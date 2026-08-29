@@ -8,9 +8,9 @@
 
 **Current development phase:** Step 8 complete — deterministic Checkpoint/Replay verified
 
-**Current task:** Step 9 — Rendering Foundation implementation specification
+**Current task:** Step 9 — implement Rendering Foundation from `docs/implementation/STEP_09_RENDERING_FOUNDATION_SPEC.md`
 
-**Next task:** Step 9 — implement and verify the rendering foundation from its audited implementation specification
+**Next task:** Step 9 — verify, self-review, document, commit and push the rendering foundation
 
 **Blockers:** None
 
