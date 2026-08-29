@@ -1,0 +1,14 @@
+{
+  "id": "numerical-scrub",
+  "title": "Numerical checkpoint scrub",
+  "category": "time",
+  "description": "Restores a falling-body solver checkpoint and deterministically replays fixed steps backward and forward in simulation time.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "checkpoint-capture",
+    "backward-scrub",
+    "forward-replay",
+    "solver-state-restore"
+  ]
+}

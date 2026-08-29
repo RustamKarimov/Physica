@@ -191,9 +191,7 @@ export class RuntimeStateStore {
     return this.snapshot();
   }
 
-  restore(
-    snapshot: RuntimeStateSnapshot,
-  ): SchedulerResult<RuntimeStateSnapshot> {
+  validateSnapshot(snapshot: RuntimeStateSnapshot): SchedulerResult<void> {
     if (snapshot.sceneId !== this.sceneId)
       return {
         ok: false,
@@ -237,7 +235,20 @@ export class RuntimeStateStore {
           message: "Runtime snapshot channel set does not match the store.",
         },
       };
-    this.entries = next;
+    return { ok: true, value: undefined };
+  }
+
+  restore(
+    snapshot: RuntimeStateSnapshot,
+  ): SchedulerResult<RuntimeStateSnapshot> {
+    const validation = this.validateSnapshot(snapshot);
+    if (!validation.ok) return validation;
+    this.entries = new Map(
+      snapshot.entries.map((entry) => [
+        stateChannelKey(entry.ref),
+        freezeEntry(entry),
+      ]),
+    );
     this.storeRevision = snapshot.revision;
     return { ok: true, value: this.snapshot() };
   }

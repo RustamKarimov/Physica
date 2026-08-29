@@ -254,11 +254,17 @@ export class ClockRuntime {
     });
   }
 
-  restore(snapshot: ClockRuntimeSnapshot): ClockResult<ClockAdvanceResult> {
+  validateSnapshot(snapshot: ClockRuntimeSnapshot): ClockResult<void> {
     const expected = new Set(this.states.keys());
+    const seen = new Set<ClockId>();
     if (
       snapshot.states.length !== expected.size ||
-      snapshot.states.some((state) => !expected.has(state.clockId))
+      snapshot.states.some((state) => {
+        const invalid = !expected.has(state.clockId) || seen.has(state.clockId);
+        seen.add(state.clockId);
+        return invalid;
+      }) ||
+      [...expected].some((clockId) => !seen.has(clockId))
     )
       return {
         ok: false,
@@ -273,7 +279,8 @@ export class ClockRuntime {
           !Number.isFinite(state.timeSeconds) ||
           !Number.isFinite(state.rate) ||
           !Number.isSafeInteger(state.revision) ||
-          state.revision < 0,
+          state.revision < 0 ||
+          typeof state.running !== "boolean",
       )
     )
       return {
@@ -283,6 +290,12 @@ export class ClockRuntime {
           message: "Snapshot contains invalid state values.",
         },
       };
+    return { ok: true, value: undefined };
+  }
+
+  restore(snapshot: ClockRuntimeSnapshot): ClockResult<ClockAdvanceResult> {
+    const validation = this.validateSnapshot(snapshot);
+    if (!validation.ok) return validation;
     const before = new Map(this.states);
     this.states = new Map(
       snapshot.states.map((state) => [state.clockId, freezeState(state)]),

@@ -1,0 +1,10 @@
+{
+  "reason": "The shared .physica example runtime, renderer and gallery capture pipeline are not implemented yet.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Rendering foundation, shared example runtime and gallery capture complete"
+}

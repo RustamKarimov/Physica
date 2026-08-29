@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 7 complete — deterministic Runtime Scheduler, transient runtime state and runtime events verified
+**Current development phase:** Step 8 complete — deterministic Checkpoint/Replay verified
 
-**Current task:** Step 8 — Checkpoint/Replay implementation specification
+**Current task:** Step 9 — Rendering Foundation implementation specification
 
-**Next task:** Step 8 — implement and verify Checkpoint/Replay from its audited implementation specification
+**Next task:** Step 9 — implement and verify the rendering foundation from its audited implementation specification
 
 **Blockers:** None
 
@@ -19,6 +19,61 @@
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+## Step 8 result
+
+Completed and audited `docs/implementation/STEP_08_CHECKPOINT_REPLAY_SPEC.md`, then implemented deterministic runtime checkpoint capture, atomic restoration and forward replay. The phase remains a runtime foundation: it adds no production physics solver, renderer, editor UI, persisted project format or installer packaging.
+
+Implemented in `packages/checkpoints`:
+
+- immutable schema-versioned checkpoint envelopes containing scene identity, selected primary clock, complete named-clock snapshot, authoritative Runtime State Store snapshot, solver/random/acquisition/runtime-continuation participant snapshots, global event-sequence position and deterministic sequence identity;
+- canonical key-ordered serialization and a dependency-free UTF-8 CRC-32 integrity checksum, with corruption detected before runtime mutation;
+- a namespaced participant registry with unique IDs, positive schema versions, lexical capture/restore order, exact participant-set validation and finite JSON-state enforcement;
+- bounded in-memory checkpoint storage with validated cadence, per-scene capacity, deterministic eviction and nearest-checkpoint-at-or-before-target selection;
+- capture and capture-if-due services with non-wrapping safe-integer checkpoint sequences;
+- restore preflight followed by clocks, authoritative state, event sequence and participant restoration, with full rollback if any participant restore fails;
+- numerical scrubbing by restoring the nearest checkpoint and replaying fixed maximum-size steps in selected-clock coordinates, including an exact partial final step and one derived-state regeneration;
+- direct analytical scrubbing adapter support without fake reverse-time visual playback;
+- stable typed callback failures without leaking host-specific exception text.
+
+Runtime integration changes:
+
+- `ClockRuntime.validateSnapshot` now performs exact clock-ID-set and finite-state preflight without mutation; restore delegates to it;
+- `RuntimeStateStore.validateSnapshot` now performs pure scene/channel/revision/JSON validation before restore;
+- `RuntimeEventSequence.validatePosition` and `restore` now expose the checkpoint-owned sequence-state contract;
+- all dependencies remain one-way through public exports: checkpoints depends only on core-model, clocks, events and runtime-scheduler; no third-party dependency or ADR change was required.
+
+Example Gallery artifacts:
+
+- `examples/time/numerical-scrub` checkpoints a semi-implicit falling-body runtime at 2 s, advances to 4 s, scrubs backward to 3 s and forward to 4 s, and exactly matches uninterrupted position, velocity and event-sequence state;
+- `examples/time/stochastic-scrub` checkpoints complete xorshift32 and event-sequence state and proves replay reproduces the exact stochastic tail that restoring the seed alone would not reproduce.
+
+Each example includes metadata, README, executable run module, deterministic expected JSON, accessible expected SVG preview, automated test and an explicit pending-artifact manifest. Future `.physica`, PNG, WebM and gallery-browser artifacts remain registered in `examples/pending-artifacts.json` until their owning rendering/gallery infrastructure exists.
+
+Scientific, architecture, teacher-UX and performance self-review resolved:
+
+- checkpoint restore validates integrity and every runtime component before mutation, while participant failures preserve their typed cause after successful rollback;
+- full PRNG state and event-sequence position are restored, not merely an initial seed;
+- replay rejects non-finite targets, non-positive step bounds, floating-point non-progress and clock divergence;
+- participant callbacks and replay adapters are isolated behind typed exception boundaries;
+- deterministic nearest selection, forward/backward equivalence, analytical scrubbing, corruption rejection, rollback and 10,000 repeated selections are covered by tests;
+- bounded per-scene storage keeps selection cost governed by the configured checkpoint capacity.
+
+Progress observation launcher repairs:
+
+- `Launch Physica.bat` now finds standalone pnpm or standard Node.js Corepack, prepends standard Node and Rust toolchain locations, installs missing workspace dependencies and validates Tauri, Cargo and the frontend build in `--check` mode;
+- Tauri's nested frontend lifecycle uses `npm run dev`/`npm run build`, so it does not require a second shell to resolve pnpm;
+- Vite is explicitly pinned to Tauri's expected port 1420;
+- a port preflight gives a concise existing-instance explanation instead of a Vite stack trace on accidental double launch;
+- an end-to-end launch with a deliberately minimal PATH started Vite on port 1420, completed the native Rust build and ran `target/debug/physica-desktop.exe` successfully;
+- the launcher remains live-development only and performs no executable/installer packaging.
+
+Commands and verification:
+
+- focused Checkpoint/Replay and gallery run — 3 files, 12 tests passed;
+- targeted runtime-integration run — 4 files, 41 tests passed before the final callback-boundary addition;
+- strict typechecks for checkpoints and both new examples — passed;
+- `pnpm run ci` — passed: repository formatting, ESLint, architecture boundaries, strict TypeScript across 70 of 71 workspace projects with scripts, 22 unit/example files with 127 tests, 2 architecture tests and all three application builds.
 
 ## Step 7 result
 
@@ -62,8 +117,9 @@ Each example includes metadata, README, executable run module, deterministic exp
 Progress observation:
 
 - added root `Launch Physica.bat`, which starts the live Tauri development application through the existing workspace toolchain;
+- after an ordinary Windows terminal could not see Codex's private pnpm path, the launcher was repaired to discover pnpm or fall back to standard Node.js Corepack, prepend the Node installation path for child scripts, install missing workspace dependencies and expose a non-launching `--check` mode;
 - the launcher performs no executable/installer packaging and remains the required observation entry point for the first meaningful visible UI phase;
-- `pnpm --filter @physica/desktop tauri --version` resolved successfully to Tauri CLI 2.11.4.
+- a clean-PATH `Launch Physica.bat --check` resolved successfully to Tauri CLI 2.11.4.
 
 Scientific, architecture, teacher-UX and performance self-review resolved:
 
@@ -297,18 +353,17 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 8 read first
+## Step 9 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
-- `docs/CHECKPOINT_AND_REPLAY.md`
-- `docs/RUNTIME_STATE.md`
-- `docs/CLOCKS_AND_TIME.md`
-- `docs/RUNTIME_SCHEDULER.md`
-- `docs/SOLVER_ARCHITECTURE.md`
+- `docs/RENDERER_ARCHITECTURE.md`
+- `docs/COORDINATES_AND_FRAMES.md`
+- `docs/PICKING_AND_SELECTION.md`
+- `docs/EXAMPLE_SYSTEM.md`
 - `docs/PERFORMANCE.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 8 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 9 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

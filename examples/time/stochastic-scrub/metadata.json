@@ -1,0 +1,14 @@
+{
+  "id": "stochastic-scrub",
+  "title": "Stochastic checkpoint scrub",
+  "category": "time",
+  "description": "Restores full xorshift32 generator and event-sequence state so stochastic replay reproduces the exact sample tail.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "random-state-checkpoint",
+    "event-sequence-restore",
+    "stochastic-replay",
+    "deterministic-scrub"
+  ]
+}

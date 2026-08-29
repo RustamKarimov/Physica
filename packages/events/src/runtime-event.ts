@@ -101,12 +101,19 @@ export class RuntimeEventSequence {
   }
 
   static create(initialValue = 0): EventResult<RuntimeEventSequence> {
-    return !Number.isSafeInteger(initialValue) || initialValue < 0
+    const validation = RuntimeEventSequence.validatePosition(initialValue);
+    return validation.ok
+      ? { ok: true, value: new RuntimeEventSequence(initialValue) }
+      : validation;
+  }
+
+  static validatePosition(position: number): EventResult<void> {
+    return !Number.isSafeInteger(position) || position < 0
       ? invalid(
           "sequenceId",
-          "Runtime event sequence must start at a non-negative safe integer.",
+          "Runtime event sequence position must be a non-negative safe integer.",
         )
-      : { ok: true, value: new RuntimeEventSequence(initialValue) };
+      : { ok: true, value: undefined };
   }
 
   next(): EventResult<number> {
@@ -125,6 +132,13 @@ export class RuntimeEventSequence {
 
   snapshot(): number {
     return this.nextValue;
+  }
+
+  restore(position: number): EventResult<number> {
+    const validation = RuntimeEventSequence.validatePosition(position);
+    if (!validation.ok) return validation;
+    this.nextValue = position;
+    return { ok: true, value: this.nextValue };
   }
 }
 

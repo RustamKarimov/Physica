@@ -1,0 +1,29 @@
+{
+  "checkpoint": {
+    "id": "physica.checkpoint:1",
+    "timeSeconds": 2,
+    "solverVelocity": -19.6
+  },
+  "afterBackwardScrub": {
+    "timeSeconds": 3,
+    "positionMetres": -47.775,
+    "velocityMetresPerSecond": -29.4,
+    "eventSequence": 12
+  },
+  "backwardReplaySteps": 4,
+  "uninterruptedAtFour": {
+    "timeSeconds": 4,
+    "positionMetres": -83.3,
+    "velocityMetresPerSecond": -39.2,
+    "eventSequence": 16
+  },
+  "replayedAtFour": {
+    "timeSeconds": 4,
+    "positionMetres": -83.3,
+    "velocityMetresPerSecond": -39.2,
+    "eventSequence": 16
+  },
+  "forwardReplaySteps": 8,
+  "deterministicMatch": true,
+  "derivedRegenerations": 2
+}

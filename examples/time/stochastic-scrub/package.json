@@ -1,18 +1,13 @@
 {
-  "name": "@physica/checkpoints",
+  "name": "@physica-example/stochastic-scrub",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@physica/checkpoints": "workspace:*",
     "@physica/clocks": "workspace:*",
     "@physica/core-model": "workspace:*",
     "@physica/events": "workspace:*",

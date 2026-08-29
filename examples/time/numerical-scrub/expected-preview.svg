@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Numerical checkpoint scrub</title><desc id="desc">A checkpoint at two seconds replays a falling body backward to three seconds and forward to four seconds with an exact deterministic match.</desc>
+  <rect width="960" height="540" fill="#0d1724"/><text x="60" y="78" fill="#edf5fb" font-family="system-ui" font-size="36">Numerical checkpoint scrub</text>
+  <line x1="100" y1="236" x2="860" y2="236" stroke="#34495e" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="100" cy="236" r="13" fill="#71879a"/><circle cx="480" cy="236" r="18" fill="#ffd166"/><circle cx="670" cy="236" r="15" fill="#65d7bd"/><circle cx="860" cy="236" r="18" fill="#65d7bd"/>
+  <text x="90" y="285" fill="#9fb0bf" font-family="system-ui" font-size="21">0 s</text><text x="440" y="285" fill="#ffd166" font-family="system-ui" font-size="21">2 s checkpoint</text><text x="642" y="285" fill="#65d7bd" font-family="system-ui" font-size="21">3 s</text><text x="840" y="285" fill="#65d7bd" font-family="system-ui" font-size="21">4 s</text>
+  <path d="M850 180 C770 105 620 110 495 188" fill="none" stroke="#f07b72" stroke-width="5" marker-end="url(#arrow)"/><path d="M493 330 C610 405 760 400 850 282" fill="none" stroke="#65d7bd" stroke-width="5" marker-end="url(#arrow)"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+  <text x="60" y="460" fill="#c2d0db" font-family="system-ui" font-size="23">Restore authoritative state → replay fixed 0.25 s steps → regenerate derived state once</text>
+</svg>

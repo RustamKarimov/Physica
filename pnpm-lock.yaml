@@ -266,6 +266,50 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/time/numerical-scrub:
+    dependencies:
+      '@physica/checkpoints':
+        specifier: workspace:*
+        version: link:../../../packages/checkpoints
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../../../packages/clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/events':
+        specifier: workspace:*
+        version: link:../../../packages/events
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../../../packages/runtime-scheduler
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/time/stochastic-scrub:
+    dependencies:
+      '@physica/checkpoints':
+        specifier: workspace:*
+        version: link:../../../packages/checkpoints
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../../../packages/clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/events':
+        specifier: workspace:*
+        version: link:../../../packages/events
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../../../packages/runtime-scheduler
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/time/two-clocks:
     dependencies:
       '@physica/clocks':
@@ -292,6 +336,19 @@ importers:
         version: 6.0.3
 
   packages/checkpoints:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/events':
+        specifier: workspace:*
+        version: link:../events
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../runtime-scheduler
     devDependencies:
       typescript:
         specifier: 'catalog:'

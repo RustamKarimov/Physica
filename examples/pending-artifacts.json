@@ -100,6 +100,28 @@
         "example.spec.ts"
       ],
       "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "numerical-scrub",
+      "path": "examples/time/numerical-scrub",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Rendering foundation, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "stochastic-scrub",
+      "path": "examples/time/stochastic-scrub",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Rendering foundation, shared example runtime and gallery capture complete"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "checkpoint": {
+    "id": "physica.checkpoint:1",
+    "timeSeconds": 2,
+    "generatorState": 2176035992,
+    "eventSequence": 4
+  },
+  "seedOnlyNextSample": 2274908837,
+  "requiredNextSample": 1882851208,
+  "uninterruptedTail": [1882851208, 698933837, 2311737117, 3306712617],
+  "replayedTail": [1882851208, 698933837, 2311737117, 3306712617],
+  "replaySteps": 4,
+  "finalGeneratorState": 3306712617,
+  "finalEventSequence": 8,
+  "uninterruptedEventSequence": 8,
+  "deterministicMatch": true
+}
