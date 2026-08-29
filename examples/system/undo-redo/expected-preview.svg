@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Physica atomic undo and redo example</title>
+  <desc id="description">A non-visual fixture summary showing commit, undo and redo as stable history states.</desc>
+  <rect width="960" height="540" fill="#101826"/>
+  <text x="64" y="96" fill="#d9e6f2" font-family="system-ui, sans-serif" font-size="38">Atomic undo / redo</text>
+  <g font-family="system-ui, sans-serif" font-size="24" text-anchor="middle">
+    <rect x="70" y="205" width="220" height="130" rx="18" fill="#1b2a3c" stroke="#7894ae" stroke-width="3"/>
+    <text x="180" y="280" fill="#ffffff">Commit · 1 scene</text>
+    <rect x="370" y="205" width="220" height="130" rx="18" fill="#1b2a3c" stroke="#d28b60" stroke-width="3"/>
+    <text x="480" y="280" fill="#ffffff">Undo · 0 scenes</text>
+    <rect x="670" y="205" width="220" height="130" rx="18" fill="#1b2a3c" stroke="#5bb8a6" stroke-width="3"/>
+    <text x="780" y="280" fill="#ffffff">Redo · stable IDs</text>
+  </g>
+  <path d="M290 270 H370 M590 270 H670" stroke="#9fb5c9" stroke-width="5"/>
+  <text x="64" y="450" fill="#5ee0bd" font-family="system-ui, sans-serif" font-size="22">One history entry · one listener publication · exact restoration</text>
+</svg>

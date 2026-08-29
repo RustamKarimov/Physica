@@ -1,0 +1,7 @@
+{
+  "afterCommitScenes": 1,
+  "afterUndoScenes": 0,
+  "afterRedoScenes": 1,
+  "stableIdentities": true,
+  "redoEqualsCommitted": true
+}

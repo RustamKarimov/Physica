@@ -1,0 +1,8 @@
+{
+  "id": "schema-roundtrip",
+  "title": "Schema round trip",
+  "category": "system",
+  "description": "A non-visual executable fixture proving the Step 5 document schema, opaque plugin preservation and canonical JSON round trip.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg"
+}

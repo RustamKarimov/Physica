@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Physica schema round-trip example</title>
+  <desc id="description">A non-visual fixture summary showing a project serialized and parsed without loss.</desc>
+  <rect width="960" height="540" fill="#101826"/>
+  <text x="64" y="96" fill="#d9e6f2" font-family="system-ui, sans-serif" font-size="38">Schema round trip</text>
+  <path d="M210 270 H750" stroke="#5bb8a6" stroke-width="8"/>
+  <path d="M720 238 L760 270 L720 302" fill="none" stroke="#5bb8a6" stroke-width="8"/>
+  <rect x="80" y="190" width="220" height="160" rx="18" fill="#1b2a3c" stroke="#7894ae" stroke-width="3"/>
+  <rect x="660" y="190" width="220" height="160" rx="18" fill="#1b2a3c" stroke="#7894ae" stroke-width="3"/>
+  <text x="190" y="255" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-size="28">Project V1</text>
+  <text x="770" y="255" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-size="28">Parsed V1</text>
+  <text x="770" y="310" text-anchor="middle" fill="#5ee0bd" font-family="system-ui, sans-serif" font-size="24">equal ✓</text>
+  <text x="64" y="460" fill="#9fb5c9" font-family="system-ui, sans-serif" font-size="22">Opaque plugin payload and stable IDs preserved</text>
+</svg>

@@ -1,0 +1,43 @@
+:root {
+  color: #e2e8f0;
+  background: #0f172a;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+main {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+section {
+  width: min(42rem, 100%);
+  padding: 3rem;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  background: #111c30;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  color: #7dd3fc;
+}
+
+p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}

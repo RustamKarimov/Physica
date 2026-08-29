@@ -1,0 +1,6 @@
+{
+  "id": "system/hello-stage",
+  "title": "Hello Stage",
+  "status": "bootstrap-only",
+  "preview": "expected-preview.svg"
+}

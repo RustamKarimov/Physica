@@ -1,0 +1,9 @@
+AGENTS.md
+README.md
+docs/
+reference/
+**/dist/
+**/node_modules/
+**/target/
+**/src-tauri/gen/schemas/
+pnpm-lock.yaml

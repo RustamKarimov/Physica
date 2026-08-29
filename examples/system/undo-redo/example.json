@@ -1,0 +1,8 @@
+{
+  "id": "undo-redo",
+  "title": "Atomic undo and redo",
+  "category": "system",
+  "description": "A non-visual executable fixture demonstrating a transaction, inverse-command undo and stable-identity redo.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg"
+}

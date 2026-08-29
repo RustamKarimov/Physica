@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Physica bootstrap icon</title>
+  <rect width="512" height="512" rx="112" fill="#0f172a" />
+  <circle cx="256" cy="256" r="152" fill="none" stroke="#38bdf8" stroke-width="40" />
+  <circle cx="256" cy="256" r="36" fill="#f8fafc" />
+</svg>

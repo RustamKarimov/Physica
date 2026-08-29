@@ -1,0 +1,16 @@
+[package]
+name = "physica-desktop"
+version = "0.0.0"
+description = "Tauri shell for the Physica desktop application"
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "physica_desktop_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[dependencies]
+tauri = { version = "=2.11.5", features = [] }

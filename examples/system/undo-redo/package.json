@@ -1,0 +1,16 @@
+{
+  "name": "@physica-example/undo-redo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/commands": "workspace:*",
+    "@physica/core-model": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}
