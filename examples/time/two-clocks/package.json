@@ -1,19 +1,14 @@
 {
-  "name": "@physica/units",
+  "name": "@physica-example/two-clocks",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@physica/mathematics": "workspace:*"
+    "@physica/clocks": "workspace:*",
+    "@physica/core-model": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

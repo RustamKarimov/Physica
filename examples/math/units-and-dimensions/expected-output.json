@@ -1,0 +1,9 @@
+{
+  "kilometreInMetres": 1500,
+  "celsiusInKelvin": 293.15,
+  "forceDimension": [1, 1, -2, 0, 0, 0, 0],
+  "energyDimension": [1, 2, -2, 0, 0, 0, 0],
+  "angleSemanticKind": "angle",
+  "combinedUncertaintyMetres": 0.5,
+  "canonicalJsonStable": true
+}

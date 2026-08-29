@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Coordinate spaces example</title><desc id="desc">A moving local frame transforms into a physical world frame at explicit time.</desc>
+  <rect width="960" height="540" fill="#101826"/><text x="64" y="92" fill="#e8f1f8" font-family="system-ui" font-size="38">Coordinate spaces</text>
+  <g stroke-width="6"><path d="M110 400 H430" stroke="#b7c8d8"/><path d="M150 440 V150" stroke="#b7c8d8"/><path d="M520 390 H820" stroke="#61d7bd"/><path d="M560 430 V170" stroke="#61d7bd"/></g>
+  <text x="105" y="485" fill="#b7c8d8" font-family="system-ui" font-size="24">moving frame</text><text x="555" y="485" fill="#61d7bd" font-family="system-ui" font-size="24">physical world (+y upward)</text><text x="64" y="125" fill="#f2c879" font-family="system-ui" font-size="20">Educational scale: NOT TO SCALE</text>
+</svg>

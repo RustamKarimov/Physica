@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Units and dimensions example</title><desc id="desc">SI canonical quantities and derived dimensions.</desc>
+  <rect width="960" height="540" fill="#101826"/><text x="64" y="92" fill="#e8f1f8" font-family="system-ui" font-size="38">Units and dimensions</text>
+  <text x="80" y="205" fill="#61d7bd" font-family="system-ui" font-size="32">1.5 km = 1500 m</text><text x="80" y="285" fill="#61d7bd" font-family="system-ui" font-size="32">20 °C = 293.15 K</text>
+  <text x="80" y="380" fill="#b7c8d8" font-family="system-ui" font-size="27">[Force] = M L T⁻² · [Energy] = M L² T⁻²</text><text x="80" y="460" fill="#f2c879" font-family="system-ui" font-size="22">Canonical SI values · explicit display units · semantic angle</text>
+</svg>

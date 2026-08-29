@@ -156,6 +156,39 @@ importers:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)
 
+  examples/math/units-and-dimensions:
+    dependencies:
+      '@physica/serialization':
+        specifier: workspace:*
+        version: link:../../../packages/serialization
+      '@physica/units':
+        specifier: workspace:*
+        version: link:../../../packages/units
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/math/vector-operations:
+    dependencies:
+      '@physica/mathematics':
+        specifier: workspace:*
+        version: link:../../../packages/mathematics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/rendering/coordinate-spaces:
+    dependencies:
+      '@physica/mathematics':
+        specifier: workspace:*
+        version: link:../../../packages/mathematics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/system/schema-roundtrip:
     dependencies:
       '@physica/core-model':
@@ -174,6 +207,19 @@ importers:
       '@physica/commands':
         specifier: workspace:*
         version: link:../../../packages/commands
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/time/two-clocks:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../../../packages/clocks
       '@physica/core-model':
         specifier: workspace:*
         version: link:../../../packages/core-model
@@ -201,6 +247,10 @@ importers:
         version: 6.0.3
 
   packages/clocks:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -518,6 +568,10 @@ importers:
         version: 6.0.3
 
   packages/units:
+    dependencies:
+      '@physica/mathematics':
+        specifier: workspace:*
+        version: link:../mathematics
     devDependencies:
       typescript:
         specifier: 'catalog:'

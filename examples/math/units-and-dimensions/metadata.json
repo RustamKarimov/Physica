@@ -1,0 +1,9 @@
+{
+  "id": "units-and-dimensions",
+  "title": "Units and dimensions",
+  "category": "math",
+  "description": "Canonical SI quantities, semantic angles, affine temperature conversion and independent uncertainty propagation.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["units", "dimensions", "quantities", "uncertainty"]
+}

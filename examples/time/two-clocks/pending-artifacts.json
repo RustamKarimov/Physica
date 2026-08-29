@@ -1,0 +1,10 @@
+{
+  "reason": "Runtime Scheduler, physics runtime, renderer and shared .physica example runtime are not implemented yet.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Runtime Scheduler, rendering foundation and Example Gallery runtime complete"
+}

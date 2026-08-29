@@ -1,0 +1,9 @@
+{
+  "id": "coordinate-spaces",
+  "title": "Coordinate spaces",
+  "category": "rendering",
+  "description": "Explicit-time Galilean reference-frame transforms, canonical physical 2D and honest educational scaling.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["coordinates", "reference-frames", "educational-scale"]
+}

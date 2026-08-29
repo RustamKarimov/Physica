@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "description": "Machine-readable obligations for foundational examples created before the shared .physica runtime, renderer, gallery capture and deterministic video pipeline exist.",
+  "examples": [
+    {
+      "id": "schema-roundtrip",
+      "path": "examples/system/schema-roundtrip",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Persistence package, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "undo-redo",
+      "path": "examples/system/undo-redo",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Persistence package, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "units-and-dimensions",
+      "path": "examples/math/units-and-dimensions",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "vector-operations",
+      "path": "examples/math/vector-operations",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Renderer foundation, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "coordinate-spaces",
+      "path": "examples/rendering/coordinate-spaces",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Renderer foundation, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "two-clocks",
+      "path": "examples/time/two-clocks",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Runtime Scheduler, shared example runtime and gallery capture complete"
+    }
+  ]
+}

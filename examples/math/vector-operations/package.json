@@ -1,14 +1,8 @@
 {
-  "name": "@physica/units",
+  "name": "@physica-example/vector-operations",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

@@ -1,0 +1,10 @@
+{
+  "reason": "Renderer and shared .physica example runtime are not implemented yet.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Rendering foundation and Example Gallery runtime complete"
+}

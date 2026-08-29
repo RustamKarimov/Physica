@@ -20,6 +20,9 @@ import {
   entity,
   withScene,
 } from "../../../tests/helpers/model-fixtures";
+import { createDefaultClockDefinitions } from "../../clocks/src";
+import { createDefaultUnitRegistry, createQuantity } from "../../units/src";
+import { vec3 } from "../../mathematics/src";
 
 function serializeOrThrow(document: ProjectDocument): string {
   const serialized = serializeProjectJson(document);
@@ -174,6 +177,39 @@ describe("unknown plugin payload preservation", () => {
           .componentInstances[0],
       ).toEqual(unknown);
     }
+  });
+});
+
+describe("Step 6 value-envelope preservation", () => {
+  it("round trips quantities, coordinates, opaque frame providers and clock definitions without a V1 migration", () => {
+    const { ids, document } = createFixtureProject(75);
+    const scene = createEmptyScene(ids, "Quantitative envelopes");
+    const registry = createDefaultUnitRegistry();
+    const distance = createQuantity(2.5, "km", registry);
+    if (!distance.ok) throw new Error("Quantity fixture failed.");
+    const quantitativeComponent = {
+      ...component(ids, "quantitative-envelope"),
+      configuration: {
+        distance: distance.value,
+        position: vec3(1, 2, 3),
+        referenceFrame: {
+          id: "org.example.frames:moving",
+          transformTypeId: "org.example.frames:future-transform",
+          configuration: { opaque: [1, 2, 3] },
+        },
+      },
+    };
+    const owner = entity(ids, "Owner");
+    const quantitativeProject = withScene(document, {
+      ...scene,
+      entityDefinitions: [
+        { ...owner, componentInstances: [quantitativeComponent] },
+      ],
+      clockDefinitions: createDefaultClockDefinitions(ids),
+    });
+    const parsed = parseProjectJson(serializeOrThrow(quantitativeProject));
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) expect(parsed.value.document).toEqual(quantitativeProject);
   });
 });
 

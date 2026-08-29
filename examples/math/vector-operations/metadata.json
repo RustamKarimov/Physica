@@ -1,0 +1,9 @@
+{
+  "id": "vector-operations",
+  "title": "Vector operations",
+  "category": "math",
+  "description": "Right-handed vector products, safe normalization, matrix transforms and quaternion rotation.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["vectors", "matrices", "quaternions"]
+}

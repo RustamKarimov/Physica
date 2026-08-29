@@ -1,0 +1,6 @@
+{
+  "beforePause": { "simulation": 2, "presentation": 2 },
+  "whilePaused": { "simulation": 2, "presentation": 5 },
+  "afterScrub": { "simulation": 10, "presentation": 5 },
+  "documentDefinitionsUnchanged": true
+}

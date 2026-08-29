@@ -1,0 +1,9 @@
+{
+  "id": "two-clocks",
+  "title": "Two independent clocks",
+  "category": "time",
+  "description": "Simulation time pauses while presentation time continues, then simulation scrubs independently.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["simulation-clock", "presentation-clock", "pause", "scrub"]
+}

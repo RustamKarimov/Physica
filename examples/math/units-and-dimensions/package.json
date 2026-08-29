@@ -1,19 +1,14 @@
 {
-  "name": "@physica/units",
+  "name": "@physica-example/units-and-dimensions",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@physica/mathematics": "workspace:*"
+    "@physica/serialization": "workspace:*",
+    "@physica/units": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

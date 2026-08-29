@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Two independent clocks example</title><desc id="desc">Simulation time pauses at two seconds while presentation time advances to five seconds.</desc>
+  <rect width="960" height="540" fill="#101826"/><text x="64" y="92" fill="#e8f1f8" font-family="system-ui" font-size="38">Two independent clocks</text>
+  <text x="80" y="210" fill="#ef766f" font-family="system-ui" font-size="28">simulation</text><rect x="260" y="175" width="520" height="42" rx="20" fill="#27384b"/><rect x="260" y="175" width="208" height="42" rx="20" fill="#ef766f"/><text x="805" y="208" fill="#ef766f" font-family="system-ui" font-size="24">2 s · paused</text>
+  <text x="80" y="330" fill="#61d7bd" font-family="system-ui" font-size="28">presentation</text><rect x="260" y="295" width="520" height="42" rx="20" fill="#27384b"/><rect x="260" y="295" width="520" height="42" rx="20" fill="#61d7bd"/><text x="805" y="328" fill="#61d7bd" font-family="system-ui" font-size="24">5 s · running</text>
+  <text x="64" y="455" fill="#b7c8d8" font-family="system-ui" font-size="23">Presentation can continue while physical simulation is frozen.</text>
+</svg>

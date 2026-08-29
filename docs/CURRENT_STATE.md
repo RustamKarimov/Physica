@@ -2,13 +2,82 @@
 
 **Architecture status:** FROZEN for initial implementation
 
-**Current development phase:** Step 5 complete — Core Project Model foundation verified
+**Execution mode:** AUTONOMOUS PROJECT EXECUTION ACTIVE
 
-**Current task:** Step 5 Core Project Model foundation complete
+**Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Next task:** Step 6 — ChatGPT — Mathematics, units, coordinates and clocks implementation specification
+**Current development phase:** Step 6 complete — mathematics, units, coordinates/reference frames and clocks verified
+
+**Current task:** Step 7 — Runtime Scheduler implementation specification
+
+**Next task:** Step 7 — implement and verify the Runtime Scheduler boundary from its audited implementation specification
 
 **Blockers:** None
+
+## Autonomous execution status
+
+Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
+
+## Step 6 result
+
+Completed and audited `docs/implementation/STEP_06_MATHEMATICS_UNITS_COORDINATES_CLOCKS_SPEC.md`, then implemented its bounded mathematics, units, coordinate/reference-frame and clock foundations. No renderer, solver, scheduler, editor UI or later subsystem was implemented.
+
+Implemented in `packages/mathematics`:
+
+- typed mathematical results and errors plus finite-input validation;
+- immutable 2D/3D vectors, complex numbers, dynamic matrices, quaternions, intervals, sampled series and a numerical policy contract;
+- tagged coordinate positions/directions, 2D planes, branded reference-frame identifiers, Galilean transforms, provider registration and deterministic frame-graph path transforms with explicit time;
+- explicit educational display scaling that does not mutate physical state.
+
+Implemented in `packages/units`:
+
+- exact seven-base SI dimension vectors and dimension algebra, including semantic dimensionless kinds;
+- unit definitions, registry and parser with SI prefixes from quecto through quetta, SI base/derived units and selected teaching units;
+- canonical-SI quantities with preserved display units, deterministic display precision, uncertainty propagation, affine-unit safeguards and generated coherent compound units.
+
+Implemented in `packages/clocks`:
+
+- persisted `physica:clock/domain-v1` configuration parsing and validation;
+- mandatory simulation and presentation clocks, unique keys, valid links and cycle rejection;
+- immutable transient clock runtime supporting run/pause/rate/scrub, linked and conditional clocks, deterministic topological advancement and snapshots;
+- strict runtime/document separation: clock state is not persisted in `ProjectDocument` and clock operations do not enter document undo history.
+
+Package-boundary decisions:
+
+- coordinate/reference-frame primitives are owned by `@physica/mathematics`, because the frozen package map defines no separate coordinates package;
+- `@physica/units` depends only on `@physica/mathematics`;
+- `@physica/clocks` depends only on `@physica/core-model`; an initially considered units dependency was removed as unnecessary;
+- no new third-party dependency or ADR was required.
+
+Example Gallery artifacts:
+
+- `examples/math/units-and-dimensions`;
+- `examples/math/vector-operations`;
+- `examples/rendering/coordinate-spaces`;
+- `examples/time/two-clocks`.
+
+Each example includes metadata, README, deterministic expected output, an accessible expected SVG preview and an automated example test. Runtime-dependent `.physica`, PNG and WebM deliverables remain truthfully registered in `examples/pending-artifacts.json` and local example manifests until their owning runtime/rendering capabilities exist; no placeholder output was presented as complete.
+
+Scientific and architecture self-review resolved:
+
+- dimensionless cancellation now preserves valid semantic kinds;
+- generated unit identifiers are Unicode-safe;
+- prefixed and compound display-unit expressions remain round-trippable;
+- non-finite quantity and frame-transform inputs return typed errors;
+- linked clocks begin at revision zero and no-op advances neither allocate state nor emit false changes;
+- deterministic quantity display formatting honors stored precision;
+- the unused clock-to-units dependency was removed.
+
+Commands and verification:
+
+- focused Step 6 run — 8 files, 57 tests passed;
+- targeted strict typechecks for all changed packages and examples — passed;
+- `pnpm typecheck` — passed across 65 of 66 workspace projects with scripts;
+- `pnpm lint` — ESLint and architecture boundaries passed;
+- `pnpm test` — unit/example suite: 14 files, 89 tests passed; architecture suite: 1 file, 2 tests passed;
+- `pnpm run ci` — passed: repository formatting, ESLint, architecture boundaries, strict TypeScript across 65 workspace projects, 89 unit/example tests, 2 architecture tests and all three application builds.
+
+Checkpoint note: Step 6 is an isolated, buildable snapshot on top of the verified Step 5 foundation and is recorded as the project-publication checkpoint.
 
 ## Step 5 result
 
@@ -162,13 +231,16 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 4 read first
+## Step 7 read first
 
 - `AGENTS.md`
+- `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
-- `docs/PROJECT_MODEL.md`
-- `docs/SERIALIZATION.md`
+- `docs/RUNTIME_SCHEDULER.md`
+- `docs/RUNTIME_STATE.md`
+- `docs/CLOCKS_AND_TIME.md`
+- `docs/COMMANDS_AND_EVENTS.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop before implementation if Step 4 requires a decision not defined by the frozen specifications.
+Stop only if Step 7 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

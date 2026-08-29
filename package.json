@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "pnpm test:unit && pnpm test:architecture",
-    "test:unit": "vitest run tests/smoke tests/examples packages/core-model packages/serialization packages/commands examples/system/schema-roundtrip examples/system/undo-redo",
+    "test:unit": "vitest run tests/smoke tests/examples packages/core-model packages/serialization packages/commands packages/mathematics packages/units packages/clocks examples",
     "test:architecture": "vitest run tests/architecture",
     "test:e2e": "playwright test",
     "ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"

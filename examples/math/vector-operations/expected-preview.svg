@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Vector operations example</title><desc id="desc">Right-handed basis vectors and their cross product.</desc>
+  <rect width="960" height="540" fill="#101826"/><text x="64" y="92" fill="#e8f1f8" font-family="system-ui" font-size="38">Vector operations</text>
+  <g transform="translate(420 350)" stroke-width="9" fill="none"><path d="M0 0 L250 0" stroke="#ef766f"/><path d="M0 0 L0 -220" stroke="#61d7bd"/><circle cx="0" cy="0" r="13" fill="#f2c879"/></g>
+  <text x="690" y="372" fill="#ef766f" font-family="system-ui" font-size="27">x</text><text x="395" y="120" fill="#61d7bd" font-family="system-ui" font-size="27">y</text><text x="64" y="460" fill="#b7c8d8" font-family="system-ui" font-size="24">x × y = z · right-handed physical convention</text>
+</svg>
