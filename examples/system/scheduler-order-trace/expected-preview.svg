@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Physica deterministic scheduler order trace</title>
+  <desc id="description">Thirteen numbered runtime phases flow from document commands through clocks and physics to rendering and audio.</desc>
+  <rect width="960" height="540" fill="#0c1724"/>
+  <text x="54" y="72" fill="#e6f2ff" font-family="system-ui, sans-serif" font-size="34">One deterministic runtime cycle</text>
+  <g font-family="system-ui, sans-serif" font-size="18" text-anchor="middle">
+    <rect x="54" y="120" width="852" height="286" rx="22" fill="#14283a" stroke="#63c9b7" stroke-width="3"/>
+    <text x="110" y="190" fill="#ffffff">1</text><text x="180" y="190" fill="#ffffff">2</text><text x="250" y="190" fill="#ffffff">3</text><text x="320" y="190" fill="#ffffff">4</text><text x="390" y="190" fill="#ffffff">5</text><text x="460" y="190" fill="#ffffff">6</text><text x="530" y="190" fill="#ffffff">7</text>
+    <text x="145" y="290" fill="#ffffff">8</text><text x="250" y="290" fill="#ffffff">9</text><text x="355" y="290" fill="#ffffff">10</text><text x="480" y="290" fill="#ffffff">11</text><text x="615" y="290" fill="#ffffff">12</text><text x="755" y="290" fill="#ffffff">13</text>
+    <text x="480" y="365" fill="#7fe5d1">clock → physics → events → observables → presentation → output</text>
+  </g>
+  <text x="54" y="472" fill="#9eb6ca" font-family="system-ui, sans-serif" font-size="21">Same inputs · same system order · same event order · refresh-rate independent</text>
+</svg>

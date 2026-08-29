@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Physica runtime state reset example</title>
+  <desc id="description">Transient state advances from zero to one and resets to zero while the saved project remains unchanged.</desc>
+  <rect width="960" height="540" fill="#101827"/>
+  <text x="60" y="82" fill="#eef6ff" font-family="system-ui, sans-serif" font-size="36">Runtime state is not document state</text>
+  <g font-family="system-ui, sans-serif" font-size="23" text-anchor="middle">
+    <rect x="75" y="190" width="220" height="130" rx="18" fill="#1a2b40" stroke="#7894ae" stroke-width="3"/><text x="185" y="250" fill="#ffffff">Initial</text><text x="185" y="286" fill="#84dfca">position = 0</text>
+    <rect x="370" y="190" width="220" height="130" rx="18" fill="#1a2b40" stroke="#df9a67" stroke-width="3"/><text x="480" y="250" fill="#ffffff">Advance</text><text x="480" y="286" fill="#ffc08c">position = 1</text>
+    <rect x="665" y="190" width="220" height="130" rx="18" fill="#1a2b40" stroke="#5fc7ae" stroke-width="3"/><text x="775" y="250" fill="#ffffff">Reset</text><text x="775" y="286" fill="#84dfca">position = 0</text>
+  </g>
+  <path d="M295 255 H370 M590 255 H665" stroke="#9fb5c9" stroke-width="5"/>
+  <text x="60" y="445" fill="#7fe5d1" font-family="system-ui, sans-serif" font-size="22">Saved ProjectDocument: byte-for-byte canonical equality ✓</text>
+</svg>

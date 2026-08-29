@@ -1,0 +1,8 @@
+{
+  "id": "runtime-state-reset",
+  "title": "Runtime state reset",
+  "category": "system",
+  "description": "Changes authoritative transient state, resets it exactly and proves the saved document was untouched.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg"
+}

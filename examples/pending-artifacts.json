@@ -67,6 +67,39 @@
         "example.spec.ts"
       ],
       "gate": "Runtime Scheduler, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "scheduler-order-trace",
+      "path": "examples/system/scheduler-order-trace",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "runtime-state-reset",
+      "path": "examples/system/runtime-state-reset",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "runtime-event",
+      "path": "examples/system/runtime-event",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
     }
   ]
 }

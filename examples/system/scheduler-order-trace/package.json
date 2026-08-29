@@ -1,19 +1,15 @@
 {
-  "name": "@physica/events",
+  "name": "@physica-example/scheduler-order-trace",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@physica/core-model": "workspace:*"
+    "@physica/clocks": "workspace:*",
+    "@physica/core-model": "workspace:*",
+    "@physica/runtime-scheduler": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

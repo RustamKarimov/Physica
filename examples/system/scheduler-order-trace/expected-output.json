@@ -1,0 +1,24 @@
+{
+  "phaseOrder": [
+    "physica:scheduler/document-control",
+    "physica:scheduler/clock-advancement",
+    "physica:scheduler/authoritative-physics",
+    "physica:scheduler/event-ordering",
+    "physica:scheduler/physical-event-processing",
+    "physica:scheduler/observables",
+    "physica:scheduler/relationships",
+    "physica:scheduler/acquisition",
+    "physica:scheduler/storyboard",
+    "physica:scheduler/presentation-animation",
+    "physica:scheduler/representation-layout",
+    "physica:scheduler/rendering",
+    "physica:scheduler/audio-output"
+  ],
+  "systemOrder": [
+    "00000000-0000-4000-8000-000000001b5c",
+    "00000000-0000-4000-8000-000000001b5d"
+  ],
+  "clockChanges": 2,
+  "position": 1,
+  "sampledPosition": 1
+}

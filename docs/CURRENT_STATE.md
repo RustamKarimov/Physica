@@ -6,17 +6,83 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 6 complete — mathematics, units, coordinates/reference frames and clocks verified
+**Current development phase:** Step 7 complete — deterministic Runtime Scheduler, transient runtime state and runtime events verified
 
-**Current task:** Step 7 — Runtime Scheduler implementation specification
+**Current task:** Step 8 — Checkpoint/Replay implementation specification
 
-**Next task:** Step 7 — implement and verify the Runtime Scheduler boundary from its audited implementation specification
+**Next task:** Step 8 — implement and verify Checkpoint/Replay from its audited implementation specification
 
 **Blockers:** None
 
 ## Autonomous execution status
 
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
+
+**User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+## Step 7 result
+
+Completed and audited `docs/implementation/STEP_07_RUNTIME_SCHEDULER_SPEC.md`, then implemented the frozen deterministic runtime boundary. The phase is limited to runtime orchestration foundations; it adds no physics model, solver, renderer, checkpoint service, editor feature or installer packaging.
+
+Implemented in `packages/events`:
+
+- immutable JSON-safe RuntimeEvent envelopes with finite timestamps, named clock domains, namespaced event types, explicit priorities and safe-integer sequence IDs;
+- typed event validation and typed event-sequence construction/exhaustion;
+- monotonic sequence snapshot position for later Checkpoint/Replay integration;
+- insertion-preserving runtime event buffer with snapshot, drain and clear behavior.
+
+Implemented in `packages/runtime-scheduler`:
+
+- the exact immutable 13-stage frozen phase order plus namespaced specialized phases anchored before/after built-in phases;
+- deterministic task registration/order and a timer-free synchronous cycle driver;
+- one automatic `ClockRuntime.advance` invocation in the clock phase, with system intervals derived only from named clock changes;
+- transient per-scene Runtime State Store with JSON-safe snapshots, exact initial-state reset/restore, revisions and no ProjectDocument/history mutation;
+- single-writer claims, declared-output enforcement and atomic per-system runtime writes;
+- producer-consumer system dependency graphs with lexical ready-set order and typed coupled-cycle rejection;
+- scheduled event order by timestamp, phase, priority, unique sequence and stable textual keys, plus next-cycle deferral for handler-emitted events;
+- deterministic event-handler order and scoped runtime-state writes;
+- JSON-safe deterministic cycle traces, including inspectable partial traces after failure;
+- ordered asynchronous worker-result collection independent of completion timing.
+
+Package-boundary decisions:
+
+- `@physica/events` owns event identity/data and depends only on core-model;
+- `@physica/runtime-scheduler` owns phase/event ordering and the Runtime State Store because the frozen map has no separate runtime-state package;
+- runtime-scheduler depends only on public core-model, clocks and events exports;
+- no package cycle, new workspace package, third-party dependency or ADR change was required.
+
+Example Gallery artifacts:
+
+- `examples/system/scheduler-order-trace`;
+- `examples/system/runtime-state-reset`;
+- `examples/system/runtime-event`.
+
+Each example includes metadata, README, executable run module, deterministic expected JSON, accessible expected SVG preview and an automated test. Future `.physica`, PNG, WebM and gallery-browser artifacts remain truthfully registered in `examples/pending-artifacts.json` until their owning infrastructure exists.
+
+Progress observation:
+
+- added root `Launch Physica.bat`, which starts the live Tauri development application through the existing workspace toolchain;
+- the launcher performs no executable/installer packaging and remains the required observation entry point for the first meaningful visible UI phase;
+- `pnpm --filter @physica/desktop tauri --version` resolved successfully to Tauri CLI 2.11.4.
+
+Scientific, architecture, teacher-UX and performance self-review resolved:
+
+- invalid sequence construction now returns typed results rather than throwing;
+- duplicate sequence IDs are rejected instead of falling back to insertion order;
+- system writes are restricted to each system's declared outputs and remain atomic on failure;
+- failed cycles expose deterministic completed trace records without nondeterministic exception text;
+- last-trace recording no longer performs quadratic array copying;
+- the 10,000-run determinism test retains all runs while avoiding heavyweight assertion overhead;
+- the Windows batch launcher is explicitly excluded from Prettier because Prettier has no batch parser.
+
+Commands and verification:
+
+- focused Step 7 run — 5 files, 26 tests passed;
+- targeted strict typechecks for events, runtime-scheduler and all three examples — passed;
+- `pnpm typecheck` — passed across 68 of 69 workspace projects with scripts;
+- `pnpm lint` — ESLint and architecture boundaries passed;
+- `pnpm test` — unit/example suite: 19 files, 115 tests passed; architecture suite: 1 file, 2 tests passed;
+- `pnpm run ci` — passed: repository formatting, ESLint, architecture boundaries, strict TypeScript across 68 workspace projects, 115 unit/example tests, 2 architecture tests and all three application builds.
 
 ## Step 6 result
 
@@ -231,16 +297,18 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 7 read first
+## Step 8 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
-- `docs/RUNTIME_SCHEDULER.md`
+- `docs/CHECKPOINT_AND_REPLAY.md`
 - `docs/RUNTIME_STATE.md`
 - `docs/CLOCKS_AND_TIME.md`
-- `docs/COMMANDS_AND_EVENTS.md`
+- `docs/RUNTIME_SCHEDULER.md`
+- `docs/SOLVER_ARCHITECTURE.md`
+- `docs/PERFORMANCE.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 7 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 8 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

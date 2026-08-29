@@ -1,19 +1,16 @@
 {
-  "name": "@physica/events",
+  "name": "@physica-example/runtime-event",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@physica/core-model": "workspace:*"
+    "@physica/clocks": "workspace:*",
+    "@physica/core-model": "workspace:*",
+    "@physica/events": "workspace:*",
+    "@physica/runtime-scheduler": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

@@ -1,0 +1,8 @@
+{
+  "id": "scheduler-order-trace",
+  "title": "Deterministic scheduler order trace",
+  "category": "system",
+  "description": "Runs all thirteen frozen phases and two dependent systems through the shared Runtime Scheduler.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg"
+}

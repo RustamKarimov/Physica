@@ -1,0 +1,8 @@
+{
+  "id": "runtime-event",
+  "title": "Deterministic runtime events",
+  "category": "system",
+  "description": "Orders same-time physical events by scheduler phase, priority and sequence, then defers handler-emitted work to the next cycle.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg"
+}

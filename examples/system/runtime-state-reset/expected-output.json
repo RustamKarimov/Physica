@@ -1,0 +1,16 @@
+{
+  "initialValues": [
+    [0, 0],
+    [2, 0]
+  ],
+  "advancedValues": [
+    [1, 0],
+    [2, 0]
+  ],
+  "resetValues": [
+    [0, 0],
+    [2, 0]
+  ],
+  "resetRevision": 2,
+  "projectUnchanged": true
+}

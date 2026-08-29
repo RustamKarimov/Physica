@@ -12,6 +12,11 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
+  "dependencies": {
+    "@physica/clocks": "workspace:*",
+    "@physica/core-model": "workspace:*",
+    "@physica/events": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "catalog:"
   }

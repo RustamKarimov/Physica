@@ -189,6 +189,57 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/system/runtime-event:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../../../packages/clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/events':
+        specifier: workspace:*
+        version: link:../../../packages/events
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../../../packages/runtime-scheduler
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/system/runtime-state-reset:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../../../packages/runtime-scheduler
+      '@physica/serialization':
+        specifier: workspace:*
+        version: link:../../../packages/serialization
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/system/scheduler-order-trace:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../../../packages/clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../../../packages/runtime-scheduler
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/system/schema-roundtrip:
     dependencies:
       '@physica/core-model':
@@ -309,6 +360,10 @@ importers:
         version: 6.0.3
 
   packages/events:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -477,6 +532,16 @@ importers:
         version: 6.0.3
 
   packages/runtime-scheduler:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/events':
+        specifier: workspace:*
+        version: link:../events
     devDependencies:
       typescript:
         specifier: 'catalog:'

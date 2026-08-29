@@ -7,3 +7,4 @@ reference/
 **/target/
 **/src-tauri/gen/schemas/
 pnpm-lock.yaml
+Launch Physica.bat

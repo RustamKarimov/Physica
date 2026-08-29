@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Physica deterministic runtime event example</title>
+  <desc id="description">Events inserted as three, two, one are processed as one, two, three, while event four waits for the next cycle.</desc>
+  <rect width="960" height="540" fill="#0d1826"/>
+  <text x="60" y="78" fill="#eef6ff" font-family="system-ui, sans-serif" font-size="36">Stable physical event order</text>
+  <text x="60" y="140" fill="#9fb5c9" font-family="system-ui, sans-serif" font-size="22">Insertion: 3 · 2 · 1</text>
+  <g font-family="system-ui, sans-serif" font-size="30" text-anchor="middle">
+    <circle cx="220" cy="270" r="62" fill="#18344a" stroke="#64cdb8" stroke-width="4"/><text x="220" y="281" fill="#ffffff">1</text>
+    <circle cx="420" cy="270" r="62" fill="#18344a" stroke="#64cdb8" stroke-width="4"/><text x="420" y="281" fill="#ffffff">2</text>
+    <circle cx="620" cy="270" r="62" fill="#18344a" stroke="#64cdb8" stroke-width="4"/><text x="620" y="281" fill="#ffffff">3</text>
+    <circle cx="820" cy="400" r="48" fill="#34283e" stroke="#d8a36e" stroke-width="3"/><text x="820" y="411" fill="#ffffff">4</text>
+  </g>
+  <path d="M282 270 H358 M482 270 H558" stroke="#a5bbce" stroke-width="5"/>
+  <path d="M670 310 Q750 335 790 375" fill="none" stroke="#d8a36e" stroke-width="4" stroke-dasharray="10 9"/>
+  <text x="60" y="470" fill="#7fe5d1" font-family="system-ui, sans-serif" font-size="21">timestamp → phase → priority → sequence · handler emissions defer safely</text>
+</svg>
