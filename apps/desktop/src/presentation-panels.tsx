@@ -1,48 +1,49 @@
 import type { PresentationTargetState } from "@physica/storyboard";
-import type { evaluateDesktopMorph } from "./morph-demo";
-import "./morph-demo.css";
+import type { evaluateDesktopCamera } from "./camera-demo";
+import "./camera-demo.css";
 
-type DesktopMorphState = ReturnType<typeof evaluateDesktopMorph>;
+type DesktopCameraState = ReturnType<typeof evaluateDesktopCamera>;
 
-export function MorphShowcase({
+export function CameraShowcase({
   state,
 }: {
-  readonly state: DesktopMorphState;
+  readonly state: DesktopCameraState;
 }) {
   return (
-    <div className="morph-showcase">
-      <svg
-        className="morph-canvas"
-        viewBox="0 0 310 210"
-        role="img"
-        aria-label={
-          "Circle to ellipse morph " + Math.round(state.progress * 100) + "%"
-        }
-      >
-        <path d={state.pathData} />
-        <circle cx="155" cy="105" r="4" />
-        <text x="12" y="20">
-          64 ARC-LENGTH SAMPLES
-        </text>
-        <text x="12" y="195">
-          PRESENTATION GEOMETRY · PHYSICS UNCHANGED
-        </text>
-      </svg>
-      <div className="match-board" aria-label="Matched transform diagnostics">
-        <div className="match-card">
-          <small>SEMANTIC ID MATCH</small>
-          <strong>{state.matchedMorphId}</strong>
-          <span>PATH → MORPH</span>
-        </div>
-        <div className="match-card replace">
-          <small>INCOMPATIBLE OBJECT</small>
-          <strong>{state.matchedReplaceId}</strong>
-          <span>TEXT → IMAGE · REPLACE</span>
-        </div>
+    <div
+      className="camera-showcase"
+      aria-label={
+        "Shared Camera follows the projectile at " +
+        Math.round(state.followProgress * 100) +
+        " percent"
+      }
+    >
+      <div
+        aria-hidden="true"
+        dangerouslySetInnerHTML={{ __html: state.markup }}
+      />
+      <div className="camera-hud">
+        <strong>SHARED ORTHOGRAPHIC CAMERA</strong>
+        <span>
+          TARGET {state.cameraTarget.x.toFixed(2)} /{" "}
+          {state.cameraTarget.y.toFixed(2)}
+        </span>
+        <span>VERTICAL SPAN {state.verticalSpan.toFixed(2)}</span>
+        <span>WORLD POSITION UNCHANGED</span>
       </div>
-      <div className="morph-legend">
-        CIRCLE → CANONICAL RESAMPLE → ELLIPSE ·{" "}
-        {Math.round(state.progress * 100)}%
+      <div className="camera-progress" aria-hidden="true">
+        <span>
+          PAN
+          <i style={{ transform: "scaleX(" + state.panProgress + ")" }} />
+        </span>
+        <span>
+          ZOOM
+          <i style={{ transform: "scaleX(" + state.zoomProgress + ")" }} />
+        </span>
+        <span>
+          FOLLOW
+          <i style={{ transform: "scaleX(" + state.followProgress + ")" }} />
+        </span>
       </div>
     </div>
   );
@@ -55,7 +56,7 @@ export function PresentationControls({
   durationSeconds,
   reducedMotion,
   animatedTarget,
-  morphState,
+  cameraState,
   onTogglePlaying,
   onFlipDirection,
   onReset,
@@ -68,7 +69,7 @@ export function PresentationControls({
   readonly durationSeconds: number;
   readonly reducedMotion: boolean;
   readonly animatedTarget: PresentationTargetState | undefined;
-  readonly morphState: DesktopMorphState;
+  readonly cameraState: DesktopCameraState;
   readonly onTogglePlaying: () => void;
   readonly onFlipDirection: () => void;
   readonly onReset: () => void;
@@ -100,12 +101,14 @@ export function PresentationControls({
           checked={reducedMotion}
           onChange={(event) => onReducedMotion(event.target.checked)}
         />
-        Resolve final state
+        Resolve final Camera state
       </label>
       <output>
-        X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · θ{" "}
-        {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · M{" "}
-        {Math.round(morphState.progress * 100)}% · N {morphState.sampleCount}
+        X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · CAM{" "}
+        {cameraState.cameraTarget.x.toFixed(1)}/
+        {cameraState.cameraTarget.y.toFixed(1)} · Z{" "}
+        {cameraState.verticalSpan.toFixed(2)} · F{" "}
+        {Math.round(cameraState.followProgress * 100)}%
       </output>
     </div>
   );

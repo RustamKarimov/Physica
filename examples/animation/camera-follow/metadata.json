@@ -1,0 +1,16 @@
+{
+  "id": "camera-follow",
+  "title": "Camera follows, physics does not move",
+  "category": "animation",
+  "description": "A presentation-clock Camera follows a projectile snapshot and zooms while the physical world trajectory remains unchanged.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "camera-follow",
+    "camera-zoom",
+    "presentation-clock",
+    "scrub",
+    "physics-separation",
+    "shared-camera"
+  ]
+}

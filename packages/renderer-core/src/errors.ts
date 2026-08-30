@@ -1,9 +1,19 @@
-import type { Result } from "@physica/core-model";
+import type { RepresentationId, Result } from "@physica/core-model";
 
 export type RenderError =
   | { readonly kind: "invalid-render-id"; readonly value: string }
   | { readonly kind: "invalid-viewport"; readonly message: string }
   | { readonly kind: "invalid-camera"; readonly message: string }
+  | { readonly kind: "invalid-camera-animation"; readonly message: string }
+  | {
+      readonly kind: "missing-camera-subject";
+      readonly representationId: RepresentationId;
+    }
+  | {
+      readonly kind: "invalid-fit-bounds";
+      readonly representationId: RepresentationId;
+      readonly message: string;
+    }
   | { readonly kind: "invalid-projection"; readonly message: string }
   | { readonly kind: "invalid-transform"; readonly message: string }
   | {

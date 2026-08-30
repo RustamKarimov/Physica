@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 13 Morph and matched transform complete — Step 14 next
+**Current development phase:** Phase 3 Step 14 Camera animation complete — HC-01 in progress
 
-**Current task:** Hand off the verified Step 13 morph and matched-transform result
+**Current task:** Run and publish scheduled HC-01 Animation Preview
 
-**Next task:** Specify Phase 3 Step 3.4 Camera animation, complete its implementation, then run scheduled HC-01 without entering Phase 4
+**Next task:** After HC-01 passes, specify Phase 4 Step 4.1 Math editor and semantic equation tree
 
 **Blockers:** None
 
@@ -21,6 +21,35 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 passed after repairs and is recorded in `docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md`. HC-01 is scheduled after Phase 3 Step 3.4, with early-trigger conditions remaining active.
+
+## Step 14 result
+
+Completed and audited docs/implementation/STEP_14_CAMERA_ANIMATION_SPEC.md, then implemented deterministic presentation-clock Camera pan, zoom, fit-object, follow-target and powers-of-ten zoom without an ADR, root ProjectDocument schema change, new package or third-party dependency.
+
+Implemented:
+
+- @physica/renderer-core: portable immutable Camera operations and subject snapshots; pose/projection channel declarations; finite validation; exact orthographic and perspective zoom optics; eight-corner AABB fit; deterministic follow resolution; typed missing-subject and invalid-bounds errors; and per-operation Camera revalidation;
+- @physica/storyboard: immutable V1 physica:storyboard/camera-v1 envelopes; Scene targeting; stable scheduling; pose/projection overlap rejection with legal parallel pan-or-follow plus zoom; arbitrary-time/reverse/scrub/reduced-motion evaluation; sequential accumulation of completed operations; transient CameraAnimationStateStore; and collision-free Runtime Scheduler presentation-phase integration;
+- package boundary: one architecture-audited internal dependency from Storyboard to renderer-core's public Camera-operation contracts, with no cycle or editor/domain inversion;
+- persistence and authority: Camera schedules, subject snapshots, evaluated operations and resolved Cameras remain transient; canonical ProjectDocument round trips preserve Camera and unknown Storyboard envelopes; Camera tasks write no physics Runtime State Store channel and advance no clock.
+
+User-visible completion:
+
+- examples/animation/camera-follow contains metadata, README, executable deterministic output, expected JSON, accessible SVG preview, automated test and truthful pending .physica/PNG/WebM/shared-runtime obligations;
+- the live desktop workbench now shows “14 / Camera Animation” and renders a projectile through a dynamically resolved shared orthographic Camera with pan, zoom, follow, textual diagnostics and shared play/reverse/scrub/reduced-motion controls;
+- the superseded, unreferenced Step 13 desktop-only morph showcase files were removed; Step 13 public APIs, package tests and gallery example remain intact.
+
+Verification:
+
+- focused renderer-core suite — 2 files and 14 tests passed;
+- focused Storyboard suite — 4 files and 44 tests passed;
+- Camera-follow gallery example — 1 file and 1 test passed;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 87 of 88 workspace projects, 52 unit/example files with 224 tests, 1 architecture file with 2 tests and all three application builds passed;
+- clean frozen-lockfile install passed across all 88 workspace projects;
+- Launch Physica.bat --check passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- the inherited non-failing combined Pixi/Three desktop chunk warning remains approximately 1.095 MB / 300 KB gzip and enters HC-01 as previously bounded debt.
+
+Self-review found no Architecture Blocker. Roadmap progression is paused at the scheduled HC-01 boundary.
 
 ## Step 13 result
 

@@ -1,0 +1,40 @@
+{
+  "id": "camera-follow",
+  "samples": [
+    {
+      "timeSeconds": 0,
+      "followProgress": 0,
+      "zoomProgress": 0,
+      "subjectPosition": { "x": -4, "y": 0, "z": 0 },
+      "cameraPosition": { "x": 0, "y": 0, "z": 12 },
+      "cameraTarget": { "x": 0, "y": 0, "z": 0 },
+      "verticalSpan": 8
+    },
+    {
+      "timeSeconds": 2,
+      "followProgress": 0.5,
+      "zoomProgress": 0.5,
+      "subjectPosition": { "x": 0, "y": 2, "z": 0 },
+      "cameraPosition": { "x": 0, "y": 2, "z": 11 },
+      "cameraTarget": { "x": 0, "y": 1, "z": 0 },
+      "verticalSpan": 5.333333
+    },
+    {
+      "timeSeconds": 4,
+      "followProgress": 1,
+      "zoomProgress": 1,
+      "subjectPosition": { "x": 4, "y": 0, "z": 0 },
+      "cameraPosition": { "x": 4, "y": 2, "z": 10 },
+      "cameraTarget": { "x": 4, "y": 0, "z": 0 },
+      "verticalSpan": 4
+    }
+  ],
+  "equalTimeDeterministic": true,
+  "worldTrajectory": [
+    { "timeSeconds": 0, "position": { "x": -4, "y": 0, "z": 0 } },
+    { "timeSeconds": 2, "position": { "x": 0, "y": 2, "z": 0 } },
+    { "timeSeconds": 4, "position": { "x": 4, "y": 0, "z": 0 } }
+  ],
+  "worldTrajectoryUnchanged": true,
+  "projectionKindPreserved": true
+}

@@ -24,10 +24,10 @@ import {
   threePlan,
 } from "./rendering-demo";
 import {
-  evaluateDesktopMorph,
-  desktopMorphDurationSeconds,
-} from "./morph-demo";
-import { MorphShowcase, PresentationControls } from "./presentation-panels";
+  desktopCameraDurationSeconds,
+  evaluateDesktopCamera,
+} from "./camera-demo";
+import { CameraShowcase, PresentationControls } from "./presentation-panels";
 
 type AdapterState = "initializing" | "ready" | "unavailable";
 
@@ -119,15 +119,15 @@ export function App() {
   const animatedTarget = animationFrame.ok
     ? animationFrame.value.targets[0]
     : undefined;
-  const morphState = evaluateDesktopMorph(animationTime, reducedMotion);
+  const cameraState = evaluateDesktopCamera(animationTime, reducedMotion);
 
   useEffect(() => {
     if (!animationPlaying || reducedMotion) return;
     const timer = window.setInterval(() => {
       setAnimationTime((current) => {
         const next = current + animationDirection * 0.025;
-        if (next > desktopAnimationSchedule.durationSeconds) return 0;
-        if (next < 0) return desktopAnimationSchedule.durationSeconds;
+        if (next > desktopCameraDurationSeconds) return 0;
+        if (next < 0) return desktopCameraDurationSeconds;
         return next;
       });
     }, 25);
@@ -224,7 +224,7 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>13 / MORPH · MATCH</strong>
+          <strong>14 / CAMERA ANIMATION</strong>
         </div>
         <div className="engine-state">
           <i /> deterministic frame ready
@@ -233,20 +233,20 @@ export function App() {
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">
         <div className="eyebrow">
-          <span>DETERMINISTIC SHAPE TRANSITIONS</span>
+          <span>DETERMINISTIC CAMERA CHOREOGRAPHY</span>
           <b>LIVE</b>
         </div>
         <div className="hero-copy">
           <div>
             <h1 id="app-title">
-              Match by meaning.
+              Frame the motion.
               <br />
-              <em>Morph geometry, never the physics.</em>
+              <em>Follow the physics. Never rewrite it.</em>
             </h1>
             <p>
-              A circle becomes an ellipse through canonical arc-length samples.
-              Stable semantic IDs match compatible objects; incompatible content
-              uses an honest replacement instead of fabricated geometry.
+              One shared Camera pans, zooms and follows a resolved projectile
+              snapshot. Scrub or reverse at any time: world coordinates and
+              authoritative physics state remain exactly where they were.
             </p>
           </div>
           <dl className="frame-meta">
@@ -298,7 +298,7 @@ export function App() {
               onPointerLeave={() =>
                 setSelection("Move across the scene to inspect semantic picks")
               }
-              aria-label="Canonical shape morph and matched transform demonstration"
+              aria-label="Shared Camera pan, zoom and follow demonstration"
             >
               <div
                 ref={threeHost}
@@ -316,7 +316,7 @@ export function App() {
                 dangerouslySetInnerHTML={{ __html: svgPlan.payload.markup }}
               />
               <div className="stage-grid" aria-hidden="true" />
-              <MorphShowcase state={morphState} />
+              <CameraShowcase state={cameraState} />
               {animatedTarget && (
                 <button
                   className="animation-object"
@@ -371,7 +371,7 @@ export function App() {
                 </div>
               )}
               <div className="stage-caption">
-                <span>SCENE / MORPH LAB</span>
+                <span>SCENE / CAMERA LAB</span>
                 <span>{animationTime.toFixed(2)} s / PRESENTATION</span>
               </div>
             </div>
@@ -379,16 +379,16 @@ export function App() {
           <aside className="inspector" aria-label="Renderer diagnostics">
             <div className="inspector-heading">
               <span>FRAME INSPECTOR</span>
-              <b>13</b>
+              <b>14</b>
             </div>
             <PresentationControls
               playing={animationPlaying}
               direction={animationDirection}
               timeSeconds={animationTime}
-              durationSeconds={desktopMorphDurationSeconds}
+              durationSeconds={desktopCameraDurationSeconds}
               reducedMotion={reducedMotion}
               animatedTarget={animatedTarget}
-              morphState={morphState}
+              cameraState={cameraState}
               onTogglePlaying={() => setAnimationPlaying((current) => !current)}
               onFlipDirection={() => {
                 setAnimationDirection((current) => (current === 1 ? -1 : 1));
@@ -434,8 +434,9 @@ export function App() {
             <div className="contract-note">
               <span>AUTHORITY</span>
               <p>
-                Morph and matched-transform state is transient. It never
-                modifies force, velocity or any authoritative physical channel.
+                Camera state is transient presentation data. Pan, zoom and
+                follow never modify force, velocity, position or any
+                authoritative physical channel.
               </p>
             </div>
           </aside>
@@ -445,7 +446,7 @@ export function App() {
       <footer>
         <span>PHYSICS-FIRST AUTHORING SYSTEM</span>
         <span>
-          PRESENTATION CLOCK → SEMANTIC MATCH · RESAMPLE → READABLE FRAME
+          PRESENTATION CLOCK → SHARED CAMERA · SUBJECT SNAPSHOT → READABLE FRAME
         </span>
       </footer>
     </main>
