@@ -8,9 +8,9 @@
 
 **Current development phase:** Step 11 specification complete — Animation Scheduler implementation underway
 
-**Current task:** Implement `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
+**Current task:** Finish and audit `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
 
-**Next task:** Implement deterministic animation definitions, easing, composition, conflict resolution and arbitrary-time evaluation in `packages/storyboard`
+**Next task:** Add exhaustive additive/multiplicative conflict tests, full Runtime Scheduler cycle integration and canonical project serialization coverage
 
 **Blockers:** None
 
@@ -23,6 +23,21 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 ## Step 11 specification checkpoint
 
 Created and audited `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`. The audit found no Architecture Blocker, third-party dependency, ADR requirement or ProjectDocument schema-version change. The frozen package map has no standalone animation package, so the existing presentation-tier `@physica/storyboard` package owns a separately exported animation module. Persisted definitions use existing generic Storyboard step envelopes; runtime evaluation reads explicit presentation-clock coordinates, writes only transient presentation state and integrates through the existing Runtime Scheduler presentation-animation phase.
+
+## Step 11 implementation checkpoint
+
+Implemented the framework-independent animation core in `packages/storyboard`: typed translation/rotation/scale/opacity channels, JSON-safe Storyboard animation envelopes, named and fixed-iteration cubic Bézier easing, Sequence/Parallel/Stagger/Wait compilation, explicit overlap policies, pure arbitrary-time evaluation, reverse/scrub equality, reduced-motion final-state resolution, transient Presentation State Store publication and the Runtime Scheduler phase adapter. Focused tests cover envelope round trips, easing, composition, reject/sequence conflicts, reverse/scrub equality, reduced motion, 10,000 evaluations and presentation-clock publication.
+
+Added `examples/animation/move-scale-rotate` with executable deterministic forward/reverse samples, metadata, README, expected JSON, accessible SVG preview, automated test and pending shared-runtime capture obligations. Advanced the launcher-visible desktop workbench to “11 / Animation Scheduler” with a deterministic moving/scaling/rotating object, presentation-time readout, play/pause, reverse/forward, scrub, reset, reduced-motion and numeric transform diagnostics. Presentation transforms remain transient and do not mutate physics.
+
+Verification at this checkpoint:
+
+- focused Storyboard and animation example run — 2 files, 10 tests passed;
+- complete repository CI — 41 files and 165 tests passed, plus 2 architecture tests, strict TypeScript across 81 of 82 workspace projects with scripts and all three app builds;
+- `Launch Physica.bat --check` — passed through Tauri CLI, Cargo and the desktop production build;
+- no third-party dependency was added.
+
+Step 11 remains in progress pending exhaustive additive/multiplicative and mixed-policy tests, an actual full Runtime Scheduler cycle integration test, canonical ProjectDocument serialization coverage and final self-review.
 
 ## Step 10 result
 

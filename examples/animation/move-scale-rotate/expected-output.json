@@ -1,0 +1,31 @@
+{
+  "id": "move-scale-rotate",
+  "durationSeconds": 2,
+  "forward": [
+    {
+      "timeSeconds": 0,
+      "translation": { "x": 0, "y": 0, "z": 0 },
+      "rotationRadians": 0,
+      "scale": { "x": 1, "y": 1, "z": 1 }
+    },
+    {
+      "timeSeconds": 1,
+      "translation": { "x": 60, "y": -20, "z": 0 },
+      "rotationRadians": 1.5707963267948966,
+      "scale": { "x": 1.25, "y": 1.25, "z": 1.25 }
+    },
+    {
+      "timeSeconds": 2,
+      "translation": { "x": 120, "y": -40, "z": 0 },
+      "rotationRadians": 3.141592653589793,
+      "scale": { "x": 1.5, "y": 1.5, "z": 1.5 }
+    }
+  ],
+  "reverse": {
+    "timeSeconds": 1,
+    "translation": { "x": 60, "y": -20, "z": 0 },
+    "rotationRadians": 1.5707963267948966,
+    "scale": { "x": 1.25, "y": 1.25, "z": 1.25 }
+  },
+  "equalTimeDeterministic": true
+}

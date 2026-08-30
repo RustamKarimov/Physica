@@ -1,0 +1,15 @@
+{
+  "id": "move-scale-rotate",
+  "title": "Move, scale and rotate",
+  "category": "animation",
+  "description": "Three presentation channels evaluated deterministically from one presentation-time coordinate.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "animation-scheduler",
+    "presentation-clock",
+    "reverse",
+    "scrub",
+    "reduced-motion"
+  ]
+}

@@ -110,6 +110,9 @@ importers:
       '@physica/renderer-three':
         specifier: workspace:*
         version: link:../../packages/renderer-three
+      '@physica/storyboard':
+        specifier: workspace:*
+        version: link:../../packages/storyboard
       '@tauri-apps/api':
         specifier: 'catalog:'
         version: 2.11.1
@@ -188,6 +191,19 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)
+
+  examples/animation/move-scale-rotate:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/storyboard':
+        specifier: workspace:*
+        version: link:../../../packages/storyboard
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   examples/library/bind-instrument:
     dependencies:
@@ -917,6 +933,16 @@ importers:
         version: 6.0.3
 
   packages/storyboard:
+    dependencies:
+      '@physica/clocks':
+        specifier: workspace:*
+        version: link:../clocks
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/runtime-scheduler':
+        specifier: workspace:*
+        version: link:../runtime-scheduler
     devDependencies:
       typescript:
         specifier: 'catalog:'

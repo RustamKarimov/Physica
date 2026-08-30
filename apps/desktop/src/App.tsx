@@ -5,8 +5,14 @@ import {
   type LibraryItemClass,
   type LibraryItemDefinition,
 } from "@physica/assets";
+import { DeterministicIdFactory } from "@physica/core-model";
 import { mountPixiRenderPlan } from "@physica/renderer-pixi";
 import { mountThreeRenderPlan } from "@physica/renderer-three";
+import {
+  compileAnimationSchedule,
+  evaluateAnimationSchedule,
+  type AnimationDefinition,
+} from "@physica/storyboard";
 import {
   DEMO_HEIGHT,
   DEMO_WIDTH,
@@ -29,6 +35,51 @@ const libraryClasses: readonly (LibraryItemClass | "all")[] = [
   "representation",
   "material-preset",
 ];
+const animationIds = new DeterministicIdFactory(170_000);
+const animationSceneId = animationIds.sceneId();
+const animationRepresentationId = animationIds.representationId();
+const animationBase = {
+  name: "Desktop animation",
+  target: {
+    kind: "representation" as const,
+    sceneId: animationSceneId,
+    id: animationRepresentationId,
+  },
+  clockKey: "presentation" as const,
+  startTimeSeconds: 0,
+  durationSeconds: 4,
+  easing: { kind: "named" as const, id: "ease-in-out" as const },
+  conflictPolicy: "replace" as const,
+  priority: 0,
+  reversible: true,
+  scrubbable: true,
+};
+const animationDefinitions: readonly AnimationDefinition[] = [
+  {
+    ...animationBase,
+    id: animationIds.storyboardStepId(),
+    channel: "presentation.translation",
+    startValue: { kind: "vec3", x: -150, y: 35, z: 0 },
+    endValue: { kind: "vec3", x: 150, y: -45, z: 0 },
+  },
+  {
+    ...animationBase,
+    id: animationIds.storyboardStepId(),
+    channel: "presentation.rotation",
+    startValue: { kind: "scalar", value: 0 },
+    endValue: { kind: "scalar", value: Math.PI * 2 },
+  },
+  {
+    ...animationBase,
+    id: animationIds.storyboardStepId(),
+    channel: "presentation.scale",
+    startValue: { kind: "vec3", x: 0.7, y: 0.7, z: 0.7 },
+    endValue: { kind: "vec3", x: 1.35, y: 1.35, z: 1.35 },
+  },
+];
+const compiledAnimation = compileAnimationSchedule(animationDefinitions);
+if (!compiledAnimation.ok) throw new Error(compiledAnimation.error.code);
+const desktopAnimationSchedule = compiledAnimation.value;
 
 export function App() {
   const pixiHost = useRef<HTMLDivElement>(null);
@@ -45,10 +96,35 @@ export function App() {
   const [placedItems, setPlacedItems] = useState<
     readonly LibraryItemDefinition[]
   >([]);
+  const [animationTime, setAnimationTime] = useState(0);
+  const [animationPlaying, setAnimationPlaying] = useState(true);
+  const [animationDirection, setAnimationDirection] = useState<1 | -1>(1);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const visibleLibraryItems = physicsLibrary.search({
     text: libraryQuery,
     ...(libraryClass === "all" ? {} : { itemClasses: [libraryClass] }),
   });
+  const animationFrame = evaluateAnimationSchedule(
+    desktopAnimationSchedule,
+    animationTime,
+    { reducedMotion },
+  );
+  const animatedTarget = animationFrame.ok
+    ? animationFrame.value.targets[0]
+    : undefined;
+
+  useEffect(() => {
+    if (!animationPlaying || reducedMotion) return;
+    const timer = window.setInterval(() => {
+      setAnimationTime((current) => {
+        const next = current + animationDirection * 0.025;
+        if (next > desktopAnimationSchedule.durationSeconds) return 0;
+        if (next < 0) return desktopAnimationSchedule.durationSeconds;
+        return next;
+      });
+    }, 25);
+    return () => window.clearInterval(timer);
+  }, [animationDirection, animationPlaying, reducedMotion]);
 
   const placeItem = (item: LibraryItemDefinition) => {
     if (item.itemClass === "material-preset") {
@@ -140,7 +216,7 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>10 / PHYSICS LIBRARY</strong>
+          <strong>11 / ANIMATION SCHEDULER</strong>
         </div>
         <div className="engine-state">
           <i /> deterministic frame ready
@@ -149,26 +225,26 @@ export function App() {
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">
         <div className="eyebrow">
-          <span>PHYSICS LIBRARY FOUNDATION</span>
+          <span>PRESENTATION ANIMATION FOUNDATION</span>
           <b>LIVE</b>
         </div>
         <div className="hero-copy">
           <div>
             <h1 id="app-title">
-              Build from physics.
+              Choreograph the idea.
               <br />
-              <em>Teach by construction.</em>
+              <em>Never fake the physics.</em>
             </h1>
             <p>
-              Search first-party smart models, apparatus, instruments and
-              representations. Drag an item onto the live stage to create a
-              versioned snapshot with fresh document identities.
+              Move, scale and rotate on the presentation clock while physical
+              state remains untouched. Scrub or reverse to revisit exactly the
+              same deterministic frame.
             </p>
           </div>
           <dl className="frame-meta">
             <div>
-              <dt>REVISION</dt>
-              <dd>{placedItems.length.toString().padStart(3, "0")}</dd>
+              <dt>TIME</dt>
+              <dd>{animationTime.toFixed(2)} s</dd>
             </div>
             <div>
               <dt>OBJECTS</dt>
@@ -284,6 +360,32 @@ export function App() {
                 dangerouslySetInnerHTML={{ __html: svgPlan.payload.markup }}
               />
               <div className="stage-grid" aria-hidden="true" />
+              {animatedTarget && (
+                <button
+                  className="animation-object"
+                  style={{
+                    opacity: animatedTarget.opacity,
+                    transform:
+                      "translate(" +
+                      animatedTarget.translation.x +
+                      "px, " +
+                      animatedTarget.translation.y +
+                      "px) rotate(" +
+                      animatedTarget.rotationRadians +
+                      "rad) scale(" +
+                      animatedTarget.scale.x +
+                      ")",
+                  }}
+                  onClick={() =>
+                    setSelection(
+                      "Presentation transform · physics state unchanged",
+                    )
+                  }
+                  aria-label="Animated presentation object"
+                >
+                  φ
+                </button>
+              )}
               <div className="placed-items" aria-live="polite">
                 {placedItems.map((item, index) => (
                   <button
@@ -312,8 +414,8 @@ export function App() {
                 </div>
               )}
               <div className="stage-caption">
-                <span>SCENE / LIBRARY LAB</span>
-                <span>{placedItems.length} INSTANCES</span>
+                <span>SCENE / ANIMATION LAB</span>
+                <span>{animationTime.toFixed(2)} s / PRESENTATION</span>
               </div>
             </div>
           </div>
@@ -321,7 +423,60 @@ export function App() {
           <aside className="inspector" aria-label="Renderer diagnostics">
             <div className="inspector-heading">
               <span>FRAME INSPECTOR</span>
-              <b>10</b>
+              <b>11</b>
+            </div>
+            <div className="animation-controls">
+              <small>PRESENTATION CLOCK</small>
+              <div className="transport">
+                <button
+                  onClick={() => setAnimationPlaying((current) => !current)}
+                >
+                  {animationPlaying ? "Pause" : "Play"}
+                </button>
+                <button
+                  onClick={() => {
+                    setAnimationDirection((current) =>
+                      current === 1 ? -1 : 1,
+                    );
+                    setAnimationPlaying(true);
+                  }}
+                >
+                  {animationDirection === 1 ? "Reverse" : "Forward"}
+                </button>
+                <button
+                  onClick={() => {
+                    setAnimationPlaying(false);
+                    setAnimationTime(0);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+              <input
+                aria-label="Scrub presentation time"
+                type="range"
+                min="0"
+                max={desktopAnimationSchedule.durationSeconds}
+                step="0.01"
+                value={animationTime}
+                onChange={(event) => {
+                  setAnimationPlaying(false);
+                  setAnimationTime(Number(event.target.value));
+                }}
+              />
+              <label>
+                <input
+                  type="checkbox"
+                  checked={reducedMotion}
+                  onChange={(event) => setReducedMotion(event.target.checked)}
+                />
+                Resolve final state
+              </label>
+              <output>
+                X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · θ{" "}
+                {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · S{" "}
+                {animatedTarget?.scale.x.toFixed(2) ?? "1.00"}
+              </output>
             </div>
             <div className="selection-readout">
               <small>SEMANTIC PICK</small>
@@ -353,8 +508,8 @@ export function App() {
             <div className="contract-note">
               <span>AUTHORITY</span>
               <p>
-                Library instances are snapshots. Editing the catalog never
-                mutates placed document objects.
+                Presentation transforms are transient. They never modify
+                position, velocity or any authoritative physical state.
               </p>
             </div>
           </aside>
@@ -363,7 +518,7 @@ export function App() {
 
       <footer>
         <span>PHYSICS-FIRST AUTHORING SYSTEM</span>
-        <span>DISCOVER → PREFLIGHT → SNAPSHOT → COMMAND</span>
+        <span>CLOCK → EASING → CHANNELS → PRESENTATION TRANSFORM</span>
       </footer>
     </main>
   );
