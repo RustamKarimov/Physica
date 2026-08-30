@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 9 complete — shared Rendering Foundation verified
+**Current development phase:** Step 10 specification complete — Physics Library Foundation implementation underway
 
-**Current task:** Step 10 — audit and specify the Physics Component / Model / Asset / Prefab Library foundation
+**Current task:** Implement `docs/implementation/STEP_10_PHYSICS_LIBRARY_FOUNDATION_SPEC.md`
 
-**Next task:** Write the bounded Step 10 implementation specification from `docs/PHYSICS_LIBRARY.md` and its owning contracts, then implement it if no Architecture Blocker exists
+**Next task:** Implement portable Library/prefab/instrument/material registries in `plugin-sdk`, then catalog, built-ins, My Library and snapshot planning in `assets`
 
 **Blockers:** None
 
@@ -19,6 +19,10 @@
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+## Step 10 specification checkpoint
+
+Created and audited `docs/implementation/STEP_10_PHYSICS_LIBRARY_FOUNDATION_SPEC.md`. The audit found no Architecture Blocker and requires no ADR, ProjectDocument schema-version change or third-party dependency. The bounded ownership is: portable declarative registry contracts in `packages/plugin-sdk`, catalog/built-ins/My Library/snapshot planning in `packages/assets`, and one atomic snapshot-instantiation command in `packages/commands`. Existing projects receive copied ordinary document content plus provenance and never remain live-linked to registry definitions.
 
 ## Step 9 result
 
