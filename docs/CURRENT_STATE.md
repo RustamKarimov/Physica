@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 11 complete — Step 12 Draw/write/reveal/highlight specification next
+**Current development phase:** Step 11 complete — Step 12 Draw/write/reveal/highlight specification audited
 
-**Current task:** Specify Step 12 from the frozen Draw/write/reveal/highlight roadmap contract
+**Current task:** Implement the audited Step 12 Draw/write/reveal/highlight specification
 
-**Next task:** Audit source specifications, create the Step 12 implementation specification, then implement `draw-vector`, `write-label` and `highlight-diagram` without entering Step 13
+**Next task:** Implement and verify `draw-vector`, `write-label` and `highlight-diagram`, then run the HC-00 retrospective project-health checkpoint without entering Step 13
 
 **Blockers:** None
 
@@ -19,6 +19,8 @@
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. It defines milestone-based whole-project audits, completion-evidence reconciliation and early-trigger conditions. HC-00 is required immediately after Step 12 as a retrospective baseline across all completed work.
 
 ## Step 11 result
 

@@ -307,6 +307,13 @@ Never silently alter an existing ADR.
 Make a recoverable Git commit/checkpoint after a verified major phase where
 appropriate.
 
+Project-wide health checkpoints are governed by
+`docs/PROJECT_HEALTH_CHECKPOINTS.md`. At each scheduled or early-trigger
+boundary, pause roadmap progression, verify every completed step against its
+promised evidence, audit integration and maintainability across the whole
+repository, correct regressions and publish the required checkpoint report
+before continuing.
+
 ----------------------------------------------------------------------
 K. CONTINUE
 ----------------------------------------------------------------------
