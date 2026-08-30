@@ -1,66 +1,48 @@
 import type { PresentationTargetState } from "@physica/storyboard";
-import type { evaluateDesktopReveal } from "./reveal-demo";
-import "./reveal-demo.css";
+import type { evaluateDesktopMorph } from "./morph-demo";
+import "./morph-demo.css";
 
-type DesktopRevealState = ReturnType<typeof evaluateDesktopReveal>;
+type DesktopMorphState = ReturnType<typeof evaluateDesktopMorph>;
 
-export function RevealShowcase({
+export function MorphShowcase({
   state,
 }: {
-  readonly state: DesktopRevealState;
+  readonly state: DesktopMorphState;
 }) {
   return (
-    <div className="reveal-showcase">
+    <div className="morph-showcase">
       <svg
-        className="reveal-vector"
+        className="morph-canvas"
         viewBox="0 0 310 210"
         role="img"
         aria-label={
-          "Force vector " + Math.round(state.pathProgress * 100) + "% drawn"
+          "Circle to ellipse morph " + Math.round(state.progress * 100) + "%"
         }
       >
-        <line
-          x1="52"
-          y1="166"
-          x2="255"
-          y2="56"
-          pathLength={state.dashArray}
-          strokeDasharray={state.dashArray}
-          strokeDashoffset={state.dashOffset}
-        />
-        {state.arrowHeadVisible && <path d="M255 56L224 59M255 56L239 83" />}
-        <text x="62" y="188">
-          PATH DRAW
+        <path d={state.pathData} />
+        <circle cx="155" cy="105" r="4" />
+        <text x="12" y="20">
+          64 ARC-LENGTH SAMPLES
+        </text>
+        <text x="12" y="195">
+          PRESENTATION GEOMETRY · PHYSICS UNCHANGED
         </text>
       </svg>
-      <div
-        className="written-label"
-        aria-label={state.fullLabel}
-        title="Full accessible label remains available while the visual prefix writes"
-      >
-        <small>GRAPHEME-SAFE LABEL</small>
-        <strong>{state.visibleLabel}</strong>
-        <span aria-hidden="true" />
+      <div className="match-board" aria-label="Matched transform diagnostics">
+        <div className="match-card">
+          <small>SEMANTIC ID MATCH</small>
+          <strong>{state.matchedMorphId}</strong>
+          <span>PATH → MORPH</span>
+        </div>
+        <div className="match-card replace">
+          <small>INCOMPATIBLE OBJECT</small>
+          <strong>{state.matchedReplaceId}</strong>
+          <span>TEXT → IMAGE · REPLACE</span>
+        </div>
       </div>
-      <div className="emphasis-diagram">
-        <div
-          className="focus-vector"
-          style={{
-            boxShadow:
-              "0 0 " +
-              34 * state.highlightIntensity +
-              "px rgba(246,199,67,.72)",
-          }}
-        >
-          F
-        </div>
-        <div
-          className="context-vector"
-          style={{ opacity: state.contextOpacity }}
-        >
-          v
-        </div>
-        <p>Focus: resultant force · velocity remains context</p>
+      <div className="morph-legend">
+        CIRCLE → CANONICAL RESAMPLE → ELLIPSE ·{" "}
+        {Math.round(state.progress * 100)}%
       </div>
     </div>
   );
@@ -73,7 +55,7 @@ export function PresentationControls({
   durationSeconds,
   reducedMotion,
   animatedTarget,
-  revealState,
+  morphState,
   onTogglePlaying,
   onFlipDirection,
   onReset,
@@ -86,7 +68,7 @@ export function PresentationControls({
   readonly durationSeconds: number;
   readonly reducedMotion: boolean;
   readonly animatedTarget: PresentationTargetState | undefined;
-  readonly revealState: DesktopRevealState;
+  readonly morphState: DesktopMorphState;
   readonly onTogglePlaying: () => void;
   readonly onFlipDirection: () => void;
   readonly onReset: () => void;
@@ -122,10 +104,8 @@ export function PresentationControls({
       </label>
       <output>
         X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · θ{" "}
-        {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · S{" "}
-        {animatedTarget?.scale.x.toFixed(2) ?? "1.00"} · D{" "}
-        {Math.round(revealState.pathProgress * 100)}% · W{" "}
-        {revealState.visibleGraphemes}/{revealState.totalGraphemes}
+        {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · M{" "}
+        {Math.round(morphState.progress * 100)}% · N {morphState.sampleCount}
       </output>
     </div>
   );

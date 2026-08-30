@@ -24,10 +24,10 @@ import {
   threePlan,
 } from "./rendering-demo";
 import {
-  evaluateDesktopReveal,
-  desktopRevealDurationSeconds,
-} from "./reveal-demo";
-import { PresentationControls, RevealShowcase } from "./presentation-panels";
+  evaluateDesktopMorph,
+  desktopMorphDurationSeconds,
+} from "./morph-demo";
+import { MorphShowcase, PresentationControls } from "./presentation-panels";
 
 type AdapterState = "initializing" | "ready" | "unavailable";
 
@@ -119,7 +119,7 @@ export function App() {
   const animatedTarget = animationFrame.ok
     ? animationFrame.value.targets[0]
     : undefined;
-  const revealState = evaluateDesktopReveal(animationTime, reducedMotion);
+  const morphState = evaluateDesktopMorph(animationTime, reducedMotion);
 
   useEffect(() => {
     if (!animationPlaying || reducedMotion) return;
@@ -224,7 +224,7 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>12 / DRAW · WRITE · REVEAL</strong>
+          <strong>13 / MORPH · MATCH</strong>
         </div>
         <div className="engine-state">
           <i /> deterministic frame ready
@@ -233,20 +233,20 @@ export function App() {
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">
         <div className="eyebrow">
-          <span>DETERMINISTIC SCIENTIFIC REVEALS</span>
+          <span>DETERMINISTIC SHAPE TRANSITIONS</span>
           <b>LIVE</b>
         </div>
         <div className="hero-copy">
           <div>
             <h1 id="app-title">
-              Draw the reasoning.
+              Match by meaning.
               <br />
-              <em>Reveal meaning, not new physics.</em>
+              <em>Morph geometry, never the physics.</em>
             </h1>
             <p>
-              Draw a vector by path length, write a Unicode-safe label and
-              highlight the instructional focus. Every effect is derived from
-              the same scrub-safe presentation-time coordinate.
+              A circle becomes an ellipse through canonical arc-length samples.
+              Stable semantic IDs match compatible objects; incompatible content
+              uses an honest replacement instead of fabricated geometry.
             </p>
           </div>
           <dl className="frame-meta">
@@ -298,7 +298,7 @@ export function App() {
               onPointerLeave={() =>
                 setSelection("Move across the scene to inspect semantic picks")
               }
-              aria-label="Layered drawing, writing and emphasis demonstration"
+              aria-label="Canonical shape morph and matched transform demonstration"
             >
               <div
                 ref={threeHost}
@@ -316,7 +316,7 @@ export function App() {
                 dangerouslySetInnerHTML={{ __html: svgPlan.payload.markup }}
               />
               <div className="stage-grid" aria-hidden="true" />
-              <RevealShowcase state={revealState} />
+              <MorphShowcase state={morphState} />
               {animatedTarget && (
                 <button
                   className="animation-object"
@@ -371,7 +371,7 @@ export function App() {
                 </div>
               )}
               <div className="stage-caption">
-                <span>SCENE / REVEAL LAB</span>
+                <span>SCENE / MORPH LAB</span>
                 <span>{animationTime.toFixed(2)} s / PRESENTATION</span>
               </div>
             </div>
@@ -379,16 +379,16 @@ export function App() {
           <aside className="inspector" aria-label="Renderer diagnostics">
             <div className="inspector-heading">
               <span>FRAME INSPECTOR</span>
-              <b>12</b>
+              <b>13</b>
             </div>
             <PresentationControls
               playing={animationPlaying}
               direction={animationDirection}
               timeSeconds={animationTime}
-              durationSeconds={desktopRevealDurationSeconds}
+              durationSeconds={desktopMorphDurationSeconds}
               reducedMotion={reducedMotion}
               animatedTarget={animatedTarget}
-              revealState={revealState}
+              morphState={morphState}
               onTogglePlaying={() => setAnimationPlaying((current) => !current)}
               onFlipDirection={() => {
                 setAnimationDirection((current) => (current === 1 ? -1 : 1));
@@ -434,8 +434,8 @@ export function App() {
             <div className="contract-note">
               <span>AUTHORITY</span>
               <p>
-                Draw, write and emphasis state is transient. It never modifies
-                force, velocity or any authoritative physical channel.
+                Morph and matched-transform state is transient. It never
+                modifies force, velocity or any authoritative physical channel.
               </p>
             </div>
           </aside>
@@ -445,7 +445,7 @@ export function App() {
       <footer>
         <span>PHYSICS-FIRST AUTHORING SYSTEM</span>
         <span>
-          PRESENTATION CLOCK → PATH · GRAPHEME · EMPHASIS → READABLE FRAME
+          PRESENTATION CLOCK → SEMANTIC MATCH · RESAMPLE → READABLE FRAME
         </span>
       </footer>
     </main>

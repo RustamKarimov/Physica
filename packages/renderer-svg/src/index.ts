@@ -211,4 +211,5 @@ export function createSvgRenderPlan(
   };
 }
 
+export * from "./morph";
 export * from "./reveal";

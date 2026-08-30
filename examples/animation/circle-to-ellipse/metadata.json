@@ -1,0 +1,16 @@
+{
+  "id": "circle-to-ellipse",
+  "title": "Circle to ellipse",
+  "category": "animation",
+  "description": "A closed circle path is canonically resampled and morphed into an ellipse while stable semantic IDs select morph or replacement behavior.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "shape-morph",
+    "path-normalization",
+    "matched-transform",
+    "semantic-replacement",
+    "presentation-clock",
+    "scrub"
+  ]
+}

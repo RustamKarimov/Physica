@@ -1,0 +1,88 @@
+.morph-showcase {
+  position: absolute;
+  z-index: 7;
+  inset: 28px 24px 46px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 18px;
+  pointer-events: none;
+}
+.morph-canvas {
+  min-width: 0;
+  height: 100%;
+  border: 1px solid rgba(112, 133, 140, 0.28);
+  background: rgba(7, 12, 15, 0.78);
+}
+.morph-canvas path {
+  fill: rgba(45, 194, 203, 0.12);
+  stroke: var(--cyan);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+.morph-canvas circle {
+  fill: #f6c743;
+}
+.morph-canvas text {
+  fill: #829197;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.1em;
+}
+.match-board {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+.match-card {
+  padding: 12px;
+  border: 1px solid rgba(112, 133, 140, 0.3);
+  background: rgba(10, 16, 19, 0.9);
+}
+.match-card small {
+  display: block;
+  margin-bottom: 8px;
+  color: #819096;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.match-card strong {
+  display: block;
+  color: #eef6f7;
+  font-size: 12px;
+}
+.match-card span {
+  display: block;
+  margin-top: 6px;
+  color: var(--cyan);
+  font:
+    9px "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+.match-card.replace span {
+  color: var(--amber);
+}
+.morph-legend {
+  position: absolute;
+  left: 17px;
+  bottom: 14px;
+  color: #aab6ba;
+  font:
+    9px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.08em;
+}
+@media (max-width: 1080px) {
+  .morph-showcase {
+    grid-template-columns: 1fr;
+  }
+  .match-board {
+    display: none;
+  }
+}

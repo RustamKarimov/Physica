@@ -1,0 +1,49 @@
+{
+  "id": "circle-to-ellipse",
+  "samples": [
+    {
+      "timeSeconds": 0,
+      "progress": 0,
+      "sampleCount": 64,
+      "cardinalPoints": [
+        { "x": 40, "y": 0 },
+        { "x": 0, "y": 40 },
+        { "x": -40, "y": 0 },
+        { "x": 0, "y": -40 }
+      ]
+    },
+    {
+      "timeSeconds": 2,
+      "progress": 0.5,
+      "sampleCount": 64,
+      "cardinalPoints": [
+        { "x": 56, "y": 0 },
+        { "x": 0, "y": 34 },
+        { "x": -56, "y": 0 },
+        { "x": 0, "y": -34 }
+      ]
+    },
+    {
+      "timeSeconds": 4,
+      "progress": 1,
+      "sampleCount": 64,
+      "cardinalPoints": [
+        { "x": 72, "y": 0 },
+        { "x": 0, "y": 28 },
+        { "x": -72, "y": 0 },
+        { "x": 0, "y": -28 }
+      ]
+    }
+  ],
+  "equalTimeDeterministic": true,
+  "matchedStrategies": ["force:morph", "label:replace"],
+  "enteringIds": ["new-value"],
+  "exitingIds": [],
+  "incompatibleFallback": {
+    "kind": "replace",
+    "progress": 0.5,
+    "sourceOpacity": 0.5,
+    "destinationOpacity": 0.5,
+    "reason": "topology-mismatch"
+  }
+}

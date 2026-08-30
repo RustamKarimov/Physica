@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 12 Draw/write/reveal/highlight and HC-00 retrospective baseline complete — Step 13 next
+**Current development phase:** Step 13 Morph and matched transform complete — Step 14 next
 
-**Current task:** Hand off the verified Step 12 result and project health-checkpoint schedule
+**Current task:** Hand off the verified Step 13 morph and matched-transform result
 
-**Next task:** Specify Phase 3 Step 3.3 Morph and matched transform from the frozen roadmap without entering camera animation
+**Next task:** Specify Phase 3 Step 3.4 Camera animation, complete its implementation, then run scheduled HC-01 without entering Phase 4
 
 **Blockers:** None
 
@@ -21,6 +21,33 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 passed after repairs and is recorded in `docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md`. HC-01 is scheduled after Phase 3 Step 3.4, with early-trigger conditions remaining active.
+
+## Step 13 result
+
+Completed and audited `docs/implementation/STEP_13_MORPH_MATCHED_TRANSFORM_SPEC.md`, then implemented deterministic presentation-clock morphing and stable-ID matched transforms without an ADR, root ProjectDocument schema change, new package or third-party dependency.
+
+Implemented:
+
+- `@physica/storyboard`: immutable V1 morph envelopes; same-Scene Representation endpoints; shape-morph and matched-transform operations; stable schedule ordering; shared-target overlap rejection; arbitrary-time/reverse/scrub/reduced-motion evaluation; transient `MorphStateStore`; collision-free Runtime Scheduler integration; and a semantic-ID match planner that classifies compatible matches, replacements, entries and exits without position/text/renderer inference;
+- `@physica/renderer-svg`: finite open/closed path validation; repeated closing-point normalization; equal arc-length resampling; matching-winding and least-distance cyclic alignment for closed paths; exact endpoint/component interpolation; and a typed cross-fade replacement plan for structurally valid but topology-incompatible paths;
+- persistence, runtime and scientific-authority boundaries: compiled schedules, normalized points and evaluated frames remain transient; canonical ProjectDocument round trips preserve V1 and unknown Storyboard envelopes; the presentation task writes no physics Runtime State Store channel and advances no clock.
+
+User-visible completion:
+
+- `examples/animation/circle-to-ellipse` contains metadata, README, executable deterministic output, expected JSON, accessible SVG preview, automated test and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
+- the live desktop workbench now shows “13 / Morph · Match”, a 64-sample circle-to-ellipse transition, semantic morph/replacement diagnostics and shared play/reverse/scrub/reduced-motion controls;
+- the superseded, unreferenced Step 12 desktop-only showcase files were removed; Step 12 public APIs, package tests and all three gallery examples remain intact.
+
+Verification:
+
+- focused Step 13 run — 3 files and 16 tests passed, including 10,000 arbitrary-time evaluations, envelope/persistence/runtime separation, stable matching, winding/start alignment, exact interpolation and topology fallback;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 86 of 87 workspace projects, 49 unit/example files with 205 tests, 1 architecture file with 2 tests and all three application builds passed;
+- clean frozen-lockfile install passed across 87 workspace projects;
+- `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- the inherited non-failing combined Pixi/Three desktop chunk warning remains approximately 1.094 MB / 300 KB gzip and is still governed by HC-04 debt;
+- attempted in-app browser visual inspection could not start because the browser-control runtime exited before page discovery; the local Vite server, strict desktop typecheck, production build and launcher check passed, and the checked-in accessible SVG preview remains the deterministic visual fixture.
+
+Self-review found no Architecture Blocker or Project Health early trigger. HC-01 remains scheduled after Step 14 camera animation.
 
 ## Step 12 result
 
@@ -552,7 +579,7 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 13 read first
+## Step 14 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
@@ -564,8 +591,10 @@ Resolved during bootstrap:
 - `docs/RENDERER_ARCHITECTURE.md`
 - `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
 - `docs/implementation/STEP_12_DRAW_WRITE_REVEAL_HIGHLIGHT_SPEC.md`
+- `docs/implementation/STEP_13_MORPH_MATCHED_TRANSFORM_SPEC.md`
+- `docs/CLOCKS_AND_TIME.md`
 - `docs/EXAMPLE_SYSTEM.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 13 reaches an Architecture Blocker or a Project Health early-trigger condition.
+Stop only if Step 14 reaches an Architecture Blocker. After Step 14, run scheduled HC-01 before entering Phase 4.
