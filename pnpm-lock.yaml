@@ -86,6 +86,9 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
       '@physica/core-model':
         specifier: workspace:*
         version: link:../../packages/core-model
@@ -185,6 +188,69 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)
+
+  examples/library/bind-instrument:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/library/drag-prefab:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/library/drag-smart-model:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/library/foundation-object-pack:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/library/registry-discovery:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/library/save-to-my-library:
+    dependencies:
+      '@physica/assets':
+        specifier: workspace:*
+        version: link:../../../packages/assets
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   examples/math/units-and-dimensions:
     dependencies:
@@ -427,6 +493,19 @@ importers:
         version: 6.0.3
 
   packages/assets:
+    dependencies:
+      '@physica/commands':
+        specifier: workspace:*
+        version: link:../commands
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@physica/serialization':
+        specifier: workspace:*
+        version: link:../serialization
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -663,6 +742,10 @@ importers:
         version: 6.0.3
 
   packages/plugin-sdk:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
     devDependencies:
       typescript:
         specifier: 'catalog:'

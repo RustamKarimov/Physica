@@ -1,0 +1,6 @@
+{
+  "id": "bind-instrument",
+  "item": "Stopwatch",
+  "observableKinds": ["time"],
+  "allowIncompleteAuthoring": true
+}

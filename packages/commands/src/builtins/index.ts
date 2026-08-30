@@ -18,8 +18,15 @@ import {
 } from "@physica/core-model";
 import { command, type Command, type CommandHandler } from "../command";
 import { CommandRegistry } from "../command-registry";
+import {
+  LIBRARY_COMMAND_TYPES,
+  registerLibraryInstantiationCommands,
+  type InstantiateLibraryItemPayload,
+  type RemoveLibraryInstantiationPayload,
+} from "../library-instantiation";
 
 export const BUILTIN_COMMAND_TYPES = {
+  ...LIBRARY_COMMAND_TYPES,
   addScene: registeredTypeId("physica:command/add-scene"),
   removeScene: registeredTypeId("physica:command/remove-scene"),
   reorderScenes: registeredTypeId("physica:command/reorder-scenes"),
@@ -1045,7 +1052,7 @@ export function registerBuiltinCommands(
     BUILTIN_COMMAND_TYPES.setProjectMetadata,
     setProjectMetadataHandler,
   );
-  return registry;
+  return registerLibraryInstantiationCommands(registry);
 }
 
 export function createBuiltinCommandRegistry(): CommandRegistry {
@@ -1067,4 +1074,6 @@ export type BuiltinCommand = Command<
   | AddRepresentationPayload
   | RemoveRepresentationPayload
   | SetProjectMetadataPayload
+  | InstantiateLibraryItemPayload
+  | RemoveLibraryInstantiationPayload
 >;

@@ -1,18 +1,13 @@
 {
-  "name": "@physica/plugin-sdk",
+  "name": "@physica-example/save-to-my-library",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@physica/assets": "workspace:*",
     "@physica/core-model": "workspace:*"
   },
   "devDependencies": {

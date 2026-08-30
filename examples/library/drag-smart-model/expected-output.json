@@ -1,0 +1,6 @@
+{
+  "id": "drag-smart-model",
+  "item": "Ball",
+  "itemClass": "smart-model",
+  "dragKind": "physica/library-item"
+}

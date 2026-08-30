@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 10 specification complete — Physics Library Foundation implementation underway
+**Current development phase:** Step 10 complete — Physics Library Foundation
 
-**Current task:** Implement `docs/implementation/STEP_10_PHYSICS_LIBRARY_FOUNDATION_SPEC.md`
+**Current task:** Prepare the Step 11 Animation Scheduler implementation specification
 
-**Next task:** Implement portable Library/prefab/instrument/material registries in `plugin-sdk`, then catalog, built-ins, My Library and snapshot planning in `assets`
+**Next task:** Audit `docs/ANIMATION_ENGINE.md` and write `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md` before implementation
 
 **Blockers:** None
 
@@ -20,9 +20,72 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-## Step 10 specification checkpoint
+## Step 10 result
 
-Created and audited `docs/implementation/STEP_10_PHYSICS_LIBRARY_FOUNDATION_SPEC.md`. The audit found no Architecture Blocker and requires no ADR, ProjectDocument schema-version change or third-party dependency. The bounded ownership is: portable declarative registry contracts in `packages/plugin-sdk`, catalog/built-ins/My Library/snapshot planning in `packages/assets`, and one atomic snapshot-instantiation command in `packages/commands`. Existing projects receive copied ordinary document content plus provenance and never remain live-linked to registry definitions.
+Completed and audited `docs/implementation/STEP_10_PHYSICS_LIBRARY_FOUNDATION_SPEC.md`, then implemented the frozen metadata-driven Physics Library foundation without an ADR, ProjectDocument schema-version change or third-party dependency. Library definitions remain declarative data; instantiated content is copied into ordinary document nodes with provenance and never remains live-linked to a registry entry.
+
+Implemented in `packages/plugin-sdk`:
+
+- portable JSON-safe contracts for Smart Models, Prefabs, Visual Objects, Instruments, Representations and Material Presets;
+- canonical metadata for Built-in, plugin and My Library sources, tags, thumbnails, editable properties, assumptions, variants, semantic anchors, typed ports, compatible targets, requirements, license and model provenance;
+- deterministic `LibraryRegistry`, `PrefabRegistry`, `InstrumentRegistry` and `MaterialPresetRegistry` implementations with validation, deep-frozen entries, lexical listing, duplicate rejection and atomic batches;
+- declarative plugin contribution registration with plugin namespace/source enforcement and rollback-safe all-or-nothing publication.
+
+Implemented in `packages/assets`:
+
+- deterministic full-text/tag/class/source/dimensionality search, source-neutral drag payloads and compatible-target evaluation;
+- registry cross-reference auditing between Library items, Prefabs, Instruments and Material Presets;
+- preflighted prefab/instrument snapshot planning with fresh persisted UUIDs, recursive reference remapping, target-slot binding, exact plugin-version requirements and component-level source provenance;
+- the first-party foundational pack: ball, block, trolley, car, mass, string, spring, pulley, support, ground/surface, ruler, stopwatch, vector arrow, coordinate axes, graph panel, equation panel and a reusable pulley/mass prefab;
+- all six item classes and nine frozen TextBlock preset metadata entries: Text Block, Definition, Explanation, Caption, Callout, Quote, Bullet List, Examiner Note and Warning;
+- a presentation-only neutral material preset that deliberately claims no unsourced physical constants;
+- canonical schema-versioned My Library import/export and in-memory storage with declarative validation.
+
+Implemented in `packages/commands`:
+
+- one atomic instantiate-Library-item command that publishes assets, datasets, entities, components, systems, clocks, events, relationships, representations, controls, equations, graphs and plugin locks as one history entry;
+- exact undo/redo with prepared identities preserved, plugin-lock conflict rejection, duplicate identity rejection and final ProjectDocument validation before publication.
+
+Desktop observation experience:
+
+- advanced the live workbench from Step 9 to “10 / Physics Library” while retaining the shared SVG/Pixi/Three demonstration stage;
+- added a metadata-driven Library browser with search, all six class filters, item counts, source-neutral cards, accessible add buttons and native drag payloads;
+- items can be dragged or added onto the stage, inspected for immutable source/version provenance and displayed as visible stage instances;
+- material presets are clearly treated as property presets instead of fake scene objects;
+- `Launch Physica.bat --check` passed Tauri CLI 2.11.4, Cargo 1.94.1 and the production desktop build, preserving the one-click live-development launcher;
+- automated browser-control visual inspection could not run because the required Windows browser-control runtime failed to start; this did not affect the production build, package interaction tests or checked-in SVG gallery previews.
+
+Example Gallery artifacts:
+
+- `examples/library/drag-smart-model`;
+- `examples/library/drag-prefab`;
+- `examples/library/bind-instrument`;
+- `examples/library/save-to-my-library`, including a real canonical export/import round trip;
+- `examples/library/foundation-object-pack`;
+- `examples/library/registry-discovery`.
+
+Each example contains metadata, README, an executable deterministic run module, expected JSON, accessible expected SVG preview, automated test and explicit pending `.physica`/PNG/WebM/shared-runtime obligations in `examples/pending-artifacts.json`.
+
+Scientific, architecture, teacher-UX and performance self-review resolved:
+
+- physics/domain packages remain independent of React and editor internals;
+- the commands package does not depend on registry/UI packages, and the assets package prepares snapshots through public contracts only;
+- anchor/port meaning is semantic rather than positional UI convention;
+- unknown plugin content retains exact version requirements and no plugin code executes in the renderer or editor;
+- no physical material constant was introduced without a reference;
+- search and registry ordering are deterministic and catalog work is bounded by registered item count;
+- plugin acceptance proves a Smart Model, Prefab and Instrument become discoverable without an editor code change.
+
+Commands and verification:
+
+- focused Step 10 package/example acceptance run — 8 files, 14 tests passed after the final plugin acceptance and My Library example changes;
+- earlier combined command/Library/example run — 9 files, 33 tests passed;
+- strict typechecks for `plugin-sdk`, `assets`, `commands`, the desktop app and all six examples — passed;
+- architecture boundary lint — passed;
+- desktop production build — passed;
+- `Launch Physica.bat --check` — passed;
+- clean frozen-lockfile workspace installation — passed across 81 workspace projects;
+- complete repository CI — passed after one unused example fixture was removed: formatting, ESLint, architecture boundaries, strict TypeScript across 80 of 81 workspace projects with scripts, 39 unit/example files with 155 tests, 2 architecture tests and all three application builds.
 
 ## Step 9 result
 
@@ -418,16 +481,16 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 10 read first
+## Step 11 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
-- `docs/PHYSICS_LIBRARY.md`
-- `docs/COMPONENT_MODEL.md`
+- `docs/ANIMATION_ENGINE.md`
+- `docs/CLOCK_SYSTEM.md`
 - `docs/COMMANDS_AND_EVENTS.md`
 - `docs/EXAMPLE_SYSTEM.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 10 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 11 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

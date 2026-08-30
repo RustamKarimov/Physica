@@ -1,0 +1,13 @@
+{
+  "id": "registry-discovery",
+  "title": "Registry discovery",
+  "category": "library",
+  "description": "Query the four declarative registries through the deterministic Physics Library catalog.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "physics-library",
+    "declarative-registry",
+    "snapshot-instantiation"
+  ]
+}

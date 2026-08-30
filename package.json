@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "pnpm test:unit && pnpm test:architecture",
-    "test:unit": "vitest run tests/smoke tests/examples packages/core-model packages/serialization packages/commands packages/mathematics packages/units packages/clocks packages/events packages/runtime-scheduler packages/checkpoints packages/renderer-core packages/renderer-svg packages/renderer-pixi packages/renderer-three packages/picking examples",
+    "test:unit": "vitest run tests/smoke tests/examples packages/core-model packages/serialization packages/commands packages/plugin-sdk packages/assets packages/mathematics packages/units packages/clocks packages/events packages/runtime-scheduler packages/checkpoints packages/renderer-core packages/renderer-svg packages/renderer-pixi packages/renderer-three packages/picking examples",
     "test:architecture": "vitest run tests/architecture",
     "test:e2e": "playwright test",
     "ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"

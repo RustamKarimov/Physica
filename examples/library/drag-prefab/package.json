@@ -1,19 +1,13 @@
 {
-  "name": "@physica/plugin-sdk",
+  "name": "@physica-example/drag-prefab",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "src"
-  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@physica/core-model": "workspace:*"
+    "@physica/assets": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"
