@@ -21,6 +21,10 @@ import {
   svgPlan,
   threePlan,
 } from "./rendering-demo";
+import {
+  evaluateDesktopReveal,
+  desktopRevealDurationSeconds,
+} from "./reveal-demo";
 
 type AdapterState = "initializing" | "ready" | "unavailable";
 
@@ -112,6 +116,7 @@ export function App() {
   const animatedTarget = animationFrame.ok
     ? animationFrame.value.targets[0]
     : undefined;
+  const revealState = evaluateDesktopReveal(animationTime, reducedMotion);
 
   useEffect(() => {
     if (!animationPlaying || reducedMotion) return;
@@ -216,7 +221,7 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>11 / ANIMATION SCHEDULER</strong>
+          <strong>12 / DRAW · WRITE · REVEAL</strong>
         </div>
         <div className="engine-state">
           <i /> deterministic frame ready
@@ -225,20 +230,20 @@ export function App() {
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">
         <div className="eyebrow">
-          <span>PRESENTATION ANIMATION FOUNDATION</span>
+          <span>DETERMINISTIC SCIENTIFIC REVEALS</span>
           <b>LIVE</b>
         </div>
         <div className="hero-copy">
           <div>
             <h1 id="app-title">
-              Choreograph the idea.
+              Draw the reasoning.
               <br />
-              <em>Never fake the physics.</em>
+              <em>Reveal meaning, not new physics.</em>
             </h1>
             <p>
-              Move, scale and rotate on the presentation clock while physical
-              state remains untouched. Scrub or reverse to revisit exactly the
-              same deterministic frame.
+              Draw a vector by path length, write a Unicode-safe label and
+              highlight the instructional focus. Every effect is derived from
+              the same scrub-safe presentation-time coordinate.
             </p>
           </div>
           <dl className="frame-meta">
@@ -342,7 +347,7 @@ export function App() {
               onPointerLeave={() =>
                 setSelection("Move across the scene to inspect semantic picks")
               }
-              aria-label="Layered rendering demonstration"
+              aria-label="Layered drawing, writing and emphasis demonstration"
             >
               <div
                 ref={threeHost}
@@ -360,6 +365,61 @@ export function App() {
                 dangerouslySetInnerHTML={{ __html: svgPlan.payload.markup }}
               />
               <div className="stage-grid" aria-hidden="true" />
+              <div className="reveal-showcase">
+                <svg
+                  className="reveal-vector"
+                  viewBox="0 0 310 210"
+                  role="img"
+                  aria-label={`Force vector ${Math.round(
+                    revealState.pathProgress * 100,
+                  )}% drawn`}
+                >
+                  <line
+                    x1="52"
+                    y1="166"
+                    x2="255"
+                    y2="56"
+                    pathLength={revealState.dashArray}
+                    strokeDasharray={revealState.dashArray}
+                    strokeDashoffset={revealState.dashOffset}
+                  />
+                  {revealState.arrowHeadVisible && (
+                    <path d="M255 56L224 59M255 56L239 83" />
+                  )}
+                  <text x="62" y="188">
+                    PATH DRAW
+                  </text>
+                </svg>
+                <div
+                  className="written-label"
+                  aria-label={revealState.fullLabel}
+                  title="Full accessible label remains available while the visual prefix writes"
+                >
+                  <small>GRAPHEME-SAFE LABEL</small>
+                  <strong>{revealState.visibleLabel}</strong>
+                  <span aria-hidden="true" />
+                </div>
+                <div className="emphasis-diagram">
+                  <div
+                    className="focus-vector"
+                    style={{
+                      boxShadow:
+                        "0 0 " +
+                        34 * revealState.highlightIntensity +
+                        "px rgba(246,199,67,.72)",
+                    }}
+                  >
+                    F
+                  </div>
+                  <div
+                    className="context-vector"
+                    style={{ opacity: revealState.contextOpacity }}
+                  >
+                    v
+                  </div>
+                  <p>Focus: resultant force · velocity remains context</p>
+                </div>
+              </div>
               {animatedTarget && (
                 <button
                   className="animation-object"
@@ -414,7 +474,7 @@ export function App() {
                 </div>
               )}
               <div className="stage-caption">
-                <span>SCENE / ANIMATION LAB</span>
+                <span>SCENE / REVEAL LAB</span>
                 <span>{animationTime.toFixed(2)} s / PRESENTATION</span>
               </div>
             </div>
@@ -423,7 +483,7 @@ export function App() {
           <aside className="inspector" aria-label="Renderer diagnostics">
             <div className="inspector-heading">
               <span>FRAME INSPECTOR</span>
-              <b>11</b>
+              <b>12</b>
             </div>
             <div className="animation-controls">
               <small>PRESENTATION CLOCK</small>
@@ -456,7 +516,7 @@ export function App() {
                 aria-label="Scrub presentation time"
                 type="range"
                 min="0"
-                max={desktopAnimationSchedule.durationSeconds}
+                max={desktopRevealDurationSeconds}
                 step="0.01"
                 value={animationTime}
                 onChange={(event) => {
@@ -475,7 +535,9 @@ export function App() {
               <output>
                 X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · θ{" "}
                 {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · S{" "}
-                {animatedTarget?.scale.x.toFixed(2) ?? "1.00"}
+                {animatedTarget?.scale.x.toFixed(2) ?? "1.00"} · D{" "}
+                {Math.round(revealState.pathProgress * 100)}% · W{" "}
+                {revealState.visibleGraphemes}/{revealState.totalGraphemes}
               </output>
             </div>
             <div className="selection-readout">
@@ -508,8 +570,8 @@ export function App() {
             <div className="contract-note">
               <span>AUTHORITY</span>
               <p>
-                Presentation transforms are transient. They never modify
-                position, velocity or any authoritative physical state.
+                Draw, write and emphasis state is transient. It never modifies
+                force, velocity or any authoritative physical channel.
               </p>
             </div>
           </aside>
@@ -518,7 +580,9 @@ export function App() {
 
       <footer>
         <span>PHYSICS-FIRST AUTHORING SYSTEM</span>
-        <span>CLOCK → EASING → CHANNELS → PRESENTATION TRANSFORM</span>
+        <span>
+          PRESENTATION CLOCK → PATH · GRAPHEME · EMPHASIS → READABLE FRAME
+        </span>
       </footer>
     </main>
   );

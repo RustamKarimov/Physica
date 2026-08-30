@@ -1,0 +1,9 @@
+{
+  "id": "highlight-diagram",
+  "title": "Highlight a diagram",
+  "category": "animation",
+  "description": "One diagram element is highlighted while a sibling is explicitly dimmed, with textual meaning preserved.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["highlight", "dim", "emphasis", "accessible-meaning"]
+}

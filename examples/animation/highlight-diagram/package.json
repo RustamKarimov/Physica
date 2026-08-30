@@ -1,0 +1,17 @@
+{
+  "name": "@physica-example/highlight-diagram",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/renderer-svg": "workspace:*",
+    "@physica/storyboard": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

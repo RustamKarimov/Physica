@@ -1,0 +1,14 @@
+{
+  "id": "draw-vector",
+  "title": "Draw a vector",
+  "category": "animation",
+  "description": "A scientific vector shaft is revealed by deterministic path length and its arrow head appears only on completion.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "path-draw",
+    "svg-path-metrics",
+    "presentation-clock",
+    "scrub"
+  ]
+}

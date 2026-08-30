@@ -756,6 +756,161 @@ footer {
   letter-spacing: 0.13em;
 }
 
+.reveal-showcase {
+  position: absolute;
+  z-index: 6;
+  inset: 24px 20px 42px;
+  pointer-events: none;
+}
+.reveal-vector {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  width: 48%;
+  height: 55%;
+  overflow: visible;
+}
+.reveal-vector line,
+.reveal-vector path {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.reveal-vector text {
+  fill: #859298;
+  font:
+    10px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.written-label {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 34px;
+  min-height: 58px;
+  padding: 10px 13px;
+  border-left: 2px solid var(--cyan);
+  background: rgba(7, 12, 15, 0.82);
+}
+.written-label small {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--cyan);
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.written-label strong {
+  color: #eef6f7;
+  font:
+    600 18px "Segoe UI",
+    sans-serif;
+}
+.written-label > span {
+  display: inline-block;
+  width: 2px;
+  height: 18px;
+  margin-left: 3px;
+  vertical-align: -3px;
+  background: var(--cyan);
+}
+.emphasis-diagram {
+  position: absolute;
+  top: 26px;
+  right: 1%;
+  width: 42%;
+  height: 54%;
+  border: 1px solid rgba(115, 132, 139, 0.26);
+  background: rgba(10, 16, 19, 0.7);
+}
+.focus-vector,
+.context-vector {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: #091013;
+  border-radius: 50%;
+  font:
+    700 18px Georgia,
+    serif;
+}
+.focus-vector {
+  left: 22%;
+  top: 28%;
+  color: #201904;
+  border: 2px solid #fff0a8;
+  background: var(--amber);
+}
+.context-vector {
+  right: 18%;
+  top: 47%;
+  border: 2px solid #a9b6bb;
+  background: #66747a;
+}
+.emphasis-diagram::before,
+.emphasis-diagram::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  transform-origin: left center;
+}
+.emphasis-diagram::before {
+  left: 31%;
+  top: 51%;
+  width: 35%;
+  background: var(--amber);
+  transform: rotate(-52deg);
+}
+.emphasis-diagram::after {
+  left: 47%;
+  top: 60%;
+  width: 30%;
+  background: #66747a;
+  transform: rotate(12deg);
+}
+.emphasis-diagram p {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 7px;
+  margin: 0;
+  color: #aeb8bc;
+  font:
+    8px/1.35 "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+.animation-object {
+  width: 38px;
+  height: 38px;
+  left: calc(47% - 19px);
+  top: calc(54% - 19px);
+  border-radius: 50%;
+  font-size: 17px;
+  opacity: 0.22 !important;
+  z-index: 5;
+}
+.drop-invitation {
+  inset: auto auto 44px 14px;
+  justify-items: start;
+  gap: 3px;
+}
+.drop-invitation strong {
+  padding: 6px 8px;
+  background: rgba(7, 12, 15, 0.8);
+  font-size: 7px;
+}
+.drop-invitation span {
+  display: none;
+}
 @media (max-width: 1040px) {
   .hero {
     padding-top: 38px;

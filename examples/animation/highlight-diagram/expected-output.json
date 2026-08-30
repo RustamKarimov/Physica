@@ -1,0 +1,63 @@
+{
+  "id": "highlight-diagram",
+  "explanation": "Focus on the force vector; velocity remains context.",
+  "samples": [
+    {
+      "timeSeconds": 0,
+      "targets": [
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee02",
+          "mode": "highlight",
+          "intensity": 0,
+          "opacityMultiplier": 1,
+          "accentIntensity": 0
+        },
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee04",
+          "mode": "dim",
+          "intensity": 0,
+          "opacityMultiplier": 1,
+          "accentIntensity": 0
+        }
+      ]
+    },
+    {
+      "timeSeconds": 1,
+      "targets": [
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee02",
+          "mode": "highlight",
+          "intensity": 0.5,
+          "opacityMultiplier": 1,
+          "accentIntensity": 0.5
+        },
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee04",
+          "mode": "dim",
+          "intensity": 0.5,
+          "opacityMultiplier": 0.6,
+          "accentIntensity": 0
+        }
+      ]
+    },
+    {
+      "timeSeconds": 2,
+      "targets": [
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee02",
+          "mode": "highlight",
+          "intensity": 1,
+          "opacityMultiplier": 1,
+          "accentIntensity": 1
+        },
+        {
+          "representationId": "00000000-0000-4000-8000-00000002ee04",
+          "mode": "dim",
+          "intensity": 1,
+          "opacityMultiplier": 0.19999999999999996,
+          "accentIntensity": 0
+        }
+      ]
+    }
+  ]
+}

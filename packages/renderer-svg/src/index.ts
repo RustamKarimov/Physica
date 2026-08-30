@@ -210,3 +210,5 @@ export function createSvgRenderPlan(
     }),
   };
 }
+
+export * from "./reveal";

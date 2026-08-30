@@ -1,0 +1,14 @@
+{
+  "id": "write-label",
+  "title": "Write a Unicode-safe label",
+  "category": "animation",
+  "description": "A label is revealed by grapheme clusters without splitting combining marks or an emoji ZWJ sequence.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "write-label",
+    "unicode-graphemes",
+    "reduced-motion",
+    "scrub"
+  ]
+}

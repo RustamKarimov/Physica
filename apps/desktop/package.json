@@ -19,6 +19,7 @@
     "@physica/renderer-svg": "workspace:*",
     "@physica/renderer-three": "workspace:*",
     "@physica/storyboard": "workspace:*",
+    "@physica/typography": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "@tauri-apps/api": "catalog:"

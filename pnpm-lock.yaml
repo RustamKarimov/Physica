@@ -113,6 +113,9 @@ importers:
       '@physica/storyboard':
         specifier: workspace:*
         version: link:../../packages/storyboard
+      '@physica/typography':
+        specifier: workspace:*
+        version: link:../../packages/typography
       '@tauri-apps/api':
         specifier: 'catalog:'
         version: 2.11.1
@@ -192,6 +195,38 @@ importers:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)
 
+  examples/animation/draw-vector:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/renderer-svg':
+        specifier: workspace:*
+        version: link:../../../packages/renderer-svg
+      '@physica/storyboard':
+        specifier: workspace:*
+        version: link:../../../packages/storyboard
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/animation/highlight-diagram:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/renderer-svg':
+        specifier: workspace:*
+        version: link:../../../packages/renderer-svg
+      '@physica/storyboard':
+        specifier: workspace:*
+        version: link:../../../packages/storyboard
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/animation/move-scale-rotate:
     dependencies:
       '@physica/core-model':
@@ -200,6 +235,22 @@ importers:
       '@physica/storyboard':
         specifier: workspace:*
         version: link:../../../packages/storyboard
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/animation/write-label:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/storyboard':
+        specifier: workspace:*
+        version: link:../../../packages/storyboard
+      '@physica/typography':
+        specifier: workspace:*
+        version: link:../../../packages/typography
     devDependencies:
       typescript:
         specifier: 'catalog:'

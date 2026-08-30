@@ -1,0 +1,37 @@
+{
+  "id": "draw-vector",
+  "totalLength": 100,
+  "samples": [
+    {
+      "timeSeconds": 0,
+      "progress": 0,
+      "visibleLength": 0,
+      "visiblePoints": [],
+      "dashOffset": 100,
+      "arrowHeadVisible": false
+    },
+    {
+      "timeSeconds": 1,
+      "progress": 0.5,
+      "visibleLength": 50,
+      "visiblePoints": [
+        { "x": 0, "y": 0 },
+        { "x": 30, "y": 40 }
+      ],
+      "dashOffset": 50,
+      "arrowHeadVisible": false
+    },
+    {
+      "timeSeconds": 2,
+      "progress": 1,
+      "visibleLength": 100,
+      "visiblePoints": [
+        { "x": 0, "y": 0 },
+        { "x": 60, "y": 80 }
+      ],
+      "dashOffset": 0,
+      "arrowHeadVisible": true
+    }
+  ],
+  "equalTimeDeterministic": true
+}

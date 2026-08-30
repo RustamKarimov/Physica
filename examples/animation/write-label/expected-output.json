@@ -1,0 +1,35 @@
+{
+  "id": "write-label",
+  "sourceText": "Force: é 👩‍🔬",
+  "graphemes": ["F", "o", "r", "c", "e", ":", " ", "é", " ", "👩‍🔬"],
+  "samples": [
+    {
+      "timeSeconds": 0,
+      "reducedMotion": false,
+      "progress": 0,
+      "visibleCount": 0,
+      "visibleText": ""
+    },
+    {
+      "timeSeconds": 1,
+      "reducedMotion": false,
+      "progress": 0.5,
+      "visibleCount": 5,
+      "visibleText": "Force"
+    },
+    {
+      "timeSeconds": 2,
+      "reducedMotion": false,
+      "progress": 1,
+      "visibleCount": 10,
+      "visibleText": "Force: é 👩‍🔬"
+    }
+  ],
+  "reducedMotionAtStart": {
+    "timeSeconds": 0,
+    "reducedMotion": true,
+    "progress": 1,
+    "visibleCount": 10,
+    "visibleText": "Force: é 👩‍🔬"
+  }
+}
