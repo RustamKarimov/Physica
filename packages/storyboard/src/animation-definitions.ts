@@ -16,10 +16,34 @@ export const ANIMATION_STEP_TYPE_ID = registeredTypeId(
   "physica:storyboard/animation-v1",
 );
 
-function finiteValue(value: AnimationValue): boolean {
-  return value.kind === "scalar"
-    ? Number.isFinite(value.value)
-    : [value.x, value.y, value.z].every(Number.isFinite);
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function cloneAndFreeze<T>(value: T): T {
+  if (Array.isArray(value))
+    return Object.freeze(value.map((entry) => cloneAndFreeze(entry))) as T;
+  if (isRecord(value))
+    return Object.freeze(
+      Object.fromEntries(
+        Object.entries(value)
+          .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+          .map(([key, entry]) => [key, cloneAndFreeze(entry)]),
+      ),
+    ) as T;
+  return value;
+}
+
+function finiteValue(value: unknown): value is AnimationValue {
+  if (!isRecord(value) || typeof value.kind !== "string") return false;
+  if (value.kind === "scalar")
+    return typeof value.value === "number" && Number.isFinite(value.value);
+  return (
+    value.kind === "vec3" &&
+    [value.x, value.y, value.z].every(
+      (entry) => typeof entry === "number" && Number.isFinite(entry),
+    )
+  );
 }
 
 function valueMatches(
@@ -35,10 +59,23 @@ function valueMatches(
 export function validateAnimationDefinition(
   definition: AnimationDefinition,
 ): AnimationResult<AnimationDefinition> {
+  if (!isRecord(definition))
+    return {
+      ok: false,
+      error: animationError(
+        "invalid-definition",
+        "invalid-animation-definition",
+        "Animation definitions must be JSON objects.",
+      ),
+    };
+  const target = definition.target as unknown;
   if (
-    definition.target.kind !== "representation" ||
-    !definition.target.sceneId ||
-    !definition.target.id
+    !isRecord(target) ||
+    target.kind !== "representation" ||
+    typeof target.sceneId !== "string" ||
+    target.sceneId.length === 0 ||
+    typeof target.id !== "string" ||
+    target.id.length === 0
   )
     return {
       ok: false,
@@ -64,6 +101,42 @@ export function validateAnimationDefinition(
         "unsupported-channel",
         "The presentation channel is unsupported.",
         { path: "channel" },
+      ),
+    };
+  if (definition.clockKey !== "presentation")
+    return {
+      ok: false,
+      error: animationError(
+        "presentation-clock-mismatch",
+        "presentation-clock-required",
+        "Animations must use the mandatory presentation clock.",
+        { path: "clockKey" },
+      ),
+    };
+  if (
+    !["sequence", "replace", "additive", "multiplicative", "reject"].includes(
+      definition.conflictPolicy,
+    )
+  )
+    return {
+      ok: false,
+      error: animationError(
+        "unsupported-conflict-policy",
+        "unknown-conflict-policy",
+        "The animation conflict policy is unsupported.",
+        { path: "conflictPolicy" },
+      ),
+    };
+  if (
+    typeof definition.reversible !== "boolean" ||
+    typeof definition.scrubbable !== "boolean"
+  )
+    return {
+      ok: false,
+      error: animationError(
+        "invalid-definition",
+        "invalid-playback-capabilities",
+        "reversible and scrubbable must be boolean values.",
       ),
     };
   if (
@@ -129,8 +202,8 @@ export function validateAnimationDefinition(
   const easing = validateEasing(definition.easing);
   if (!easing.ok) return easing;
   if (
+    typeof definition.name !== "string" ||
     !definition.name.trim() ||
-    definition.clockKey !== "presentation" ||
     !isJsonValue(definition)
   )
     return {
@@ -138,26 +211,36 @@ export function validateAnimationDefinition(
       error: animationError(
         "invalid-definition",
         "invalid-animation-definition",
-        "Animation definitions must be named, presentation-clock and JSON-safe.",
+        "Animation definitions must be named and JSON-safe.",
       ),
     };
-  return { ok: true, value: definition };
+  return { ok: true, value: cloneAndFreeze(definition) };
 }
 
 export function createAnimationEnvelope(
   definition: AnimationDefinition,
   enabled = true,
 ): AnimationResult<StoryboardStepEnvelope> {
+  if (typeof enabled !== "boolean")
+    return {
+      ok: false,
+      error: animationError(
+        "invalid-definition",
+        "invalid-envelope-enabled",
+        "Animation envelope enabled state must be boolean.",
+        { path: "enabled" },
+      ),
+    };
   const validation = validateAnimationDefinition(definition);
   if (!validation.ok) return validation;
-  const { id, ...configuration } = definition;
+  const { id, ...configuration } = validation.value;
   return {
     ok: true,
-    value: Object.freeze({
+    value: cloneAndFreeze({
       id,
       typeId: ANIMATION_STEP_TYPE_ID,
       schemaVersion: 1,
-      configuration: configuration as unknown as JsonObject,
+      configuration: cloneAndFreeze(configuration) as unknown as JsonObject,
       enabled,
     }),
   };
@@ -167,23 +250,32 @@ export function parseAnimationEnvelope(
   envelope: StoryboardStepEnvelope,
 ): AnimationResult<AnimationDefinition> {
   if (
+    !isRecord(envelope) ||
     envelope.typeId !== ANIMATION_STEP_TYPE_ID ||
-    envelope.schemaVersion !== 1
+    envelope.schemaVersion !== 1 ||
+    typeof envelope.id !== "string" ||
+    !isRecord(envelope.configuration) ||
+    typeof envelope.enabled !== "boolean"
   )
     return {
       ok: false,
       error: animationError(
         "invalid-definition",
         "unsupported-animation-envelope",
-        "The Storyboard step is not a supported V1 animation.",
+        "The Storyboard step is not a well-formed supported V1 animation.",
       ),
     };
   const definition = {
     id: envelope.id,
     ...envelope.configuration,
   } as unknown as AnimationDefinition;
-  const validation = validateAnimationDefinition(definition);
-  return validation.ok
-    ? { ok: true, value: Object.freeze(definition) }
-    : validation;
+  return validateAnimationDefinition(definition);
+}
+
+export function validateAnimationEnvelope(
+  envelope: StoryboardStepEnvelope,
+): AnimationResult<StoryboardStepEnvelope> {
+  const parsed = parseAnimationEnvelope(envelope);
+  if (!parsed.ok) return parsed;
+  return createAnimationEnvelope(parsed.value, envelope.enabled);
 }

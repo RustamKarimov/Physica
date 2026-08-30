@@ -98,7 +98,12 @@ export interface PresentationTargetState {
     readonly z: number;
   };
   readonly opacity: number;
-  readonly sourceAnimationIds: readonly StoryboardStepId[];
+  readonly sourceAnimationIds: {
+    readonly translation: readonly StoryboardStepId[];
+    readonly rotation: readonly StoryboardStepId[];
+    readonly scale: readonly StoryboardStepId[];
+    readonly opacity: readonly StoryboardStepId[];
+  };
 }
 
 export interface PresentationAnimationFrame {

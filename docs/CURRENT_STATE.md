@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 11 specification complete — Animation Scheduler implementation underway
+**Current development phase:** Step 11 complete — Step 12 Draw/write/reveal/highlight specification next
 
-**Current task:** Finish and audit `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
+**Current task:** Specify Step 12 from the frozen Draw/write/reveal/highlight roadmap contract
 
-**Next task:** Add exhaustive additive/multiplicative conflict tests, full Runtime Scheduler cycle integration and canonical project serialization coverage
+**Next task:** Audit source specifications, create the Step 12 implementation specification, then implement `draw-vector`, `write-label` and `highlight-diagram` without entering Step 13
 
 **Blockers:** None
 
@@ -20,24 +20,35 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-## Step 11 specification checkpoint
+## Step 11 result
 
-Created and audited `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`. The audit found no Architecture Blocker, third-party dependency, ADR requirement or ProjectDocument schema-version change. The frozen package map has no standalone animation package, so the existing presentation-tier `@physica/storyboard` package owns a separately exported animation module. Persisted definitions use existing generic Storyboard step envelopes; runtime evaluation reads explicit presentation-clock coordinates, writes only transient presentation state and integrates through the existing Runtime Scheduler presentation-animation phase.
+Completed and audited `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`, then implemented deterministic presentation animation in the existing presentation-tier `@physica/storyboard` package. The phase required no Architecture Blocker escalation, ADR, ProjectDocument schema-version change, new package or third-party dependency.
 
-## Step 11 implementation checkpoint
+Implemented:
 
-Implemented the framework-independent animation core in `packages/storyboard`: typed translation/rotation/scale/opacity channels, JSON-safe Storyboard animation envelopes, named and fixed-iteration cubic Bézier easing, Sequence/Parallel/Stagger/Wait compilation, explicit overlap policies, pure arbitrary-time evaluation, reverse/scrub equality, reduced-motion final-state resolution, transient Presentation State Store publication and the Runtime Scheduler phase adapter. Focused tests cover envelope round trips, easing, composition, reject/sequence conflicts, reverse/scrub equality, reduced motion, 10,000 evaluations and presentation-clock publication.
+- canonical, deeply immutable V1 Storyboard animation envelopes with public create, parse and validate operations and typed malformed-input errors;
+- translation, rotation, scale and opacity presentation channels with scalar/Vec3 interpolation, per-channel source diagnostics and final-stage opacity normalization;
+- deterministic named and fixed-iteration cubic Bézier easing, including overshoot-safe final composition;
+- Sequence, Parallel, Stagger and Wait compilation plus sequence, replace, additive, multiplicative and reject conflict policies with stable start/priority/StoryboardStep ordering;
+- pure arbitrary-time forward, reverse, repeated scrub and zero-duration evaluation with deep-frozen schedules and frames;
+- reduced-motion final-state resolution and a transient Presentation State Store that remains outside ProjectDocument, command history and authoritative Runtime State Store channels;
+- scene-safe, collision-free Runtime Scheduler task adapters in the frozen presentation-animation phase, driven only by the already-advanced presentation clock.
 
-Added `examples/animation/move-scale-rotate` with executable deterministic forward/reverse samples, metadata, README, expected JSON, accessible SVG preview, automated test and pending shared-runtime capture obligations. Advanced the launcher-visible desktop workbench to “11 / Animation Scheduler” with a deterministic moving/scaling/rotating object, presentation-time readout, play/pause, reverse/forward, scrub, reset, reduced-motion and numeric transform diagnostics. Presentation transforms remain transient and do not mutate physics.
+The final audit added exhaustive additive translation/rotation, multiplicative scale/opacity, mixed/invalid-policy and replacement-order coverage; cubic interior reference values; malformed definition/easing paths; scene mismatch rejection; a complete 13-phase Runtime Scheduler cycle; canonical ProjectDocument round trip; unknown Storyboard step and extension preservation; and proof that runtime presentation fields are never serialized.
 
-Verification at this checkpoint:
+User-visible completion:
 
-- focused Storyboard and animation example run — 2 files, 10 tests passed;
-- complete repository CI — 41 files and 165 tests passed, plus 2 architecture tests, strict TypeScript across 81 of 82 workspace projects with scripts and all three app builds;
-- `Launch Physica.bat --check` — passed through Tauri CLI, Cargo and the desktop production build;
-- no third-party dependency was added.
+- `examples/animation/move-scale-rotate` contains metadata, README, executable deterministic samples, expected JSON, accessible SVG preview, automated test and explicit pending shared-runtime capture obligations;
+- the launcher-visible desktop workbench remains at “11 / Animation Scheduler” with deterministic move/scale/rotate playback, play/pause, reverse/forward, reset, scrub, reduced-motion and textual transform diagnostics;
+- presentation transforms remain transient and never mutate physics.
 
-Step 11 remains in progress pending exhaustive additive/multiplicative and mixed-policy tests, an actual full Runtime Scheduler cycle integration test, canonical ProjectDocument serialization coverage and final self-review.
+Final verification:
+
+- focused Storyboard and animation example run — 2 files, 19 tests passed;
+- complete repository CI — 41 files and 174 tests passed, plus 2 architecture tests, strict TypeScript across 81 of 82 workspace projects with scripts and all three app builds;
+- `Launch Physica.bat --check` — passed through Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- architecture boundaries and lockfile supply-chain policies passed;
+- the inherited Vite advisory for the Pixi/Three desktop showcase chunk remains non-failing and does not affect correctness.
 
 ## Step 10 result
 
@@ -500,16 +511,21 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 11 read first
+## Step 12 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
+- `docs/ROADMAP.md`
 - `docs/ANIMATION_ENGINE.md`
+- `docs/STORYBOARD.md`
+- `docs/RENDERER_ARCHITECTURE.md`
+- `docs/TEXT_CONTENT.md`
+- `docs/TYPOGRAPHY_AND_I18N.md`
 - `docs/CLOCKS_AND_TIME.md`
-- `docs/COMMANDS_AND_EVENTS.md`
+- `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
 - `docs/EXAMPLE_SYSTEM.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 11 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 12 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

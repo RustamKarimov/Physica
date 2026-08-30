@@ -18,6 +18,7 @@
     "@physica/runtime-scheduler": "workspace:*"
   },
   "devDependencies": {
+    "@physica/serialization": "workspace:*",
     "typescript": "catalog:"
   }
 }

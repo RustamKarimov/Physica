@@ -164,7 +164,7 @@ Supported nodes:
 - `Stagger` — child origins are offset by a finite non-negative interval;
 - `Wait` — contributes duration without a target channel.
 
-Composition IDs are namespaced registered type IDs. Children retain stable StoryboardStep identities. Compilation is deterministic and preserves author order only where semantically declared; evaluation order otherwise uses explicit keys.
+Composition node kinds are closed discriminants used only as authoring-time compiler input. Clips retain stable StoryboardStep identities. Compilation is deterministic and preserves author order only where semantically declared; evaluation order otherwise uses explicit keys.
 
 `Until` and `RepeatPresentation` remain schema-reserved but are not executed until Storyboard conditions and repeat policy are implemented. Physics loops must never be represented as presentation repeats.
 

@@ -4,9 +4,32 @@ import type { AnimationEasing } from "./animation-types";
 export function validateEasing(
   easing: AnimationEasing,
 ): AnimationResult<AnimationEasing> {
-  if (easing.kind === "named")
-    return ["linear", "ease-in", "ease-out", "ease-in-out"].includes(easing.id)
-      ? { ok: true, value: Object.freeze({ ...easing }) }
+  const source = easing as unknown;
+  if (
+    source === null ||
+    typeof source !== "object" ||
+    Array.isArray(source) ||
+    !("kind" in source && typeof source.kind === "string")
+  )
+    return {
+      ok: false,
+      error: animationError(
+        "invalid-easing",
+        "invalid-easing-shape",
+        "Easing must be a named or cubic Bézier definition.",
+      ),
+    };
+  if (source.kind === "named")
+    return "id" in source &&
+      typeof source.id === "string" &&
+      ["linear", "ease-in", "ease-out", "ease-in-out"].includes(source.id)
+      ? {
+          ok: true,
+          value: Object.freeze({
+            kind: "named",
+            id: source.id,
+          }) as AnimationEasing,
+        }
       : {
           ok: false,
           error: animationError(
@@ -15,23 +38,40 @@ export function validateEasing(
             "The named easing is not registered.",
           ),
         };
-  const values = [easing.x1, easing.y1, easing.x2, easing.y2];
-  if (
-    !values.every(Number.isFinite) ||
-    easing.x1 < 0 ||
-    easing.x1 > 1 ||
-    easing.x2 < 0 ||
-    easing.x2 > 1
-  )
-    return {
-      ok: false,
-      error: animationError(
-        "invalid-easing",
-        "invalid-cubic-bezier",
-        "Cubic Bézier controls must be finite and x controls must be in [0, 1].",
-      ),
-    };
-  return { ok: true, value: Object.freeze({ ...easing }) };
+  if (source.kind === "cubic-bezier") {
+    const x1 = "x1" in source ? source.x1 : undefined;
+    const y1 = "y1" in source ? source.y1 : undefined;
+    const x2 = "x2" in source ? source.x2 : undefined;
+    const y2 = "y2" in source ? source.y2 : undefined;
+    const values = [x1, y1, x2, y2];
+    if (
+      values.every(
+        (value) => typeof value === "number" && Number.isFinite(value),
+      ) &&
+      (x1 as number) >= 0 &&
+      (x1 as number) <= 1 &&
+      (x2 as number) >= 0 &&
+      (x2 as number) <= 1
+    )
+      return {
+        ok: true,
+        value: Object.freeze({
+          kind: "cubic-bezier",
+          x1,
+          y1,
+          x2,
+          y2,
+        }) as AnimationEasing,
+      };
+  }
+  return {
+    ok: false,
+    error: animationError(
+      "invalid-easing",
+      "invalid-cubic-bezier",
+      "Cubic Bézier controls must be finite and x controls must be in [0, 1].",
+    ),
+  };
 }
 
 function bezier(t: number, first: number, second: number): number {

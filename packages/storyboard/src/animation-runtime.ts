@@ -62,6 +62,21 @@ export function evaluatePresentationClock(
   store: PresentationStateStore,
   reducedMotion = false,
 ): AnimationResult<PresentationStateSnapshot> {
+  const sceneMismatch = schedule.animations.find(
+    (animation) => animation.target.sceneId !== sceneId,
+  );
+  if (sceneMismatch)
+    return {
+      ok: false,
+      error: animationError(
+        "invalid-target",
+        "presentation-scene-mismatch",
+        "The animation schedule contains a target from another scene.",
+        {
+          relatedIds: [sceneId, sceneMismatch.target.sceneId, sceneMismatch.id],
+        },
+      ),
+    };
   const clock = clockStates.find(
     (entry) => entry.clockId === presentationClockId,
   );
@@ -86,11 +101,6 @@ export function evaluatePresentationClock(
     : evaluated;
 }
 
-const TASK_ID_RESULT = runtimeTaskId("physica:task/presentation-animation");
-if (!TASK_ID_RESULT.ok)
-  throw new Error("Invalid built-in presentation task ID.");
-const PRESENTATION_TASK_ID = TASK_ID_RESULT.value;
-
 export function createPresentationAnimationTask(options: {
   readonly sceneId: SceneId;
   readonly presentationClockId: ClockId;
@@ -98,8 +108,14 @@ export function createPresentationAnimationTask(options: {
   readonly store: PresentationStateStore;
   readonly reducedMotion?: () => boolean;
 }): RuntimeTask {
+  const taskId = runtimeTaskId(
+    `physica:task/presentation-animation/${options.sceneId.toLowerCase()}`,
+  );
+  if (!taskId.ok)
+    throw new Error("Invalid built-in presentation task identity.");
+  const id = taskId.value;
   return Object.freeze({
-    id: PRESENTATION_TASK_ID,
+    id,
     phaseId: SCHEDULER_PHASES.presentationAnimation,
     run(context: RuntimeTaskContext): SchedulerResult<void> {
       const result = evaluatePresentationClock(
@@ -116,7 +132,7 @@ export function createPresentationAnimationTask(options: {
             ok: false,
             error: {
               kind: "invalid-task",
-              taskId: PRESENTATION_TASK_ID,
+              taskId: id,
               message: result.error.code,
             },
           };

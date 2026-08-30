@@ -77,7 +77,12 @@ interface MutableTarget {
   rotationRadians: number;
   scale: { x: number; y: number; z: number };
   opacity: number;
-  sourceAnimationIds: ScheduledAnimation["id"][];
+  sourceAnimationIds: {
+    translation: ScheduledAnimation["id"][];
+    rotation: ScheduledAnimation["id"][];
+    scale: ScheduledAnimation["id"][];
+    opacity: ScheduledAnimation["id"][];
+  };
 }
 
 function apply(
@@ -116,7 +121,15 @@ function apply(
   if (animation.channel === "presentation.opacity" && value.kind === "scalar")
     target.opacity =
       combine === "multiplicative" ? target.opacity * value.value : value.value;
-  target.sourceAnimationIds.push(animation.id);
+  const sourceKey =
+    animation.channel === "presentation.translation"
+      ? "translation"
+      : animation.channel === "presentation.rotation"
+        ? "rotation"
+        : animation.channel === "presentation.scale"
+          ? "scale"
+          : "opacity";
+  target.sourceAnimationIds[sourceKey].push(animation.id);
 }
 
 export function evaluateAnimationSchedule(
@@ -146,7 +159,12 @@ export function evaluateAnimationSchedule(
         rotationRadians: 0,
         scale: { x: 1, y: 1, z: 1 },
         opacity: 1,
-        sourceAnimationIds: [],
+        sourceAnimationIds: {
+          translation: [],
+          rotation: [],
+          scale: [],
+          opacity: [],
+        },
       };
       targets.set(key, target);
     }
@@ -164,7 +182,10 @@ export function evaluateAnimationSchedule(
         left.sceneId.localeCompare(right.sceneId) ||
         left.representationId.localeCompare(right.representationId),
     )
-    .map((entry) => ({ ...entry }));
+    .map((entry) => ({
+      ...entry,
+      opacity: Math.min(1, Math.max(0, entry.opacity)),
+    }));
   return {
     ok: true,
     value: freeze({ presentationTimeSeconds, targets: ordered }),
