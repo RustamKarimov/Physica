@@ -10,6 +10,13 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/mathematics": "workspace:*",
+    "@physica/picking": "workspace:*",
+    "@physica/renderer-core": "workspace:*",
+    "@physica/renderer-pixi": "workspace:*",
+    "@physica/renderer-svg": "workspace:*",
+    "@physica/renderer-three": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "@tauri-apps/api": "catalog:"

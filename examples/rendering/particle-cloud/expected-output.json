@@ -1,0 +1,10 @@
+{
+  "sourceParticleCount": 6,
+  "displayedParticleCount": 2,
+  "displayedCenters": [
+    [100, 300],
+    [300, 100]
+  ],
+  "pickRegionCount": 2,
+  "sourceUnchanged": true
+}

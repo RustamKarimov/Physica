@@ -1,0 +1,9 @@
+{
+  "renderOrder": [
+    "example.svg:annotation",
+    "example.pixi:particle",
+    "example.three:vector"
+  ],
+  "backendOrder": ["svg", "pixi", "three"],
+  "semanticIdsOnly": true
+}

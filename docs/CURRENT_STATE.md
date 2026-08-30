@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 8 complete — deterministic Checkpoint/Replay verified
+**Current development phase:** Step 9 complete — shared Rendering Foundation verified
 
-**Current task:** Step 9 — implement Rendering Foundation from `docs/implementation/STEP_09_RENDERING_FOUNDATION_SPEC.md`
+**Current task:** Step 10 — audit and specify the Physics Component / Model / Asset / Prefab Library foundation
 
-**Next task:** Step 9 — verify, self-review, document, commit and push the rendering foundation
+**Next task:** Write the bounded Step 10 implementation specification from `docs/PHYSICS_LIBRARY.md` and its owning contracts, then implement it if no Architecture Blocker exists
 
 **Blockers:** None
 
@@ -19,6 +19,67 @@
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+## Step 9 result
+
+Completed and audited `docs/implementation/STEP_09_RENDERING_FOUNDATION_SPEC.md`, then implemented one shared deterministic camera, render-frame, layer and semantic-picking foundation across SVG, PixiJS and Three.js. Rendering remains transient and consumes already-resolved world state; it does not store or advance physics, mutate `ProjectDocument`, or introduce an editor-owned authority path.
+
+Implemented in `packages/renderer-core`:
+
+- immutable orthographic and perspective camera definitions with finite viewport/clipping validation, right-handed camera-basis construction, world projection, screen-y inversion, orthographic unprojection and perspective screen rays;
+- explicit post-projection presentation transforms kept separate from physical world coordinates;
+- renderer-neutral background, line, arrow, circle, polyline, particle-cloud and 3D-vector primitives;
+- semantic layer/backend compatibility, stable namespaced render IDs, deterministic item ordering, duplicate rejection and immutable render frames;
+- canonical dirty-frame comparison, viewport culling helpers, renderer-neutral pick regions and typed render/adapter errors.
+
+Implemented concrete adapters and picking:
+
+- `packages/renderer-svg` produces deterministic normalized SVG markup, explicit arrow-head geometry and semantic pick regions from the shared camera;
+- `packages/renderer-pixi` produces immutable stride/culling particle plans, semantic particle regions and an internally owned/disposed PixiJS 8 WebGL mount;
+- `packages/renderer-three` produces exact shaft/cone vector plans, projected semantic regions and an internally owned/disposed Three.js WebGL mount, including the shared post-projection presentation transform;
+- `packages/picking` validates circle, segment, rectangle and polygon regions and returns deterministic topmost semantic results by layer, z-index, hit distance, stable render ID and registration sequence, without exposing backend object handles.
+
+Desktop observation experience:
+
+- replaced the bootstrap-only card with a polished live “Rendering Foundation” workbench using only public renderer/picking exports;
+- the fixed shared-camera frame visibly composes an SVG line/annotation, a 220-particle Pixi cloud and a Three 3D vector in one stage;
+- the inspector reports adapter readiness, deterministic frame metadata and pointer-driven semantic picks while clearly stating that renderers never advance physics;
+- a fixed 1280 × 900 browser visual inspection confirmed aligned layers and readable layout;
+- live Chromium verification reported all three adapters `ready`, zero page/console errors and the expected `physica.svg:force · SVG · annotation` semantic hit;
+- `Launch Physica.bat --check` passed through Tauri CLI 2.11.4, Cargo 1.94.1 and the production desktop build, preserving the one-click live-development launcher.
+
+Example Gallery artifacts:
+
+- `examples/rendering/line-and-arrow` checks the exact deterministic SVG plan/markup and right-handed world-to-screen projection;
+- `examples/rendering/particle-cloud` checks deterministic stride/culling, projected centers, semantic region count and source-state immutability;
+- `examples/rendering/3d-vector-scene` checks exact 3D vector geometry and known perspective-projected endpoints;
+- `examples/rendering/mixed-renderer-selection` supplies shuffled overlapping SVG/Pixi/Three regions and checks stable semantic topmost ordering.
+
+Each example includes metadata, README, executable run module, deterministic expected JSON, accessible expected SVG preview, automated test and an explicit pending-artifact manifest. Future `.physica`, PNG, WebM and shared gallery-runtime artifacts remain registered in `examples/pending-artifacts.json` rather than being fabricated.
+
+Dependencies added after license and ownership audit:
+
+- `pixi.js` 8.20.1 (MIT), scoped to `renderer-pixi`;
+- `three` 0.185.1 (MIT) and `@types/three` 0.185.4 (MIT), scoped to `renderer-three`.
+
+Scientific, architecture, teacher-UX and performance self-review resolved:
+
+- all adapters consume the same camera snapshot, semantic identity and layer system while backend handles remain private;
+- physical coordinates stay immutable and presentation transforms never feed back into world state;
+- particle stride/culling changes only visual plans, not source arrays or observables;
+- deterministic numerical/semantic plans remain the scientific baseline instead of hardware-dependent GPU pixels alone;
+- the Three browser mount was corrected during review to apply the same optional post-projection presentation transform already used by planning and picking;
+- the desktop production bundle emits Vite's non-failing large-chunk advisory because Pixi and Three are both present in this foundation showcase; code splitting remains future application optimization, not a correctness or architecture blocker.
+
+Commands and verification:
+
+- focused renderer run — 5 files, 10 tests passed;
+- four Step 9 gallery examples — 4 files, 4 tests passed with strict example typechecks;
+- desktop strict typecheck and production build — passed;
+- live Chromium adapter/picking/error smoke verification — passed;
+- `Launch Physica.bat --check` — passed;
+- clean frozen-lockfile workspace installation — passed across 75 workspace projects;
+- `pnpm run ci` — passed: formatting, ESLint, architecture boundaries, strict TypeScript across 74 workspace projects with scripts, 31 unit/example files with 141 tests, 2 architecture tests and all three application builds.
 
 ## Step 8 result
 
@@ -353,17 +414,16 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 9 read first
+## Step 10 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
-- `docs/RENDERER_ARCHITECTURE.md`
-- `docs/COORDINATES_AND_FRAMES.md`
-- `docs/PICKING_AND_SELECTION.md`
+- `docs/PHYSICS_LIBRARY.md`
+- `docs/COMPONENT_MODEL.md`
+- `docs/COMMANDS_AND_EVENTS.md`
 - `docs/EXAMPLE_SYSTEM.md`
-- `docs/PERFORMANCE.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 9 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 10 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.

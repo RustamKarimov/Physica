@@ -1,0 +1,9 @@
+{
+  "id": "particle-cloud",
+  "title": "Particle cloud",
+  "category": "rendering",
+  "description": "Deterministic Pixi particle selection with visual stride, viewport culling and immutable source state.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["renderer-pixi", "particle-cloud", "culling", "immutability"]
+}

@@ -1,0 +1,8 @@
+{
+  "origin": [0, 0, 0],
+  "end": [3, 4, 0],
+  "length": 5,
+  "projectedStart": [300, 200],
+  "projectedEnd": [360, 120],
+  "headLength": 0.6
+}

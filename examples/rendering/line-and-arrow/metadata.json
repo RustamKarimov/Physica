@@ -1,0 +1,9 @@
+{
+  "id": "line-and-arrow",
+  "title": "Line and arrow",
+  "category": "rendering",
+  "description": "A deterministic SVG line and arrow projected through the shared right-handed orthographic camera.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["renderer-svg", "orthographic-camera", "screen-y-inversion"]
+}

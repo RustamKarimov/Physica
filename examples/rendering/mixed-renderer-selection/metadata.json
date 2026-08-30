@@ -1,0 +1,9 @@
+{
+  "id": "mixed-renderer-selection",
+  "title": "Mixed renderer selection",
+  "category": "rendering",
+  "description": "Stable semantic topmost picking across shuffled SVG, Pixi and Three regions.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["picking", "semantic-identity", "cross-renderer-ordering"]
+}

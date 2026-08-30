@@ -1,0 +1,9 @@
+{
+  "id": "3d-vector-scene",
+  "title": "3D vector scene",
+  "category": "rendering",
+  "description": "Known Three.js vector geometry and projected endpoints under the shared perspective camera.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["renderer-three", "perspective-camera", "3d-vector"]
+}

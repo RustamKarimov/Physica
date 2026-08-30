@@ -122,6 +122,50 @@
         "example.spec.ts"
       ],
       "gate": "Rendering foundation, shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "line-and-arrow",
+      "path": "examples/rendering/line-and-arrow",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "particle-cloud",
+      "path": "examples/rendering/particle-cloud",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "3d-vector-scene",
+      "path": "examples/rendering/3d-vector-scene",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "mixed-renderer-selection",
+      "path": "examples/rendering/mixed-renderer-selection",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
     }
   ]
 }

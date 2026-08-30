@@ -1,0 +1,18 @@
+{
+  "name": "@physica-example/3d-vector-scene",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/mathematics": "workspace:*",
+    "@physica/renderer-core": "workspace:*",
+    "@physica/renderer-three": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

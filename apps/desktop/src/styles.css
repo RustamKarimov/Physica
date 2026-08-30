@@ -1,43 +1,448 @@
 :root {
-  color: #e2e8f0;
-  background: #0f172a;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #e8edf0;
+  background: #0b1013;
+  font-family: "Segoe UI", system-ui, sans-serif;
   font-synthesis: none;
+  --ink: #e8edf0;
+  --muted: #7f8b90;
+  --line: #293238;
+  --panel: #10171b;
+  --cyan: #2dc2cb;
+  --amber: #f6c743;
+  --coral: #f25f47;
 }
 
 * {
   box-sizing: border-box;
 }
-
+html {
+  background: #0b1013;
+}
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 940px;
   min-height: 100vh;
 }
+button,
+input {
+  font: inherit;
+}
 
-main {
+.app-shell {
   min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 28% 37%,
+      rgba(45, 194, 203, 0.055),
+      transparent 32rem
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px), #0b1013;
+  background-size:
+    auto,
+    100% 48px,
+    auto;
+}
+
+.topbar {
+  height: 64px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--line);
+  font-family: "Cascadia Mono", "Consolas", monospace;
+  letter-spacing: 0.08em;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+.brand-mark {
+  width: 30px;
+  height: 30px;
   display: grid;
   place-items: center;
-  padding: 2rem;
+  color: #091013;
+  background: var(--cyan);
+  font:
+    700 21px Georgia,
+    serif;
+  border-radius: 2px;
+}
+.step-label {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 10px;
+  color: var(--muted);
+}
+.step-label strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.engine-state {
+  justify-self: end;
+  color: #9ba5a9;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.engine-state i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  background: #72d9a7;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(114, 217, 167, 0.65);
 }
 
-section {
-  width: min(42rem, 100%);
-  padding: 3rem;
-  border: 1px solid #334155;
-  border-radius: 1rem;
-  background: #111c30;
-  text-align: center;
+.hero {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 58px 0 30px;
 }
-
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font:
+    11px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.14em;
+  color: var(--cyan);
+}
+.eyebrow b {
+  padding: 4px 7px;
+  background: rgba(45, 194, 203, 0.12);
+  border: 1px solid rgba(45, 194, 203, 0.35);
+  color: #8be5e9;
+  font-size: 9px;
+}
+.hero-copy {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: end;
+  margin: 20px 0 34px;
+}
 h1 {
-  margin: 0 0 1rem;
-  color: #7dd3fc;
+  margin: 0;
+  max-width: 650px;
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  font-weight: 720;
+}
+h1 em {
+  color: var(--cyan);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+.hero-copy p {
+  max-width: 610px;
+  margin: 23px 0 0;
+  color: #929ca1;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.frame-meta {
+  display: flex;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: rgba(16, 23, 27, 0.78);
+}
+.frame-meta div {
+  min-width: 112px;
+  padding: 14px 16px;
+  border-left: 1px solid var(--line);
+}
+.frame-meta div:first-child {
+  border-left: 0;
+}
+.frame-meta dt,
+.frame-meta dd {
+  margin: 0;
+  font-family: "Cascadia Mono", "Consolas", monospace;
+}
+.frame-meta dt {
+  color: #626e74;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+}
+.frame-meta dd {
+  margin-top: 7px;
+  color: #cad1d4;
+  font-size: 11px;
 }
 
-p {
-  margin: 0;
-  color: #cbd5e1;
-  line-height: 1.6;
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 282px;
+  min-height: 470px;
+  border: 1px solid #354047;
+  background: #090d10;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.32);
+}
+.stage-frame {
+  position: relative;
+  padding: 25px 18px 18px 32px;
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+}
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 720 / 440;
+  max-height: 440px;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at 45% 48%,
+    #152328 0,
+    #0d1418 55%,
+    #090d10 100%
+  );
+  cursor: crosshair;
+}
+.render-layer,
+.stage-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.render-layer canvas,
+.render-layer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.layer-three {
+  z-index: 1;
+}
+.layer-pixi {
+  z-index: 2;
+}
+.layer-svg {
+  z-index: 3;
+  pointer-events: none;
+}
+.stage-grid {
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.48;
+  background-image:
+    linear-gradient(rgba(164, 190, 198, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(164, 190, 198, 0.08) 1px, transparent 1px);
+  background-size: 10% 16.666%;
+}
+.stage-grid::before,
+.stage-grid::after {
+  content: "";
+  position: absolute;
+  background: rgba(173, 198, 204, 0.2);
+}
+.stage-grid::before {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+.stage-grid::after {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+.stage-caption {
+  position: absolute;
+  z-index: 5;
+  left: 13px;
+  right: 13px;
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #65747a;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+.stage-ruler {
+  position: absolute;
+  display: flex;
+  color: #4f5c62;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+.stage-ruler-x {
+  left: 32px;
+  right: 18px;
+  top: 8px;
+  justify-content: space-between;
+}
+.stage-ruler-y {
+  left: 8px;
+  top: 25px;
+  bottom: 18px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.inspector {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #10171b;
+}
+.inspector-heading {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  font:
+    10px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.inspector-heading b {
+  color: #566269;
+  font-weight: 400;
+}
+.selection-readout {
+  min-height: 94px;
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.selection-readout small {
+  display: block;
+  color: var(--cyan);
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.13em;
+}
+.selection-readout strong {
+  display: block;
+  margin-top: 10px;
+  color: #bfc8cc;
+  font:
+    500 11px/1.55 "Cascadia Mono",
+    "Consolas",
+    monospace;
+  overflow-wrap: anywhere;
+}
+.adapter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid;
+}
+.adapter-cyan {
+  border-left-color: var(--cyan);
+}
+.adapter-amber {
+  border-left-color: var(--amber);
+}
+.adapter-coral {
+  border-left-color: var(--coral);
+}
+.adapter > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.adapter strong {
+  font:
+    600 13px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.08em;
+}
+.adapter span {
+  color: #68757b;
+  font-size: 10px;
+}
+.adapter-stat {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+}
+.adapter-stat b {
+  font:
+    400 20px "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+.adapter-stat small {
+  color: #6f7c81;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  text-transform: uppercase;
+}
+.contract-note {
+  margin: auto 18px 18px;
+  padding: 15px;
+  border: 1px solid #29343a;
+  background: #0c1215;
+}
+.contract-note span {
+  color: var(--coral);
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.contract-note p {
+  margin: 8px 0 0;
+  color: #79868b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 15px 0 22px;
+  color: #515c61;
+  font:
+    8px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.13em;
+}
+
+@media (max-width: 1040px) {
+  .hero {
+    padding-top: 38px;
+  }
+  .hero-copy {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .frame-meta {
+    justify-self: start;
+  }
+  h1 {
+    font-size: 56px;
+  }
 }

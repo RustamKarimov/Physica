@@ -12,7 +12,14 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
+  "dependencies": {
+    "@physica/renderer-core": "workspace:*",
+    "three": "catalog:"
+  },
   "devDependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/mathematics": "workspace:*",
+    "@types/three": "catalog:",
     "typescript": "catalog:"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "@physica-example/mixed-renderer-selection",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/picking": "workspace:*",
+    "@physica/renderer-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}
