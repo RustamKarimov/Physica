@@ -1,0 +1,14 @@
+{
+  "id": "hello-stage",
+  "title": "Hello Stage",
+  "category": "system",
+  "description": "The first Physica example now runs through the shared camera, render-frame and SVG adapter pipeline.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "repository-bootstrap",
+    "shared-render-frame",
+    "svg-renderer",
+    "semantic-picking"
+  ]
+}

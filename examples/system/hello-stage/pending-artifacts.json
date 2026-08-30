@@ -1,0 +1,10 @@
+{
+  "reason": "The shared .physica gallery runtime and deterministic video capture pipeline are not implemented yet.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Shared example runtime and gallery capture complete"
+}

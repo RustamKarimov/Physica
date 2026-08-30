@@ -4,6 +4,8 @@
 
 **Applies from:** Step 12 onward, with the first audit looking back across all completed work
 
+**Completed:** HC-00 passed after repairs; see docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md. Next scheduled checkpoint: HC-01 after Phase 3 Step 3.4.
+
 ## 1. Purpose
 
 Ordinary phase verification proves the current change. A Project Health Checkpoint asks whether the growing product still forms one coherent, maintainable, scientifically trustworthy system and whether earlier roadmap steps actually delivered their assigned outcomes.

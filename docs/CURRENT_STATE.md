@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 11 complete — Step 12 Draw/write/reveal/highlight specification audited
+**Current development phase:** Step 12 Draw/write/reveal/highlight and HC-00 retrospective baseline complete — Step 13 next
 
-**Current task:** Implement the audited Step 12 Draw/write/reveal/highlight specification
+**Current task:** Hand off the verified Step 12 result and project health-checkpoint schedule
 
-**Next task:** Implement and verify `draw-vector`, `write-label` and `highlight-diagram`, then run the HC-00 retrospective project-health checkpoint without entering Step 13
+**Next task:** Specify Phase 3 Step 3.3 Morph and matched transform from the frozen roadmap without entering camera animation
 
 **Blockers:** None
 
@@ -20,7 +20,46 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. It defines milestone-based whole-project audits, completion-evidence reconciliation and early-trigger conditions. HC-00 is required immediately after Step 12 as a retrospective baseline across all completed work.
+**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 passed after repairs and is recorded in `docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md`. HC-01 is scheduled after Phase 3 Step 3.4, with early-trigger conditions remaining active.
+
+## Step 12 result
+
+Completed and audited `docs/implementation/STEP_12_DRAW_WRITE_REVEAL_HIGHLIGHT_SPEC.md`, then implemented deterministic presentation-clock drawing, writing, reveal and emphasis without an ADR, root ProjectDocument schema change, new package or third-party dependency.
+
+Implemented:
+
+- `@physica/storyboard`: immutable V1 reveal envelopes, operation validation, stable scheduling/conflict rejection, arbitrary-time evaluation, reduced motion, transient reveal state and collision-free Runtime Scheduler integration;
+- `@physica/renderer-svg`: finite path metrics, exact prefix slicing, forward/reverse stroke-dash plans, completion-only arrow heads, directional mask plans and bounded emphasis styles;
+- `@physica/typography`: typed `Intl.Segmenter` grapheme segmentation and prefix writing that preserves combining sequences, emoji ZWJ sequences and RTL logical order;
+- canonical persistence and runtime-separation tests, exact 3-4-5 path tests, all reveal operation families, reverse/scrub/zero-duration/reduced-motion coverage and 10,000 deterministic evaluations.
+
+User-visible completion:
+
+- `examples/animation/draw-vector`;
+- `examples/animation/write-label`;
+- `examples/animation/highlight-diagram`;
+- the launcher-visible desktop workbench now shows “12 / Draw · Write · Reveal” and animates all three effects from the shared play/reverse/scrub/reduced-motion controls.
+
+Focused verification passed: 6 files and 17 tests, strict typechecks for all owning packages/examples, architecture lint, desktop build and launcher check. Complete repository results are recorded with HC-00 below.
+
+## HC-00 result
+
+The first whole-project health checkpoint passed after repairs. See `docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md` for the completed-step evidence matrix, exact findings and bounded debt.
+
+Corrections made:
+
+- standardized older executable examples from `example.json` to `metadata.json` and supplied all missing local pending-artifact manifests;
+- upgraded the original Roadmap `hello-stage` placeholder into a real shared-renderer example with deterministic output and automated test;
+- split the Step 12 desktop growth into typed Library, adapter, reveal and presentation-control components plus component-owned styles, reducing `App.tsx` from 616 to 453 lines and base `styles.css` from 934 to 616 lines.
+
+Audit results:
+
+- 26 of 26 examples satisfy the currently possible gallery artifact contract and have matching root pending entries;
+- 59 workspace package/application nodes have zero dependency cycles;
+- all future empty package shells match the frozen package map rather than abandoned partial code;
+- formatting, ESLint, architecture boundaries, strict TypeScript across 85 of 86 workspace projects, 46 unit/example files with 189 tests, 1 architecture file with 2 tests, all three app builds, frozen install and launcher check passed;
+- no completed step was reopened and no Architecture Blocker was found;
+- large stable modules and the inherited combined Pixi/Three desktop chunk are recorded with owners and latest safe resolution boundaries.
 
 ## Step 11 result
 
@@ -513,21 +552,20 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 12 read first
+## Step 13 read first
 
 - `AGENTS.md`
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
+- `docs/PROJECT_HEALTH_CHECKPOINTS.md`
 - `docs/PROJECT_CONSTITUTION.md`
 - `docs/ROADMAP.md`
 - `docs/ANIMATION_ENGINE.md`
 - `docs/STORYBOARD.md`
 - `docs/RENDERER_ARCHITECTURE.md`
-- `docs/TEXT_CONTENT.md`
-- `docs/TYPOGRAPHY_AND_I18N.md`
-- `docs/CLOCKS_AND_TIME.md`
 - `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
+- `docs/implementation/STEP_12_DRAW_WRITE_REVEAL_HIGHLIGHT_SPEC.md`
 - `docs/EXAMPLE_SYSTEM.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
 - approved ADRs in `docs/DECISIONS.md`
 
-Stop only if Step 12 reaches an Architecture Blocker condition defined by `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`.
+Stop only if Step 13 reaches an Architecture Blocker or a Project Health early-trigger condition.

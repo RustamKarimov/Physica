@@ -13,6 +13,8 @@ import {
   evaluateAnimationSchedule,
   type AnimationDefinition,
 } from "@physica/storyboard";
+import { Adapter } from "./Adapter";
+import { LibraryBrowser } from "./LibraryBrowser";
 import {
   DEMO_HEIGHT,
   DEMO_WIDTH,
@@ -25,6 +27,7 @@ import {
   evaluateDesktopReveal,
   desktopRevealDurationSeconds,
 } from "./reveal-demo";
+import { PresentationControls, RevealShowcase } from "./presentation-panels";
 
 type AdapterState = "initializing" | "ready" | "unavailable";
 
@@ -263,68 +266,16 @@ export function App() {
         </div>
 
         <div className="workbench">
-          <aside className="library-browser" aria-label="Physics Library">
-            <div className="library-heading">
-              <div>
-                <small>CATALOG</small>
-                <strong>Library</strong>
-              </div>
-              <span>{visibleLibraryItems.length}</span>
-            </div>
-            <label className="library-search">
-              <span className="sr-only">Search Library</span>
-              <input
-                value={libraryQuery}
-                onChange={(event) => setLibraryQuery(event.target.value)}
-                placeholder="Search objects…"
-              />
-              <kbd>⌕</kbd>
-            </label>
-            <div className="library-filters" aria-label="Library item class">
-              {libraryClasses.map((itemClass) => (
-                <button
-                  key={itemClass}
-                  className={libraryClass === itemClass ? "active" : ""}
-                  onClick={() => setLibraryClass(itemClass)}
-                >
-                  {itemClass === "all" ? "All" : itemClass.replace("-", " ")}
-                </button>
-              ))}
-            </div>
-            <div className="library-list">
-              {visibleLibraryItems.map((item) => (
-                <article
-                  className="library-card"
-                  key={item.id}
-                  draggable
-                  onDragStart={(event) => {
-                    event.dataTransfer.effectAllowed = "copy";
-                    event.dataTransfer.setData(
-                      "application/x-physica-library",
-                      JSON.stringify(physicsLibrary.dragPayload(item)),
-                    );
-                  }}
-                >
-                  <div
-                    className={"library-glyph glyph-" + item.itemClass}
-                    aria-hidden="true"
-                  >
-                    {item.displayName.slice(0, 1)}
-                  </div>
-                  <div>
-                    <strong>{item.displayName}</strong>
-                    <span>{item.itemClass.replace("-", " ")}</span>
-                  </div>
-                  <button
-                    onClick={() => placeItem(item)}
-                    aria-label={"Add " + item.displayName + " to stage"}
-                  >
-                    +
-                  </button>
-                </article>
-              ))}
-            </div>
-          </aside>
+          <LibraryBrowser
+            items={visibleLibraryItems}
+            itemClasses={libraryClasses}
+            query={libraryQuery}
+            selectedClass={libraryClass}
+            onQueryChange={setLibraryQuery}
+            onClassChange={setLibraryClass}
+            onPlace={placeItem}
+            dragPayload={(item) => physicsLibrary.dragPayload(item)}
+          />{" "}
           <div className="stage-frame">
             <div className="stage-ruler stage-ruler-x">
               <span>−4</span>
@@ -365,61 +316,7 @@ export function App() {
                 dangerouslySetInnerHTML={{ __html: svgPlan.payload.markup }}
               />
               <div className="stage-grid" aria-hidden="true" />
-              <div className="reveal-showcase">
-                <svg
-                  className="reveal-vector"
-                  viewBox="0 0 310 210"
-                  role="img"
-                  aria-label={`Force vector ${Math.round(
-                    revealState.pathProgress * 100,
-                  )}% drawn`}
-                >
-                  <line
-                    x1="52"
-                    y1="166"
-                    x2="255"
-                    y2="56"
-                    pathLength={revealState.dashArray}
-                    strokeDasharray={revealState.dashArray}
-                    strokeDashoffset={revealState.dashOffset}
-                  />
-                  {revealState.arrowHeadVisible && (
-                    <path d="M255 56L224 59M255 56L239 83" />
-                  )}
-                  <text x="62" y="188">
-                    PATH DRAW
-                  </text>
-                </svg>
-                <div
-                  className="written-label"
-                  aria-label={revealState.fullLabel}
-                  title="Full accessible label remains available while the visual prefix writes"
-                >
-                  <small>GRAPHEME-SAFE LABEL</small>
-                  <strong>{revealState.visibleLabel}</strong>
-                  <span aria-hidden="true" />
-                </div>
-                <div className="emphasis-diagram">
-                  <div
-                    className="focus-vector"
-                    style={{
-                      boxShadow:
-                        "0 0 " +
-                        34 * revealState.highlightIntensity +
-                        "px rgba(246,199,67,.72)",
-                    }}
-                  >
-                    F
-                  </div>
-                  <div
-                    className="context-vector"
-                    style={{ opacity: revealState.contextOpacity }}
-                  >
-                    v
-                  </div>
-                  <p>Focus: resultant force · velocity remains context</p>
-                </div>
-              </div>
+              <RevealShowcase state={revealState} />
               {animatedTarget && (
                 <button
                   className="animation-object"
@@ -479,67 +376,34 @@ export function App() {
               </div>
             </div>
           </div>
-
           <aside className="inspector" aria-label="Renderer diagnostics">
             <div className="inspector-heading">
               <span>FRAME INSPECTOR</span>
               <b>12</b>
             </div>
-            <div className="animation-controls">
-              <small>PRESENTATION CLOCK</small>
-              <div className="transport">
-                <button
-                  onClick={() => setAnimationPlaying((current) => !current)}
-                >
-                  {animationPlaying ? "Pause" : "Play"}
-                </button>
-                <button
-                  onClick={() => {
-                    setAnimationDirection((current) =>
-                      current === 1 ? -1 : 1,
-                    );
-                    setAnimationPlaying(true);
-                  }}
-                >
-                  {animationDirection === 1 ? "Reverse" : "Forward"}
-                </button>
-                <button
-                  onClick={() => {
-                    setAnimationPlaying(false);
-                    setAnimationTime(0);
-                  }}
-                >
-                  Reset
-                </button>
-              </div>
-              <input
-                aria-label="Scrub presentation time"
-                type="range"
-                min="0"
-                max={desktopRevealDurationSeconds}
-                step="0.01"
-                value={animationTime}
-                onChange={(event) => {
-                  setAnimationPlaying(false);
-                  setAnimationTime(Number(event.target.value));
-                }}
-              />
-              <label>
-                <input
-                  type="checkbox"
-                  checked={reducedMotion}
-                  onChange={(event) => setReducedMotion(event.target.checked)}
-                />
-                Resolve final state
-              </label>
-              <output>
-                X {animatedTarget?.translation.x.toFixed(1) ?? "0.0"} · θ{" "}
-                {animatedTarget?.rotationRadians.toFixed(2) ?? "0.00"} · S{" "}
-                {animatedTarget?.scale.x.toFixed(2) ?? "1.00"} · D{" "}
-                {Math.round(revealState.pathProgress * 100)}% · W{" "}
-                {revealState.visibleGraphemes}/{revealState.totalGraphemes}
-              </output>
-            </div>
+            <PresentationControls
+              playing={animationPlaying}
+              direction={animationDirection}
+              timeSeconds={animationTime}
+              durationSeconds={desktopRevealDurationSeconds}
+              reducedMotion={reducedMotion}
+              animatedTarget={animatedTarget}
+              revealState={revealState}
+              onTogglePlaying={() => setAnimationPlaying((current) => !current)}
+              onFlipDirection={() => {
+                setAnimationDirection((current) => (current === 1 ? -1 : 1));
+                setAnimationPlaying(true);
+              }}
+              onReset={() => {
+                setAnimationPlaying(false);
+                setAnimationTime(0);
+              }}
+              onScrub={(timeSeconds) => {
+                setAnimationPlaying(false);
+                setAnimationTime(timeSeconds);
+              }}
+              onReducedMotion={setReducedMotion}
+            />{" "}
             <div className="selection-readout">
               <small>SEMANTIC PICK</small>
               <strong>{selection}</strong>
@@ -585,32 +449,5 @@ export function App() {
         </span>
       </footer>
     </main>
-  );
-}
-
-function Adapter({
-  name,
-  purpose,
-  state,
-  accent,
-  count,
-}: {
-  name: string;
-  purpose: string;
-  state: AdapterState;
-  accent: string;
-  count: number;
-}) {
-  return (
-    <div className={`adapter adapter-${accent}`}>
-      <div>
-        <strong>{name}</strong>
-        <span>{purpose}</span>
-      </div>
-      <div className="adapter-stat">
-        <b>{count}</b>
-        <small>{state}</small>
-      </div>
-    </div>
   );
 }

@@ -1,0 +1,11 @@
+{
+  "id": "hello-stage",
+  "sceneId": "00000000-0000-4000-8000-000000000064",
+  "representationId": "00000000-0000-4000-8000-000000000065",
+  "backend": "svg",
+  "width": 320,
+  "height": 180,
+  "elementCount": 1,
+  "semanticPickIds": ["physica.example:hello-stage"],
+  "deterministic": true
+}

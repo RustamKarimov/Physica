@@ -3,6 +3,17 @@
   "description": "Machine-readable obligations for foundational examples created before the shared .physica runtime, renderer, gallery capture and deterministic video pipeline exist.",
   "examples": [
     {
+      "id": "hello-stage",
+      "path": "examples/system/hello-stage",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
       "id": "schema-roundtrip",
       "path": "examples/system/schema-roundtrip",
       "pending": [
