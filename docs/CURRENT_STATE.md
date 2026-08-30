@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Step 10 complete — Physics Library Foundation
+**Current development phase:** Step 11 specification complete — Animation Scheduler implementation underway
 
-**Current task:** Prepare the Step 11 Animation Scheduler implementation specification
+**Current task:** Implement `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
 
-**Next task:** Audit `docs/ANIMATION_ENGINE.md` and write `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md` before implementation
+**Next task:** Implement deterministic animation definitions, easing, composition, conflict resolution and arbitrary-time evaluation in `packages/storyboard`
 
 **Blockers:** None
 
@@ -19,6 +19,10 @@
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
+
+## Step 11 specification checkpoint
+
+Created and audited `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`. The audit found no Architecture Blocker, third-party dependency, ADR requirement or ProjectDocument schema-version change. The frozen package map has no standalone animation package, so the existing presentation-tier `@physica/storyboard` package owns a separately exported animation module. Persisted definitions use existing generic Storyboard step envelopes; runtime evaluation reads explicit presentation-clock coordinates, writes only transient presentation state and integrates through the existing Runtime Scheduler presentation-animation phase.
 
 ## Step 10 result
 
@@ -487,7 +491,7 @@ Resolved during bootstrap:
 - `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
 - `docs/PROJECT_CONSTITUTION.md`
 - `docs/ANIMATION_ENGINE.md`
-- `docs/CLOCK_SYSTEM.md`
+- `docs/CLOCKS_AND_TIME.md`
 - `docs/COMMANDS_AND_EVENTS.md`
 - `docs/EXAMPLE_SYSTEM.md`
 - `docs/PACKAGE_DEPENDENCIES.md`
