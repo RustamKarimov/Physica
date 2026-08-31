@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 4 active — Step 4.3 complete
+**Current development phase:** Phase 4 complete — HC-02 passed after corrections
 
-**Current task:** Specify Phase 4 Step 4.4 Graph analysis and overlays
+**Current task:** Specify Phase 5 Step 5.1 Dependency Relationship Engine
 
-**Next task:** Implement Phase 4 Step 4.4 Graph analysis and overlays after specification review, then execute scheduled HC-02 before entering Phase 5
+**Next task:** Implement only Phase 5 Step 5.1 attach, follow, bind, offset, tangent, normal and derived-property relationships after specification review, including `examples/relationships/tangent-follower`
 
 **Blockers:** None
 
@@ -20,7 +20,53 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 and HC-01 passed after repairs and are recorded under docs/health-checkpoints/. HC-02 is scheduled after Phase 4 Step 4.4, with early-trigger conditions remaining active.
+**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00, HC-01 and HC-02 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-03 is scheduled after Phase 6 Step 6.10, with early-trigger conditions remaining active.
+
+## HC-02 and Step 18 result
+
+Completed and audited `docs/implementation/STEP_18_GRAPH_ANALYSIS_OVERLAYS_SPEC.md`, implemented the Phase 4 Step 4.4 release gate, and passed the scheduled Equation/Graph Preview health checkpoint after four corrections. The audited implementation baseline is commit `08a7ac7`; the complete checkpoint report is `docs/health-checkpoints/HC_02_EQUATIONS_AND_GRAPHS.md`.
+
+Implemented in `@physica/data`:
+
+- optional finite non-negative x/y canonical uncertainty on V1 samples, preserved through generic `DatasetDefinition` round trips;
+- deterministic derived histogram datasets with explicit interval/final-bin policy, excluded-sample counts and provenance;
+- deterministic one-sided amplitude spectra for bounded, uniformly sampled time series, using the central Numerics Policy and a direct real DFT with correct DC/Nyquist scaling;
+- separated dataset validation/creation from envelope persistence during HC-02 without changing the package API.
+
+Implemented in `@physica/graphs`:
+
+- persisted optional tangent, gradient triangle, area, maximum, unweighted linear-fit and error-bar overlay definitions;
+- deterministic piecewise-linear calculus/statistics resolution in canonical scientific coordinates, with unit-aware display conversion and viewport-invariant values;
+- histogram/bar rendering and shared renderer-neutral SVG plans, while preserving the existing plot clipping and graph-data/screen-layout separation;
+- typed failures for invalid analysis references/ranges, insufficient or degenerate data, incompatible/logarithmic bar axes and malformed persisted overlays;
+- successful models and resolved plans remain immutable; resolved pixel plans are transient and never authoritative data.
+
+User-visible completion:
+
+- `examples/graphs/graph-gradient`, `graph-area` and `histogram-live` contain metadata, README, executable deterministic output, exact expected JSON, accessible expected SVG preview, automated tests and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
+- the launcher-visible desktop opens at “18 / Graph Analysis” with real tangent/gradient/maximum, area/fit/error-bar, histogram and spectrum views;
+- the Step 17 graph engine, corrected Step 16 measured equation transforms, Step 15 equation editor and all earlier proofs remain available below it;
+- the maximum marker colour-precedence defect found by HC-02 was corrected.
+
+HC-02 corrections and audit results:
+
+- closed HC00-D01 by splitting the 1,079-line commands built-ins module into public contract, helpers and three command-family modules, preserving IDs, payloads, inverses, registration and exports;
+- split the 528-line dataset module into 256-line validation/creation and 288-line persistence modules;
+- repaired the root pending-artifact ledger, which now matches all 37 examples exactly;
+- workspace graph: 97 nodes, zero dependency cycles; no new third-party dependency, license, ADR, schema version, writer, clock, scheduler, solver or renderer authority;
+- no completed step was reopened and no Architecture Blocker was found;
+- retained bounded debt: large units/coordinate/quantity modules before HC-03, scheduler/core validation on growth or HC-03, graph analysis before another analysis family or HC-03, and desktop lazy loading no later than HC-04.
+
+Verification:
+
+- focused post-refactor gate — 7 files and 46 tests passed;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 96 of 97 workspace projects, 68 unit/example files with 282 tests, 1 architecture file with 2 tests and all three application builds passed;
+- frozen offline install passed across all 97 workspace projects;
+- `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- the non-failing desktop bundle warning is approximately 4.945 MB / 1.372 MB gzip and remains owned by the desktop app for stable-shell lazy loading no later than HC-04;
+- automated live Windows capture remains unavailable because of the recorded local sandbox refresh-helper limitation and is not counted as evidence; the checked-in accessible previews, executed smoke tests, builds and launcher gate pass, and the one-click launcher remains available for user observation.
+
+Phase 4 and HC-02 are complete. Phase 5 Step 5.1 is next; begin with an audited implementation specification and do not implement Step 5.2 physics-aware vectors, Step 5.3 controls or Step 5.4 Storyboard early.
 
 ## Step 17 result
 
@@ -750,19 +796,19 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Phase 4 Step 4.4 read first
+## Phase 5 Step 5.1 read first
 
 - AGENTS.md
 - docs/AUTONOMOUS_EXECUTION_PROTOCOL.md
 - docs/PROJECT_HEALTH_CHECKPOINTS.md
 - docs/PROJECT_CONSTITUTION.md
 - docs/ROADMAP.md
-- docs/GRAPH_AND_DATA_ENGINE.md
-- docs/MATHEMATICS_AND_UNITS.md
-- docs/COORDINATES_AND_FRAMES.md
-- docs/RENDERER_ARCHITECTURE.md
-- docs/implementation/STEP_17_GRAPH_ENGINE_SPEC.md
+- docs/RELATIONSHIPS.md
+- docs/DYNAMIC_RELATIONSHIPS.md
+- docs/MATHEMATICS_AND_UNITS.md when tangent/normal or derived mathematical values require it
+- docs/RUNTIME_SCHEDULER.md when relationship evaluation ordering requires it
+- docs/COMMANDS_AND_EVENTS.md when dependency invalidation or runtime signaling requires it
 - docs/PACKAGE_DEPENDENCIES.md
 - approved ADRs in docs/DECISIONS.md
 
-Begin with a Step 4.4 implementation specification. Preserve canonical dataset authority, explicit graph-data/screen-layout spaces, unit compatibility and the graph renderer clip contract. Implement only the analysis overlays named by the roadmap/specification. Stop only if graph analysis reaches an Architecture Blocker; do not implement variable binding, formula animation, data export or later graph types early. After Step 4.4 verification, execute scheduled HC-02 before Phase 5.
+Begin with a Step 5.1 implementation specification. Preserve single-authoritative-writer, document/runtime separation and Runtime Scheduler ownership while implementing only attach, follow, bind, offset, tangent, normal and derived-property relationships. Include the complete `examples/relationships/tangent-follower` release-gate artifacts. Stop only for an Architecture Blocker; do not implement physics-aware vector rendering, interactive controls or Storyboard early.
