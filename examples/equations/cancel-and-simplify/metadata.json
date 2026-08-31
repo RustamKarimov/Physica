@@ -1,0 +1,15 @@
+{
+  "id": "cancel-and-simplify",
+  "title": "Cancel clutter, preserve meaning",
+  "category": "equations",
+  "description": "Physica verifies x + (y - y) = x, matches the retained subject and makes the cancelled pair explicitly exit.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "verified-simplification",
+    "canonical-expression-matching",
+    "cancel-exit-motion",
+    "deterministic-scrubbing",
+    "transform-persistence"
+  ]
+}

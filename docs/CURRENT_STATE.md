@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 4 active — Step 4.1 complete
+**Current development phase:** Phase 4 active — Step 4.2 complete
 
-**Current task:** Hand off the verified semantic-equation foundation
+**Current task:** Hand off the verified equation-transform release gate
 
-**Next task:** Specify Phase 4 Step 4.2 Equation transform engine
+**Next task:** Specify Phase 4 Step 4.3 Graph engine
 
 **Blockers:** None
 
@@ -21,6 +21,43 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 and HC-01 passed after repairs and are recorded under docs/health-checkpoints/. HC-02 is scheduled after Phase 4 Step 4.4, with early-trigger conditions remaining active.
+
+## Step 16 result
+
+Completed and audited `docs/implementation/STEP_16_EQUATION_TRANSFORM_ENGINE_SPEC.md`, then implemented the Phase 4 Step 4.2 release gate without an ADR, root `ProjectDocument` schema change, new third-party dependency, clock, solver, scheduler task or authoritative runtime writer.
+
+Implemented in `@physica/equations`:
+
+- immutable V1 equation transforms stored through the existing extensible `EquationDefinition` list as `physica:equation/transform-v1`, with complete source/target semantic snapshots, correspondence, frozen validity status, verification method/explanation and JSON-safe metadata;
+- deterministic semantic matching in the frozen priority order: persistent ID, symbolic atom, structural role, canonical-expression fingerprint, optional glyph fallback and explicit enter/exit, with every endpoint consumed at most once;
+- validated teacher overrides that take presentation precedence but cannot alter mathematical validity;
+- conservative Compute Engine verification for simplified expression equality, equation residual equality and explicit symbol substitution, assigning only the four frozen statuses and leaving every unestablished case visibly `UNVERIFIED_PRESENTATION`;
+- parse-time recomputation of symbolic verification, so a forged or stale persisted verification status/method is rejected;
+- renderer-neutral FLIP plans over validated semantic fragment layout boxes, with deterministic smoothstep scrubbing, matched inverse translation/scale, explicit exit/entry opacity, exact endpoints and reduced-motion final-state resolution;
+- typed errors for malformed transforms, correspondence, verification/substitution, persisted envelopes, fragment layouts and progress; successful inputs, transforms, plans and frames remain immutable.
+
+Release-gate correction:
+
+- the initial cancellation fixture used `(2x+2x)/2`, but the pinned canonicalizer correctly collapsed it to `2x` before motion planning, leaving no honest fragment to exit;
+- the completed `cancel-and-simplify` example therefore uses `x+(y-y) → x`, whose canonical source retains the cancelling pair and whose simplified target is safely verified; no decorative or glyph-only cancellation was fabricated.
+
+User-visible completion:
+
+- `examples/equations/v-u-at-rearrangement`, `examples/equations/substitution` and `examples/equations/cancel-and-simplify` each contain metadata, README, executable deterministic output, expected JSON, accessible presentation-grade SVG preview, automated tests and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
+- the launcher-visible desktop now opens at “16 / Equation Transform” with selectable rearrange/substitute/cancel proofs, verified status, semantic correspondence provenance, real FLIP/enter/exit frames, replay/play/scrub/reduced-motion controls and a visible teacher-override case;
+- the live Step 15 MathLive/semantic-tree/KaTeX editor and all earlier Camera/Library proofs remain directly below it.
+
+Verification:
+
+- focused equation engine plus three gallery examples — 5 files and 21 tests passed;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 91 of 92 workspace projects, 58 unit/example files with 248 tests, 1 architecture file with 2 tests and all three application builds passed;
+- frozen offline install passed across all 92 workspace projects;
+- `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- in-app browser visual automation again could not start because the local Windows sandbox refresh helper exited before browser discovery; this is not counted as a live visual pass. The production build, launcher check and all three checked-in accessible SVG release-gate previews/tests passed;
+- the non-failing desktop bundle warning is approximately 4.881 MB / 1.355 MB gzip. The existing desktop lazy-loading debt remains owned by the desktop app, is re-evaluated at HC-02 and must be resolved with the stable shell no later than HC-04;
+- the 538-line desktop transform workbench is mostly declarative proof composition but is a maintainability review signal. The desktop app owns it; HC-02 must inspect whether demo construction and view markup should be split before formula-animation integration grows it further.
+
+Self-review found no Architecture Blocker, reopened step or Project Health early trigger. Phase 4 Step 4.3 Graph engine is next; do not implement variable binding or formula animation early.
 
 ## Step 15 result
 
@@ -673,19 +710,19 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Phase 4 Step 4.2 read first
+## Phase 4 Step 4.3 read first
 
 - AGENTS.md
 - docs/AUTONOMOUS_EXECUTION_PROTOCOL.md
 - docs/PROJECT_HEALTH_CHECKPOINTS.md
 - docs/PROJECT_CONSTITUTION.md
 - docs/ROADMAP.md
-- docs/EQUATION_ENGINE.md
+- docs/GRAPH_AND_DATA_ENGINE.md
 - docs/MATHEMATICS_AND_UNITS.md
-- docs/TEXT_CONTENT.md
-- docs/TYPOGRAPHY_AND_I18N.md
-- docs/implementation/STEP_15_MATH_EDITOR_SEMANTIC_EQUATION_TREE_SPEC.md
+- docs/COORDINATES_AND_FRAMES.md
+- docs/RENDERER_ARCHITECTURE.md
+- docs/implementation/STEP_16_EQUATION_TRANSFORM_ENGINE_SPEC.md
 - docs/PACKAGE_DEPENDENCIES.md
 - approved ADRs in docs/DECISIONS.md
 
-Begin with a Step 4.2 implementation specification. Preserve the Step 4.1 source/semantic/render separation and stable Physica node identities. Stop only if the equation transform engine reaches an Architecture Blocker; do not implement graphing early.
+Begin with a Step 4.3 implementation specification. Preserve typed world/view/layout coordinates, the shared Camera and scientific unit/tolerance contracts. Stop only if the graph engine reaches an Architecture Blocker; do not implement variable binding or formula animation early.

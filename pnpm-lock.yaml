@@ -315,6 +315,19 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/equations/cancel-and-simplify:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/equations':
+        specifier: workspace:*
+        version: link:../../../packages/equations
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/equations/edit-and-render:
     dependencies:
       '@physica/core-model':
@@ -326,6 +339,32 @@ importers:
       '@physica/serialization':
         specifier: workspace:*
         version: link:../../../packages/serialization
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/equations/substitution:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/equations':
+        specifier: workspace:*
+        version: link:../../../packages/equations
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/equations/v-u-at-rearrangement:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/equations':
+        specifier: workspace:*
+        version: link:../../../packages/equations
     devDependencies:
       typescript:
         specifier: 'catalog:'

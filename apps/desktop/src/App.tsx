@@ -15,6 +15,7 @@ import {
 } from "@physica/storyboard";
 import { Adapter } from "./Adapter";
 import { EquationWorkbench } from "./EquationWorkbench";
+import { EquationTransformWorkbench } from "./EquationTransformWorkbench";
 import { LibraryBrowser } from "./LibraryBrowser";
 import {
   DEMO_HEIGHT,
@@ -217,7 +218,11 @@ export function App() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#rendering-lab" aria-label="Physica home">
+        <a
+          className="brand"
+          href="#equation-transform"
+          aria-label="Physica home"
+        >
           <span className="brand-mark" aria-hidden="true">
             φ
           </span>
@@ -225,13 +230,14 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>15 / SEMANTIC EQUATIONS</strong>
+          <strong>16 / EQUATION TRANSFORM</strong>
         </div>
         <div className="engine-state">
-          <i /> canonical model ready
+          <i /> transform engine verified
         </div>
       </header>
 
+      <EquationTransformWorkbench />
       <EquationWorkbench />
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">

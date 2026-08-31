@@ -1,0 +1,16 @@
+{
+  "id": "v-u-at-rearrangement",
+  "title": "Rearrange without losing the terms",
+  "category": "equations",
+  "description": "Physica verifies v = u + at to v - u = at by residual equality, proposes semantic correspondence and evaluates deterministic matched/enter/exit motion.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "semantic-equation-transform",
+    "residual-equivalence-verification",
+    "semantic-correspondence",
+    "flip-motion",
+    "enter-exit-terms",
+    "transform-persistence"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "v-u-at-rearrangement",
+  "source": "v=u+at",
+  "target": "v-u=at",
+  "equivalenceStatus": "VERIFIED_EQUIVALENT",
+  "verificationMethod": {
+    "engine": {
+      "id": "cortex-js/compute-engine",
+      "version": "0.120.0"
+    },
+    "kind": "compute-engine",
+    "operation": "residual-equality",
+    "outcome": "verified"
+  },
+  "correspondence": {
+    "matched": 9,
+    "sourceOnly": 1,
+    "targetOnly": 3,
+    "methods": {
+      "canonical-expression": 1,
+      "structural-identity": 1,
+      "symbolic-identity": 7
+    }
+  },
+  "motion": {
+    "matched": 6,
+    "exits": 1,
+    "entries": 1,
+    "startProgress": 0,
+    "middleProgress": 0.5,
+    "endProgress": 1,
+    "exactEndIdentity": true,
+    "deterministicScrub": true
+  },
+  "envelope": {
+    "typeId": "physica:equation/transform-v1",
+    "schemaVersion": 1,
+    "roundTrip": true
+  }
+}

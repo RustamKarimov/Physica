@@ -1,0 +1,38 @@
+{
+  "id": "cancel-and-simplify",
+  "source": "x+(y-y)",
+  "target": "x",
+  "equivalenceStatus": "VERIFIED_EQUIVALENT",
+  "verificationMethod": {
+    "engine": {
+      "id": "cortex-js/compute-engine",
+      "version": "0.120.0"
+    },
+    "kind": "compute-engine",
+    "operation": "expression-equality",
+    "outcome": "verified"
+  },
+  "correspondence": {
+    "matched": 1,
+    "sourceOnly": 6,
+    "targetOnly": 0,
+    "methods": {
+      "symbolic-identity": 1
+    }
+  },
+  "motion": {
+    "matched": 1,
+    "exits": 4,
+    "entries": 0,
+    "startExitOpacity": 1,
+    "middleExitOpacity": 0.5,
+    "endExitOpacity": 0,
+    "reducedMotionProgress": 1,
+    "deterministicScrub": true
+  },
+  "envelope": {
+    "typeId": "physica:equation/transform-v1",
+    "schemaVersion": 1,
+    "roundTrip": true
+  }
+}

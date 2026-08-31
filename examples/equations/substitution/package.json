@@ -1,0 +1,16 @@
+{
+  "name": "@physica-example/substitution",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/equations": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Cancel clutter, preserve meaning</title>
+  <desc id="description">A verified simplification visibly exits a cancelled y minus y pair while the matched x remains.</desc>
+  <rect width="1200" height="675" fill="#080e12"/>
+  <path d="M0 96h1200M0 584h1200" stroke="#27343b"/>
+  <rect x="45" y="34" width="38" height="38" rx="4" fill="#d96f5d"/><text x="64" y="62" text-anchor="middle" fill="#160b09" font-family="Georgia" font-size="27" font-weight="700">φ</text>
+  <text x="98" y="60" fill="#edf1f2" font-family="Consolas, monospace" font-size="17" font-weight="700">PHYSICA · CANCEL + SIMPLIFY</text>
+  <text x="1138" y="59" text-anchor="end" fill="#78868c" font-family="Consolas, monospace" font-size="12">SEMANTIC FRAGMENTS · NOT SCREENSHOTS</text>
+  <text x="64" y="136" fill="#e17b68" font-family="Consolas, monospace" font-size="11" letter-spacing="2">REMOVE STRUCTURE HONESTLY · KEEP VERIFIED MEANING</text>
+  <text x="64" y="190" fill="#f1f3f4" font-family="Segoe UI, sans-serif" font-size="40" font-weight="700">Cancel clutter, preserve meaning</text>
+  <rect x="64" y="228" width="1072" height="304" rx="8" fill="#0d171c" stroke="#34434a"/>
+  <text x="100" y="270" fill="#77868c" font-family="Consolas, monospace" font-size="10">SOURCE · CANONICAL EXPRESSION</text>
+  <text x="152" y="382" fill="#f3f5f5" font-family="Georgia" font-size="58" font-style="italic">x + (y − y)</text>
+  <g stroke="#d96f5d" stroke-width="4"><path d="M300 319l118 84M418 319l-118 84"/></g>
+  <path d="M448 365h170" stroke="#d96f5d" stroke-width="2"/><path d="M608 357l15 8-15 8" fill="#d96f5d"/>
+  <text x="724" y="382" fill="#f3f5f5" font-family="Georgia" font-size="66" font-style="italic">x</text>
+  <rect x="882" y="292" width="214" height="111" rx="5" fill="#10221e" stroke="#34735c"/>
+  <text x="904" y="322" fill="#8be0b1" font-family="Consolas, monospace" font-size="10">VERIFIED EQUIVALENT</text>
+  <text x="904" y="348" fill="#aebfc3" font-family="Consolas, monospace" font-size="10">simplified expressions equal</text>
+  <text x="904" y="374" fill="#74868c" font-family="Consolas, monospace" font-size="10">removed nodes exit explicitly</text>
+  <g font-family="Consolas, monospace" font-size="10">
+    <rect x="100" y="468" width="202" height="38" rx="3" fill="#161a1e" stroke="#603831"/><text x="118" y="492" fill="#e39485">EXIT · opacity 1 → 0</text>
+    <rect x="318" y="468" width="246" height="38" rx="3" fill="#101c20" stroke="#2c4750"/><text x="336" y="492" fill="#9bcfd2">MATCH · inverse transform → identity</text>
+    <rect x="580" y="468" width="230" height="38" rx="3" fill="#101c20" stroke="#2c4750"/><text x="598" y="492" fill="#9bcfd2">SCRUB · deterministic at 50%</text>
+  </g>
+  <line x1="96" y1="580" x2="1095" y2="580" stroke="#34434a" stroke-width="4"/><line x1="96" y1="580" x2="595" y2="580" stroke="#d96f5d" stroke-width="4"/><circle cx="595" cy="580" r="9" fill="#f4f5f5" stroke="#d96f5d" stroke-width="4"/>
+  <text x="64" y="636" fill="#718087" font-family="Consolas, monospace" font-size="11">THE ANIMATION EXPLAINS A VERIFIED CHANGE; IT DOES NOT VERIFY THE CHANGE</text>
+</svg>

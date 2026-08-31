@@ -1,0 +1,15 @@
+{
+  "id": "substitution",
+  "title": "Substitute values with proof attached",
+  "category": "equations",
+  "description": "Physica applies declared kinematics values semantically, verifies the resulting equation and plans symbol-to-value enter/exit motion.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "verified-substitution",
+    "semantic-correspondence",
+    "symbol-to-value-motion",
+    "enter-exit-terms",
+    "transform-persistence"
+  ]
+}
