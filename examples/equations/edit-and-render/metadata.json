@@ -1,0 +1,16 @@
+{
+  "id": "edit-and-render",
+  "title": "Edit notation without losing meaning",
+  "category": "equations",
+  "description": "An editable kinematics equation preserves Physica semantic identities across a valid edit, round-trips through ProjectDocument JSON and renders stable KaTeX output.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "mathlive-input",
+    "canonical-mathjson",
+    "semantic-node-ids",
+    "identity-reconciliation",
+    "equation-persistence",
+    "katex-rendering"
+  ]
+}

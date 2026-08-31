@@ -1,0 +1,394 @@
+.eq-lab {
+  width: min(1240px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 50px 0 38px;
+}
+
+.eq-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--cyan);
+  font:
+    11px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.14em;
+}
+
+.eq-eyebrow b {
+  padding: 4px 7px;
+  color: #9becef;
+  background: rgba(45, 194, 203, 0.12);
+  border: 1px solid rgba(45, 194, 203, 0.35);
+  font-size: 9px;
+}
+
+.eq-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 52px;
+  align-items: end;
+  margin: 18px 0 30px;
+}
+
+.eq-hero h1 {
+  max-width: 720px;
+}
+
+.eq-hero p {
+  max-width: 650px;
+  margin: 22px 0 0;
+  color: #96a0a5;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.eq-meta {
+  display: flex;
+  margin: 0;
+  background: rgba(16, 23, 27, 0.82);
+  border: 1px solid var(--line);
+}
+
+.eq-meta div {
+  min-width: 105px;
+  padding: 14px 16px;
+  border-left: 1px solid var(--line);
+}
+
+.eq-meta div:first-child {
+  border-left: 0;
+}
+
+.eq-meta dt,
+.eq-meta dd,
+.eq-details dt,
+.eq-details dd {
+  margin: 0;
+  font-family: "Cascadia Mono", Consolas, monospace;
+}
+
+.eq-meta dt,
+.eq-details dt {
+  color: #647178;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+}
+
+.eq-meta dd {
+  margin-top: 7px;
+  color: #d6dddf;
+  font-size: 12px;
+}
+
+.eq-workbench {
+  display: grid;
+  grid-template-columns: minmax(400px, 1.2fr) minmax(320px, 0.9fr) 270px;
+  min-height: 520px;
+  background: #090d10;
+  border: 1px solid #354047;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
+}
+
+.eq-editor,
+.eq-semantics,
+.eq-contract {
+  min-width: 0;
+  padding: 24px;
+}
+
+.eq-editor,
+.eq-semantics {
+  border-right: 1px solid var(--line);
+}
+
+.eq-semantics,
+.eq-contract {
+  background: #0f161a;
+}
+
+.eq-contract {
+  display: flex;
+  flex-direction: column;
+}
+
+.eq-panel-heading {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.eq-panel-heading > span {
+  color: var(--cyan);
+  font:
+    10px "Cascadia Mono",
+    Consolas,
+    monospace;
+}
+
+.eq-panel-heading h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.eq-panel-heading p {
+  margin: 5px 0 0;
+  color: #718086;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.eq-field-label {
+  display: block;
+  color: #d9e1e3;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.eq-field-help {
+  margin: 6px 0 12px;
+  color: #728087;
+  font-size: 10px;
+}
+
+.eq-mathfield-host {
+  min-height: 98px;
+}
+
+.eq-mathfield-host math-field {
+  display: block;
+  width: 100%;
+  min-height: 86px;
+  padding: 20px 18px;
+  color: #eaf5f6;
+  background: #111c21;
+  border: 1px solid #3a4c54;
+  border-radius: 2px;
+  font-size: 28px;
+  --caret-color: var(--cyan);
+  --selection-background-color: rgba(45, 194, 203, 0.26);
+  --contains-highlight-background-color: rgba(246, 199, 67, 0.18);
+}
+
+.eq-mathfield-host math-field:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(45, 194, 203, 0.14);
+  outline: none;
+}
+
+.eq-status {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border-left: 3px solid #78d7a9;
+  background: rgba(120, 215, 169, 0.06);
+  font-family: "Cascadia Mono", Consolas, monospace;
+}
+
+.eq-status.is-invalid {
+  border-left-color: var(--coral);
+  background: rgba(242, 95, 71, 0.07);
+}
+
+.eq-status span {
+  color: #78d7a9;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+
+.eq-status.is-invalid span {
+  color: var(--coral);
+}
+
+.eq-status strong {
+  color: #aeb9bd;
+  font-size: 10px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.eq-final-render {
+  margin-top: 24px;
+  padding: 18px;
+  background: #f2f0e9;
+  border: 1px solid #d4d1c7;
+}
+
+.eq-mini-heading {
+  display: flex;
+  justify-content: space-between;
+  color: #596268;
+  font:
+    8px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.12em;
+}
+
+.eq-mini-heading b {
+  color: #267f65;
+}
+
+.eq-katex-output {
+  min-height: 102px;
+  display: grid;
+  place-items: center;
+  overflow-x: auto;
+  color: #11181b;
+  font-size: 1.15rem;
+}
+
+.eq-render-error {
+  color: #a33328;
+  font-size: 11px;
+}
+
+.eq-canonical-json {
+  min-height: 310px;
+  max-height: 340px;
+  margin: 0;
+  padding: 17px;
+  overflow: auto;
+  color: #b9e9eb;
+  background: #091014;
+  border: 1px solid #28363d;
+  font:
+    11px/1.55 "Cascadia Mono",
+    Consolas,
+    monospace;
+  white-space: pre-wrap;
+}
+
+.eq-identity-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.eq-identity-strip span {
+  display: flex;
+  gap: 7px;
+  min-width: 0;
+  padding: 7px 8px;
+  overflow: hidden;
+  color: #87979d;
+  background: #0a1115;
+  border: 1px solid #26333a;
+  font:
+    8px "Cascadia Mono",
+    Consolas,
+    monospace;
+}
+
+.eq-identity-strip b {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.eq-layer-stack {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eq-layer-stack li {
+  display: grid;
+  gap: 4px;
+  padding: 13px;
+  background: #0a1115;
+  border: 1px solid #28343a;
+}
+
+.eq-layer-stack b {
+  color: #d6dfe1;
+  font:
+    10px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.09em;
+}
+
+.eq-layer-stack span {
+  color: #718087;
+  font-size: 10px;
+}
+
+.eq-authority-note {
+  margin-top: 18px;
+  padding: 14px;
+  background: rgba(246, 199, 67, 0.05);
+  border: 1px solid #4b4227;
+}
+
+.eq-authority-note > span {
+  color: var(--amber);
+  font:
+    8px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.12em;
+}
+
+.eq-authority-note p {
+  margin: 8px 0 0;
+  color: #909a9e;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.eq-details {
+  display: grid;
+  gap: 12px;
+  margin: auto 0 0;
+  padding-top: 20px;
+}
+
+.eq-details dd {
+  margin-top: 4px;
+  color: #abb6ba;
+  font-size: 9px;
+  overflow-wrap: anywhere;
+}
+
+.eq-previous-proof {
+  display: block;
+  width: fit-content;
+  margin: 18px auto 0;
+  color: #7e8d93;
+  font:
+    9px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.eq-previous-proof:hover,
+.eq-previous-proof:focus-visible {
+  color: var(--cyan);
+}
+
+@media (max-width: 1120px) {
+  .eq-hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .eq-meta {
+    justify-self: start;
+  }
+
+  .eq-workbench {
+    grid-template-columns: minmax(430px, 1.15fr) minmax(330px, 0.85fr);
+  }
+
+  .eq-contract {
+    display: none;
+  }
+}

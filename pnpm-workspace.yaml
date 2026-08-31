@@ -14,6 +14,9 @@ catalog:
   pixi.js: 8.20.1
   three: 0.185.1
   "@types/three": 0.185.4
+  "@cortex-js/compute-engine": 0.120.0
+  katex: 0.18.4
+  mathlive: 0.110.0
   typescript: 6.0.3
   vite: 8.2.2
   zod: 4.4.3

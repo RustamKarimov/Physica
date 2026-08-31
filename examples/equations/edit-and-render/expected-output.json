@@ -1,0 +1,63 @@
+{
+  "id": "edit-and-render",
+  "sourceBefore": "x=x_0+ut+\\frac{1}{2}at^2",
+  "sourceAfter": "x=x_0+ut+\\frac{1}{2}at^2+bt^3",
+  "canonicalBefore": [
+    "Equal",
+    "x",
+    [
+      "Add",
+      ["Multiply", ["Rational", 1, 2], "a", ["Power", "t", 2]],
+      ["Multiply", "t", "u"],
+      "x_0"
+    ]
+  ],
+  "canonicalAfter": [
+    "Equal",
+    "x",
+    [
+      "Add",
+      ["Multiply", "b", ["Power", "t", 3]],
+      ["Multiply", ["Rational", 1, 2], "a", ["Power", "t", 2]],
+      ["Multiply", "t", "u"],
+      "x_0"
+    ]
+  ],
+  "nodeCountBefore": 21,
+  "nodeCountAfter": 28,
+  "retainedIdentityCount": 19,
+  "introducedIdentityCount": 9,
+  "retainedIdentitySuffixes": [
+    "03d091",
+    "03d092",
+    "03d094",
+    "03d096",
+    "03d09d",
+    "03d09e",
+    "03d095",
+    "03d0a1",
+    "03d097",
+    "03d098",
+    "03d099",
+    "03d09a",
+    "03d09b",
+    "03d09c",
+    "03d0a2",
+    "03d09f",
+    "03d0a0",
+    "03d0a3",
+    "03d0a4"
+  ],
+  "envelope": {
+    "typeId": "physica:equation/model-v1",
+    "schemaVersion": 1,
+    "canonicalProjectRoundTrip": true,
+    "semanticTreeRoundTrip": true
+  },
+  "rendering": {
+    "stable": true,
+    "containsMathMl": true,
+    "containsKatexHtml": true,
+    "markupLength": 4002
+  }
+}

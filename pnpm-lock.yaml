@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@cortex-js/compute-engine':
+      specifier: 0.120.0
+      version: 0.120.0
     '@tauri-apps/api':
       specifier: 2.11.1
       version: 2.11.1
@@ -24,6 +27,12 @@ catalogs:
     '@vitejs/plugin-react':
       specifier: 6.1.1
       version: 6.1.1
+    katex:
+      specifier: 0.18.4
+      version: 0.18.4
+    mathlive:
+      specifier: 0.110.0
+      version: 0.110.0
     pixi.js:
       specifier: 8.20.1
       version: 8.20.1
@@ -92,6 +101,9 @@ importers:
       '@physica/core-model':
         specifier: workspace:*
         version: link:../../packages/core-model
+      '@physica/equations':
+        specifier: workspace:*
+        version: link:../../packages/equations
       '@physica/mathematics':
         specifier: workspace:*
         version: link:../../packages/mathematics
@@ -119,6 +131,12 @@ importers:
       '@tauri-apps/api':
         specifier: 'catalog:'
         version: 2.11.1
+      katex:
+        specifier: 'catalog:'
+        version: 0.18.4
+      mathlive:
+        specifier: 'catalog:'
+        version: 0.110.0
       react:
         specifier: 'catalog:'
         version: 19.2.8
@@ -292,6 +310,22 @@ importers:
       '@physica/typography':
         specifier: workspace:*
         version: link:../../../packages/typography
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/equations/edit-and-render:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/equations':
+        specifier: workspace:*
+        version: link:../../../packages/equations
+      '@physica/serialization':
+        specifier: workspace:*
+        version: link:../../../packages/serialization
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -720,6 +754,16 @@ importers:
         version: 6.0.3
 
   packages/equations:
+    dependencies:
+      '@cortex-js/compute-engine':
+        specifier: 'catalog:'
+        version: 0.120.0
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      katex:
+        specifier: 'catalog:'
+        version: 0.18.4
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1089,6 +1133,9 @@ importers:
 
 packages:
 
+  '@arnog/colors@0.5.0':
+    resolution: {integrity: sha512-NB7yqrO7qvInsqJdqz6C6mDU+2oiKmbBbk3czMS0E7KkGxLRy538tEHCsB5TKqmaxxXpi6/U120TnGl8NsDePg==}
+
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
     engines: {node: '>=6.9.0'}
@@ -1155,6 +1202,15 @@ packages:
   '@babel/types@7.29.8':
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
+
+  '@cortex-js/compute-engine@0.120.0':
+    resolution: {integrity: sha512-CVFRjHdPU5MYl1lu+hNldT/KavKl2OYA+kKBBtlCPM0/D5vhfGEJQwwCdwDwcZFOF/w65uS+4lxl1qnDGcmmjA==}
+    engines: {node: '>=22.3.0', npm: '>=10.5.0'}
+    hasBin: true
+
+  '@cortex-js/compute-engine@0.58.0':
+    resolution: {integrity: sha512-N0+vXjVZfKwJS7ZIGvq41mojI55m5TrdDXveAXzNjzjZ9iNiNrdEzXL2EmrcP+9GCWCwTonrEeZWAIG78f3INg==}
+    engines: {node: '>=21.7.3', npm: '>=10.5.0'}
 
   '@dimforge/rapier3d-compat@0.12.0':
     resolution: {integrity: sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==}
@@ -1620,6 +1676,14 @@ packages:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
 
+  commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+
+  complex-esm@2.1.1-esm1:
+    resolution: {integrity: sha512-IShBEWHILB9s7MnfyevqNGxV0A1cfcSnewL/4uPFiSxkcQL4Mm3FxJ0pXMtCXuWLjYz3lRRyk6OfkeDZcjD6nw==}
+    engines: {node: '>=16.14.2', npm: '>=8.5.0'}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
@@ -1638,6 +1702,9 @@ packages:
     peerDependenciesMeta:
       supports-color:
         optional: true
+
+  decimal.js@10.6.0:
+    resolution: {integrity: sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==}
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
@@ -1840,6 +1907,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  katex@0.18.4:
+    resolution: {integrity: sha512-IMPntbRLOU+eu88XDiFKqQ8Akhr9Tv7jDMXqPhjG9SI1JMA4DIgXk4x9k4skJz2NZJXBRbC+2pYBLj9olqcZow==}
+    hasBin: true
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -1930,6 +2001,9 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  mathlive@0.110.0:
+    resolution: {integrity: sha512-UOpJsQ6h1eeN0xZULGTl1MwUB/lZLCDuzKeHvKEh7Zra8U/rtgDNrssj5PZdJtBTIV48AfEhtv6rv47AeMOxJA==}
 
   meshoptimizer@1.1.1:
     resolution: {integrity: sha512-oRFNWJRDA/WTrVj7NWvqa5HqE1t9MYDj2VaWirQCzCCrAd2GHrqR/sQezCxiWATPNlKTcRaPRHPJwIRoPBAp5g==}
@@ -2239,6 +2313,8 @@ packages:
 
 snapshots:
 
+  '@arnog/colors@0.5.0': {}
+
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -2338,6 +2414,17 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
+
+  '@cortex-js/compute-engine@0.120.0':
+    dependencies:
+      '@arnog/colors': 0.5.0
+      complex-esm: 2.1.1-esm1
+
+  '@cortex-js/compute-engine@0.58.0':
+    dependencies:
+      '@arnog/colors': 0.5.0
+      complex-esm: 2.1.1-esm1
+      decimal.js: 10.6.0
 
   '@dimforge/rapier3d-compat@0.12.0': {}
 
@@ -2734,6 +2821,10 @@ snapshots:
 
   chai@6.2.2: {}
 
+  commander@8.3.0: {}
+
+  complex-esm@2.1.1-esm1: {}
+
   convert-source-map@2.0.0: {}
 
   cross-spawn@7.0.6:
@@ -2747,6 +2838,8 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
+
+  decimal.js@10.6.0: {}
 
   deep-is@0.1.4: {}
 
@@ -2929,6 +3022,10 @@ snapshots:
 
   json5@2.2.3: {}
 
+  katex@0.18.4:
+    dependencies:
+      commander: 8.3.0
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -2998,6 +3095,10 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  mathlive@0.110.0:
+    dependencies:
+      '@cortex-js/compute-engine': 0.58.0
 
   meshoptimizer@1.1.1: {}
 

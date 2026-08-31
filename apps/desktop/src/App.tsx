@@ -14,6 +14,7 @@ import {
   type AnimationDefinition,
 } from "@physica/storyboard";
 import { Adapter } from "./Adapter";
+import { EquationWorkbench } from "./EquationWorkbench";
 import { LibraryBrowser } from "./LibraryBrowser";
 import {
   DEMO_HEIGHT,
@@ -224,12 +225,14 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>14 / CAMERA ANIMATION</strong>
+          <strong>15 / SEMANTIC EQUATIONS</strong>
         </div>
         <div className="engine-state">
-          <i /> deterministic frame ready
+          <i /> canonical model ready
         </div>
       </header>
+
+      <EquationWorkbench />
 
       <section className="hero" id="rendering-lab" aria-labelledby="app-title">
         <div className="eyebrow">

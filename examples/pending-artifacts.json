@@ -309,6 +309,17 @@
         "example.spec.ts"
       ],
       "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "edit-and-render",
+      "path": "examples/equations/edit-and-render",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
     }
   ]
 }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@physica/assets": "workspace:*",
     "@physica/core-model": "workspace:*",
+    "@physica/equations": "workspace:*",
     "@physica/mathematics": "workspace:*",
     "@physica/picking": "workspace:*",
     "@physica/renderer-core": "workspace:*",
@@ -20,9 +21,11 @@
     "@physica/renderer-three": "workspace:*",
     "@physica/storyboard": "workspace:*",
     "@physica/typography": "workspace:*",
+    "katex": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@tauri-apps/api": "catalog:"
+    "@tauri-apps/api": "catalog:",
+    "mathlive": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",

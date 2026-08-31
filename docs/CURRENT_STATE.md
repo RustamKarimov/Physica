@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 3 complete — HC-01 passed
+**Current development phase:** Phase 4 active — Step 4.1 complete
 
-**Current task:** Hand off the verified Phase 3 Animation Preview baseline
+**Current task:** Hand off the verified semantic-equation foundation
 
-**Next task:** Specify Phase 4 Step 4.1 Math editor and semantic equation tree
+**Next task:** Specify Phase 4 Step 4.2 Equation transform engine
 
 **Blockers:** None
 
@@ -21,6 +21,44 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 and HC-01 passed after repairs and are recorded under docs/health-checkpoints/. HC-02 is scheduled after Phase 4 Step 4.4, with early-trigger conditions remaining active.
+
+## Step 15 result
+
+Completed and audited `docs/implementation/STEP_15_MATH_EDITOR_SEMANTIC_EQUATION_TREE_SPEC.md`, then implemented editable semantic equations without an ADR, root `ProjectDocument` schema change, new workspace package, clock, solver, scheduler task or authoritative runtime writer.
+
+Implemented in `@physica/equations`:
+
+- immutable V1 equation models with exact LaTeX source, pinned canonicalizer stamp, canonical MathJSON, diagnostics, metadata and UUID-v4 semantic node identities;
+- editor-independent Compute Engine parsing and canonicalization, with invalid edits returning typed errors and leaving the prior model untouched;
+- JSON-safe atom/list/record identity trees that mirror canonical MathJSON exactly;
+- structural reconciliation that retains each unchanged semantic subtree identity once across whitespace changes, ancestor edits and subtree movement while assigning new IDs to new semantics;
+- runtime validation for owning equation IDs, semantic IDs, duplicate IDs, fingerprints, record ordering, tree/canonical mismatch, diagnostics, metadata and unsupported envelope versions;
+- conversion through the existing generic `physica:equation/model-v1` `EquationDefinition` envelope, including exact canonical ProjectDocument serialization round trips;
+- deterministic KaTeX HTML plus MathML output with trust disabled, strict errors and bounded expansion/size.
+
+Dependency and security decisions:
+
+- pinned `@cortex-js/compute-engine` 0.120.0 (MIT) for canonical MathJSON;
+- pinned `mathlive` 0.110.0 (MIT) for desktop input; versions through 0.109.2 are forbidden because CVE-2026-54705 is fixed in 0.110.0;
+- pinned `katex` 0.18.4 (MIT) for final rendering;
+- MathLive and all DOM/React behavior remain desktop-owned; `@physica/equations` has no editor dependency and rendered glyphs never own identity.
+
+User-visible completion:
+
+- `examples/equations/edit-and-render` contains metadata, README, executable deterministic edit/persistence/render output, expected JSON, accessible SVG preview, automated tests and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
+- the launcher-visible desktop now opens with a real MathLive equation workbench, last-valid-model protection, canonical MathJSON, semantic ID/retention diagnostics and KaTeX final rendering;
+- the completed Camera animation and object Library showcase remains available directly below the new workbench, preventing a Step 14 regression.
+
+Verification:
+
+- focused equations plus gallery run — 2 files and 10 tests passed;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 88 of 89 workspace projects, 54 unit/example files with 235 tests, 1 architecture file with 2 tests and all three application builds passed;
+- frozen offline install passed across all 89 workspace projects;
+- `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- in-app browser visual automation could not start because the local Windows sandbox refresh helper exited before browser discovery; targeted desktop typecheck, production build, launcher check and the checked-in accessible SVG preview all passed;
+- the non-failing desktop bundle warning is now approximately 4.858 MB / 1.349 MB gzip because the real MathLive/Compute Engine/KaTeX stack is combined with the previously eager Pixi/Three proof. The desktop app owns this bounded debt; re-evaluate at HC-02 and resolve with the stable-shell lazy-loading work no later than HC-04.
+
+Self-review found no Architecture Blocker or Project Health early trigger. Phase 4 Step 4.2 Equation transform engine is next; do not implement graphing early.
 
 ## HC-01 result
 
@@ -585,6 +623,12 @@ Application shell:
 - Rust `tauri` crate 2.11.5
 - Rust `tauri-build` crate 2.6.3
 
+Equation authoring:
+
+- MathLive 0.110.0
+- `@cortex-js/compute-engine` 0.120.0
+- KaTeX 0.18.4
+
 Quality tooling:
 
 - Vitest 4.1.11
@@ -629,7 +673,7 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Phase 4 Step 4.1 read first
+## Phase 4 Step 4.2 read first
 
 - AGENTS.md
 - docs/AUTONOMOUS_EXECUTION_PROTOCOL.md
@@ -640,8 +684,8 @@ Resolved during bootstrap:
 - docs/MATHEMATICS_AND_UNITS.md
 - docs/TEXT_CONTENT.md
 - docs/TYPOGRAPHY_AND_I18N.md
-- docs/STORYBOARD.md
+- docs/implementation/STEP_15_MATH_EDITOR_SEMANTIC_EQUATION_TREE_SPEC.md
 - docs/PACKAGE_DEPENDENCIES.md
 - approved ADRs in docs/DECISIONS.md
 
-Begin with a Step 4.1 implementation specification. Stop only if Math editor and semantic equation tree work reaches an Architecture Blocker; do not implement equation transforms or graphing early.
+Begin with a Step 4.2 implementation specification. Preserve the Step 4.1 source/semantic/render separation and stable Physica node identities. Stop only if the equation transform engine reaches an Architecture Blocker; do not implement graphing early.
