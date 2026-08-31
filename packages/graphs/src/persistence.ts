@@ -13,6 +13,7 @@ import { createCartesianGraph } from "./model";
 import type {
   CartesianGraphV1,
   GraphAnnotationV1,
+  GraphAnalysisOverlayV1,
   GraphAxisV1,
   GraphCurveStyleV1,
   GraphDomainPolicy,
@@ -45,6 +46,9 @@ export function toCartesianGraphDefinition(
     series: valid.value.series,
     points: valid.value.points,
     annotations: valid.value.annotations,
+    ...(valid.value.analysisOverlays
+      ? { analysisOverlays: valid.value.analysisOverlays }
+      : {}),
     cursor: valid.value.cursor,
     ...(valid.value.metadata ? { metadata: valid.value.metadata } : {}),
   };
@@ -110,7 +114,12 @@ function style(value: unknown, path: string): GraphResult<GraphCurveStyleV1> {
     typeof record.lineWidth !== "number" ||
     (record.dash !== undefined &&
       (!Array.isArray(record.dash) ||
-        record.dash.some((item) => typeof item !== "number")))
+        record.dash.some((item) => typeof item !== "number"))) ||
+    (record.renderMode !== undefined &&
+      typeof record.renderMode !== "string") ||
+    (record.barWidthCanonical !== undefined &&
+      typeof record.barWidthCanonical !== "number") ||
+    (record.fillHex !== undefined && typeof record.fillHex !== "string")
   )
     return bad(path, "Style is malformed.");
   return {
@@ -119,8 +128,142 @@ function style(value: unknown, path: string): GraphResult<GraphCurveStyleV1> {
       strokeHex: record.strokeHex,
       lineWidth: record.lineWidth,
       ...(record.dash ? { dash: record.dash as number[] } : {}),
+      ...(typeof record.renderMode === "string"
+        ? {
+            renderMode: record.renderMode as NonNullable<
+              GraphCurveStyleV1["renderMode"]
+            >,
+          }
+        : {}),
+      ...(typeof record.barWidthCanonical === "number"
+        ? { barWidthCanonical: record.barWidthCanonical }
+        : {}),
+      ...(typeof record.fillHex === "string"
+        ? { fillHex: record.fillHex }
+        : {}),
     },
   };
+}
+
+function analysis(
+  value: unknown,
+  path: string,
+): GraphResult<GraphAnalysisOverlayV1> {
+  const record = asRecord(value);
+  if (
+    !record ||
+    typeof record.id !== "string" ||
+    typeof record.kind !== "string" ||
+    typeof record.datasetId !== "string" ||
+    typeof record.seriesKey !== "string"
+  )
+    return bad(path, "Analysis is malformed.");
+  const base = {
+    id: record.id,
+    datasetId: record.datasetId as GraphAnalysisOverlayV1["datasetId"],
+    seriesKey: record.seriesKey as DataSeriesKey,
+  };
+  if (record.kind === "tangent")
+    return typeof record.xCanonical === "number" &&
+      typeof record.strokeHex === "string" &&
+      typeof record.lineWidth === "number" &&
+      (record.triangleRunCanonical === undefined ||
+        typeof record.triangleRunCanonical === "number")
+      ? {
+          ok: true,
+          value: {
+            ...base,
+            kind: "tangent",
+            xCanonical: record.xCanonical,
+            strokeHex: record.strokeHex,
+            lineWidth: record.lineWidth,
+            ...(typeof record.triangleRunCanonical === "number"
+              ? { triangleRunCanonical: record.triangleRunCanonical }
+              : {}),
+          },
+        }
+      : bad(path, "Tangent analysis is malformed.");
+  if (record.kind === "area")
+    return typeof record.xMinCanonical === "number" &&
+      typeof record.xMaxCanonical === "number" &&
+      typeof record.baselineCanonical === "number" &&
+      typeof record.fillHex === "string" &&
+      typeof record.opacity === "number"
+      ? {
+          ok: true,
+          value: {
+            ...base,
+            kind: "area",
+            xMinCanonical: record.xMinCanonical,
+            xMaxCanonical: record.xMaxCanonical,
+            baselineCanonical: record.baselineCanonical,
+            fillHex: record.fillHex,
+            opacity: record.opacity,
+          },
+        }
+      : bad(path, "Area analysis is malformed.");
+  if (record.kind === "maximum")
+    return typeof record.label === "string" &&
+      typeof record.markerHex === "string" &&
+      (record.xMinCanonical === undefined ||
+        typeof record.xMinCanonical === "number") &&
+      (record.xMaxCanonical === undefined ||
+        typeof record.xMaxCanonical === "number")
+      ? {
+          ok: true,
+          value: {
+            ...base,
+            kind: "maximum",
+            label: record.label,
+            markerHex: record.markerHex,
+            ...(typeof record.xMinCanonical === "number"
+              ? { xMinCanonical: record.xMinCanonical }
+              : {}),
+            ...(typeof record.xMaxCanonical === "number"
+              ? { xMaxCanonical: record.xMaxCanonical }
+              : {}),
+          },
+        }
+      : bad(path, "Maximum analysis is malformed.");
+  if (record.kind === "linear-fit")
+    return typeof record.strokeHex === "string" &&
+      typeof record.lineWidth === "number" &&
+      (record.xMinCanonical === undefined ||
+        typeof record.xMinCanonical === "number") &&
+      (record.xMaxCanonical === undefined ||
+        typeof record.xMaxCanonical === "number")
+      ? {
+          ok: true,
+          value: {
+            ...base,
+            kind: "linear-fit",
+            strokeHex: record.strokeHex,
+            lineWidth: record.lineWidth,
+            ...(typeof record.xMinCanonical === "number"
+              ? { xMinCanonical: record.xMinCanonical }
+              : {}),
+            ...(typeof record.xMaxCanonical === "number"
+              ? { xMaxCanonical: record.xMaxCanonical }
+              : {}),
+          },
+        }
+      : bad(path, "Linear-fit analysis is malformed.");
+  if (record.kind === "error-bars")
+    return typeof record.strokeHex === "string" &&
+      typeof record.lineWidth === "number" &&
+      typeof record.capSize === "number"
+      ? {
+          ok: true,
+          value: {
+            ...base,
+            kind: "error-bars",
+            strokeHex: record.strokeHex,
+            lineWidth: record.lineWidth,
+            capSize: record.capSize,
+          },
+        }
+      : bad(path, "Error-bar analysis is malformed.");
+  return bad(path + ".kind", "Analysis kind is unsupported.");
 }
 
 export function parseCartesianGraphDefinition(
@@ -148,6 +291,14 @@ export function parseCartesianGraphDefinition(
     !Array.isArray(record.annotations)
   )
     return bad("$.configuration", "Graph configuration is malformed.");
+  if (
+    record.analysisOverlays !== undefined &&
+    !Array.isArray(record.analysisOverlays)
+  )
+    return bad(
+      "$.configuration.analysisOverlays",
+      "Analysis overlays must be an array.",
+    );
   const xAxis = axis(record.xAxis, "$.configuration.xAxis");
   if (!xAxis.ok) return xAxis;
   const yAxis = axis(record.yAxis, "$.configuration.yAxis");
@@ -228,6 +379,17 @@ export function parseCartesianGraphDefinition(
       : finiteJsonObject(record.metadata);
   if (record.metadata !== undefined && !metadata)
     return bad("$.configuration.metadata", "Metadata must be finite JSON.");
+  const analyses: GraphAnalysisOverlayV1[] = [];
+  if (Array.isArray(record.analysisOverlays)) {
+    for (let index = 0; index < record.analysisOverlays.length; index += 1) {
+      const parsed = analysis(
+        record.analysisOverlays[index],
+        `$.configuration.analysisOverlays[${index}]`,
+      );
+      if (!parsed.ok) return parsed;
+      analyses.push(parsed.value);
+    }
+  }
   return createCartesianGraph(
     {
       id: definition.id,
@@ -237,6 +399,9 @@ export function parseCartesianGraphDefinition(
       series,
       points,
       annotations,
+      ...(record.analysisOverlays !== undefined
+        ? { analysisOverlays: analyses }
+        : {}),
       cursor: {
         enabled: cursor.enabled,
         mode: cursor.mode as CartesianGraphV1["cursor"]["mode"],

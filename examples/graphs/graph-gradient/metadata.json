@@ -1,0 +1,14 @@
+{
+  "id": "graph-gradient",
+  "title": "Read gradient from the same curve",
+  "category": "graphs",
+  "description": "A tangent and gradient triangle are derived from the graph's piecewise-linear scientific model, while the maximum is selected without fabricated interpolation.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "piecewise-linear-tangent",
+    "gradient-triangle",
+    "stable-maximum",
+    "analysis-persistence"
+  ]
+}

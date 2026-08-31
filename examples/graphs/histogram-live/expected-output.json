@@ -1,0 +1,18 @@
+{
+  "id": "histogram-live",
+  "histogram": {
+    "counts": [2, 3, 1, 2],
+    "edgesCanonical": [0, 1, 2, 3, 4],
+    "bars": 4,
+    "excluded": 0
+  },
+  "spectrum": {
+    "sampleIntervalSeconds": 0.0625,
+    "bins": 9,
+    "peakFrequencyHz": 2,
+    "peakAmplitudeV": 1,
+    "algorithm": "direct-real-dft-v1"
+  },
+  "provenance": { "histogram": "derived", "spectrum": "derived" },
+  "sourceUnchanged": true
+}

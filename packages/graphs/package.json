@@ -15,6 +15,7 @@
   "dependencies": {
     "@physica/core-model": "workspace:*",
     "@physica/data": "workspace:*",
+    "@physica/mathematics": "workspace:*",
     "@physica/units": "workspace:*"
   },
   "devDependencies": {

@@ -16,6 +16,7 @@ import {
 import { Adapter } from "./Adapter";
 import { EquationWorkbench } from "./EquationWorkbench";
 import { EquationTransformWorkbench } from "./EquationTransformWorkbench";
+import { GraphAnalysisWorkbench } from "./GraphAnalysisWorkbench";
 import { GraphWorkbench } from "./GraphWorkbench";
 import { LibraryBrowser } from "./LibraryBrowser";
 import {
@@ -219,7 +220,7 @@ export function App() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#graph-engine" aria-label="Physica home">
+        <a className="brand" href="#graph-analysis" aria-label="Physica home">
           <span className="brand-mark" aria-hidden="true">
             φ
           </span>
@@ -227,13 +228,14 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>17 / GRAPH ENGINE</strong>
+          <strong>18 / GRAPH ANALYSIS</strong>
         </div>
         <div className="engine-state">
-          <i /> graph engine verified
+          <i /> analysis engine verified
         </div>
       </header>
 
+      <GraphAnalysisWorkbench />
       <GraphWorkbench />
       <EquationTransformWorkbench />
       <EquationWorkbench />

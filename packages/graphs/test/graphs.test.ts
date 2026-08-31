@@ -38,6 +38,28 @@ const viewport = {
   padding: { left: 60, right: 20, top: 20, bottom: 50 },
 };
 
+const analysisKey = dataSeriesKey("analysis.motion");
+const analysisData = createCartesianDataset({
+  id: ids.datasetId(),
+  name: "Analysed motion",
+  series: [
+    {
+      key: analysisKey,
+      name: "Velocity",
+      x: { label: "Time", symbol: "t", unitExpression: "s" },
+      y: { label: "Velocity", symbol: "v", unitExpression: "m/s" },
+      samples: [0, 1, 2, 3, 4].map((xCanonical) => ({
+        xCanonical,
+        yCanonical: 1 + 2 * xCanonical,
+        xUncertaintyCanonical: 0.05,
+        yUncertaintyCanonical: 0.2,
+      })),
+    },
+  ],
+  provenance: { sourceKind: "measured", sourceDescription: "Motion sensor" },
+});
+if (!analysisData.ok) throw new Error(analysisData.error.kind);
+
 function graph() {
   return createCartesianGraph({
     id: ids.graphId(),
@@ -77,6 +99,85 @@ function graph() {
       { id: "uniform", text: "uniform motion", xCanonical: 1.5, yCanonical: 3 },
     ],
     cursor: { enabled: true, mode: "linear-interpolation" },
+  });
+}
+
+function analysisGraph() {
+  return createCartesianGraph({
+    id: ids.graphId(),
+    name: "Velocity analysis",
+    xAxis: {
+      label: "Time",
+      unitExpression: "s",
+      scale: "linear",
+      domain: { kind: "manual", minCanonical: 0, maxCanonical: 4 },
+      tickTarget: 5,
+    },
+    yAxis: {
+      label: "Velocity",
+      unitExpression: "m/s",
+      scale: "linear",
+      domain: { kind: "manual", minCanonical: 0, maxCanonical: 10 },
+      tickTarget: 6,
+    },
+    series: [
+      {
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        style: { strokeHex: "#35cfe1", lineWidth: 2 },
+      },
+    ],
+    points: [],
+    annotations: [],
+    analysisOverlays: [
+      {
+        id: "gradient",
+        kind: "tangent",
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        xCanonical: 2,
+        strokeHex: "#ffcf70",
+        lineWidth: 2,
+        triangleRunCanonical: 1,
+      },
+      {
+        id: "area",
+        kind: "area",
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        xMinCanonical: 0,
+        xMaxCanonical: 4,
+        baselineCanonical: 0,
+        fillHex: "#79a7ff",
+        opacity: 0.25,
+      },
+      {
+        id: "maximum",
+        kind: "maximum",
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        label: "maximum velocity",
+        markerHex: "#ff8c70",
+      },
+      {
+        id: "fit",
+        kind: "linear-fit",
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        strokeHex: "#d499ff",
+        lineWidth: 2,
+      },
+      {
+        id: "uncertainty",
+        kind: "error-bars",
+        datasetId: analysisData.value.id,
+        seriesKey: analysisKey,
+        strokeHex: "#e9f7f5",
+        lineWidth: 1,
+        capSize: 5,
+      },
+    ],
+    cursor: { enabled: false, mode: "nearest" },
   });
 }
 
@@ -273,5 +374,180 @@ describe("Cartesian graph V1", () => {
           large.value.curves[0]!.points[1]!.x,
     ).toBe(true);
     expect(JSON.stringify(data.value)).toBe(before);
+  });
+});
+
+describe("Cartesian graph analysis overlays", () => {
+  it("round-trips optional V1 analyses without changing legacy omission", () => {
+    const legacy = graph();
+    const analysed = analysisGraph();
+    expect(legacy.ok && analysed.ok).toBe(true);
+    if (!legacy.ok || !analysed.ok) return;
+    const legacyEnvelope = toCartesianGraphDefinition(legacy.value);
+    const analysedEnvelope = toCartesianGraphDefinition(analysed.value);
+    expect(legacyEnvelope.ok && analysedEnvelope.ok).toBe(true);
+    if (!legacyEnvelope.ok || !analysedEnvelope.ok) return;
+    expect("analysisOverlays" in legacyEnvelope.value.configuration).toBe(
+      false,
+    );
+    expect(
+      parseCartesianGraphDefinition(
+        JSON.parse(JSON.stringify(analysedEnvelope.value)),
+      ),
+    ).toEqual(analysed);
+  });
+
+  it("resolves exact tangent, triangle, area, maximum, fit and uncertainty", () => {
+    const model = analysisGraph();
+    expect(model.ok).toBe(true);
+    if (!model.ok) return;
+    const before = JSON.stringify(analysisData.value);
+    const resolved = resolveCartesianGraph({
+      graph: model.value,
+      datasets: [analysisData.value],
+      viewport,
+    });
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+    const tangent = resolved.value.analyses.find(
+      (item) => item.kind === "tangent",
+    );
+    const area = resolved.value.analyses.find((item) => item.kind === "area");
+    const maximum = resolved.value.analyses.find(
+      (item) => item.kind === "maximum",
+    );
+    const fit = resolved.value.analyses.find(
+      (item) => item.kind === "linear-fit",
+    );
+    const uncertainty = resolved.value.analyses.find(
+      (item) => item.kind === "error-bars",
+    );
+    expect(tangent).toMatchObject({
+      slopeCanonical: 2,
+      anchor: { xCanonical: 2, yCanonical: 5 },
+      triangle: { runCanonical: 1, riseCanonical: 2 },
+    });
+    expect(area).toMatchObject({ signedAreaCanonical: 20, displayArea: 20 });
+    expect(maximum).toMatchObject({
+      source: { xCanonical: 4, yCanonical: 9 },
+    });
+    expect(fit).toMatchObject({
+      slopeCanonical: 2,
+      interceptCanonical: 1,
+      rSquared: 1,
+    });
+    expect(uncertainty).toMatchObject({ sampleCount: 5 });
+    expect(
+      uncertainty?.kind === "error-bars" && uncertainty.segments,
+    ).toHaveLength(10);
+    expect(Object.isFrozen(resolved.value.analyses)).toBe(true);
+    expect(JSON.stringify(analysisData.value)).toBe(before);
+  });
+
+  it("keeps canonical results invariant across viewport changes", () => {
+    const model = analysisGraph();
+    expect(model.ok).toBe(true);
+    if (!model.ok) return;
+    const small = resolveCartesianGraph({
+      graph: model.value,
+      datasets: [analysisData.value],
+      viewport: { ...viewport, width: 320 },
+    });
+    const large = resolveCartesianGraph({
+      graph: model.value,
+      datasets: [analysisData.value],
+      viewport,
+    });
+    expect(small.ok && large.ok).toBe(true);
+    if (!small.ok || !large.ok) return;
+    expect(
+      small.value.analyses.map(({ kind, summary }) => ({ kind, summary })),
+    ).toEqual(
+      large.value.analyses.map(({ kind, summary }) => ({ kind, summary })),
+    );
+    const smallTangent = small.value.analyses.find(
+      (item) => item.kind === "tangent",
+    );
+    const largeTangent = large.value.analyses.find(
+      (item) => item.kind === "tangent",
+    );
+    expect(
+      smallTangent?.kind === "tangent" &&
+        largeTangent?.kind === "tangent" &&
+        smallTangent.line.to.x !== largeTangent.line.to.x,
+    ).toBe(true);
+  });
+
+  it("resolves histogram bars from canonical bin centres", () => {
+    const histogramKey = dataSeriesKey("histogram.count");
+    const histogram = createCartesianDataset({
+      id: ids.datasetId(),
+      name: "Histogram",
+      series: [
+        {
+          key: histogramKey,
+          name: "Counts",
+          x: { label: "Length", symbol: "l", unitExpression: "m" },
+          y: { label: "Count", symbol: "n", unitExpression: "" },
+          samples: [
+            { xCanonical: 1, yCanonical: 2 },
+            { xCanonical: 3, yCanonical: 3 },
+          ],
+        },
+      ],
+      provenance: { sourceKind: "derived", sourceDescription: "Histogram" },
+    });
+    expect(histogram.ok).toBe(true);
+    if (!histogram.ok) return;
+    const model = createCartesianGraph({
+      id: ids.graphId(),
+      name: "Histogram",
+      xAxis: {
+        label: "Length",
+        unitExpression: "m",
+        scale: "linear",
+        domain: { kind: "manual", minCanonical: 0, maxCanonical: 4 },
+        tickTarget: 5,
+      },
+      yAxis: {
+        label: "Count",
+        unitExpression: "",
+        scale: "linear",
+        domain: { kind: "manual", minCanonical: 0, maxCanonical: 4 },
+        tickTarget: 5,
+      },
+      series: [
+        {
+          datasetId: histogram.value.id,
+          seriesKey: histogramKey,
+          style: {
+            strokeHex: "#35cfe1",
+            fillHex: "#35cfe1",
+            lineWidth: 1,
+            renderMode: "bars",
+            barWidthCanonical: 2,
+          },
+        },
+      ],
+      points: [],
+      annotations: [],
+      cursor: { enabled: false, mode: "nearest" },
+    });
+    expect(model.ok).toBe(true);
+    if (!model.ok) return;
+    const resolved = resolveCartesianGraph({
+      graph: model.value,
+      datasets: [histogram.value],
+      viewport,
+    });
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+    expect(resolved.value.curves[0]!.bars).toHaveLength(2);
+    expect(resolved.value.curves[0]!.bars?.[0]?.source).toEqual({
+      xMinCanonical: 0,
+      xMaxCanonical: 2,
+      yCanonical: 2,
+      baselineCanonical: 0,
+    });
   });
 });

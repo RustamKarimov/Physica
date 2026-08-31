@@ -5,6 +5,7 @@ import type {
   JsonObject,
   ObservableId,
 } from "@physica/core-model";
+import type { NumericsPolicy } from "@physica/mathematics";
 
 declare const dataSeriesKeyBrand: unique symbol;
 export type DataSeriesKey = string & {
@@ -20,6 +21,8 @@ export interface DataAxisMetadataV1 {
 export interface CartesianSampleV1 {
   readonly xCanonical: number;
   readonly yCanonical: number;
+  readonly xUncertaintyCanonical?: number;
+  readonly yUncertaintyCanonical?: number;
 }
 
 export interface CartesianDataSeriesV1 {
@@ -70,6 +73,38 @@ export interface AcquisitionWindowResult {
   readonly lastSampleIndex: number;
 }
 
+export interface HistogramDerivationInput {
+  readonly sourceDataset: CartesianDatasetV1;
+  readonly sourceSeriesKey: DataSeriesKey;
+  readonly outputId: DatasetId;
+  readonly outputName: string;
+  readonly outputSeriesKey: DataSeriesKey;
+  readonly binCount: number;
+  readonly rangeCanonical?: readonly [number, number];
+}
+
+export interface HistogramDerivationResult {
+  readonly dataset: CartesianDatasetV1;
+  readonly binEdgesCanonical: readonly number[];
+  readonly excludedBelow: number;
+  readonly excludedAbove: number;
+}
+
+export interface SpectrumDerivationInput {
+  readonly sourceDataset: CartesianDatasetV1;
+  readonly sourceSeriesKey: DataSeriesKey;
+  readonly outputId: DatasetId;
+  readonly outputName: string;
+  readonly outputSeriesKey: DataSeriesKey;
+  readonly numericsPolicy?: NumericsPolicy;
+}
+
+export interface SpectrumDerivationResult {
+  readonly dataset: CartesianDatasetV1;
+  readonly sampleIntervalCanonical: number;
+  readonly frequencyCount: number;
+}
+
 export type DataError =
   | {
       readonly kind: "invalid-dataset";
@@ -107,7 +142,27 @@ export type DataError =
       readonly kind: "observable-evaluation-failed";
       readonly timeSeconds: number;
       readonly message: string;
-    };
+    }
+  | {
+      readonly kind: "invalid-derivation";
+      readonly path: string;
+      readonly message: string;
+    }
+  | {
+      readonly kind: "missing-derivation-series";
+      readonly seriesKey: DataSeriesKey;
+    }
+  | {
+      readonly kind: "nonuniform-spectrum-sampling";
+      readonly sampleIndex: number;
+      readonly expectedInterval: number;
+      readonly actualInterval: number;
+    }
+  | {
+      readonly kind: "invalid-spectrum-time-unit";
+      readonly unitExpression: string;
+    }
+  | { readonly kind: "derivation-sample-limit"; readonly count: number };
 
 export type DataResult<T> =
   | { readonly ok: true; readonly value: T }

@@ -8,6 +8,7 @@ import {
   type DefaultUnitRegistry,
 } from "@physica/units";
 import { freezeDeep } from "./internal";
+import { resolveGraphAnalyses } from "./analysis";
 import { createCartesianGraph } from "./model";
 import {
   displayValue,
@@ -190,6 +191,18 @@ export function resolveCartesianGraph(
     resolved.push({ binding, series: found.value });
   }
   const samples = resolved.flatMap((item) => item.series.samples);
+  if (
+    graph.value.yAxis.scale === "log10" &&
+    resolved.some((item) => item.binding.style.renderMode === "bars")
+  )
+    return {
+      ok: false,
+      error: {
+        kind: "invalid-graph",
+        path: "$.series.style.renderMode",
+        message: "Histogram bars require a linear y axis.",
+      },
+    };
   const xDomain = resolveDomain(
     graph.value.xAxis,
     [
@@ -216,16 +229,44 @@ export function resolveCartesianGraph(
         (1 - scaleRatio(y, yDomain.value, graph.value.yAxis.scale)) *
           plotRect.height,
     );
-  const curves = resolved.map(({ binding, series }) => ({
-    datasetId: binding.datasetId,
-    seriesKey: binding.seriesKey,
-    name: series.name,
-    style: binding.style,
-    source: series.samples.map((item) =>
-      source(item.xCanonical, item.yCanonical),
-    ),
-    points: series.samples.map((item) => map(item.xCanonical, item.yCanonical)),
-  }));
+  const curves = resolved.map(({ binding, series }) => {
+    const bars =
+      binding.style.renderMode === "bars" &&
+      binding.style.barWidthCanonical !== undefined
+        ? series.samples.map((item) => {
+            const half = binding.style.barWidthCanonical! / 2;
+            const cornerA = map(item.xCanonical - half, 0);
+            const cornerB = map(item.xCanonical + half, item.yCanonical);
+            return {
+              source: {
+                xMinCanonical: item.xCanonical - half,
+                xMaxCanonical: item.xCanonical + half,
+                yCanonical: item.yCanonical,
+                baselineCanonical: 0,
+              },
+              rect: {
+                x: Math.min(cornerA.x, cornerB.x),
+                y: Math.min(cornerA.y, cornerB.y),
+                width: Math.abs(cornerB.x - cornerA.x),
+                height: Math.abs(cornerB.y - cornerA.y),
+              },
+            };
+          })
+        : undefined;
+    return {
+      datasetId: binding.datasetId,
+      seriesKey: binding.seriesKey,
+      name: series.name,
+      style: binding.style,
+      source: series.samples.map((item) =>
+        source(item.xCanonical, item.yCanonical),
+      ),
+      points: series.samples.map((item) =>
+        map(item.xCanonical, item.yCanonical),
+      ),
+      ...(bars ? { bars } : {}),
+    };
+  });
   const points = [];
   for (const marker of graph.value.points) {
     const found = findSeries(
@@ -258,6 +299,16 @@ export function resolveCartesianGraph(
     source: source(item.xCanonical, item.yCanonical),
     point: map(item.xCanonical, item.yCanonical),
   }));
+  const analyses = resolveGraphAnalyses({
+    graph: graph.value,
+    datasets: input.datasets,
+    xDomain: xDomain.value,
+    yDomain: yDomain.value,
+    xUnit: xUnit.value,
+    yUnit: yUnit.value,
+    map,
+  });
+  if (!analyses.ok) return analyses;
   let cursor: ResolvedCartesianGraph["cursor"];
   const cursorX = input.cursorXCanonical;
   if (
@@ -320,8 +371,9 @@ export function resolveCartesianGraph(
     curves,
     points,
     annotations,
+    analyses: analyses.value,
     ...(cursor ? { cursor } : {}),
-    accessibilitySummary: `${graph.value.name}. ${curves.length} series. X axis ${xAxisLabel}; Y axis ${yAxisLabel}.`,
+    accessibilitySummary: `${graph.value.name}. ${curves.length} series${analyses.value.length > 0 ? ` and ${analyses.value.length} analyses` : ""}. X axis ${xAxisLabel}; Y axis ${yAxisLabel}.`,
   };
   return { ok: true, value: freezeDeep(result) };
 }

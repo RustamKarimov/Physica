@@ -1,0 +1,14 @@
+{
+  "id": "graph-gradient",
+  "model": "piecewise-linear",
+  "tangent": {
+    "xCanonical": 1,
+    "yCanonical": 6,
+    "slopeCanonical": 4,
+    "runCanonical": 1,
+    "riseCanonical": 4
+  },
+  "maximum": { "xCanonical": 2, "yCanonical": 8, "label": "maximum height" },
+  "summaries": ["Tangent at 1: gradient 4 m/s.", "maximum height: 8 m at 2 s."],
+  "frozen": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "graph-area",
+  "area": { "signedCanonical": 20, "display": 20, "unit": "m/s·s" },
+  "fit": {
+    "slopeCanonical": 2,
+    "interceptCanonical": 1,
+    "rSquared": 1,
+    "weighting": "unweighted"
+  },
+  "uncertainty": {
+    "sampleCount": 5,
+    "segmentCount": 10,
+    "xCanonical": 0.05,
+    "yCanonical": 0.2
+  },
+  "summaries": [
+    "Signed area 20 m/s·s.",
+    "Linear fit gradient 2, R² 1.",
+    "Error bars for 5 samples with supplied uncertainty."
+  ],
+  "immutable": true
+}

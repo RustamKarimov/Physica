@@ -25,6 +25,9 @@ export interface GraphCurveStyleV1 {
   readonly strokeHex: string;
   readonly lineWidth: number;
   readonly dash?: readonly number[];
+  readonly renderMode?: "line" | "bars";
+  readonly barWidthCanonical?: number;
+  readonly fillHex?: string;
 }
 export interface GraphSeriesBindingV1 {
   readonly datasetId: DatasetId;
@@ -45,6 +48,52 @@ export interface GraphAnnotationV1 {
   readonly xCanonical: number;
   readonly yCanonical: number;
 }
+interface GraphAnalysisBaseV1 {
+  readonly id: string;
+  readonly datasetId: DatasetId;
+  readonly seriesKey: DataSeriesKey;
+}
+export interface GraphTangentAnalysisV1 extends GraphAnalysisBaseV1 {
+  readonly kind: "tangent";
+  readonly xCanonical: number;
+  readonly strokeHex: string;
+  readonly lineWidth: number;
+  readonly triangleRunCanonical?: number;
+}
+export interface GraphAreaAnalysisV1 extends GraphAnalysisBaseV1 {
+  readonly kind: "area";
+  readonly xMinCanonical: number;
+  readonly xMaxCanonical: number;
+  readonly baselineCanonical: number;
+  readonly fillHex: string;
+  readonly opacity: number;
+}
+export interface GraphMaximumAnalysisV1 extends GraphAnalysisBaseV1 {
+  readonly kind: "maximum";
+  readonly label: string;
+  readonly markerHex: string;
+  readonly xMinCanonical?: number;
+  readonly xMaxCanonical?: number;
+}
+export interface GraphLinearFitAnalysisV1 extends GraphAnalysisBaseV1 {
+  readonly kind: "linear-fit";
+  readonly strokeHex: string;
+  readonly lineWidth: number;
+  readonly xMinCanonical?: number;
+  readonly xMaxCanonical?: number;
+}
+export interface GraphErrorBarsAnalysisV1 extends GraphAnalysisBaseV1 {
+  readonly kind: "error-bars";
+  readonly strokeHex: string;
+  readonly lineWidth: number;
+  readonly capSize: number;
+}
+export type GraphAnalysisOverlayV1 =
+  | GraphTangentAnalysisV1
+  | GraphAreaAnalysisV1
+  | GraphMaximumAnalysisV1
+  | GraphLinearFitAnalysisV1
+  | GraphErrorBarsAnalysisV1;
 export interface CartesianGraphV1 {
   readonly id: GraphId;
   readonly name: string;
@@ -53,6 +102,7 @@ export interface CartesianGraphV1 {
   readonly series: readonly GraphSeriesBindingV1[];
   readonly points: readonly GraphPointMarkerV1[];
   readonly annotations: readonly GraphAnnotationV1[];
+  readonly analysisOverlays?: readonly GraphAnalysisOverlayV1[];
   readonly cursor: {
     readonly enabled: boolean;
     readonly mode: "nearest" | "linear-interpolation";
@@ -95,6 +145,20 @@ export interface ResolvedGraphCurve {
   readonly style: GraphCurveStyleV1;
   readonly source: readonly GraphDataCoordinate[];
   readonly points: readonly GraphLayoutCoordinate[];
+  readonly bars?: readonly {
+    readonly source: {
+      readonly xMinCanonical: number;
+      readonly xMaxCanonical: number;
+      readonly yCanonical: number;
+      readonly baselineCanonical: number;
+    };
+    readonly rect: {
+      readonly x: number;
+      readonly y: number;
+      readonly width: number;
+      readonly height: number;
+    };
+  }[];
 }
 export interface ResolvedGraphCursorReadout {
   readonly datasetId: DatasetId;
@@ -106,6 +170,71 @@ export interface ResolvedGraphCursorReadout {
   readonly yDisplay: string;
   readonly point: GraphLayoutCoordinate;
 }
+export interface ResolvedGraphSegment {
+  readonly sourceFrom: GraphDataCoordinate;
+  readonly sourceTo: GraphDataCoordinate;
+  readonly from: GraphLayoutCoordinate;
+  readonly to: GraphLayoutCoordinate;
+}
+export type ResolvedGraphAnalysis =
+  | {
+      readonly id: string;
+      readonly kind: "tangent";
+      readonly slopeCanonical: number;
+      readonly anchor: GraphDataCoordinate;
+      readonly line: ResolvedGraphSegment;
+      readonly strokeHex: string;
+      readonly lineWidth: number;
+      readonly triangle?: {
+        readonly runCanonical: number;
+        readonly riseCanonical: number;
+        readonly source: readonly GraphDataCoordinate[];
+        readonly points: readonly GraphLayoutCoordinate[];
+      };
+      readonly summary: string;
+    }
+  | {
+      readonly id: string;
+      readonly kind: "area";
+      readonly signedAreaCanonical: number;
+      readonly displayArea: number;
+      readonly displayUnitExpression: string;
+      readonly source: readonly GraphDataCoordinate[];
+      readonly points: readonly GraphLayoutCoordinate[];
+      readonly fillHex: string;
+      readonly opacity: number;
+      readonly summary: string;
+    }
+  | {
+      readonly id: string;
+      readonly kind: "maximum";
+      readonly label: string;
+      readonly markerHex: string;
+      readonly source: GraphDataCoordinate;
+      readonly point: GraphLayoutCoordinate;
+      readonly summary: string;
+    }
+  | {
+      readonly id: string;
+      readonly kind: "linear-fit";
+      readonly slopeCanonical: number;
+      readonly interceptCanonical: number;
+      readonly rSquared: number;
+      readonly line: ResolvedGraphSegment;
+      readonly strokeHex: string;
+      readonly lineWidth: number;
+      readonly summary: string;
+    }
+  | {
+      readonly id: string;
+      readonly kind: "error-bars";
+      readonly segments: readonly ResolvedGraphSegment[];
+      readonly strokeHex: string;
+      readonly lineWidth: number;
+      readonly capSize: number;
+      readonly sampleCount: number;
+      readonly summary: string;
+    };
 export interface ResolvedCartesianGraph {
   readonly name: string;
   readonly viewport: GraphViewport;
@@ -135,6 +264,7 @@ export interface ResolvedCartesianGraph {
     readonly source: GraphDataCoordinate;
     readonly point: GraphLayoutCoordinate;
   }[];
+  readonly analyses: readonly ResolvedGraphAnalysis[];
   readonly cursor?: {
     readonly xCanonical: number;
     readonly xDisplay: string;
@@ -184,7 +314,18 @@ export type GraphError =
       readonly kind: "invalid-marker";
       readonly markerId: string;
       readonly message: string;
-    };
+    }
+  | {
+      readonly kind: "invalid-analysis";
+      readonly analysisId: string;
+      readonly message: string;
+    }
+  | {
+      readonly kind: "insufficient-analysis-data";
+      readonly analysisId: string;
+      readonly message: string;
+    }
+  | { readonly kind: "singular-linear-fit"; readonly analysisId: string };
 export type GraphResult<T> =
   | { readonly ok: true; readonly value: T }
   | { readonly ok: false; readonly error: GraphError };

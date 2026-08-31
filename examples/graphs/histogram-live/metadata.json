@@ -1,0 +1,15 @@
+{
+  "id": "histogram-live",
+  "title": "Derive distributions and frequencies reproducibly",
+  "category": "graphs",
+  "description": "Immutable observations become deterministic histogram bars, while a uniformly sampled signal becomes a one-sided amplitude spectrum with explicit provenance.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "histogram-derivation",
+    "histogram-bars",
+    "direct-dft",
+    "one-sided-amplitude-spectrum",
+    "derived-provenance"
+  ]
+}

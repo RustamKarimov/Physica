@@ -1,0 +1,14 @@
+{
+  "id": "graph-area",
+  "title": "Measure area without hiding uncertainty",
+  "category": "graphs",
+  "description": "A velocity trace exposes exact piecewise-linear area, an ordinary least-squares fit and canonical measurement uncertainties as independent overlays.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "signed-trapezoidal-area",
+    "linear-fit",
+    "coefficient-of-determination",
+    "uncertainty-bars"
+  ]
+}
