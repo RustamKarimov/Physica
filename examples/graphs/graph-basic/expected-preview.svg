@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Compare motion on one set of axes</title>
+  <desc id="description">Measured and modelled trolley displacement share unit-aware time and displacement axes. The measured curve is solid and the model is dashed.</desc>
+  <rect width="1200" height="675" fill="#07131b"/>
+  <text x="72" y="72" fill="#e9f7f5" font-family="system-ui" font-size="30" font-weight="700">Compare motion on one set of axes</text>
+  <text x="72" y="105" fill="#8ca6ad" font-family="system-ui" font-size="15">CANONICAL DATA → UNIT-AWARE AXES → RENDERER-NEUTRAL PLAN</text>
+  <rect x="72" y="136" width="1056" height="470" rx="18" fill="#0b1c26" stroke="#1d3945"/>
+  <g stroke="#17323d" stroke-width="1">
+    <path d="M158 174V534M332 174V534M506 174V534M680 174V534M854 174V534M1028 174V534"/>
+    <path d="M158 174H1028M158 294H1028M158 414H1028M158 534H1028"/>
+  </g>
+  <path d="M158 534H1028M158 174V534" fill="none" stroke="#8ca6ad" stroke-width="2"/>
+  <polyline points="158,534 332,491 506,433 680,364 854,287 1028,198" fill="none" stroke="#27d3c2" stroke-width="4" stroke-linejoin="round"/>
+  <polyline points="158,534 332,492 506,438 680,372 854,294 1028,204" fill="none" stroke="#ffb454" stroke-width="4" stroke-dasharray="9 6" stroke-linejoin="round"/>
+  <circle cx="854" cy="287" r="7" fill="#07131b" stroke="#e9f7f5" stroke-width="3"/>
+  <path d="M792 232L848 280" stroke="#e9f7f5" stroke-width="1.5"/>
+  <text x="680" y="220" fill="#e9f7f5" font-family="system-ui" font-size="15">increasing gradient</text>
+  <g fill="#8ca6ad" font-family="system-ui" font-size="14" text-anchor="middle">
+    <text x="158" y="560">0</text><text x="332" y="560">1</text><text x="506" y="560">2</text><text x="680" y="560">3</text><text x="854" y="560">4</text><text x="1028" y="560">5</text>
+  </g>
+  <g fill="#8ca6ad" font-family="system-ui" font-size="14" text-anchor="end">
+    <text x="145" y="539">0</text><text x="145" y="419">5</text><text x="145" y="299">10</text><text x="145" y="179">15</text>
+  </g>
+  <text x="592" y="591" fill="#c6d8da" font-family="system-ui" font-size="15" text-anchor="middle">Time (s)</text>
+  <text x="104" y="354" fill="#c6d8da" font-family="system-ui" font-size="15" text-anchor="middle" transform="rotate(-90 104 354)">Displacement (m)</text>
+  <g font-family="system-ui" font-size="14">
+    <path d="M190 158H236" stroke="#27d3c2" stroke-width="4"/><text x="246" y="163" fill="#dceaea">Measured</text>
+    <path d="M374 158H420" stroke="#ffb454" stroke-width="4" stroke-dasharray="9 6"/><text x="430" y="163" fill="#dceaea">Model</text>
+  </g>
+</svg>

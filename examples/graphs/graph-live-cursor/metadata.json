@@ -1,0 +1,15 @@
+{
+  "id": "graph-live-cursor",
+  "title": "Sample once, inspect at any frame",
+  "category": "graphs",
+  "description": "A fixed-clock observable produces the same canonical samples across coarse and fine update windows, while a presentation cursor interpolates readouts without resampling physics.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "fixed-clock-acquisition",
+    "window-independent-sampling",
+    "linear-cursor-interpolation",
+    "cursor-readouts",
+    "presentation-data-separation"
+  ]
+}

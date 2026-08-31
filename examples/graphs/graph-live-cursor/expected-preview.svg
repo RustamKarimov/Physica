@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Sample once, inspect at any frame</title>
+  <desc id="description">A fixed-clock velocity series with a presentation-only cursor at 2.25 seconds reading 5.5 metres per second.</desc>
+  <rect width="1200" height="675" fill="#07131b"/>
+  <text x="72" y="72" fill="#e9f7f5" font-family="system-ui" font-size="30" font-weight="700">Sample once, inspect at any frame</text>
+  <text x="72" y="105" fill="#8ca6ad" font-family="system-ui" font-size="15">FIXED CLOCK · 0.5 s INTERVAL · CURSOR DOES NOT RESAMPLE PHYSICS</text>
+  <rect x="72" y="136" width="1056" height="470" rx="18" fill="#0b1c26" stroke="#1d3945"/>
+  <g stroke="#17323d" stroke-width="1">
+    <path d="M158 174V534M332 174V534M506 174V534M680 174V534M854 174V534M1028 174V534"/>
+    <path d="M158 174H1028M158 234H1028M158 294H1028M158 354H1028M158 414H1028M158 474H1028M158 534H1028"/>
+  </g>
+  <path d="M158 534H1028M158 174V534" fill="none" stroke="#8ca6ad" stroke-width="2"/>
+  <polyline points="158,504 245,474 332,444 419,414 506,384 593,354 680,324 767,294 854,264 941,234 1028,204" fill="none" stroke="#79a7ff" stroke-width="4" stroke-linejoin="round"/>
+  <g fill="#0b1c26" stroke="#79a7ff" stroke-width="2">
+    <circle cx="158" cy="504" r="4"/><circle cx="245" cy="474" r="4"/><circle cx="332" cy="444" r="4"/><circle cx="419" cy="414" r="4"/><circle cx="506" cy="384" r="4"/><circle cx="593" cy="354" r="4"/><circle cx="680" cy="324" r="4"/><circle cx="767" cy="294" r="4"/><circle cx="854" cy="264" r="4"/><circle cx="941" cy="234" r="4"/><circle cx="1028" cy="204" r="4"/>
+  </g>
+  <path d="M549.5 174V534" stroke="#ffcf70" stroke-width="2" stroke-dasharray="5 5"/>
+  <circle cx="549.5" cy="369" r="7" fill="#ffcf70" stroke="#07131b" stroke-width="3"/>
+  <rect x="574" y="326" width="190" height="72" rx="10" fill="#122c38" stroke="#ffcf70"/>
+  <text x="592" y="353" fill="#ffcf70" font-family="system-ui" font-size="15" font-weight="700">CURSOR · 2.25 s</text>
+  <text x="592" y="380" fill="#e9f7f5" font-family="system-ui" font-size="18">Velocity  5.5 m/s</text>
+  <g fill="#8ca6ad" font-family="system-ui" font-size="14" text-anchor="middle">
+    <text x="158" y="560">0</text><text x="332" y="560">1</text><text x="506" y="560">2</text><text x="680" y="560">3</text><text x="854" y="560">4</text><text x="1028" y="560">5</text>
+  </g>
+  <text x="592" y="591" fill="#c6d8da" font-family="system-ui" font-size="15" text-anchor="middle">Time (s)</text>
+  <text x="104" y="354" fill="#c6d8da" font-family="system-ui" font-size="15" text-anchor="middle" transform="rotate(-90 104 354)">Velocity (m/s)</text>
+</svg>

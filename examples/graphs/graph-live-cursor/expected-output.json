@@ -1,0 +1,21 @@
+{
+  "id": "graph-live-cursor",
+  "acquisition": {
+    "clockId": "00000000-0000-4000-8000-0000001d24f0",
+    "observableId": "mechanics:trolley.velocity",
+    "intervalSeconds": 0.5,
+    "sampleCount": 11,
+    "sampleTimes": [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+    "windowIndependent": true
+  },
+  "cursor": {
+    "mode": "linear-interpolation",
+    "xCanonical": 2.25,
+    "xDisplay": "2.25 s",
+    "yCanonical": 5.5,
+    "yDisplay": "5.5 m/s",
+    "screen": { "x": 465.8, "y": 269.08 }
+  },
+  "presentationOnly": true,
+  "accessibilitySummary": "Live velocity–time. 1 series. X axis Time (s); Y axis Velocity (m/s)."
+}

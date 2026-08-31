@@ -1,0 +1,45 @@
+{
+  "id": "graph-basic",
+  "axes": {
+    "x": "Time (s)",
+    "y": "Displacement (m)",
+    "xDomain": [0, 5],
+    "yDomain": [0, 15],
+    "xTicks": ["0", "1", "2", "3", "4", "5"],
+    "yTicks": ["0", "5", "10", "15"]
+  },
+  "curves": [
+    {
+      "name": "Measured",
+      "samples": 6,
+      "line": "solid",
+      "first": { "x": 86, "y": 468 },
+      "last": { "x": 930, "y": 62.93 }
+    },
+    {
+      "name": "Constant-acceleration model",
+      "samples": 6,
+      "line": "dashed",
+      "first": { "x": 86, "y": 468 },
+      "last": { "x": 930, "y": 70.17 }
+    }
+  ],
+  "marker": {
+    "label": "observed 10.3 m",
+    "source": {
+      "space": "graph-data",
+      "xCanonical": 4,
+      "yCanonical": 10.3
+    },
+    "point": { "x": 761.2, "y": 169.99 }
+  },
+  "annotation": "increasing gradient",
+  "persistence": {
+    "datasetTypeId": "physica:data/cartesian-v1",
+    "graphTypeId": "physica:graph/cartesian-v1",
+    "datasetRoundTrip": true,
+    "graphRoundTrip": true
+  },
+  "immutable": true,
+  "accessibilitySummary": "Trolley displacement–time. 2 series. X axis Time (s); Y axis Displacement (m)."
+}

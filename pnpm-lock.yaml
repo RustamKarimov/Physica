@@ -101,9 +101,15 @@ importers:
       '@physica/core-model':
         specifier: workspace:*
         version: link:../../packages/core-model
+      '@physica/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       '@physica/equations':
         specifier: workspace:*
         version: link:../../packages/equations
+      '@physica/graphs':
+        specifier: workspace:*
+        version: link:../../packages/graphs
       '@physica/mathematics':
         specifier: workspace:*
         version: link:../../packages/mathematics
@@ -365,6 +371,38 @@ importers:
       '@physica/equations':
         specifier: workspace:*
         version: link:../../../packages/equations
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/graphs/graph-basic:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/data':
+        specifier: workspace:*
+        version: link:../../../packages/data
+      '@physica/graphs':
+        specifier: workspace:*
+        version: link:../../../packages/graphs
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/graphs/graph-live-cursor:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../../../packages/core-model
+      '@physica/data':
+        specifier: workspace:*
+        version: link:../../../packages/data
+      '@physica/graphs':
+        specifier: workspace:*
+        version: link:../../../packages/graphs
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -787,6 +825,13 @@ importers:
         version: 6.0.3
 
   packages/data:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/units':
+        specifier: workspace:*
+        version: link:../units
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -831,6 +876,16 @@ importers:
         version: 6.0.3
 
   packages/graphs:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/data':
+        specifier: workspace:*
+        version: link:../data
+      '@physica/units':
+        specifier: workspace:*
+        version: link:../units
     devDependencies:
       typescript:
         specifier: 'catalog:'

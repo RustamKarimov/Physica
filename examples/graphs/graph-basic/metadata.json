@@ -1,0 +1,16 @@
+{
+  "id": "graph-basic",
+  "title": "Compare motion on one set of axes",
+  "category": "graphs",
+  "description": "Two unit-compatible displacement series share deterministic axes, distinct line styles, an observation marker and a renderer-neutral annotation.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "unit-aware-axes",
+    "multi-series-curves",
+    "non-color-line-coding",
+    "point-markers",
+    "graph-annotations",
+    "dataset-and-graph-persistence"
+  ]
+}

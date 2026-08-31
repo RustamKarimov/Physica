@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 4 active — Step 4.2 complete
+**Current development phase:** Phase 4 active — Step 4.3 complete
 
-**Current task:** Specify Phase 4 Step 4.3 Graph engine
+**Current task:** Specify Phase 4 Step 4.4 Graph analysis and overlays
 
-**Next task:** Implement Phase 4 Step 4.3 Graph engine after specification review
+**Next task:** Implement Phase 4 Step 4.4 Graph analysis and overlays after specification review, then execute scheduled HC-02 before entering Phase 5
 
 **Blockers:** None
 
@@ -21,6 +21,42 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 and HC-01 passed after repairs and are recorded under docs/health-checkpoints/. HC-02 is scheduled after Phase 4 Step 4.4, with early-trigger conditions remaining active.
+
+## Step 17 result
+
+Completed and audited `docs/implementation/STEP_17_GRAPH_ENGINE_SPEC.md`, then implemented the Phase 4 Step 4.3 graph release gate without an ADR, root `ProjectDocument` schema change, new workspace package, third-party dependency, solver, uncontrolled frame loop or authoritative physics writer.
+
+Implemented in `@physica/data`:
+
+- immutable V1 Cartesian datasets stored through the existing generic `DatasetDefinition` resource as `physica:data/cartesian-v1`, with named series, ordered finite canonical samples, explicit x/y units, locally stable keys, metadata and imported/simulated/measured/derived provenance;
+- typed validation and parsing for IDs, unit expressions, duplicate keys, non-finite/unordered samples, provenance and unsupported/malformed envelopes, with canonical JSON round trips and deeply frozen success values;
+- a pure fixed-interval acquisition primitive bound to an explicit `ClockId`, `ObservableId`, target series, start time and interval. It samples exact schedule times independent of caller/render window size, rejects backward/non-finite/over-limit windows and never samples on display refresh.
+
+Implemented in `@physica/graphs`:
+
+- immutable V1 Cartesian graph configurations stored through the existing Scene `GraphDefinition` envelope as `physica:graph/cartesian-v1`;
+- linear and base-10 logarithmic axes, auto/manual domains, deterministic nice ticks, unit/dimension compatibility, non-colour curve styling, markers, data-anchored text annotations and nearest/interpolated cursors;
+- renderer-neutral resolution with explicit `graph-data` source coordinates, `screen-layout` vertices/anchors, y inversion, a mandatory plot-rectangle clip contract, canonical-to-display unit conversion, accessibility summaries and complete dataset preservation across viewport changes;
+- typed contextual errors for missing datasets/series, incompatible units, invalid log domains and invalid markers. Successful graphs and plans remain deeply frozen.
+
+User-visible completion:
+
+- `examples/graphs/graph-basic` and `examples/graphs/graph-live-cursor` each contain metadata, README, executable deterministic output, exact expected JSON, accessible expected SVG preview, automated tests and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
+- `graph-basic` proves two unit-compatible measured/model curves with solid/dashed coding, deterministic axes/ticks, an observation marker, annotation and dataset/graph persistence;
+- `graph-live-cursor` proves coarse/fine acquisition-window equality over 11 fixed-clock samples and presentation-only interpolation at arbitrary cursor times without resampling or mutating data;
+- the launcher-visible desktop now opens at “17 / Graph Engine” with real resolved SVG axes, curves, legend, markers, annotations, an explicit plot clip, live cursor slider/play control and readouts. The corrected Step 16 equation transform, Step 15 equation editor and all earlier Camera/Library proofs remain below it.
+
+Verification:
+
+- focused data/graph/example/desktop gate — 5 files and 17 tests passed, with affected-package TypeScript checks passing;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 93 of 94 workspace projects, 64 unit/example files with 267 tests, 1 architecture file with 2 tests and all three application builds passed;
+- frozen offline install passed across all 94 workspace projects;
+- `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- checked-in accessible SVG previews, desktop fixture smoke tests and the production/launcher gates passed. Automated live Windows capture is not counted because the previously recorded local sandbox refresh-helper limitation remains; the one-click launcher remains available for user observation;
+- the non-failing desktop bundle warning is approximately 4.920 MB / 1.366 MB gzip. Existing desktop code-splitting debt remains owned by the desktop app, is mandatory review scope at HC-02 and must be resolved with the stable shell no later than HC-04;
+- Step 17's largest behavior-bearing files are 439 lines for dataset validation/persistence, 369 lines for the graph workbench and 327 lines for graph resolution. The 503-line workbench stylesheet is declarative/responsive styling; HC-02 must recheck whether Step 4.4 integration causes any of these files to cross the concentrated-file early-trigger threshold.
+
+Self-review found no Architecture Blocker or new Project Health early trigger. The scheduled HC-02 boundary remains immediately after Step 4.4 and before Phase 5; it will re-audit every Phase 4 release gate, including the corrected equation-transition evidence, graph contracts, integration regressions, accumulated files and desktop bundle ownership. Phase 4 Step 4.4 Graph analysis and overlays is next; do not implement variable binding, formula animation, data export or later graph types early.
 
 ## Step 16 result
 
@@ -714,7 +750,7 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Phase 4 Step 4.3 read first
+## Phase 4 Step 4.4 read first
 
 - AGENTS.md
 - docs/AUTONOMOUS_EXECUTION_PROTOCOL.md
@@ -725,8 +761,8 @@ Resolved during bootstrap:
 - docs/MATHEMATICS_AND_UNITS.md
 - docs/COORDINATES_AND_FRAMES.md
 - docs/RENDERER_ARCHITECTURE.md
-- docs/implementation/STEP_16_EQUATION_TRANSFORM_ENGINE_SPEC.md
+- docs/implementation/STEP_17_GRAPH_ENGINE_SPEC.md
 - docs/PACKAGE_DEPENDENCIES.md
 - approved ADRs in docs/DECISIONS.md
 
-Begin with a Step 4.3 implementation specification. Preserve typed world/view/layout coordinates, the shared Camera and scientific unit/tolerance contracts. Stop only if the graph engine reaches an Architecture Blocker; do not implement variable binding or formula animation early.
+Begin with a Step 4.4 implementation specification. Preserve canonical dataset authority, explicit graph-data/screen-layout spaces, unit compatibility and the graph renderer clip contract. Implement only the analysis overlays named by the roadmap/specification. Stop only if graph analysis reaches an Architecture Blocker; do not implement variable binding, formula animation, data export or later graph types early. After Step 4.4 verification, execute scheduled HC-02 before Phase 5.
