@@ -121,6 +121,8 @@ Matching uses bounded indexes and deterministic queues; normal behavior is linea
 
 The desktop proof exposes play/replay and scrub controls, correspondence/status text, visible focus, readable source/target equations and a reduced-motion final state. Meaning is not communicated by motion or color alone. KaTeX remains configured with trust disabled. The proof uses semantic fragments rather than screenshots.
 
+The launcher proof must derive every motion box from the fragments actually rendered in the transform stage. Hand-authored or index-derived placeholder coordinates are not acceptable release-gate evidence. Its visual partition must reconstruct the complete source at progress 0 and the complete target at progress 1 without missing operators, duplicate glyphs or unrelated atom cards. A compound term may remain grouped when atom-by-atom motion would imply a false derivation step. Presentation review must scrub the endpoints and intermediate states for all required examples and reject geometrically or mathematically misleading trajectories.
+
 ## 9. Test matrix
 
 Targeted tests cover:

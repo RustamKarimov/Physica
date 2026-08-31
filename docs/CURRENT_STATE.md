@@ -8,9 +8,9 @@
 
 **Current development phase:** Phase 4 active — Step 4.2 complete
 
-**Current task:** Hand off the verified equation-transform release gate
+**Current task:** Specify Phase 4 Step 4.3 Graph engine
 
-**Next task:** Specify Phase 4 Step 4.3 Graph engine
+**Next task:** Implement Phase 4 Step 4.3 Graph engine after specification review
 
 **Blockers:** None
 
@@ -40,24 +40,28 @@ Release-gate correction:
 
 - the initial cancellation fixture used `(2x+2x)/2`, but the pinned canonicalizer correctly collapsed it to `2x` before motion planning, leaving no honest fragment to exit;
 - the completed `cancel-and-simplify` example therefore uses `x+(y-y) → x`, whose canonical source retains the cancelling pair and whose simplified target is safely verified; no decorative or glyph-only cancellation was fabricated.
+- subsequent user visual review correctly identified that the launcher proof still rendered selected semantic atoms as uniform cards at index-derived placeholder coordinates. That was a presentation acceptance failure: the engine contract was sound, but its desktop release-gate evidence was not presentation-grade. Step 4.2 was reopened and corrected before graphing began;
+- the corrected proof renders explicit KaTeX term partitions, groups compound substitution where atom-by-atom motion would imply a false derivation, measures each displayed fragment with `getBoundingClientRect()` in the actual stage, and feeds only those measured boxes to the renderer-neutral motion engine. Progress 0 reconstructs the complete source and progress 1 the complete target;
+- a new smoke test executes all three desktop demo definitions, validates semantic endpoints and correspondence invariants, and proves the visual fragments reconstruct the exact source/target LaTeX without missing or duplicate nodes. The Step 16 specification now explicitly rejects fabricated/index-derived geometry and incomplete endpoint partitions;
+- the former 538-line workbench was split into a 424-line measured presentation component and a 310-line deterministic demo-definition module. This resolves the immediate concentrated-file review signal without changing package ownership or public contracts.
 
 User-visible completion:
 
 - `examples/equations/v-u-at-rearrangement`, `examples/equations/substitution` and `examples/equations/cancel-and-simplify` each contain metadata, README, executable deterministic output, expected JSON, accessible presentation-grade SVG preview, automated tests and truthful pending `.physica`/PNG/WebM/shared-runtime obligations;
-- the launcher-visible desktop now opens at “16 / Equation Transform” with selectable rearrange/substitute/cancel proofs, verified status, semantic correspondence provenance, real FLIP/enter/exit frames, replay/play/scrub/reduced-motion controls and a visible teacher-override case;
+- the launcher-visible desktop now opens at “16 / Equation Transform” with selectable rearrange/substitute/cancel proofs, verified status, semantic correspondence provenance, measured KaTeX term motion, explicit enter/exit frames, replay/play/scrub/reduced-motion controls and a visible teacher-override case;
 - the live Step 15 MathLive/semantic-tree/KaTeX editor and all earlier Camera/Library proofs remain directly below it.
 
 Verification:
 
 - focused equation engine plus three gallery examples — 5 files and 21 tests passed;
-- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 91 of 92 workspace projects, 58 unit/example files with 248 tests, 1 architecture file with 2 tests and all three application builds passed;
+- post-correction complete checks — formatting/diff hygiene, ESLint, architecture boundaries, strict TypeScript across 91 of 92 workspace projects, 59 unit/example files with 250 tests, 1 architecture file with 2 tests and all three application builds passed;
 - frozen offline install passed across all 92 workspace projects;
 - `Launch Physica.bat --check` passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
-- in-app browser visual automation again could not start because the local Windows sandbox refresh helper exited before browser discovery; this is not counted as a live visual pass. The production build, launcher check and all three checked-in accessible SVG release-gate previews/tests passed;
+- the real Tauri development app starts and `Launch Physica.bat --check` passes, but both in-app browser and Windows screenshot automation exit at the local Windows sandbox refresh helper before capture. This is not counted as an automated live visual pass. The executed fragment reconstruction gate, production build, launcher check and all three checked-in accessible SVG previews/tests passed; user observation through the launcher remains available;
 - the non-failing desktop bundle warning is approximately 4.881 MB / 1.355 MB gzip. The existing desktop lazy-loading debt remains owned by the desktop app, is re-evaluated at HC-02 and must be resolved with the stable shell no later than HC-04;
-- the 538-line desktop transform workbench is mostly declarative proof composition but is a maintainability review signal. The desktop app owns it; HC-02 must inspect whether demo construction and view markup should be split before formula-animation integration grows it further.
+- the split measured-motion component remains 424 lines and is reviewable; HC-02 should still inspect whether later formula-animation integration warrants extracting the measurement/render hook.
 
-Self-review found no Architecture Blocker, reopened step or Project Health early trigger. Phase 4 Step 4.3 Graph engine is next; do not implement variable binding or formula animation early.
+User feedback activated the Project Health release-gate early trigger and reopened Step 4.2. The finding is now fixed and reverified with no Architecture Blocker, package-boundary change, scientific-authority change or remaining regression. HC-02 remains at the already-governed Phase 4 Step 4.4 boundary, before the next phase, where this repair will be re-audited with equation/graph integration. Phase 4 Step 4.3 Graph engine is next; do not implement variable binding or formula animation early.
 
 ## Step 15 result
 

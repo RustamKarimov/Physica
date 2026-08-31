@@ -1,283 +1,123 @@
-import { useEffect, useMemo, useState } from "react";
-import { DeterministicIdFactory } from "@physica/core-model";
 import {
-  createEquationModel,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import {
   createEquationMotionPlan,
-  createEquationTransform,
-  DeterministicSemanticEquationIdFactory,
   evaluateEquationMotion,
-  matchEquationNodes,
-  renderEquationToMarkup,
-  type EquationCorrespondenceOverride,
-  type EquationModelV1,
+  type EquationFragmentLayout,
   type EquationMotionPlan,
   type EquationResult,
-  type EquationTransformV1,
-  type EquationVerificationRequest,
-  type SemanticEquationNode,
   type SemanticEquationNodeId,
 } from "@physica/equations";
+import {
+  equationTransformDemos,
+  type EquationVisualFragment,
+} from "./equation-transform-demos";
 import "./equation-transform-workbench.css";
-
-interface TransformDemo {
-  readonly id: string;
-  readonly tab: string;
-  readonly title: string;
-  readonly note: string;
-  readonly accent: "cyan" | "amber" | "coral";
-  readonly transform: EquationTransformV1;
-  readonly motion: EquationMotionPlan;
-  readonly sourceMarkup: string;
-  readonly targetMarkup: string;
-  readonly sourceLabels: ReadonlyMap<SemanticEquationNodeId, string>;
-  readonly targetLabels: ReadonlyMap<SemanticEquationNodeId, string>;
-}
-
-interface DemoConfig {
-  readonly id: string;
-  readonly tab: string;
-  readonly title: string;
-  readonly note: string;
-  readonly accent: TransformDemo["accent"];
-  readonly sourceLatex: string;
-  readonly targetLatex: string;
-  readonly verification: EquationVerificationRequest;
-  readonly semanticSeed: number;
-  readonly overrideAtom?: string;
-}
 
 function unwrap<T>(result: EquationResult<T>): T {
   if (!result.ok) throw new Error(result.error.kind);
   return result.value;
 }
 
-function flatten(root: SemanticEquationNode): readonly SemanticEquationNode[] {
-  const nodes: SemanticEquationNode[] = [];
-  const visit = (node: SemanticEquationNode) => {
-    nodes.push(node);
-    if (node.kind === "list") node.items.forEach(visit);
-    if (node.kind === "record") {
-      node.entries.forEach((entry) => visit(entry.value));
-    }
-  };
-  visit(root);
-  return nodes;
-}
-
-function displayLabel(node: SemanticEquationNode): string {
-  if (node.kind !== "atom") return "term";
-  if (node.value === "Equal") return "=";
-  if (node.value === "Add") return "+";
-  if (node.value === "Multiply") return "·";
-  if (node.value === "Negate") return "−";
-  if (node.value === "Rational") return "½";
-  return String(node.value);
-}
-
-function nodeLookup(model: EquationModelV1) {
-  return new Map(flatten(model.semanticRoot).map((node) => [node.id, node]));
-}
-
-const documentIds = new DeterministicIdFactory(900_000);
-
-function buildDemo(config: DemoConfig): TransformDemo {
-  const source = unwrap(
-    createEquationModel({
-      id: documentIds.equationId(),
-      name: config.title + " source",
-      latex: config.sourceLatex,
-      idFactory: new DeterministicSemanticEquationIdFactory(
-        config.semanticSeed,
-      ),
-    }),
-  );
-  const target = unwrap(
-    createEquationModel({
-      id: documentIds.equationId(),
-      name: config.title + " target",
-      latex: config.targetLatex,
-      idFactory: new DeterministicSemanticEquationIdFactory(
-        config.semanticSeed + 10_000,
-      ),
-    }),
-  );
-  const sourceNodes = nodeLookup(source);
-  const targetNodes = nodeLookup(target);
-  let overrides: readonly EquationCorrespondenceOverride[] | undefined;
-  if (config.overrideAtom) {
-    const sourceNode = [...sourceNodes.values()].find(
-      (node) => node.kind === "atom" && node.value === config.overrideAtom,
-    );
-    const targetNode = [...targetNodes.values()].find(
-      (node) => node.kind === "atom" && node.value === config.overrideAtom,
-    );
-    if (!sourceNode || !targetNode) throw new Error("Missing override atom.");
-    overrides = [{ sourceNodeId: sourceNode.id, targetNodeId: targetNode.id }];
-  }
-  const transform = unwrap(
-    createEquationTransform({
-      id: documentIds.equationId(),
-      name: config.title,
-      source,
-      target,
-      verification: config.verification,
-      ...(overrides ? { overrides } : {}),
-      metadata: { desktopProof: config.id },
-    }),
-  );
-  const match = unwrap(
-    matchEquationNodes({
-      source,
-      target,
-      ...(overrides ? { overrides } : {}),
-    }),
-  );
-  const matched = transform.tokenCorrespondence
-    .filter((item) => {
-      const sourceNode = sourceNodes.get(item.sourceNodeId);
-      const targetNode = targetNodes.get(item.targetNodeId);
-      return (
-        sourceNode?.kind === "atom" &&
-        targetNode?.kind === "atom" &&
-        displayLabel(sourceNode) === displayLabel(targetNode)
-      );
-    })
-    .slice(0, 5);
-  const sourceOnly = match.sourceOnly
-    .filter((id) => sourceNodes.get(id)?.kind === "atom")
-    .slice(0, 4);
-  const targetOnly = match.targetOnly
-    .filter((id) => targetNodes.get(id)?.kind === "atom")
-    .slice(0, 3);
-  const sourceFragments = [
-    ...matched.map((item, index) => ({
-      nodeId: item.sourceNodeId,
-      x: 54 + index * 82,
-      y: 58 + (index % 2) * 3,
-      width: 46,
-      height: 48,
-    })),
-    ...sourceOnly.map((nodeId, index) => ({
-      nodeId,
-      x: 500 + index * 58,
-      y: 58,
-      width: 46,
-      height: 48,
-    })),
-  ];
-  const targetFragments = [
-    ...matched.map((item, index) => ({
-      nodeId: item.targetNodeId,
-      x: 78 + index * 88 + (index % 2) * 18,
-      y: 142 - (index % 2) * 4,
-      width: 48,
-      height: 48,
-    })),
-    ...targetOnly.map((nodeId, index) => ({
-      nodeId,
-      x: 500 + index * 60,
-      y: 142,
-      width: 48,
-      height: 48,
-    })),
-  ];
-  const motion = unwrap(
-    createEquationMotionPlan(
-      transform,
-      {
-        coordinateSpace: "equation-transform-stage-px",
-        fragments: sourceFragments,
-      },
-      {
-        coordinateSpace: "equation-transform-stage-px",
-        fragments: targetFragments,
-      },
-    ),
-  );
-  const sourceMarkup = unwrap(renderEquationToMarkup(source)).markup;
-  const targetMarkup = unwrap(renderEquationToMarkup(target)).markup;
-  return {
-    id: config.id,
-    tab: config.tab,
-    title: config.title,
-    note: config.note,
-    accent: config.accent,
-    transform,
-    motion,
-    sourceMarkup,
-    targetMarkup,
-    sourceLabels: new Map(
-      sourceFragments.map((fragment) => [
-        fragment.nodeId,
-        displayLabel(sourceNodes.get(fragment.nodeId)!),
-      ]),
-    ),
-    targetLabels: new Map(
-      targetFragments.map((fragment) => [
-        fragment.nodeId,
-        displayLabel(targetNodes.get(fragment.nodeId)!),
-      ]),
-    ),
-  };
-}
-
-const demos: readonly TransformDemo[] = [
-  buildDemo({
-    id: "rearrange",
-    tab: "REARRANGE",
-    title: "Move u. Keep the physics.",
-    note: "Verified from equal simplified residuals.",
-    accent: "cyan",
-    sourceLatex: "v=u+at",
-    targetLatex: "v-u=at",
-    verification: { kind: "automatic-equivalence" },
-    semanticSeed: 910_000,
-  }),
-  buildDemo({
-    id: "substitute",
-    tab: "SUBSTITUTE",
-    title: "Replace symbols with known values.",
-    note: "Declared values are checked before the status changes.",
-    accent: "amber",
-    sourceLatex: String.raw`s=ut+\frac{1}{2}at^2`,
-    targetLatex: "s=28",
-    verification: {
-      kind: "substitution",
-      substitutions: { u: 3, t: 4, a: 2 },
-    },
-    semanticSeed: 930_000,
-  }),
-  buildDemo({
-    id: "cancel",
-    tab: "CANCEL",
-    title: "Let the cancelled pair leave.",
-    note: "Teacher override pins x; the symbolic check remains independent.",
-    accent: "coral",
-    sourceLatex: "x+(y-y)",
-    targetLatex: "x",
-    verification: { kind: "automatic-equivalence" },
-    semanticSeed: 950_000,
-    overrideAtom: "x",
-  }),
-];
-
 function readableStatus(value: string): string {
   return value.replaceAll("_", " ");
 }
 
+function fragmentClass(fragment: EquationVisualFragment): string {
+  return `tx-fragment has-${fragment.spacing}-spacing`;
+}
+
+function MotionFragment({
+  fragment,
+  className,
+  style,
+}: {
+  readonly fragment: EquationVisualFragment;
+  readonly className: string;
+  readonly style: CSSProperties;
+}) {
+  return (
+    <span
+      className={`tx-token ${className}`}
+      style={style}
+      dangerouslySetInnerHTML={{ __html: fragment.markup }}
+    />
+  );
+}
+
 export function EquationTransformWorkbench() {
-  const [selectedId, setSelectedId] = useState(demos[0]!.id);
+  const [selectedId, setSelectedId] = useState(equationTransformDemos[0]!.id);
   const [progress, setProgress] = useState(0);
+  const [motion, setMotion] = useState<EquationMotionPlan | null>(null);
   const [reducedMotion, setReducedMotion] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
   const [playing, setPlaying] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  const demo = demos.find((item) => item.id === selectedId) ?? demos[0]!;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const sourceRefs = useRef(new Map<SemanticEquationNodeId, HTMLSpanElement>());
+  const targetRefs = useRef(new Map<SemanticEquationNodeId, HTMLSpanElement>());
+  const demo =
+    equationTransformDemos.find((item) => item.id === selectedId) ??
+    equationTransformDemos[0]!;
+
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const measure = () => {
+      const stageBox = stage.getBoundingClientRect();
+      const layouts = (
+        fragments: readonly EquationVisualFragment[],
+        elements: ReadonlyMap<SemanticEquationNodeId, HTMLSpanElement>,
+      ): readonly EquationFragmentLayout[] =>
+        fragments.map((fragment) => {
+          const element = elements.get(fragment.nodeId);
+          if (!element) throw new Error("Missing rendered equation fragment.");
+          const box = element.getBoundingClientRect();
+          return {
+            nodeId: fragment.nodeId,
+            x: box.left - stageBox.left,
+            y: box.top - stageBox.top,
+            width: box.width,
+            height: box.height,
+          };
+        });
+
+      const nextMotion = unwrap(
+        createEquationMotionPlan(
+          demo.transform,
+          {
+            coordinateSpace: "desktop-equation-stage-css-px",
+            fragments: layouts(demo.sourceFragments, sourceRefs.current),
+          },
+          {
+            coordinateSpace: "desktop-equation-stage-css-px",
+            fragments: layouts(demo.targetFragments, targetRefs.current),
+          },
+        ),
+      );
+      setMotion(nextMotion);
+    };
+
+    const frameId = window.requestAnimationFrame(measure);
+    const observer = new ResizeObserver(measure);
+    observer.observe(stage);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
+  }, [demo]);
 
   useEffect(() => {
-    if (!playing || reducedMotion) return;
+    if (!playing || reducedMotion || !motion) return;
     const timer = window.setInterval(() => {
       setProgress((current) => {
         const next = current + 0.0125;
@@ -289,21 +129,30 @@ export function EquationTransformWorkbench() {
       });
     }, 30);
     return () => window.clearInterval(timer);
-  }, [playing, reducedMotion, selectedId]);
+  }, [motion, playing, reducedMotion]);
 
   const frame = useMemo(
     () =>
-      unwrap(evaluateEquationMotion(demo.motion, progress, { reducedMotion })),
-    [demo, progress, reducedMotion],
+      motion
+        ? unwrap(evaluateEquationMotion(motion, progress, { reducedMotion }))
+        : null,
+    [motion, progress, reducedMotion],
   );
   const frames = new Map(
-    frame.fragments.map((fragment) => [fragment.nodeId, fragment]),
+    frame?.fragments.map((fragment) => [fragment.nodeId, fragment]) ?? [],
+  );
+  const sourceById = new Map(
+    demo.sourceFragments.map((fragment) => [fragment.nodeId, fragment]),
+  );
+  const targetById = new Map(
+    demo.targetFragments.map((fragment) => [fragment.nodeId, fragment]),
   );
   const methods = [
     ...new Set(demo.transform.tokenCorrespondence.map((item) => item.method)),
   ];
 
   const selectDemo = (id: string) => {
+    setMotion(null);
     setSelectedId(id);
     setProgress(0);
     setPlaying(!reducedMotion);
@@ -316,7 +165,7 @@ export function EquationTransformWorkbench() {
       aria-labelledby="tx-title"
     >
       <div className="tx-eyebrow">
-        <span>SEMANTIC CORRESPONDENCE · HONEST VALIDITY · FLIP MOTION</span>
+        <span>SEMANTIC CORRESPONDENCE · HONEST VALIDITY · MEASURED MOTION</span>
         <b>RELEASE GATE</b>
       </div>
       <div className="tx-hero">
@@ -327,33 +176,35 @@ export function EquationTransformWorkbench() {
             <em>Never manufacture the proof.</em>
           </h1>
           <p>
-            Physica matches semantic terms for motion, then verifies the
-            mathematics on a separate path. Scrub any example: visual
-            correspondence can explain a step, but only the symbolic result may
-            certify it.
+            Physica matches meaningful terms, measures their actual rendered
+            positions, and verifies the mathematics on a separate path. Scrub
+            any example: motion may explain a step, but only the symbolic result
+            may certify it.
           </p>
         </div>
         <dl className="tx-meta">
           <div>
             <dt>MATCHED</dt>
-            <dd>{demo.motion.matched.length}</dd>
+            <dd>{motion?.matched.length ?? "—"}</dd>
           </div>
           <div>
             <dt>EXIT / ENTER</dt>
             <dd>
-              {demo.motion.exits.length} / {demo.motion.entries.length}
+              {motion
+                ? `${motion.exits.length} / ${motion.entries.length}`
+                : "—"}
             </dd>
           </div>
           <div>
             <dt>PROGRESS</dt>
-            <dd>{Math.round(frame.easedProgress * 100)}%</dd>
+            <dd>{Math.round((frame?.easedProgress ?? 0) * 100)}%</dd>
           </div>
         </dl>
       </div>
 
       <div className={"tx-console is-" + demo.accent}>
         <nav className="tx-tabs" aria-label="Equation transform examples">
-          {demos.map((item, index) => (
+          {equationTransformDemos.map((item, index) => (
             <button
               key={item.id}
               type="button"
@@ -393,63 +244,100 @@ export function EquationTransformWorkbench() {
               </div>
             </div>
             <div
+              ref={stageRef}
               className="tx-motion-stage"
-              aria-label="Semantic equation fragment motion"
+              aria-label={`Measured equation transition at ${Math.round((frame?.easedProgress ?? 0) * 100)} percent`}
             >
-              <span className="tx-guide tx-guide-source">FIRST</span>
-              <span className="tx-guide tx-guide-target">LAST</span>
-              {demo.motion.matched.map((item) => {
-                const state = frames.get(item.target.nodeId)!;
-                return (
+              <span className="tx-motion-caption">RENDERED TERM GEOMETRY</span>
+              <div className="tx-measure-row" aria-hidden="true">
+                {demo.sourceFragments.map((fragment) => (
                   <span
+                    key={fragment.nodeId}
+                    ref={(element) => {
+                      if (element)
+                        sourceRefs.current.set(fragment.nodeId, element);
+                      else sourceRefs.current.delete(fragment.nodeId);
+                    }}
+                    className={fragmentClass(fragment)}
+                    dangerouslySetInnerHTML={{ __html: fragment.markup }}
+                  />
+                ))}
+              </div>
+              <div className="tx-measure-row" aria-hidden="true">
+                {demo.targetFragments.map((fragment) => (
+                  <span
+                    key={fragment.nodeId}
+                    ref={(element) => {
+                      if (element)
+                        targetRefs.current.set(fragment.nodeId, element);
+                      else targetRefs.current.delete(fragment.nodeId);
+                    }}
+                    className={fragmentClass(fragment)}
+                    dangerouslySetInnerHTML={{ __html: fragment.markup }}
+                  />
+                ))}
+              </div>
+              {motion?.matched.map((item) => {
+                const state = frames.get(item.target.nodeId);
+                const fragment = targetById.get(item.target.nodeId);
+                if (!state || !fragment) return null;
+                return (
+                  <MotionFragment
                     key={item.target.nodeId}
-                    className="tx-token is-matched"
-                    title={item.correspondence.method}
+                    fragment={fragment}
+                    className="is-matched"
                     style={{
                       left: item.target.x,
                       top: item.target.y,
+                      width: item.target.width,
+                      height: item.target.height,
                       opacity: state.opacity,
                       transform: `translate(${state.translateX}px, ${state.translateY}px) scale(${state.scaleX}, ${state.scaleY})`,
                     }}
-                  >
-                    {demo.targetLabels.get(item.target.nodeId)}
-                  </span>
+                  />
                 );
               })}
-              {demo.motion.exits.map((item) => {
-                const state = frames.get(item.nodeId)!;
+              {motion?.exits.map((item) => {
+                const state = frames.get(item.nodeId);
+                const fragment = sourceById.get(item.nodeId);
+                if (!state || !fragment) return null;
                 return (
-                  <span
+                  <MotionFragment
                     key={item.nodeId}
-                    className="tx-token is-exit"
+                    fragment={fragment}
+                    className="is-exit"
                     style={{
                       left: item.x,
                       top: item.y,
+                      width: item.width,
+                      height: item.height,
                       opacity: state.opacity,
-                      transform: `scale(${state.scaleX})`,
+                      transform: `scale(${state.scaleX}, ${state.scaleY})`,
                     }}
-                  >
-                    {demo.sourceLabels.get(item.nodeId)}
-                  </span>
+                  />
                 );
               })}
-              {demo.motion.entries.map((item) => {
-                const state = frames.get(item.nodeId)!;
+              {motion?.entries.map((item) => {
+                const state = frames.get(item.nodeId);
+                const fragment = targetById.get(item.nodeId);
+                if (!state || !fragment) return null;
                 return (
-                  <span
+                  <MotionFragment
                     key={item.nodeId}
-                    className="tx-token is-entry"
+                    fragment={fragment}
+                    className="is-entry"
                     style={{
                       left: item.x,
                       top: item.y,
+                      width: item.width,
+                      height: item.height,
                       opacity: state.opacity,
-                      transform: `scale(${state.scaleX})`,
+                      transform: `scale(${state.scaleX}, ${state.scaleY})`,
                     }}
-                  >
-                    {demo.targetLabels.get(item.nodeId)}
-                  </span>
+                  />
                 );
               })}
+              {!motion && <span className="tx-layout-status">MEASURING…</span>}
             </div>
             <div className="tx-controls">
               <button
@@ -464,7 +352,7 @@ export function EquationTransformWorkbench() {
               <button
                 type="button"
                 onClick={() => setPlaying((value) => !value)}
-                disabled={reducedMotion}
+                disabled={reducedMotion || !motion}
               >
                 {playing ? "Ⅱ PAUSE" : "▶ PLAY"}
               </button>
@@ -476,6 +364,7 @@ export function EquationTransformWorkbench() {
                   max="1"
                   step="0.001"
                   value={progress}
+                  disabled={!motion}
                   onChange={(event) => {
                     setPlaying(false);
                     setProgress(Number(event.currentTarget.value));
@@ -519,8 +408,9 @@ export function EquationTransformWorkbench() {
             <div className="tx-integrity">
               <span>INTEGRITY BOUNDARY</span>
               <p>
-                Motion reads semantic IDs and layout boxes. It never edits the
-                equation document, advances a clock or writes physics state.
+                Motion reads semantic IDs and measured renderer boxes. It never
+                edits the equation document, advances a clock or writes physics
+                state.
               </p>
             </div>
           </aside>

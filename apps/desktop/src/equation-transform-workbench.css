@@ -185,7 +185,7 @@
 }
 .tx-motion-stage {
   position: relative;
-  height: 224px;
+  height: 196px;
   margin-top: 16px;
   overflow: hidden;
   background:
@@ -194,7 +194,7 @@
   border: 1px solid #293941;
 }
 .tx-motion-stage::after {
-  content: "FLIP: FIRST → INVERT → PLAY → LAST";
+  content: "MEASURE → MATCH → INVERT → PLAY";
   position: absolute;
   right: 14px;
   bottom: 10px;
@@ -205,9 +205,10 @@
     monospace;
   letter-spacing: 0.1em;
 }
-.tx-guide {
+.tx-motion-caption {
   position: absolute;
   left: 13px;
+  top: 11px;
   color: #44545b;
   font:
     8px "Cascadia Mono",
@@ -215,41 +216,59 @@
     monospace;
   letter-spacing: 0.12em;
 }
-.tx-guide-source {
-  top: 73px;
+.tx-measure-row {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: baseline;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  white-space: nowrap;
+  font-size: 34px;
+  pointer-events: none;
 }
-.tx-guide-target {
-  top: 157px;
+.tx-fragment {
+  display: inline-block;
+  line-height: 1;
+}
+.tx-fragment.has-binary-spacing {
+  margin-inline: 0.22em;
+}
+.tx-fragment.has-relation-spacing {
+  margin-inline: 0.28em;
 }
 .tx-token {
   position: absolute;
-  width: 46px;
-  height: 48px;
-  display: grid;
-  place-items: center;
+  display: block;
   transform-origin: top left;
   color: #eef5f5;
-  background: #101d22;
-  border: 1px solid #34515a;
-  border-radius: 4px;
-  font:
-    italic 26px Georgia,
-    serif;
+  font-size: 34px;
+  line-height: 1;
   will-change: transform, opacity;
 }
 .tx-token.is-matched {
-  border-color: color-mix(in srgb, var(--tx-accent) 65%, #34515a);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--tx-accent) 12%, transparent);
+  filter: drop-shadow(
+    0 0 10px color-mix(in srgb, var(--tx-accent) 22%, transparent)
+  );
 }
 .tx-token.is-exit {
   color: #f3a99d;
-  border-color: #6a3d36;
-  background: #1a1313;
 }
 .tx-token.is-entry {
   color: #9fe7ba;
-  border-color: #376c53;
-  background: #10201a;
+}
+.tx-layout-status {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #6f8087;
+  font:
+    9px "Cascadia Mono",
+    Consolas,
+    monospace;
+  letter-spacing: 0.12em;
 }
 .tx-controls {
   display: grid;
