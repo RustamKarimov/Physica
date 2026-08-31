@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 3 Step 14 Camera animation complete — HC-01 in progress
+**Current development phase:** Phase 3 complete — HC-01 passed
 
-**Current task:** Run and publish scheduled HC-01 Animation Preview
+**Current task:** Hand off the verified Phase 3 Animation Preview baseline
 
-**Next task:** After HC-01 passes, specify Phase 4 Step 4.1 Math editor and semantic equation tree
+**Next task:** Specify Phase 4 Step 4.1 Math editor and semantic equation tree
 
 **Blockers:** None
 
@@ -20,7 +20,28 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 passed after repairs and is recorded in `docs/health-checkpoints/HC_00_RETROSPECTIVE_BASELINE.md`. HC-01 is scheduled after Phase 3 Step 3.4, with early-trigger conditions remaining active.
+**Project health governance:** docs/PROJECT_HEALTH_CHECKPOINTS.md is active. HC-00 and HC-01 passed after repairs and are recorded under docs/health-checkpoints/. HC-02 is scheduled after Phase 4 Step 4.4, with early-trigger conditions remaining active.
+
+## HC-01 result
+
+Scheduled HC-01 passed after four in-scope corrections. See docs/health-checkpoints/HC_01_ANIMATION_PREVIEW.md for the completed-step evidence matrix, exact findings, architecture/scientific/teacher/accessibility review and bounded debt.
+
+Corrections made:
+
+- rejected negative Camera-animation start times with a typed timing error and regression assertion;
+- added a cross-renderer integration test proving one resolved animated Camera projects the same world point through SVG, Pixi and Three while physical coordinates remain unchanged;
+- split the new 544-line Camera renderer module into a 383-line resolver and 190-line contract/validation module without changing public exports;
+- added reliable image semantics to the labeled desktop Camera preview.
+
+Audit results:
+
+- all 28 examples satisfy the currently achievable gallery contract and have matching root pending entries;
+- 59 workspace application/package nodes have zero dependency cycles;
+- 38 empty package shells remain intentional future nodes from the frozen package map;
+- no stale desktop showcase reference, manifest mismatch, new third-party dependency, debt marker, reopened step or Architecture Blocker was found;
+- frozen offline install, formatting, ESLint, architecture boundaries, strict TypeScript across 87 of 88 workspace projects, 52 unit/example files with 225 tests, 1 architecture file with 2 tests, all three app builds and launcher check passed.
+
+Phase 3 is complete. The exact next task is Phase 4 Step 4.1 Math editor and semantic equation tree.
 
 ## Step 14 result
 
@@ -47,9 +68,9 @@ Verification:
 - complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 87 of 88 workspace projects, 52 unit/example files with 224 tests, 1 architecture file with 2 tests and all three application builds passed;
 - clean frozen-lockfile install passed across all 88 workspace projects;
 - Launch Physica.bat --check passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
-- the inherited non-failing combined Pixi/Three desktop chunk warning remains approximately 1.095 MB / 300 KB gzip and enters HC-01 as previously bounded debt.
+- the inherited non-failing combined Pixi/Three desktop chunk warning remains approximately 1.095 MB / 300 KB gzip and remains bounded to HC-04.
 
-Self-review found no Architecture Blocker. Roadmap progression is paused at the scheduled HC-01 boundary.
+Self-review found no Architecture Blocker. Step 14 proceeded to the scheduled HC-01 audit, which passed above.
 
 ## Step 13 result
 
@@ -76,7 +97,7 @@ Verification:
 - the inherited non-failing combined Pixi/Three desktop chunk warning remains approximately 1.094 MB / 300 KB gzip and is still governed by HC-04 debt;
 - attempted in-app browser visual inspection could not start because the browser-control runtime exited before page discovery; the local Vite server, strict desktop typecheck, production build and launcher check passed, and the checked-in accessible SVG preview remains the deterministic visual fixture.
 
-Self-review found no Architecture Blocker or Project Health early trigger. HC-01 remains scheduled after Step 14 camera animation.
+Self-review found no Architecture Blocker or Project Health early trigger. At the Step 13 boundary, HC-01 remained scheduled; it passed after Step 14 as recorded above.
 
 ## Step 12 result
 
@@ -608,22 +629,19 @@ Resolved during bootstrap:
 - physics/domain packages do not import React or editor internals;
 - every future user-visible feature requires its complete Example Gallery artifact set.
 
-## Step 14 read first
+## Phase 4 Step 4.1 read first
 
-- `AGENTS.md`
-- `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`
-- `docs/PROJECT_HEALTH_CHECKPOINTS.md`
-- `docs/PROJECT_CONSTITUTION.md`
-- `docs/ROADMAP.md`
-- `docs/ANIMATION_ENGINE.md`
-- `docs/STORYBOARD.md`
-- `docs/RENDERER_ARCHITECTURE.md`
-- `docs/implementation/STEP_11_ANIMATION_SCHEDULER_SPEC.md`
-- `docs/implementation/STEP_12_DRAW_WRITE_REVEAL_HIGHLIGHT_SPEC.md`
-- `docs/implementation/STEP_13_MORPH_MATCHED_TRANSFORM_SPEC.md`
-- `docs/CLOCKS_AND_TIME.md`
-- `docs/EXAMPLE_SYSTEM.md`
-- `docs/PACKAGE_DEPENDENCIES.md`
-- approved ADRs in `docs/DECISIONS.md`
+- AGENTS.md
+- docs/AUTONOMOUS_EXECUTION_PROTOCOL.md
+- docs/PROJECT_HEALTH_CHECKPOINTS.md
+- docs/PROJECT_CONSTITUTION.md
+- docs/ROADMAP.md
+- docs/EQUATION_ENGINE.md
+- docs/MATHEMATICS_AND_UNITS.md
+- docs/TEXT_CONTENT.md
+- docs/TYPOGRAPHY_AND_I18N.md
+- docs/STORYBOARD.md
+- docs/PACKAGE_DEPENDENCIES.md
+- approved ADRs in docs/DECISIONS.md
 
-Stop only if Step 14 reaches an Architecture Blocker. After Step 14, run scheduled HC-01 before entering Phase 4.
+Begin with a Step 4.1 implementation specification. Stop only if Math editor and semantic equation tree work reaches an Architecture Blocker; do not implement equation transforms or graphing early.

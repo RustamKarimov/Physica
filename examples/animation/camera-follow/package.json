@@ -9,6 +9,9 @@
   "dependencies": {
     "@physica/core-model": "workspace:*",
     "@physica/renderer-core": "workspace:*",
+    "@physica/renderer-pixi": "workspace:*",
+    "@physica/renderer-svg": "workspace:*",
+    "@physica/renderer-three": "workspace:*",
     "@physica/storyboard": "workspace:*"
   },
   "devDependencies": {

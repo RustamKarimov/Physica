@@ -81,14 +81,25 @@ export function validateCameraAnimationDefinition(
       ),
     };
   if (
+    !Number.isFinite(definition.startTimeSeconds) ||
+    definition.startTimeSeconds < 0 ||
+    !Number.isFinite(definition.durationSeconds) ||
+    definition.durationSeconds < 0 ||
+    !Number.isSafeInteger(definition.priority)
+  )
+    return {
+      ok: false,
+      error: cameraAnimationError(
+        "invalid-time",
+        "invalid-camera-animation-timing",
+        "Camera animation start, duration and priority must be valid non-negative timing values.",
+      ),
+    };
+  if (
     typeof definition.id !== "string" ||
     definition.id.length === 0 ||
     typeof definition.name !== "string" ||
     definition.name.trim().length === 0 ||
-    !Number.isFinite(definition.startTimeSeconds) ||
-    !Number.isFinite(definition.durationSeconds) ||
-    definition.durationSeconds < 0 ||
-    !Number.isSafeInteger(definition.priority) ||
     typeof definition.reversible !== "boolean" ||
     typeof definition.scrubbable !== "boolean" ||
     !isJsonValue(definition)
@@ -96,10 +107,7 @@ export function validateCameraAnimationDefinition(
     return {
       ok: false,
       error: cameraAnimationError(
-        Number.isFinite(definition.durationSeconds) &&
-          definition.durationSeconds >= 0
-          ? "invalid-definition"
-          : "invalid-time",
+        "invalid-definition",
         "invalid-camera-animation-definition",
         "Camera animation identity, timing, flags and metadata must be finite and JSON-safe.",
       ),

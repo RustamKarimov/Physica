@@ -203,6 +203,15 @@ importers:
       '@physica/renderer-core':
         specifier: workspace:*
         version: link:../../../packages/renderer-core
+      '@physica/renderer-pixi':
+        specifier: workspace:*
+        version: link:../../../packages/renderer-pixi
+      '@physica/renderer-svg':
+        specifier: workspace:*
+        version: link:../../../packages/renderer-svg
+      '@physica/renderer-three':
+        specifier: workspace:*
+        version: link:../../../packages/renderer-three
       '@physica/storyboard':
         specifier: workspace:*
         version: link:../../../packages/storyboard

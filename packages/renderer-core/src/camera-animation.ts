@@ -8,71 +8,31 @@ import {
   type Vec3,
 } from "@physica/mathematics";
 import { createCameraService } from "./camera";
+import {
+  copyCameraVec3 as copyVec3,
+  finiteCameraVec3 as finiteVec3,
+  invalidCameraAnimation as invalid,
+  validateCameraPresentationOperation,
+  type CameraBounds3,
+  type CameraSubjectSnapshot,
+  type EvaluatedCameraOperation,
+} from "./camera-animation-contract";
 import type { RenderResult } from "./errors";
 import type { CameraDefinition } from "./types";
 
 const EPSILON = 1e-12;
 
-export type CameraAnimationChannel = "pose" | "projection";
-
-export interface CameraBounds3 {
-  readonly minimum: Vec3;
-  readonly maximum: Vec3;
-}
-
-export interface CameraSubjectSnapshot {
-  readonly representationId: RepresentationId;
-  readonly position: Vec3;
-  readonly bounds?: CameraBounds3;
-}
-
-export type CameraPresentationOperation =
-  | {
-      readonly kind: "pan";
-      readonly startOffset: Vec3;
-      readonly endOffset: Vec3;
-    }
-  | {
-      readonly kind: "zoom";
-      readonly startZoom: number;
-      readonly endZoom: number;
-    }
-  | {
-      readonly kind: "fit-object";
-      readonly representationId: RepresentationId;
-      readonly padding: number;
-    }
-  | {
-      readonly kind: "follow-target";
-      readonly representationId: RepresentationId;
-      readonly cameraOffset: Vec3;
-      readonly lookAtOffset: Vec3;
-    }
-  | {
-      readonly kind: "powers-of-ten-zoom";
-      readonly startExponent: number;
-      readonly endExponent: number;
-    };
-
-export interface EvaluatedCameraOperation {
-  readonly sourceId: string;
-  readonly operation: CameraPresentationOperation;
-  readonly progress: number;
-}
-
-function finiteVec3(value: unknown): value is Vec3 {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<Vec3>;
-  return (
-    Number.isFinite(candidate.x) &&
-    Number.isFinite(candidate.y) &&
-    Number.isFinite(candidate.z)
-  );
-}
-
-function copyVec3(value: Vec3): Vec3 {
-  return vec3(value.x, value.y, value.z);
-}
+export {
+  cameraOperationChannels,
+  validateCameraPresentationOperation,
+} from "./camera-animation-contract";
+export type {
+  CameraAnimationChannel,
+  CameraBounds3,
+  CameraPresentationOperation,
+  CameraSubjectSnapshot,
+  EvaluatedCameraOperation,
+} from "./camera-animation-contract";
 
 function interpolateVec3(start: Vec3, end: Vec3, progress: number): Vec3 {
   return addVec3(start, scaleVec3(subtractVec3(end, start), progress));
@@ -80,128 +40,6 @@ function interpolateVec3(start: Vec3, end: Vec3, progress: number): Vec3 {
 
 function interpolate(start: number, end: number, progress: number): number {
   return start + (end - start) * progress;
-}
-
-function invalid(message: string): RenderResult<never> {
-  return {
-    ok: false,
-    error: { kind: "invalid-camera-animation", message },
-  };
-}
-
-export function cameraOperationChannels(
-  operation: CameraPresentationOperation,
-): readonly CameraAnimationChannel[] {
-  switch (operation.kind) {
-    case "pan":
-    case "follow-target":
-      return Object.freeze(["pose"]);
-    case "zoom":
-    case "powers-of-ten-zoom":
-      return Object.freeze(["projection"]);
-    case "fit-object":
-      return Object.freeze(["pose", "projection"]);
-  }
-}
-
-export function validateCameraPresentationOperation(
-  operation: unknown,
-): RenderResult<CameraPresentationOperation> {
-  if (!operation || typeof operation !== "object")
-    return invalid("Camera operation must be an object.");
-  const candidate = operation as Record<string, unknown>;
-  switch (candidate.kind) {
-    case "pan":
-      if (
-        !finiteVec3(candidate.startOffset) ||
-        !finiteVec3(candidate.endOffset)
-      )
-        return invalid("Pan offsets must be finite Vec3 values.");
-      return {
-        ok: true,
-        value: Object.freeze({
-          kind: "pan",
-          startOffset: copyVec3(candidate.startOffset),
-          endOffset: copyVec3(candidate.endOffset),
-        }),
-      };
-    case "zoom":
-      if (
-        !Number.isFinite(candidate.startZoom) ||
-        !Number.isFinite(candidate.endZoom) ||
-        (candidate.startZoom as number) <= 0 ||
-        (candidate.endZoom as number) <= 0
-      )
-        return invalid("Zoom factors must be finite and positive.");
-      return {
-        ok: true,
-        value: Object.freeze({
-          kind: "zoom",
-          startZoom: candidate.startZoom as number,
-          endZoom: candidate.endZoom as number,
-        }),
-      };
-    case "fit-object":
-      if (
-        typeof candidate.representationId !== "string" ||
-        candidate.representationId.length === 0 ||
-        !Number.isFinite(candidate.padding) ||
-        (candidate.padding as number) < 0 ||
-        (candidate.padding as number) > 10
-      )
-        return invalid(
-          "Fit-object requires a Representation ID and padding in [0, 10].",
-        );
-      return {
-        ok: true,
-        value: Object.freeze({
-          kind: "fit-object",
-          representationId: candidate.representationId as RepresentationId,
-          padding: candidate.padding as number,
-        }),
-      };
-    case "follow-target":
-      if (
-        typeof candidate.representationId !== "string" ||
-        candidate.representationId.length === 0 ||
-        !finiteVec3(candidate.cameraOffset) ||
-        !finiteVec3(candidate.lookAtOffset)
-      )
-        return invalid(
-          "Follow-target requires a Representation ID and finite offsets.",
-        );
-      return {
-        ok: true,
-        value: Object.freeze({
-          kind: "follow-target",
-          representationId: candidate.representationId as RepresentationId,
-          cameraOffset: copyVec3(candidate.cameraOffset),
-          lookAtOffset: copyVec3(candidate.lookAtOffset),
-        }),
-      };
-    case "powers-of-ten-zoom":
-      if (
-        !Number.isFinite(candidate.startExponent) ||
-        !Number.isFinite(candidate.endExponent) ||
-        (candidate.startExponent as number) < -12 ||
-        (candidate.startExponent as number) > 12 ||
-        (candidate.endExponent as number) < -12 ||
-        (candidate.endExponent as number) > 12
-      )
-        return invalid(
-          "Powers-of-ten exponents must be finite and in [-12, 12].",
-        );
-      return {
-        ok: true,
-        value: Object.freeze({
-          kind: "powers-of-ten-zoom",
-          startExponent: candidate.startExponent as number,
-          endExponent: candidate.endExponent as number,
-        }),
-      };
-    default:
-      return invalid("Camera operation kind is unknown.");
-  }
 }
 
 function validateSubject(

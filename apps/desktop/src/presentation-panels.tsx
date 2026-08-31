@@ -12,6 +12,7 @@ export function CameraShowcase({
   return (
     <div
       className="camera-showcase"
+      role="img"
       aria-label={
         "Shared Camera follows the projectile at " +
         Math.round(state.followProgress * 100) +

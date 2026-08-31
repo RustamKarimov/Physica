@@ -101,6 +101,13 @@ describe("Camera-animation definitions and scheduling", () => {
     expect(
       createCameraAnimationEnvelope(
         fixture({
+          startTimeSeconds: -0.01,
+        }),
+      ),
+    ).toMatchObject({ ok: false, error: { kind: "invalid-time" } });
+    expect(
+      createCameraAnimationEnvelope(
+        fixture({
           clockKey: "simulation" as "presentation",
         }),
       ),
