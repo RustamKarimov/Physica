@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 5 complete — relationship, control and storyboard integration verified
+**Current development phase:** Phase 6 complete — Physics Runtime Preview and HC-03 verified
 
-**Current task:** Phase 5 complete; awaiting Phase 6 phase-level execution
+**Current task:** Phase 6 and scheduled HC-03 complete; awaiting Phase 7 phase-level execution
 
-**Next task:** Execute Phase 6 — Physics runtime and solver adapters as one phase-level assignment. Begin with an audited Step 6.1 Universal Model Runtime specification, continue through Steps 6.2–6.10, then run scheduled HC-03 before Phase 7.
+**Next task:** Execute Phase 7 — Teacher editor completion as one phase-level assignment. Implement Steps 7.1–7.5, then run scheduled HC-04 before Phase 8 Mechanics curriculum work.
 
 **Blockers:** None
 
@@ -20,7 +20,21 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00, HC-01 and HC-02 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-03 is scheduled after Phase 6 Step 6.10, with early-trigger conditions remaining active.
+**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-03 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-04 is scheduled after Phase 7 Step 7.5, with early-trigger conditions remaining active.
+
+## Phase 6 and HC-03 result
+
+Completed and audited `docs/implementation/PHASE_6_PHYSICS_RUNTIME_SOLVERS_SPEC.md`, all roadmap Steps 6.1–6.10 and the scheduled Physics Runtime Preview checkpoint. The implementation baseline is commit `838b731`; the checkpoint report is `docs/health-checkpoints/HC_03_PHYSICS_RUNTIME.md`.
+
+Delivered the universal model lifecycle; analytical/algebraic services; ordered compute boundary; Euler, Verlet, RK4 and adaptive RK45; semantic rigid/Rapier bridge; particles; scalar/complex grids; rays; DC/transient circuits; seeded stochastic work; and projection/reconstruction. Every adapter publishes its determinism, precision, worker and checkpoint policy.
+
+Eleven complete Phase 6 Gallery projects ship executable exact output, metadata, README, accessible SVG, automated tests, local pending declarations and root-ledger entries. The launcher now begins with a solver observatory that states the physical question, result and contract and explicitly distinguishes these proofs from final lessons.
+
+HC-03 corrected compute failure ordering, particle diagnostic snapshots, solver descriptor completeness and root Gallery ledger drift. No completed step was reopened and no Architecture Blocker exists.
+
+Verification passed: clean frozen install across 114 workspaces; repository formatting; ESLint and architecture boundaries; strict TypeScript across 113 scripted workspaces; 89 unit/example/scientific files with 347 tests; 1 architecture file with 2 tests; all three application builds; and `Launch Physica.bat --check` with Tauri 2.11.4 and Cargo 1.94.1.
+
+The desktop bundle is approximately 4.991 MB / 1.386 MB gzip. Stable-shell/backend lazy loading remains due at HC-04. The next assignment is all of Phase 7, ending with HC-04; do not implement Phase 8 mechanics content early.
 
 ## Phase 5 result
 

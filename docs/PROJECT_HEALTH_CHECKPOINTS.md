@@ -4,7 +4,7 @@
 
 **Applies from:** Step 12 onward, with the first audit looking back across all completed work
 
-**Completed:** HC-00, HC-01 and HC-02 passed after repairs; see the reports under `docs/health-checkpoints/`. Next scheduled checkpoint: HC-03 after Phase 6 Step 6.10.
+**Completed:** HC-00 through HC-03 passed after repairs; see the reports under `docs/health-checkpoints/`. Next scheduled checkpoint: HC-04 after Phase 7 Step 7.5.
 
 ## 1. Purpose
 
