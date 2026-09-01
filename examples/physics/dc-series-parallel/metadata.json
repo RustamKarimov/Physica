@@ -1,0 +1,13 @@
+{
+  "id": "dc-series-parallel",
+  "title": "DC series-parallel circuit",
+  "category": "physics-runtime",
+  "description": "Solves node voltages and branch currents for a deterministic DC network.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "dc-series-parallel",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

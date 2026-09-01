@@ -1,0 +1,6 @@
+{
+  "modelId": "example:constant-speed",
+  "position": 6,
+  "event": "example:reached-two-seconds",
+  "resetPosition": 0
+}

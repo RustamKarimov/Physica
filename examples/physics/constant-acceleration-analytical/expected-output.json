@@ -1,0 +1,7 @@
+{
+  "model": "constant-acceleration",
+  "timeSeconds": 2,
+  "position": 5,
+  "velocity": 0,
+  "acceleration": -2
+}

@@ -9,6 +9,9 @@
   "files": [
     "src"
   ],
+  "dependencies": {
+    "@physica/physics-core": "workspace:*"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

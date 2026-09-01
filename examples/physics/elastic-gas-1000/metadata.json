@@ -1,0 +1,13 @@
+{
+  "id": "elastic-gas-1000",
+  "title": "Elastic gas with 1000 particles",
+  "category": "physics-runtime",
+  "description": "Exercises data-oriented particle storage and spatial hashing for a thousand-particle ensemble.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "elastic-gas-1000",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "wave-equation-string-grid",
+  "title": "Wave equation string grid",
+  "category": "physics-runtime",
+  "description": "Advances a fixed-boundary scalar grid within the Courant stability limit.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "wave-equation-string-grid",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

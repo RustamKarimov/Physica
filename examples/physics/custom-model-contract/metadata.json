@@ -1,0 +1,13 @@
+{
+  "id": "custom-model-contract",
+  "title": "Universal custom model lifecycle",
+  "category": "physics-runtime",
+  "description": "Initializes, advances, observes, emits an event, and resets through the universal model contract.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "custom-model-contract",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

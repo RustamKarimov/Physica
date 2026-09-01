@@ -1,0 +1,13 @@
+{
+  "nodeVoltages": {
+    "ground": 0,
+    "junction": 6,
+    "supply": 12
+  },
+  "resistorCurrents": {
+    "branch-a": 0.03,
+    "branch-b": 0.03,
+    "series": 0.06
+  },
+  "kirchhoffResidual": 0
+}

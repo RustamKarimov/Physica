@@ -1,0 +1,13 @@
+{
+  "id": "algebraic-root-service",
+  "title": "Algebraic root and linear solve",
+  "category": "physics-runtime",
+  "description": "Uses deterministic bracketed root finding and pivoted elimination with diagnostics.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "algebraic-root-service",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

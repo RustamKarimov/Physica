@@ -1,0 +1,10 @@
+{
+  "reason": "Shared .physica runtime and capture are not implemented yet.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Shared example runtime and gallery capture complete"
+}

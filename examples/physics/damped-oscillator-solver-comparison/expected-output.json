@@ -1,0 +1,8 @@
+{
+  "timeSeconds": 1,
+  "euler": 0.564785,
+  "verlet": 0.568967,
+  "rk4": 0.568972,
+  "rk45": 0.568972,
+  "adaptiveAcceptedSteps": 8
+}

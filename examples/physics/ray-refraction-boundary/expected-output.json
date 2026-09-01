@@ -1,0 +1,10 @@
+{
+  "interactions": 1,
+  "interaction": "refracted",
+  "hit": {
+    "x": 0.57735,
+    "y": 0
+  },
+  "incidentAngleDegrees": 30,
+  "refractedAngleDegrees": 19.471221
+}

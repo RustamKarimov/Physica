@@ -1,0 +1,13 @@
+{
+  "id": "ray-refraction-boundary",
+  "title": "Ray refraction boundary",
+  "category": "physics-runtime",
+  "description": "Computes one Snell-law refraction path at an air-to-glass boundary.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "ray-refraction-boundary",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

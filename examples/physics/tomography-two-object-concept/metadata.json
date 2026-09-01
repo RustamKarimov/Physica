@@ -1,0 +1,13 @@
+{
+  "id": "tomography-two-object-concept",
+  "title": "Tomography two-object concept",
+  "category": "physics-runtime",
+  "description": "Forward-projects two absorbers and performs a simple back-projection.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "tomography-two-object-concept",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

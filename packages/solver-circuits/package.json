@@ -9,6 +9,10 @@
   "files": [
     "src"
   ],
+  "dependencies": {
+    "@physica/physics-core": "workspace:*",
+    "@physica/solver-algebraic": "workspace:*"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

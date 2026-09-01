@@ -1,0 +1,13 @@
+{
+  "id": "constant-acceleration-analytical",
+  "title": "Constant acceleration analytical evaluator",
+  "category": "physics-runtime",
+  "description": "Evaluates exact one-dimensional constant-acceleration state at a selected time.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "constant-acceleration-analytical",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

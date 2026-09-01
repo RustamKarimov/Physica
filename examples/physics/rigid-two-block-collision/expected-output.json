@@ -1,0 +1,9 @@
+{
+  "timeSeconds": 0.2,
+  "velocities": {
+    "left": -1,
+    "right": 1
+  },
+  "contacts": 1,
+  "totalMomentum": 0
+}

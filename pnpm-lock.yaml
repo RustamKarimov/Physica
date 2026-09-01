@@ -134,6 +134,30 @@ importers:
       '@physica/renderer-three':
         specifier: workspace:*
         version: link:../../packages/renderer-three
+      '@physica/solver-algebraic':
+        specifier: workspace:*
+        version: link:../../packages/solver-algebraic
+      '@physica/solver-analytical':
+        specifier: workspace:*
+        version: link:../../packages/solver-analytical
+      '@physica/solver-circuits':
+        specifier: workspace:*
+        version: link:../../packages/solver-circuits
+      '@physica/solver-grid':
+        specifier: workspace:*
+        version: link:../../packages/solver-grid
+      '@physica/solver-ode':
+        specifier: workspace:*
+        version: link:../../packages/solver-ode
+      '@physica/solver-rays':
+        specifier: workspace:*
+        version: link:../../packages/solver-rays
+      '@physica/solver-reconstruction':
+        specifier: workspace:*
+        version: link:../../packages/solver-reconstruction
+      '@physica/solver-stochastic':
+        specifier: workspace:*
+        version: link:../../packages/solver-stochastic
       '@physica/storyboard':
         specifier: workspace:*
         version: link:../../packages/storyboard
@@ -569,6 +593,116 @@ importers:
       '@physica/mathematics':
         specifier: workspace:*
         version: link:../../../packages/mathematics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/algebraic-root-service:
+    dependencies:
+      '@physica/solver-algebraic':
+        specifier: workspace:*
+        version: link:../../../packages/solver-algebraic
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/constant-acceleration-analytical:
+    dependencies:
+      '@physica/solver-analytical':
+        specifier: workspace:*
+        version: link:../../../packages/solver-analytical
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/custom-model-contract:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../../../packages/physics-core
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/damped-oscillator-solver-comparison:
+    dependencies:
+      '@physica/solver-ode':
+        specifier: workspace:*
+        version: link:../../../packages/solver-ode
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/dc-series-parallel:
+    dependencies:
+      '@physica/solver-circuits':
+        specifier: workspace:*
+        version: link:../../../packages/solver-circuits
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/elastic-gas-1000:
+    dependencies:
+      '@physica/solver-particles':
+        specifier: workspace:*
+        version: link:../../../packages/solver-particles
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/random-decay-events:
+    dependencies:
+      '@physica/solver-stochastic':
+        specifier: workspace:*
+        version: link:../../../packages/solver-stochastic
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/ray-refraction-boundary:
+    dependencies:
+      '@physica/solver-rays':
+        specifier: workspace:*
+        version: link:../../../packages/solver-rays
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/rigid-two-block-collision:
+    dependencies:
+      '@physica/solver-rigid':
+        specifier: workspace:*
+        version: link:../../../packages/solver-rigid
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/tomography-two-object-concept:
+    dependencies:
+      '@physica/solver-reconstruction':
+        specifier: workspace:*
+        version: link:../../../packages/solver-reconstruction
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/physics/wave-equation-string-grid:
+    dependencies:
+      '@physica/solver-grid':
+        specifier: workspace:*
+        version: link:../../../packages/solver-grid
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1283,60 +1417,103 @@ importers:
         version: 6.0.3
 
   packages/solver-algebraic:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-analytical:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-circuits:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
+      '@physica/solver-algebraic':
+        specifier: workspace:*
+        version: link:../solver-algebraic
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-grid:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-ode:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-particles:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-rays:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-reconstruction:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-rigid:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
   packages/solver-stochastic:
+    dependencies:
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
     devDependencies:
       typescript:
         specifier: 'catalog:'

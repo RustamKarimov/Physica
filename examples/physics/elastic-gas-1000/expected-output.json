@@ -1,0 +1,7 @@
+{
+  "particleCount": 1000,
+  "kineticEnergyBefore": 250,
+  "kineticEnergyAfter": 250,
+  "meanSquaredSpeed": 0.5,
+  "collisions": 0
+}

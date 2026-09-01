@@ -1,0 +1,13 @@
+{
+  "id": "rigid-two-block-collision",
+  "title": "Rigid two-block collision",
+  "category": "physics-runtime",
+  "description": "Maps semantic bodies through the rigid adapter and captures an elastic contact snapshot.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "rigid-two-block-collision",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "random-decay-events",
+  "title": "Seeded random decay events",
+  "category": "physics-runtime",
+  "description": "Schedules reproducible exponential decay events and reports a Monte Carlo reference summary.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "random-decay-events",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

@@ -474,6 +474,127 @@
         "example.spec.ts"
       ],
       "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "custom-model-contract",
+      "path": "examples/physics/custom-model-contract",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "constant-acceleration-analytical",
+      "path": "examples/physics/constant-acceleration-analytical",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "algebraic-root-service",
+      "path": "examples/physics/algebraic-root-service",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "damped-oscillator-solver-comparison",
+      "path": "examples/physics/damped-oscillator-solver-comparison",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "rigid-two-block-collision",
+      "path": "examples/physics/rigid-two-block-collision",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "elastic-gas-1000",
+      "path": "examples/physics/elastic-gas-1000",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "wave-equation-string-grid",
+      "path": "examples/physics/wave-equation-string-grid",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "ray-refraction-boundary",
+      "path": "examples/physics/ray-refraction-boundary",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "dc-series-parallel",
+      "path": "examples/physics/dc-series-parallel",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "random-decay-events",
+      "path": "examples/physics/random-decay-events",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "tomography-two-object-concept",
+      "path": "examples/physics/tomography-two-object-concept",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
     }
   ]
 }

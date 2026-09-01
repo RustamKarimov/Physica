@@ -1,0 +1,13 @@
+{
+  "id": "damped-oscillator-solver-comparison",
+  "title": "Damped oscillator solver comparison",
+  "category": "physics-runtime",
+  "description": "Compares fixed-step and adaptive ODE adapters on one damped oscillator.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "damped-oscillator-solver-comparison",
+    "deterministic-reference-case",
+    "phase-6-solver-contract"
+  ]
+}

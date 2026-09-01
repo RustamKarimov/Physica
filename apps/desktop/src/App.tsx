@@ -20,6 +20,7 @@ import { GraphAnalysisWorkbench } from "./GraphAnalysisWorkbench";
 import { GraphWorkbench } from "./GraphWorkbench";
 import { LibraryBrowser } from "./LibraryBrowser";
 import { Phase5Workbench } from "./Phase5Workbench";
+import { Phase6Workbench } from "./Phase6Workbench";
 import {
   DEMO_HEIGHT,
   DEMO_WIDTH,
@@ -223,7 +224,7 @@ export function App() {
       <header className="topbar">
         <a
           className="brand"
-          href="#phase-5-workbench"
+          href="#phase-6-workbench"
           aria-label="Physica home"
         >
           <span className="brand-mark" aria-hidden="true">
@@ -233,13 +234,14 @@ export function App() {
         </a>
         <div className="step-label">
           <span>FOUNDATION TRACK</span>
-          <strong>PHASE 5 / RELATIONSHIPS · CONTROLS · STORYBOARD</strong>
+          <strong>PHASE 6 / PHYSICS RUNTIME · SOLVER ADAPTERS</strong>
         </div>
         <div className="engine-state">
-          <i /> phase 5 contracts active
+          <i /> phase 6 contracts active
         </div>
       </header>
 
+      <Phase6Workbench />
       <Phase5Workbench />
       <GraphAnalysisWorkbench />
       <GraphWorkbench />

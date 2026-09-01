@@ -1,0 +1,126 @@
+.phase6-workbench {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 58px 0 28px;
+}
+.phase6-heading {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 54px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+.phase6-heading span,
+.phase6-result span,
+.phase6-authority b {
+  color: var(--cyan);
+  font:
+    10px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.14em;
+}
+.phase6-heading h1 {
+  margin: 12px 0 0;
+  font-size: clamp(38px, 4.4vw, 62px);
+}
+.phase6-heading p,
+.phase6-result p {
+  color: #929ca1;
+  line-height: 1.65;
+}
+.phase6-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  border: 1px solid #354047;
+  background: #090d10;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+}
+.phase6-grid nav {
+  display: grid;
+  align-content: start;
+  padding: 12px;
+  border-right: 1px solid var(--line);
+  max-height: 590px;
+  overflow: auto;
+}
+.phase6-grid nav button {
+  text-align: left;
+  padding: 14px;
+  border: 0;
+  border-bottom: 1px solid #29343a;
+  background: transparent;
+  color: #dce5e9;
+  cursor: pointer;
+}
+.phase6-grid nav button.active {
+  background: #14282e;
+  box-shadow: inset 3px 0 var(--cyan);
+}
+.phase6-grid nav b,
+.phase6-grid nav small {
+  display: block;
+}
+.phase6-grid nav small {
+  margin-top: 5px;
+  color: #7f9099;
+  line-height: 1.35;
+}
+.phase6-stage {
+  min-height: 540px;
+  padding: 28px;
+  background: radial-gradient(circle at 55% 50%, #172a32, #0b1115 68%);
+}
+.phase6-result {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 28px;
+}
+.phase6-result strong {
+  color: var(--amber);
+  font:
+    24px "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+.phase6-result p {
+  grid-column: 1/-1;
+  margin: 0;
+}
+.phase6-stage svg {
+  width: 100%;
+  height: 330px;
+}
+.phase6-stage polyline {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 5;
+}
+.phase6-stage circle {
+  fill: var(--amber);
+}
+.phase6-axis {
+  fill: none;
+  stroke: #40515a;
+  stroke-width: 2;
+}
+.phase6-authority {
+  display: flex;
+  gap: 18px;
+  padding: 14px;
+  border: 1px solid #344148;
+  background: #10171b;
+  color: #aebcc3;
+  font-size: 12px;
+}
+@media (max-width: 850px) {
+  .phase6-heading,
+  .phase6-grid {
+    grid-template-columns: 1fr;
+  }
+  .phase6-grid nav {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    max-height: 260px;
+  }
+}
