@@ -1,0 +1,16 @@
+{
+  "id": "tangent-follower",
+  "follower": { "kind": "vec2", "x": 1, "y": 1.25, "unit": "m" },
+  "tangent": {
+    "kind": "vec2",
+    "x": 0.4472135954999579,
+    "y": 0.8944271909999159
+  },
+  "normal": {
+    "kind": "vec2",
+    "x": -0.8944271909999159,
+    "y": 0.4472135954999579
+  },
+  "recomputedCount": 3,
+  "authority": "derived-only"
+}

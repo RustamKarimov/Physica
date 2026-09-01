@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+  <title id="title">Physical and layout drag comparison</title>
+  <desc id="desc">Physical body movement and label layout movement travel on different authority routes.</desc>
+  <rect width="800" height="440" rx="28" fill="#0b1324"/>
+  <text x="50" y="55" fill="#e8f0ff" font-family="sans-serif" font-size="27">Similar gestures · different authorities</text>
+  <rect x="55" y="90" width="315" height="270" rx="22" fill="#14243a"/><circle cx="170" cy="220" r="43" fill="#38d6c8"/><path d="M170 220 L280 145" stroke="#f8cf70" stroke-width="7"/><path d="M280 145 l-27 4 l13 22 z" fill="#f8cf70"/><text x="82" y="330" fill="#c6d4e5" font-family="sans-serif" font-size="19">physical → live input</text>
+  <rect x="430" y="90" width="315" height="270" rx="22" fill="#14243a"/><circle cx="530" cy="225" r="43" fill="#3b5571"/><rect x="565" y="130" width="135" height="46" rx="12" fill="#ff7a9b"/><path d="M620 180 L655 240" stroke="#f8cf70" stroke-width="5"/><text x="462" y="330" fill="#c6d4e5" font-family="sans-serif" font-size="19">label → layout property</text>
+</svg>

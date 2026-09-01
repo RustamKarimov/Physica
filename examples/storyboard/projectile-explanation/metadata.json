@@ -1,0 +1,15 @@
+{
+  "id": "projectile-explanation",
+  "title": "Projectile explanation storyboard",
+  "category": "storyboard",
+  "description": "A teacher sequence coordinates simulation directives, vector explanation, an apex condition and a learner pause.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "simulation-command",
+    "presentation-action",
+    "condition",
+    "interaction-pause",
+    "teacher-note"
+  ]
+}

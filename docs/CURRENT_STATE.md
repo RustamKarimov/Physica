@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 4 complete — HC-02 passed after corrections
+**Current development phase:** Phase 5 complete — relationship, control and storyboard integration verified
 
-**Current task:** Specify Phase 5 Step 5.1 Dependency Relationship Engine
+**Current task:** Phase 5 phase-level checkpoint, publication and handoff
 
-**Next task:** Implement only Phase 5 Step 5.1 attach, follow, bind, offset, tangent, normal and derived-property relationships after specification review, including `examples/relationships/tangent-follower`
+**Next task:** Execute Phase 6 — Physics runtime and solver adapters as one phase-level assignment. Begin with an audited Step 6.1 Universal Model Runtime specification, continue through Steps 6.2–6.10, then run scheduled HC-03 before Phase 7.
 
 **Blockers:** None
 
@@ -21,6 +21,68 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00, HC-01 and HC-02 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-03 is scheduled after Phase 6 Step 6.10, with early-trigger conditions remaining active.
+
+## Phase 5 result
+
+Completed and audited all four Phase 5 implementation specifications:
+
+- docs/implementation/STEP_19_DEPENDENCY_RELATIONSHIPS_SPEC.md;
+- docs/implementation/STEP_20_PHYSICS_AWARE_VECTORS_SPEC.md;
+- docs/implementation/STEP_21_INTERACTIVE_CONTROLS_SPEC.md;
+- docs/implementation/STEP_22_STORYBOARD_SPEC.md.
+
+The four roadmap steps were implemented and verified as one integrated phase-level assignment, without an ADR, root ProjectDocument schema-version change, new workspace package, third-party dependency, solver, competing clock/scheduler, editor/domain inversion or authoritative physics writer.
+
+Implemented in @physica/relationships:
+
+- immutable generic V1 dependency relationship envelopes for bind, offset, attach, follow, tangent, normal and closed derived operators;
+- deterministic validated DAG compilation with missing-reference, duplicate-ID, cycle and authoritative-physical-target rejection;
+- piecewise-linear tangent/normal evaluation, scalar/vector arithmetic, unit-identity checks, dirty-branch recomputation and a transient RelationshipStateStore;
+- Runtime Scheduler integration only at the frozen relationships phase, with read-only external observables and no Runtime State Store or project-document writes;
+- a physics-aware vector representation that reads mathematical origin/vector relationship outputs, preserves physical magnitude independently of visual scale, handles zero vectors honestly and returns renderer-neutral world geometry.
+
+Implemented in @physica/controls:
+
+- immutable V1 definitions and metadata for slider, number/unit field, toggle, button, vector handle, physical drag, layout drag and measurement probe;
+- central-unit-registry conversion, finite value validation, range clamp/snap, accessible labels and deterministic keyboard behavior metadata;
+- explicit action routes for document commands, initial-state commands, live-runtime input, presentation and layout owners;
+- a transient queued ControlInputStore applied only at the scheduler document/control phase;
+- enforced separation of physical drag and layout drag, read-only probes and revalidation on both envelope and direct interaction entry paths.
+
+Implemented in @physica/storyboard:
+
+- immutable V1 teacher lesson steps with presentation actions, simulation commands, notes, camera cues, flow triggers, manual waits, presentation-duration waits, typed conditions and interaction pauses;
+- declared-order schedule compilation, transient entry-once directive history, manual/condition/interaction progression and stable completion;
+- priority-then-stable-ID resolution through the existing project PresentationFlow;
+- Runtime Scheduler integration only at the frozen storyboard phase. Storyboard emits directives to owning systems and never writes physics state or advances a clock, so presentation actions may coexist honestly with a paused simulation.
+
+Physics Library and user-visible completion:
+
+- the built-in Vector Arrow is now a representation item with vec2/vec3 observable compatibility, the physics-vector type ID and a recommended vector-handle control;
+- examples/relationships/tangent-follower and velocity-vector;
+- examples/controls/live-parameter-binding and physical-vs-layout-drag;
+- examples/storyboard/projectile-explanation and multi-scene-presentation;
+- all six examples contain metadata, README, executable exact output, expected JSON, accessible expected SVG preview, automated tests and truthful pending .physica/PNG/WebM/shared-runtime obligations; the aggregate ledger now reconciles all 43 examples;
+- the one-click launcher now opens at “Phase 5 / Relationships · Controls · Storyboard” with a real piecewise relationship follower/tangent, observable-driven velocity vector, owner-routed sliders and an interactive teacher Storyboard. It explicitly labels the curve/projectile data as foundation fixtures rather than final mechanics or final artwork, and every earlier graph/equation/camera/library proof remains below it.
+
+Verification:
+
+- hardened Phase 5 targeted gate — 9 files and 29 tests passed;
+- complete repository CI — formatting, ESLint, architecture boundaries, strict TypeScript across 102 of 103 workspace projects, 77 unit/example files with 311 tests, 1 architecture file with 2 tests and all three application builds passed;
+- clean frozen install passed across all 103 workspace projects;
+- Launch Physica.bat --check passed with Tauri CLI 2.11.4, Cargo 1.94.1 and the desktop production build;
+- the in-app browser runtime exited in its host before page creation on two retries. This is not counted as visual evidence; the local Vite server, checked-in accessible previews, exact example tests, desktop build and launcher check passed, and Launch Physica.bat remains the observation path;
+- the inherited desktop bundle warning is approximately 4.974 MB / 1.380 MB gzip and remains owned by the desktop stable-shell lazy-loading work no later than HC-04.
+
+Phase-level maintainability and integration review:
+
+- workspace graph: 103 projects, architecture boundary checks passed and no cycle or package inversion was introduced;
+- no TODO/FIXME/HACK suppression, domain-to-React import, duplicate scheduler/clock/state authority or stale Phase 5 placeholder was found;
+- the largest new behavior-bearing file is the 415-line desktop Phase 5 workbench; relationship, control and lesson logic is split by definitions, operations, scheduling/runtime and types;
+- packages/assets/src/builtins.ts is 515 lines after adding vector metadata. It is predominantly declarative registry data, remained safely reviewable in this phase and does not trigger an unscheduled checkpoint. @physica/assets owns extraction before another substantial Library pack or at HC-03, whichever comes first;
+- existing desktop styles.css/App.tsx and bundle concentration remain previously governed debt with the HC-04 stable-shell boundary.
+
+No completed step was reopened, no Project Health early trigger requires an unscheduled checkpoint and no Architecture Blocker exists. Phase 5 is complete. The next phase-level assignment is all of Phase 6, beginning with Step 6.1 and ending with Step 6.10 plus scheduled HC-03; do not implement Phase 7 editor completion early.
 
 ## HC-02 and Step 18 result
 

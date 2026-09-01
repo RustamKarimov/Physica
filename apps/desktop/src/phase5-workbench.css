@@ -1,0 +1,173 @@
+.phase5-workbench {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 58px 0 44px;
+}
+
+.phase5-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  gap: 54px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+
+.phase5-heading span,
+.phase5-card > span,
+.phase5-authority b {
+  color: var(--cyan);
+  font:
+    10px "Cascadia Mono",
+    "Consolas",
+    monospace;
+  letter-spacing: 0.14em;
+}
+
+.phase5-heading h1 {
+  max-width: 760px;
+  margin-top: 12px;
+  font-size: clamp(38px, 4.4vw, 62px);
+}
+
+.phase5-heading p {
+  margin: 0;
+  color: #929ca1;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.phase5-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  border: 1px solid #354047;
+  background: #090d10;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+}
+
+.phase5-stage {
+  min-height: 480px;
+  padding: 26px;
+  border-right: 1px solid var(--line);
+  background: radial-gradient(circle at 52% 43%, #17252b, #0b1115 67%);
+}
+
+.phase5-stage svg {
+  width: 100%;
+  height: 100%;
+}
+
+.phase5-stage text {
+  fill: #9dabb4;
+  font:
+    13px "Cascadia Mono",
+    "Consolas",
+    monospace;
+}
+
+.phase5-axis {
+  fill: none;
+  stroke: #314047;
+  stroke-width: 2;
+}
+
+.phase5-curve {
+  fill: none;
+  stroke: #607581;
+  stroke-width: 4;
+}
+
+.phase5-follower {
+  fill: var(--amber);
+  filter: drop-shadow(0 0 8px rgba(246, 199, 67, 0.6));
+}
+
+.phase5-tangent {
+  stroke: #f25f77;
+  stroke-width: 5;
+}
+
+.phase5-vector {
+  stroke: var(--cyan);
+  stroke-width: 7;
+  filter: drop-shadow(0 0 7px rgba(45, 194, 203, 0.45));
+}
+
+.phase5-controls {
+  padding: 22px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.phase5-card,
+.phase5-authority {
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #10171b;
+}
+
+.phase5-card label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 18px;
+  color: #cbd4d8;
+  font-size: 13px;
+}
+
+.phase5-card output {
+  color: var(--amber);
+  font-family: "Cascadia Mono", "Consolas", monospace;
+}
+
+.phase5-card input {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--cyan);
+}
+
+.phase5-card p {
+  margin: 16px 0 0;
+  color: #7f8b90;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.phase5-story strong {
+  display: block;
+  margin-top: 14px;
+  color: #e5ecef;
+}
+
+.phase5-story button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid rgba(45, 194, 203, 0.55);
+  background: rgba(45, 194, 203, 0.1);
+  color: #8be5e9;
+  cursor: pointer;
+}
+
+.phase5-story button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.phase5-authority {
+  display: grid;
+  gap: 9px;
+  color: #9eaaaf;
+  font-size: 11px;
+}
+
+@media (max-width: 1000px) {
+  .phase5-heading,
+  .phase5-grid {
+    grid-template-columns: 1fr;
+  }
+  .phase5-stage {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}

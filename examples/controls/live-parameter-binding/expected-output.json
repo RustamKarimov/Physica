@@ -1,0 +1,9 @@
+{
+  "id": "live-parameter-binding",
+  "gravity": { "kind": "scalar", "value": 9.5, "unit": "m/s^2" },
+  "documentValue": { "kind": "scalar", "value": 2.5, "unit": "m" },
+  "documentRoute": "document-command",
+  "presentationValue": { "kind": "boolean", "value": true },
+  "presentationRoute": "presentation",
+  "projectMutation": false
+}

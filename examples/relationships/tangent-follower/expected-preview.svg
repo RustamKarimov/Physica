@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+  <title id="title">Tangent follower relationship preview</title>
+  <desc id="desc">A curved path with a follower point, derived tangent arrow and perpendicular normal arrow.</desc>
+  <rect width="800" height="440" rx="28" fill="#0b1324"/>
+  <path d="M90 360 C230 340 300 285 385 210 S600 90 710 70" fill="none" stroke="#45617f" stroke-width="5"/>
+  <circle cx="385" cy="210" r="14" fill="#f8cf70"/>
+  <path d="M385 210 L500 105" stroke="#38d6c8" stroke-width="7"/><path d="M500 105 l-13 28 l-18-20 z" fill="#38d6c8"/>
+  <path d="M385 210 L280 95" stroke="#ff7a9b" stroke-width="6"/><path d="M280 95 l28 12 l-20 19 z" fill="#ff7a9b"/>
+  <text x="48" y="52" fill="#e8f0ff" font-family="sans-serif" font-size="25">derived tangent · derived normal · follower + offset</text>
+</svg>

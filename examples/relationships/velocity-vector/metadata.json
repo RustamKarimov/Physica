@@ -1,0 +1,13 @@
+{
+  "id": "velocity-vector",
+  "title": "Velocity vector from an observable",
+  "category": "relationships",
+  "description": "A representation reads a mathematical velocity vector while world scaling remains visual-only.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "physics-aware-vector",
+    "observable-binding",
+    "world-scale-separation"
+  ]
+}

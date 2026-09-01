@@ -1,0 +1,14 @@
+{
+  "id": "physical-vs-layout-drag",
+  "title": "Physical drag versus layout drag",
+  "category": "controls",
+  "description": "Two visually similar drag gestures produce explicitly different physical-input and layout actions.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "physical-drag",
+    "layout-drag",
+    "authority-separation",
+    "keyboard-equivalence"
+  ]
+}

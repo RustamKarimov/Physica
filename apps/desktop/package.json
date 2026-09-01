@@ -12,11 +12,13 @@
   "dependencies": {
     "@physica/assets": "workspace:*",
     "@physica/core-model": "workspace:*",
+    "@physica/controls": "workspace:*",
     "@physica/data": "workspace:*",
     "@physica/equations": "workspace:*",
     "@physica/graphs": "workspace:*",
     "@physica/mathematics": "workspace:*",
     "@physica/picking": "workspace:*",
+    "@physica/relationships": "workspace:*",
     "@physica/renderer-core": "workspace:*",
     "@physica/renderer-pixi": "workspace:*",
     "@physica/renderer-svg": "workspace:*",

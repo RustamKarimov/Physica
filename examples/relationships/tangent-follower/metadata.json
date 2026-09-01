@@ -1,0 +1,9 @@
+{
+  "id": "tangent-follower",
+  "title": "Follower with tangent and normal",
+  "category": "relationships",
+  "description": "A follower, tangent and normal are deterministic derived outputs of one piecewise-linear curve.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["follow", "offset", "tangent", "normal", "derived-authority"]
+}

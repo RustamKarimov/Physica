@@ -1,0 +1,9 @@
+{
+  "id": "multi-scene-presentation",
+  "sceneCount": 3,
+  "matchingTransitionCount": 2,
+  "selectedPriority": 10,
+  "selectedChallengeScene": true,
+  "directives": ["flow", "note"],
+  "status": "waiting"
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+  <title id="title">Live parameter control preview</title>
+  <desc id="desc">A gravity slider, unit-aware length input and motion trail toggle with explicit ownership labels.</desc>
+  <rect width="800" height="440" rx="28" fill="#0b1324"/>
+  <text x="50" y="55" fill="#e8f0ff" font-family="sans-serif" font-size="27">Control routing · no direct project mutation</text>
+  <rect x="55" y="95" width="690" height="82" rx="16" fill="#14243a"/><text x="80" y="130" fill="#b8c8db" font-family="sans-serif" font-size="20">Gravity · live runtime input</text><path d="M82 153 H690" stroke="#516a86" stroke-width="8"/><circle cx="385" cy="153" r="14" fill="#38d6c8"/><text x="565" y="132" fill="#38d6c8" font-family="sans-serif" font-size="20">9.5 m/s²</text>
+  <rect x="55" y="198" width="330" height="95" rx="16" fill="#14243a"/><text x="80" y="235" fill="#b8c8db" font-family="sans-serif" font-size="19">Length · document command</text><text x="80" y="270" fill="#f8cf70" font-family="sans-serif" font-size="25">250 cm → 2.5 m</text>
+  <rect x="410" y="198" width="335" height="95" rx="16" fill="#14243a"/><text x="435" y="235" fill="#b8c8db" font-family="sans-serif" font-size="19">Trail · presentation only</text><rect x="435" y="253" width="58" height="28" rx="14" fill="#38d6c8"/><circle cx="479" cy="267" r="11" fill="#f7fbff"/>
+</svg>

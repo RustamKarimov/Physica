@@ -1,0 +1,14 @@
+{
+  "id": "physical-vs-layout-drag",
+  "physical": {
+    "route": "live-runtime-input",
+    "target": "body.position",
+    "value": { "kind": "vec2", "x": 2, "y": 3 }
+  },
+  "layout": {
+    "route": "layout",
+    "target": "label.position",
+    "value": { "kind": "vec2", "x": 24, "y": -12 }
+  },
+  "sameAuthority": false
+}

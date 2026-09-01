@@ -7,6 +7,7 @@ import {
 import {
   createPhysicsLibraryRegistries,
   type InstrumentDefinition,
+  type CompatibleTargetDefinition,
   type LibraryAnchorDefinition,
   type LibraryItemClass,
   type LibraryItemDefinition,
@@ -41,6 +42,8 @@ interface ObjectDescriptor {
   readonly anchors?: readonly LibraryAnchorDefinition[];
   readonly ports?: readonly LibraryPortDefinition[];
   readonly dimensionality?: "2D" | "3D" | "BOTH";
+  readonly compatibleTargets?: readonly CompatibleTargetDefinition[];
+  readonly recommendedControlIds?: readonly RegisteredTypeId[];
 }
 
 function localAnchor(
@@ -158,9 +161,9 @@ function itemFor(
     editableProperties: [],
     anchors: descriptor.anchors ?? [],
     ports: descriptor.ports ?? [],
-    compatibleTargets: [],
+    compatibleTargets: descriptor.compatibleTargets ?? [],
     recommendedRepresentationIds: [],
-    recommendedControlIds: [],
+    recommendedControlIds: descriptor.recommendedControlIds ?? [],
     assumptions: [],
     visualVariants: [],
     dimensionality: descriptor.dimensionality ?? "BOTH",
@@ -322,10 +325,22 @@ const FOUNDATION_OBJECTS: readonly ObjectDescriptor[] = [
   {
     slug: "vector-arrow",
     displayName: "Vector Arrow",
-    description: "A visual arrow for vector quantity annotations.",
-    itemClass: "visual-object",
-    tags: ["representation", "vector", "annotation"],
-    componentType: "physica:component/visual-object",
+    description:
+      "A physics-aware representation that reads a mathematical vector observable.",
+    itemClass: "representation",
+    tags: ["representation", "vector", "observable", "physics-aware"],
+    componentType: "physica:component/representation-panel",
+    defaultParameters: {
+      representationTypeId: "physica:representation/physics-vector-v1",
+      worldScale: 1,
+    },
+    compatibleTargets: [
+      { kind: "observable-kind", valueKind: "vec2" },
+      { kind: "observable-kind", valueKind: "vec3" },
+    ],
+    recommendedControlIds: [
+      registeredTypeId("physica:control-kind/vector-handle"),
+    ],
   },
   {
     slug: "coordinate-axes",

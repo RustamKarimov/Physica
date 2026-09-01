@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+  <title id="title">Velocity vector observable preview</title>
+  <desc id="desc">A velocity arrow with components 3 and 4 metres per second and magnitude 5 metres per second.</desc>
+  <rect width="800" height="440" rx="28" fill="#0b1324"/>
+  <path d="M120 340 H710 M120 340 V55" stroke="#314762" stroke-width="3"/>
+  <path d="M180 315 L570 95" stroke="#38d6c8" stroke-width="10"/><path d="M570 95 l-43 5 l20 35 z" fill="#38d6c8"/>
+  <path d="M180 315 H570 V95" fill="none" stroke="#7f95ae" stroke-dasharray="10 10" stroke-width="3"/>
+  <text x="45" y="50" fill="#e8f0ff" font-family="sans-serif" font-size="26">v = (3, 4) m/s · |v| = 5 m/s</text>
+</svg>

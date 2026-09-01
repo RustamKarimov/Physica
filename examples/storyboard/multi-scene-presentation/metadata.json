@@ -1,0 +1,14 @@
+{
+  "id": "multi-scene-presentation",
+  "title": "Multi-scene presentation flow",
+  "category": "storyboard",
+  "description": "A lesson flow directive selects a scene transition by explicit priority and stable identity.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "presentation-flow",
+    "choice-trigger",
+    "priority-resolution",
+    "teacher-note"
+  ]
+}

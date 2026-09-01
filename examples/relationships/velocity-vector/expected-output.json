@@ -1,0 +1,10 @@
+{
+  "id": "velocity-vector",
+  "tail": { "x": 2, "y": 1 },
+  "head": { "x": 3.5, "y": 3 },
+  "vector": { "x": 3, "y": 4 },
+  "magnitude": 5,
+  "direction": { "x": 0.6, "y": 0.8 },
+  "unit": "m/s",
+  "representationTypeId": "physica:representation/physics-vector-v1"
+}

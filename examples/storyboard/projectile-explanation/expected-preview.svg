@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+  <title id="title">Projectile lesson storyboard preview</title>
+  <desc id="desc">Three teacher steps pause and explain velocity, observe an apex fixture observable, then wait for learner interaction.</desc>
+  <rect width="800" height="440" rx="28" fill="#0b1324"/>
+  <text x="48" y="52" fill="#e8f0ff" font-family="sans-serif" font-size="27">Projectile explanation · orchestration contract</text>
+  <path d="M80 335 Q350 35 690 335" fill="none" stroke="#45617f" stroke-width="4" stroke-dasharray="10 8"/>
+  <circle cx="350" cy="180" r="15" fill="#f8cf70"/><path d="M350 180 L470 90" stroke="#38d6c8" stroke-width="7"/><path d="M470 90 l-30 6 l16 24 z" fill="#38d6c8"/>
+  <g font-family="sans-serif" font-size="17"><rect x="55" y="360" width="205" height="48" rx="12" fill="#203752"/><text x="72" y="390" fill="#dce8f6">1 Pause + explain</text><rect x="285" y="360" width="205" height="48" rx="12" fill="#203752"/><text x="302" y="390" fill="#dce8f6">2 Apex condition</text><rect x="515" y="360" width="230" height="48" rx="12" fill="#203752"/><text x="532" y="390" fill="#dce8f6">3 Learner pause</text></g>
+  <text x="500" y="130" fill="#9fb3c9" font-family="sans-serif" font-size="16">fixture observable · Phase 6 solver pending</text>
+</svg>

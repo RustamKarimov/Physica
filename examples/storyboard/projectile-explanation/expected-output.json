@@ -1,0 +1,13 @@
+{
+  "id": "projectile-explanation",
+  "observableSource": "deterministic-fixture-not-phase-6-solver",
+  "entry": {
+    "index": 0,
+    "status": "waiting",
+    "directives": ["simulation:pause", "presentation", "note"]
+  },
+  "afterManualIndex": 1,
+  "apexIndex": 2,
+  "question": { "status": "waiting", "directives": ["note"] },
+  "completed": { "index": 3, "status": "complete", "directiveCount": 5 }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "live-parameter-binding",
+  "title": "Live parameter binding",
+  "category": "controls",
+  "description": "Slider, unit field and toggle values are normalized and routed to live, document and presentation owners.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "slider",
+    "number-unit",
+    "toggle",
+    "unit-conversion",
+    "owner-routing"
+  ]
+}

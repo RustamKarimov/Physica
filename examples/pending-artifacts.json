@@ -408,6 +408,72 @@
         "example.spec.ts"
       ],
       "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "tangent-follower",
+      "path": "examples/relationships/tangent-follower",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "velocity-vector",
+      "path": "examples/relationships/velocity-vector",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "live-parameter-binding",
+      "path": "examples/controls/live-parameter-binding",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "physical-vs-layout-drag",
+      "path": "examples/controls/physical-vs-layout-drag",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "projectile-explanation",
+      "path": "examples/storyboard/projectile-explanation",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "multi-scene-presentation",
+      "path": "examples/storyboard/multi-scene-presentation",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Shared example runtime and gallery capture complete"
     }
   ]
 }

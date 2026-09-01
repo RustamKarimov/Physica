@@ -1,0 +1,16 @@
+{
+  "name": "@physica-example/projectile-explanation",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@physica/core-model": "workspace:*",
+    "@physica/storyboard": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

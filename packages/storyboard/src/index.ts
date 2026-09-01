@@ -24,3 +24,8 @@ export * from "./reveal-evaluator";
 export * from "./reveal-runtime";
 export * from "./reveal-schedule";
 export * from "./reveal-types";
+export * from "./lesson-definitions";
+export * from "./lesson-flow";
+export * from "./lesson-runtime";
+export * from "./lesson-schedule";
+export * from "./lesson-types";
