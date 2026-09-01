@@ -8,7 +8,7 @@
 
 **Current development phase:** Phase 5 complete — relationship, control and storyboard integration verified
 
-**Current task:** Phase 5 phase-level checkpoint, publication and handoff
+**Current task:** Phase 5 complete; awaiting Phase 6 phase-level execution
 
 **Next task:** Execute Phase 6 — Physics runtime and solver adapters as one phase-level assignment. Begin with an audited Step 6.1 Universal Model Runtime specification, continue through Steps 6.2–6.10, then run scheduled HC-03 before Phase 7.
 
