@@ -1,0 +1,10 @@
+{
+  "id": "projectile",
+  "title": "Projectile motion",
+  "category": "mechanics",
+  "topic": 2,
+  "description": "What does projectile motion reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["trajectory", "component vectors"]
+}

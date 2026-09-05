@@ -1,0 +1,10 @@
+{
+  "id": "inelastic-collision",
+  "title": "Inelastic collision",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does inelastic collision reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["collision track", "energy change"]
+}

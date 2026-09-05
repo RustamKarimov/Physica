@@ -1,0 +1,10 @@
+{
+  "id": "moments-balance",
+  "title": "Moments balance",
+  "category": "mechanics",
+  "topic": 4,
+  "description": "What does moments balance reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["beam and pivot", "moment arrows"]
+}

@@ -19,9 +19,10 @@ import {
   type SceneId,
 } from "@physica/core-model";
 import type { AdvancedTimelineV1 } from "@physica/storyboard";
+import { registerMechanicsPhysicsLibrary } from "@physica/physics-mechanics";
 
 export interface ProjectTemplate {
-  readonly id: "blank" | "motion" | "equation";
+  readonly id: string;
   readonly title: string;
   readonly description: string;
   readonly question: string;
@@ -61,6 +62,62 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
     ],
     seed: 730_000,
   },
+  {
+    id: "projectile",
+    title: "Projectile lesson",
+    description: "Launcher, projectile, trajectory and linked motion graph.",
+    question: "How do horizontal and vertical motion combine?",
+    itemIds: ["physica:library/projectile-launcher-setup"],
+    seed: 740_000,
+  },
+  {
+    id: "incline",
+    title: "Inclined-plane FBD",
+    description: "A block, plane and resolved force representations.",
+    question: "Which forces determine motion down the plane?",
+    itemIds: ["physica:library/inclined-plane-block"],
+    seed: 750_000,
+  },
+  {
+    id: "pulley",
+    title: "Pulley investigation",
+    description: "Two masses, one string and a shared constraint.",
+    question: "How do the two masses set acceleration and tension?",
+    itemIds: ["physica:library/atwood-machine"],
+    seed: 760_000,
+  },
+  {
+    id: "collision",
+    title: "Collision analysis",
+    description: "Track, two trolleys and before/after momentum views.",
+    question: "What is conserved through the collision?",
+    itemIds: ["physica:library/collision-track"],
+    seed: 770_000,
+  },
+  {
+    id: "energy",
+    title: "Energy transfer",
+    description: "Input, useful output, stores and dissipation.",
+    question: "Where does every joule go?",
+    itemIds: ["physica:library/efficiency-energy-flow-setup"],
+    seed: 780_000,
+  },
+  {
+    id: "stress",
+    title: "Stress–strain explanation",
+    description: "Specimen, probes, graph and elastic-limit marker.",
+    question: "How does a material cross from elastic to plastic behavior?",
+    itemIds: ["physica:library/stress-strain-demonstration"],
+    seed: 790_000,
+  },
+  {
+    id: "circular",
+    title: "Uniform circular motion",
+    description: "Ball, orbit, radius and physical vector followers.",
+    question: "Why is acceleration inward while velocity is tangent?",
+    itemIds: ["physica:library/ball-on-string-circular-motion"],
+    seed: 800_000,
+  },
 ];
 
 export interface EditorSession {
@@ -71,13 +128,16 @@ export interface EditorSession {
 }
 
 export const physicsLibrary = createBuiltInPhysicsLibrary();
+registerMechanicsPhysicsLibrary(physicsLibrary.registries);
+const mechanicsReferences = physicsLibrary.validateReferences();
+if (!mechanicsReferences.ok) throw new Error(mechanicsReferences.error.message);
 
 export function createEditorSession(template: ProjectTemplate): EditorSession {
   const ids = new DeterministicIdFactory(template.seed);
   const document = createEmptyProject(ids, {
     title: template.title,
     description: template.question,
-    tags: ["teacher-authored", "phase-7"],
+    tags: ["teacher-authored", "phase-8", "mechanics-alpha"],
     createdAt: new Date().toISOString(),
   });
   const store = new DefaultProjectStore(

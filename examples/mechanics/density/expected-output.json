@@ -1,0 +1,12 @@
+{
+  "id": "density",
+  "topic": 4,
+  "title": "Density",
+  "question": "What does density reveal?",
+  "result": {
+    "densityKilogramsPerCubicMetre": 7800
+  },
+  "equations": ["ρ = m/V"],
+  "assumptions": ["Uniform sample"],
+  "representations": ["density body", "measurement apparatus"]
+}

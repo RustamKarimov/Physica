@@ -1,0 +1,13 @@
+{
+  "id": "elastic-energy",
+  "topic": 6,
+  "title": "Elastic energy",
+  "question": "What does elastic energy reveal?",
+  "result": {
+    "forceNewtons": 20,
+    "storedEnergyJoules": 0.4
+  },
+  "equations": ["E = area under F–x = ½Fx"],
+  "assumptions": ["Linear loading path"],
+  "representations": ["force–extension graph", "area shading"]
+}

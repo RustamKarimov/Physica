@@ -1,0 +1,10 @@
+{
+  "id": "centre-of-mass-stability",
+  "title": "Centre of mass and stability",
+  "category": "mechanics",
+  "topic": 4,
+  "description": "What does centre of mass and stability reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["COM marker", "support base"]
+}

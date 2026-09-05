@@ -1,0 +1,25 @@
+{
+  "id": "velocity-acceleration-followers",
+  "topic": 12,
+  "title": "Tangent and radial followers",
+  "question": "What does tangent and radial followers reveal?",
+  "result": {
+    "positionMetres": {
+      "x": 0,
+      "y": 3
+    },
+    "velocityMetresPerSecond": {
+      "x": -6,
+      "y": 0
+    },
+    "accelerationMetresPerSecondSquared": {
+      "x": 0,
+      "y": -12
+    },
+    "velocityDotRadius": 0,
+    "accelerationCrossRadius": 0
+  },
+  "equations": ["v ⟂ r", "a points toward centre"],
+  "assumptions": ["Uniform circular motion"],
+  "representations": ["velocity tangent", "radial acceleration"]
+}

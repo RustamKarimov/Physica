@@ -1,0 +1,20 @@
+{
+  "id": "elastic-collision",
+  "topic": 3,
+  "title": "Elastic collision",
+  "question": "What does elastic collision reveal?",
+  "result": {
+    "finalVelocityA": 1,
+    "finalVelocityB": 4,
+    "momentumBefore": 6,
+    "momentumAfter": 6,
+    "momentumResidual": 0,
+    "kineticEnergyBefore": 9,
+    "kineticEnergyAfter": 9,
+    "kineticEnergyChange": 0,
+    "restitution": 1
+  },
+  "equations": ["Σp before = Σp after", "e = 1"],
+  "assumptions": ["One-dimensional isolated collision"],
+  "representations": ["collision track", "before/after momentum"]
+}

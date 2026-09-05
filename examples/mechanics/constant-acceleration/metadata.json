@@ -1,0 +1,10 @@
+{
+  "id": "constant-acceleration",
+  "title": "Constant acceleration",
+  "category": "mechanics",
+  "topic": 2,
+  "description": "What does constant acceleration reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["number line", "v–t graph"]
+}

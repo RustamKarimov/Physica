@@ -1,0 +1,29 @@
+{
+  "id": "stress-strain",
+  "topic": 6,
+  "title": "Stress–strain",
+  "question": "What does stress–strain reveal?",
+  "result": [
+    {
+      "strain": 0.001,
+      "stressPascals": 200000000,
+      "region": "elastic",
+      "permanentStrain": 0
+    },
+    {
+      "strain": 0.003,
+      "stressPascals": 410000000,
+      "region": "plastic",
+      "permanentStrain": 0.00095
+    },
+    {
+      "strain": 0.006,
+      "stressPascals": 440000000,
+      "region": "plastic",
+      "permanentStrain": 0.0038
+    }
+  ],
+  "equations": ["σ = Eε in elastic region"],
+  "assumptions": ["Bilinear educational material model"],
+  "representations": ["specimen", "stress–strain graph"]
+}

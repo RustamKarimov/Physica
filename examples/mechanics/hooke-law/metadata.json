@@ -1,0 +1,10 @@
+{
+  "id": "hooke-law",
+  "title": "Hooke's law",
+  "category": "mechanics",
+  "topic": 6,
+  "description": "What does Hooke's law reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["spring rig", "force–extension graph"]
+}

@@ -628,6 +628,336 @@
         "example.spec.ts"
       ],
       "gate": "Shared example runtime and gallery capture complete"
+    },
+    {
+      "id": "units-prefixes",
+      "path": "examples/mechanics/units-prefixes",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "dimensional-analysis",
+      "path": "examples/mechanics/dimensional-analysis",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "vector-components",
+      "path": "examples/mechanics/vector-components",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "uncertainty-repeated-measurements",
+      "path": "examples/mechanics/uncertainty-repeated-measurements",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "constant-velocity",
+      "path": "examples/mechanics/constant-velocity",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "constant-acceleration",
+      "path": "examples/mechanics/constant-acceleration",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "free-fall",
+      "path": "examples/mechanics/free-fall",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "projectile",
+      "path": "examples/mechanics/projectile",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "motion-graphs-linked",
+      "path": "examples/mechanics/motion-graphs-linked",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "forces-fbd",
+      "path": "examples/mechanics/forces-fbd",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "inclined-plane",
+      "path": "examples/mechanics/inclined-plane",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "pulley-system",
+      "path": "examples/mechanics/pulley-system",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "elastic-collision",
+      "path": "examples/mechanics/elastic-collision",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "inelastic-collision",
+      "path": "examples/mechanics/inelastic-collision",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "impulse",
+      "path": "examples/mechanics/impulse",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "moments-balance",
+      "path": "examples/mechanics/moments-balance",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "centre-of-mass-stability",
+      "path": "examples/mechanics/centre-of-mass-stability",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "density",
+      "path": "examples/mechanics/density",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "pressure-depth",
+      "path": "examples/mechanics/pressure-depth",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "energy-conservation",
+      "path": "examples/mechanics/energy-conservation",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "spring-energy",
+      "path": "examples/mechanics/spring-energy",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "work-area",
+      "path": "examples/mechanics/work-area",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "power-efficiency",
+      "path": "examples/mechanics/power-efficiency",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "hooke-law",
+      "path": "examples/mechanics/hooke-law",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "young-modulus",
+      "path": "examples/mechanics/young-modulus",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "stress-strain",
+      "path": "examples/mechanics/stress-strain",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "elastic-energy",
+      "path": "examples/mechanics/elastic-energy",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "uniform-circular-motion",
+      "path": "examples/mechanics/uniform-circular-motion",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "centripetal-force",
+      "path": "examples/mechanics/centripetal-force",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "velocity-acceleration-followers",
+      "path": "examples/mechanics/velocity-acceleration-followers",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "id": "young-modulus",
+  "topic": 6,
+  "title": "Young modulus",
+  "question": "What does young modulus reveal?",
+  "result": {
+    "stressPascals": 100000000,
+    "strain": 0.0005,
+    "youngModulusPascals": 200000000000
+  },
+  "equations": ["E = stress/strain"],
+  "assumptions": ["Uniform wire cross-section", "Linear elastic region"],
+  "representations": ["wire apparatus", "micrometer"]
+}

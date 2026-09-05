@@ -1,0 +1,10 @@
+{
+  "id": "uncertainty-repeated-measurements",
+  "title": "Repeated measurements",
+  "category": "mechanics",
+  "topic": 1,
+  "description": "What does repeated measurements reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["measurement table", "uncertainty interval"]
+}

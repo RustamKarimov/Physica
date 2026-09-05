@@ -1,0 +1,10 @@
+{
+  "id": "constant-velocity",
+  "title": "Constant velocity",
+  "category": "mechanics",
+  "topic": 2,
+  "description": "What does constant velocity reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["moving body", "x–t graph"]
+}

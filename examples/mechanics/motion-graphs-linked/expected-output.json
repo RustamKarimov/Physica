@@ -1,0 +1,43 @@
+{
+  "id": "motion-graphs-linked",
+  "topic": 2,
+  "title": "Linked motion graphs",
+  "question": "What does linked motion graphs reveal?",
+  "result": [
+    {
+      "timeSeconds": 0,
+      "positionMetres": 0,
+      "displacementMetres": 0,
+      "velocityMetresPerSecond": 1,
+      "speedMetresPerSecond": 1,
+      "accelerationMetresPerSecondSquared": 2
+    },
+    {
+      "timeSeconds": 1,
+      "positionMetres": 2,
+      "displacementMetres": 2,
+      "velocityMetresPerSecond": 3,
+      "speedMetresPerSecond": 3,
+      "accelerationMetresPerSecondSquared": 2
+    },
+    {
+      "timeSeconds": 2,
+      "positionMetres": 6,
+      "displacementMetres": 6,
+      "velocityMetresPerSecond": 5,
+      "speedMetresPerSecond": 5,
+      "accelerationMetresPerSecondSquared": 2
+    },
+    {
+      "timeSeconds": 3,
+      "positionMetres": 12,
+      "displacementMetres": 12,
+      "velocityMetresPerSecond": 7,
+      "speedMetresPerSecond": 7,
+      "accelerationMetresPerSecondSquared": 2
+    }
+  ],
+  "equations": ["gradient(x–t) = v", "area(v–t) = displacement"],
+  "assumptions": ["Shared analytical state"],
+  "representations": ["x–t graph", "v–t graph", "a–t graph"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "centripetal-force",
+  "title": "Centripetal force",
+  "category": "mechanics",
+  "topic": 12,
+  "description": "What does centripetal force reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["ball on string", "inward force vector"]
+}

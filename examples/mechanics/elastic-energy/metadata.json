@@ -1,0 +1,10 @@
+{
+  "id": "elastic-energy",
+  "title": "Elastic energy",
+  "category": "mechanics",
+  "topic": 6,
+  "description": "What does elastic energy reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["force–extension graph", "area shading"]
+}

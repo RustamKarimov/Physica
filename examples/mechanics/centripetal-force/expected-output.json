@@ -1,0 +1,13 @@
+{
+  "id": "centripetal-force",
+  "topic": 12,
+  "title": "Centripetal force",
+  "question": "What does centripetal force reveal?",
+  "result": {
+    "accelerationMetresPerSecondSquared": 18,
+    "forceNewtons": 9
+  },
+  "equations": ["a = v²/r", "F = mv²/r"],
+  "assumptions": ["Uniform circular motion"],
+  "representations": ["ball on string", "inward force vector"]
+}

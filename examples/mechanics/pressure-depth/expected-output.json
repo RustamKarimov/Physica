@@ -1,0 +1,12 @@
+{
+  "id": "pressure-depth",
+  "topic": 4,
+  "title": "Pressure with depth",
+  "question": "What does pressure with depth reveal?",
+  "result": {
+    "gaugePressurePascals": 19620
+  },
+  "equations": ["p = ρgh"],
+  "assumptions": ["Static incompressible fluid", "Uniform gravity"],
+  "representations": ["fluid vessel", "pressure arrows", "pressure-depth graph"]
+}

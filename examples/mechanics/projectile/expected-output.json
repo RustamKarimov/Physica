@@ -1,0 +1,29 @@
+{
+  "id": "projectile",
+  "topic": 2,
+  "title": "Projectile motion",
+  "question": "What does projectile motion reveal?",
+  "result": {
+    "timeSeconds": 1,
+    "positionMetres": {
+      "x": 14.142136,
+      "y": 9.237136
+    },
+    "displacementMetres": {
+      "x": 14.142136,
+      "y": 9.237136
+    },
+    "velocityMetresPerSecond": {
+      "x": 14.142136,
+      "y": 4.332136
+    },
+    "accelerationMetresPerSecondSquared": {
+      "x": 0,
+      "y": -9.81
+    },
+    "speedMetresPerSecond": 14.790788
+  },
+  "equations": ["x = u cos θ · t", "y = u sin θ · t − ½gt²"],
+  "assumptions": ["Uniform gravity", "Negligible air resistance"],
+  "representations": ["trajectory", "component vectors"]
+}

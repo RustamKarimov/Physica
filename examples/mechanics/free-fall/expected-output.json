@@ -1,0 +1,17 @@
+{
+  "id": "free-fall",
+  "topic": 2,
+  "title": "Free fall",
+  "question": "What does free fall reveal?",
+  "result": {
+    "timeSeconds": 1,
+    "positionMetres": 15.095,
+    "displacementMetres": -4.905,
+    "velocityMetresPerSecond": -9.81,
+    "speedMetresPerSecond": 9.81,
+    "accelerationMetresPerSecondSquared": -9.81
+  },
+  "equations": ["y = y₀ − ½gt²"],
+  "assumptions": ["Uniform gravity", "Negligible air resistance"],
+  "representations": ["free-fall tower", "velocity vector"]
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Centripetal force</title>
+  <desc id="description">What does centripetal force reveal? The preview is a deterministic accessible Mechanics Alpha summary.</desc>
+  <rect width="960" height="540" fill="#09171b"/>
+  <rect x="52" y="48" width="856" height="444" rx="22" fill="#10252b" stroke="#387068" stroke-width="2"/>
+  <text x="90" y="105" fill="#73cabb" font-family="system-ui" font-size="18" letter-spacing="2">CAMBRIDGE 9702 · TOPIC 12</text>
+  <text x="90" y="160" fill="#f1f6f4" font-family="Georgia" font-size="38">Centripetal force</text>
+  <text x="90" y="210" fill="#acc2c3" font-family="system-ui" font-size="18">What does centripetal force reveal?</text>
+  <line x1="90" y1="245" x2="870" y2="245" stroke="#29464d"/>
+  <text x="90" y="292" fill="#f2cb7b" font-family="Georgia" font-size="24">a = v²/r · F = mv²/r</text>
+  <text x="90" y="350" fill="#dbe9e7" font-family="system-ui" font-size="16">Representations: ball on string · inward force vector</text>
+  <text x="90" y="395" fill="#95b3b4" font-family="monospace" font-size="13">{&quot;accelerationMetresPerSecondSquared&quot;:18,&quot;forceNewtons&quot;:9}</text>
+  <text x="90" y="454" fill="#69c7aa" font-family="system-ui" font-size="16">✓ deterministic physics result · accessible preview · not final production artwork</text>
+</svg>

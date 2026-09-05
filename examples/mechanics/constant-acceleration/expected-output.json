@@ -1,0 +1,17 @@
+{
+  "id": "constant-acceleration",
+  "topic": 2,
+  "title": "Constant acceleration",
+  "question": "What does constant acceleration reveal?",
+  "result": {
+    "timeSeconds": 4,
+    "positionMetres": 32,
+    "displacementMetres": 32,
+    "velocityMetresPerSecond": 14,
+    "speedMetresPerSecond": 14,
+    "accelerationMetresPerSecondSquared": 3
+  },
+  "equations": ["v = u + at", "s = ut + ½at²"],
+  "assumptions": ["Constant acceleration"],
+  "representations": ["number line", "v–t graph"]
+}

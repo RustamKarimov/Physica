@@ -1,0 +1,18 @@
+{
+  "id": "inclined-plane",
+  "topic": 3,
+  "title": "Inclined plane",
+  "question": "What does inclined plane reveal?",
+  "result": {
+    "weightNewtons": 49.05,
+    "normalNewtons": 42.478546,
+    "downslopeWeightNewtons": 24.525,
+    "frictionNewtons": 8.495709,
+    "resultantDownslopeNewtons": 16.029291,
+    "accelerationDownslopeMetresPerSecondSquared": 3.205858,
+    "moving": true
+  },
+  "equations": ["N = mg cos θ", "F∥ = mg sin θ"],
+  "assumptions": ["Rigid plane", "Coulomb friction"],
+  "representations": ["inclined plane", "force vectors"]
+}

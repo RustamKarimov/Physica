@@ -1,0 +1,10 @@
+{
+  "id": "spring-energy",
+  "title": "Spring energy",
+  "category": "mechanics",
+  "topic": 5,
+  "description": "What does spring energy reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["spring", "energy area"]
+}

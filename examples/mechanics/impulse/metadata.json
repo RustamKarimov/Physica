@@ -1,0 +1,10 @@
+{
+  "id": "impulse",
+  "title": "Impulse area",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does impulse area reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["force–time graph", "impulse area"]
+}

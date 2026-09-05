@@ -1,0 +1,10 @@
+{
+  "id": "forces-fbd",
+  "title": "Forces and free-body diagram",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does forces and free-body diagram reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["physical scene", "free-body diagram"]
+}

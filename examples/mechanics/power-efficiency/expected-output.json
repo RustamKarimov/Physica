@@ -1,0 +1,13 @@
+{
+  "id": "power-efficiency",
+  "topic": 5,
+  "title": "Power and efficiency",
+  "question": "What does power and efficiency reveal?",
+  "result": {
+    "powerWatts": 200,
+    "efficiency": 0.75
+  },
+  "equations": ["P = W/t", "η = useful/input"],
+  "assumptions": ["Energy accounting interval is fixed"],
+  "representations": ["power meter", "energy-flow diagram"]
+}

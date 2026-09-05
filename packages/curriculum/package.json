@@ -12,6 +12,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
+  "dependencies": {
+    "@physica/physics-mechanics": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "catalog:"
   }

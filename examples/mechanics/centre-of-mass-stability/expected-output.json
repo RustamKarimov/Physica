@@ -1,0 +1,16 @@
+{
+  "id": "centre-of-mass-stability",
+  "topic": 4,
+  "title": "Centre of mass and stability",
+  "question": "What does centre of mass and stability reveal?",
+  "result": {
+    "centreOfMassMetres": {
+      "x": 1,
+      "y": 0
+    },
+    "stable": true
+  },
+  "equations": ["xCOM = Σmx/Σm"],
+  "assumptions": ["Uniform gravitational field"],
+  "representations": ["COM marker", "support base"]
+}

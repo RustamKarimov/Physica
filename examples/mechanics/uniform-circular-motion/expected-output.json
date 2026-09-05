@@ -1,0 +1,32 @@
+{
+  "id": "uniform-circular-motion",
+  "topic": 12,
+  "title": "Uniform circular motion",
+  "question": "What does uniform circular motion reveal?",
+  "result": {
+    "timeSeconds": 1,
+    "angleRadians": 1.570796,
+    "positionMetres": {
+      "x": 0,
+      "y": 2
+    },
+    "velocityMetresPerSecond": {
+      "x": -3.141593,
+      "y": 0
+    },
+    "accelerationMetresPerSecondSquared": {
+      "x": 0,
+      "y": -4.934802
+    },
+    "linearSpeedMetresPerSecond": 3.141593,
+    "centripetalAccelerationMetresPerSecondSquared": 4.934802,
+    "centripetalForceNewtons": 2.467401
+  },
+  "equations": ["v = ωr", "a = ω²r"],
+  "assumptions": [
+    "Fixed radius",
+    "Constant angular speed",
+    "Point-particle body"
+  ],
+  "representations": ["orbit circle", "radius sweep", "angular arc"]
+}

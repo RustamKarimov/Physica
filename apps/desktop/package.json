@@ -18,6 +18,7 @@
     "@physica/equations": "workspace:*",
     "@physica/graphs": "workspace:*",
     "@physica/mathematics": "workspace:*",
+    "@physica/physics-mechanics": "workspace:*",
     "@physica/picking": "workspace:*",
     "@physica/relationships": "workspace:*",
     "@physica/renderer-core": "workspace:*",

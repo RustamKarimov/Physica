@@ -1,0 +1,21 @@
+{
+  "id": "energy-conservation",
+  "topic": 5,
+  "title": "Energy conservation",
+  "question": "What does energy conservation reveal?",
+  "result": {
+    "initialGpeJoules": 98.1,
+    "finalKeJoules": 98.1,
+    "ledger": {
+      "inputJoules": 98.1,
+      "usefulJoules": 0,
+      "storedJoules": 98.1,
+      "dissipatedJoules": 0,
+      "accountedJoules": 98.1,
+      "conservationResidualJoules": 0
+    }
+  },
+  "equations": ["mgh = ½mv²"],
+  "assumptions": ["No dissipative transfer"],
+  "representations": ["falling body", "energy bars"]
+}

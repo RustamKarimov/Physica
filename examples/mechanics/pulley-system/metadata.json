@@ -1,0 +1,10 @@
+{
+  "id": "pulley-system",
+  "title": "Pulley system",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does pulley system reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["pulley apparatus", "tension vectors"]
+}

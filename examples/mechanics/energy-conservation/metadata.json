@@ -1,0 +1,10 @@
+{
+  "id": "energy-conservation",
+  "title": "Energy conservation",
+  "category": "mechanics",
+  "topic": 5,
+  "description": "What does energy conservation reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["falling body", "energy bars"]
+}

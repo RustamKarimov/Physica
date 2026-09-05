@@ -1,0 +1,12 @@
+{
+  "id": "spring-energy",
+  "topic": 5,
+  "title": "Spring energy",
+  "question": "What does spring energy reveal?",
+  "result": {
+    "storedEnergyJoules": 1
+  },
+  "equations": ["E = ½kx²"],
+  "assumptions": ["Linear elastic spring"],
+  "representations": ["spring", "energy area"]
+}

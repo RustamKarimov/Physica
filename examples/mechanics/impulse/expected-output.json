@@ -1,0 +1,12 @@
+{
+  "id": "impulse",
+  "topic": 3,
+  "title": "Impulse area",
+  "question": "What does impulse area reveal?",
+  "result": {
+    "impulseNewtonSeconds": 2
+  },
+  "equations": ["J = ∫F dt = Δp"],
+  "assumptions": ["Piecewise-linear force samples"],
+  "representations": ["force–time graph", "impulse area"]
+}

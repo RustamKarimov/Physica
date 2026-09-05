@@ -1,0 +1,10 @@
+{
+  "id": "young-modulus",
+  "title": "Young modulus",
+  "category": "mechanics",
+  "topic": 6,
+  "description": "What does young modulus reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["wire apparatus", "micrometer"]
+}

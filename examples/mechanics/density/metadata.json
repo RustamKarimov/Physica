@@ -1,0 +1,10 @@
+{
+  "id": "density",
+  "title": "Density",
+  "category": "mechanics",
+  "topic": 4,
+  "description": "What does density reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["density body", "measurement apparatus"]
+}

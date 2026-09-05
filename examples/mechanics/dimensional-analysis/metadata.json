@@ -1,0 +1,10 @@
+{
+  "id": "dimensional-analysis",
+  "title": "Dimensional analysis",
+  "category": "mechanics",
+  "topic": 1,
+  "description": "What does dimensional analysis reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["unit tree", "equation"]
+}

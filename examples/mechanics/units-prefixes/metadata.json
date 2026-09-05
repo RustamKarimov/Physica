@@ -1,0 +1,10 @@
+{
+  "id": "units-prefixes",
+  "title": "SI prefix scale",
+  "category": "mechanics",
+  "topic": 1,
+  "description": "What does si prefix scale reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["quantity card", "prefix scale"]
+}

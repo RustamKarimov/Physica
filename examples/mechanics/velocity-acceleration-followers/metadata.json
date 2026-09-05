@@ -1,0 +1,10 @@
+{
+  "id": "velocity-acceleration-followers",
+  "title": "Tangent and radial followers",
+  "category": "mechanics",
+  "topic": 12,
+  "description": "What does tangent and radial followers reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["velocity tangent", "radial acceleration"]
+}

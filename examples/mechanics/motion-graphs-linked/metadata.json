@@ -1,0 +1,10 @@
+{
+  "id": "motion-graphs-linked",
+  "title": "Linked motion graphs",
+  "category": "mechanics",
+  "topic": 2,
+  "description": "What does linked motion graphs reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["x–t graph", "v–t graph", "a–t graph"]
+}

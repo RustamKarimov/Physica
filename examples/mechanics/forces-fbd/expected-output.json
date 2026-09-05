@@ -1,0 +1,39 @@
+{
+  "id": "forces-fbd",
+  "topic": 3,
+  "title": "Forces and free-body diagram",
+  "question": "What does forces and free-body diagram reveal?",
+  "result": {
+    "contributions": [
+      {
+        "id": "push",
+        "label": "Push",
+        "source": "applied",
+        "forceNewtons": {
+          "x": 10,
+          "y": 0
+        }
+      },
+      {
+        "id": "friction",
+        "label": "Friction",
+        "source": "friction",
+        "forceNewtons": {
+          "x": -4,
+          "y": 0
+        }
+      }
+    ],
+    "resultantNewtons": {
+      "x": 6,
+      "y": 0
+    },
+    "accelerationMetresPerSecondSquared": {
+      "x": 3,
+      "y": 0
+    }
+  },
+  "equations": ["ΣF = ma"],
+  "assumptions": ["Point-mass translation"],
+  "representations": ["physical scene", "free-body diagram"]
+}

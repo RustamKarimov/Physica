@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Elastic collision</title>
+  <desc id="description">What does elastic collision reveal? The preview is a deterministic accessible Mechanics Alpha summary.</desc>
+  <rect width="960" height="540" fill="#09171b"/>
+  <rect x="52" y="48" width="856" height="444" rx="22" fill="#10252b" stroke="#387068" stroke-width="2"/>
+  <text x="90" y="105" fill="#73cabb" font-family="system-ui" font-size="18" letter-spacing="2">CAMBRIDGE 9702 · TOPIC 3</text>
+  <text x="90" y="160" fill="#f1f6f4" font-family="Georgia" font-size="38">Elastic collision</text>
+  <text x="90" y="210" fill="#acc2c3" font-family="system-ui" font-size="18">What does elastic collision reveal?</text>
+  <line x1="90" y1="245" x2="870" y2="245" stroke="#29464d"/>
+  <text x="90" y="292" fill="#f2cb7b" font-family="Georgia" font-size="24">Σp before = Σp after · e = 1</text>
+  <text x="90" y="350" fill="#dbe9e7" font-family="system-ui" font-size="16">Representations: collision track · before/after momentum</text>
+  <text x="90" y="395" fill="#95b3b4" font-family="monospace" font-size="13">{&quot;finalVelocityA&quot;:1,&quot;finalVelocityB&quot;:4,&quot;momentumBefore&quot;:6,&quot;momentumAfter&quot;:6,&quot;momentumResidual&quot;:0,&quot;kineticEnergyBefore&quot;:9,&quot;kineticEnergyAfter&quot;:9,&quot;kinet</text>
+  <text x="90" y="454" fill="#69c7aa" font-family="system-ui" font-size="16">✓ deterministic physics result · accessible preview · not final production artwork</text>
+</svg>

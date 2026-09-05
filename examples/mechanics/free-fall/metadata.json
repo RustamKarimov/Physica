@@ -1,0 +1,10 @@
+{
+  "id": "free-fall",
+  "title": "Free fall",
+  "category": "mechanics",
+  "topic": 2,
+  "description": "What does free fall reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["free-fall tower", "velocity vector"]
+}

@@ -1,0 +1,10 @@
+{
+  "reason": "The shared .physica packaging and deterministic raster/video capture pipeline is scheduled for Phase 20.",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "upgradeGate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+}

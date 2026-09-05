@@ -1,0 +1,10 @@
+{
+  "id": "stress-strain",
+  "title": "Stress–strain",
+  "category": "mechanics",
+  "topic": 6,
+  "description": "What does stress–strain reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["specimen", "stress–strain graph"]
+}

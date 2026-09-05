@@ -1,0 +1,10 @@
+{
+  "id": "elastic-collision",
+  "title": "Elastic collision",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does elastic collision reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["collision track", "before/after momentum"]
+}

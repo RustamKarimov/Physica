@@ -1,0 +1,15 @@
+{
+  "id": "moments-balance",
+  "topic": 4,
+  "title": "Moments balance",
+  "question": "What does moments balance reveal?",
+  "result": {
+    "clockwiseNewtonMetres": 20,
+    "anticlockwiseNewtonMetres": 20,
+    "resultantNewtonMetres": 0,
+    "equilibrium": true
+  },
+  "equations": ["moment = Fd⊥", "Στ = 0"],
+  "assumptions": ["Rigid beam", "Fixed pivot"],
+  "representations": ["beam and pivot", "moment arrows"]
+}

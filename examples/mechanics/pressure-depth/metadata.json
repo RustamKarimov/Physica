@@ -1,0 +1,10 @@
+{
+  "id": "pressure-depth",
+  "title": "Pressure with depth",
+  "category": "mechanics",
+  "topic": 4,
+  "description": "What does pressure with depth reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["fluid vessel", "pressure arrows", "pressure-depth graph"]
+}

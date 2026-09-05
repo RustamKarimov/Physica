@@ -1,0 +1,17 @@
+{
+  "id": "constant-velocity",
+  "topic": 2,
+  "title": "Constant velocity",
+  "question": "What does constant velocity reveal?",
+  "result": {
+    "timeSeconds": 4,
+    "positionMetres": 14,
+    "displacementMetres": 12,
+    "velocityMetresPerSecond": 3,
+    "speedMetresPerSecond": 3,
+    "accelerationMetresPerSecondSquared": 0
+  },
+  "equations": ["x = x₀ + vt"],
+  "assumptions": ["One-dimensional constant velocity"],
+  "representations": ["moving body", "x–t graph"]
+}

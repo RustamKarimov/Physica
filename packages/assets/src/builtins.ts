@@ -137,6 +137,26 @@ function itemFor(
   descriptor: ObjectDescriptor,
   prefab: PrefabDefinition,
 ): LibraryItemDefinition {
+  const mechanicsTopics: Readonly<Record<string, readonly number[]>> = {
+    ball: [2, 3, 5, 12],
+    block: [2, 3],
+    trolley: [2, 3],
+    car: [2, 12],
+    mass: [3, 4, 5],
+    string: [3, 12],
+    spring: [3, 5, 6],
+    pulley: [3],
+    support: [4, 6],
+    "ground-surface": [2, 3],
+    ruler: [1, 4, 6],
+    stopwatch: [1, 2, 12],
+    "vector-arrow": [1, 2, 3, 12],
+    "coordinate-axes": [1, 2],
+    "graph-panel": [1, 2, 3, 4, 5, 6, 12],
+    "equation-panel": [1, 2, 3, 4, 5, 6, 12],
+    "pulley-mass-setup": [3],
+  };
+  const topicNumbers = mechanicsTopics[descriptor.slug] ?? [];
   return {
     id: registeredTypeId("physica:library/" + descriptor.slug),
     schemaVersion: 1,
@@ -146,8 +166,19 @@ function itemFor(
     itemClass: descriptor.itemClass,
     source: BUILT_IN_SOURCE,
     domainTags: ["physics"],
-    curriculumTags: ["general"],
-    topicTags: descriptor.tags,
+    curriculumTags: [
+      "general",
+      ...(topicNumbers.length > 0
+        ? [
+            "cambridge-9702",
+            ...topicNumbers.map((topic) => `cambridge-9702-topic-${topic}`),
+          ]
+        : []),
+    ],
+    topicTags: [
+      ...descriptor.tags,
+      ...topicNumbers.map((topic) => `topic-${topic}`),
+    ],
     searchTags: [
       ...new Set([...descriptor.tags, descriptor.displayName.toLowerCase()]),
     ],

@@ -1,0 +1,10 @@
+{
+  "id": "inclined-plane",
+  "title": "Inclined plane",
+  "category": "mechanics",
+  "topic": 3,
+  "description": "What does inclined plane reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["inclined plane", "force vectors"]
+}

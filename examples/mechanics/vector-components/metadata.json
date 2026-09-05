@@ -1,0 +1,10 @@
+{
+  "id": "vector-components",
+  "title": "Vector components",
+  "category": "mechanics",
+  "topic": 1,
+  "description": "What does vector components reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["vector diagram", "component labels"]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "hooke-law",
+  "topic": 6,
+  "title": "Hooke's law",
+  "question": "What does hooke's law reveal?",
+  "result": {
+    "forceNewtons": 20,
+    "extensionMetres": 0.08,
+    "springConstantNewtonsPerMetre": 250,
+    "storedEnergyJoules": 0.8
+  },
+  "equations": ["F = kx"],
+  "assumptions": ["Within proportional limit"],
+  "representations": ["spring rig", "force–extension graph"]
+}

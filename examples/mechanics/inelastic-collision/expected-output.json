@@ -1,0 +1,20 @@
+{
+  "id": "inelastic-collision",
+  "topic": 3,
+  "title": "Inelastic collision",
+  "question": "What does inelastic collision reveal?",
+  "result": {
+    "finalVelocityA": 2,
+    "finalVelocityB": 2,
+    "momentumBefore": 6,
+    "momentumAfter": 6,
+    "momentumResidual": 0,
+    "kineticEnergyBefore": 9,
+    "kineticEnergyAfter": 6,
+    "kineticEnergyChange": -3,
+    "restitution": 0
+  },
+  "equations": ["Σp before = Σp after", "e = 0"],
+  "assumptions": ["One-dimensional isolated collision"],
+  "representations": ["collision track", "energy change"]
+}

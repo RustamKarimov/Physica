@@ -1,0 +1,10 @@
+{
+  "id": "uniform-circular-motion",
+  "title": "Uniform circular motion",
+  "category": "mechanics",
+  "topic": 12,
+  "description": "What does uniform circular motion reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["orbit circle", "radius sweep", "angular arc"]
+}

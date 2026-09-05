@@ -1,0 +1,15 @@
+{
+  "id": "pulley-system",
+  "topic": 3,
+  "title": "Pulley system",
+  "question": "What does pulley system reveal?",
+  "result": {
+    "accelerationMetresPerSecondSquared": 1.962,
+    "tensionNewtons": 23.544,
+    "heavierSide": "B",
+    "constraintResidualNewtons": 0
+  },
+  "equations": ["a = (m₂−m₁)g/(m₁+m₂)"],
+  "assumptions": ["Massless inextensible string", "Frictionless pulley"],
+  "representations": ["pulley apparatus", "tension vectors"]
+}

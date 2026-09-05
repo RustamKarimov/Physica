@@ -104,8 +104,9 @@ function ProjectHome({
           download the project snapshot.
         </span>
         <small>
-          The final curriculum lessons, polished simulations and packaged
-          .physica save/open workflow arrive in later phases.
+          Seven Mechanics Alpha templates and the full mechanics Library are
+          available now. Native .physica packaging and final export arrive in
+          Phase 20.
         </small>
       </div>
     </main>

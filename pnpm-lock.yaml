@@ -119,6 +119,9 @@ importers:
       '@physica/mathematics':
         specifier: workspace:*
         version: link:../../packages/mathematics
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../packages/physics-mechanics
       '@physica/picking':
         specifier: workspace:*
         version: link:../../packages/picking
@@ -615,6 +618,306 @@ importers:
       '@physica/mathematics':
         specifier: workspace:*
         version: link:../../../packages/mathematics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/centre-of-mass-stability:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/centripetal-force:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/constant-acceleration:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/constant-velocity:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/density:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/dimensional-analysis:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/elastic-collision:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/elastic-energy:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/energy-conservation:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/forces-fbd:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/free-fall:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/hooke-law:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/impulse:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/inclined-plane:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/inelastic-collision:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/moments-balance:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/motion-graphs-linked:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/power-efficiency:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/pressure-depth:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/projectile:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/pulley-system:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/spring-energy:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/stress-strain:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/uncertainty-repeated-measurements:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/uniform-circular-motion:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/units-prefixes:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/vector-components:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/velocity-acceleration-followers:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/work-area:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/mechanics/young-modulus:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1140,6 +1443,10 @@ importers:
         version: 6.0.3
 
   packages/curriculum:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../physics-mechanics
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1267,6 +1574,22 @@ importers:
         version: 6.0.3
 
   packages/physics-mechanics:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
+      '@physica/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@physica/solver-analytical':
+        specifier: workspace:*
+        version: link:../solver-analytical
+      '@physica/units':
+        specifier: workspace:*
+        version: link:../units
     devDependencies:
       typescript:
         specifier: 'catalog:'

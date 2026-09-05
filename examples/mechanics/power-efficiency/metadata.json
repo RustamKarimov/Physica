@@ -1,0 +1,10 @@
+{
+  "id": "power-efficiency",
+  "title": "Power and efficiency",
+  "category": "mechanics",
+  "topic": 5,
+  "description": "What does power and efficiency reveal?",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["power meter", "energy-flow diagram"]
+}

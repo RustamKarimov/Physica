@@ -1,0 +1,14 @@
+{
+  "id": "units-prefixes",
+  "topic": 1,
+  "title": "SI prefix scale",
+  "question": "What does si prefix scale reveal?",
+  "result": {
+    "displayed": "1.25 km",
+    "canonicalMetres": 1250,
+    "scientific": "1.25e+3"
+  },
+  "equations": ["1 km = 10³ m"],
+  "assumptions": ["SI prefix definitions"],
+  "representations": ["quantity card", "prefix scale"]
+}

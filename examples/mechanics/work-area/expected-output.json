@@ -1,0 +1,12 @@
+{
+  "id": "work-area",
+  "topic": 5,
+  "title": "Work from graph area",
+  "question": "What does work from graph area reveal?",
+  "result": {
+    "workJoules": 30
+  },
+  "equations": ["W = ∫F dx"],
+  "assumptions": ["Piecewise-linear force curve"],
+  "representations": ["force–displacement graph", "area overlay"]
+}

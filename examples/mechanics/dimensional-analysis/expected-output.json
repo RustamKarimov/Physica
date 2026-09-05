@@ -1,0 +1,14 @@
+{
+  "id": "dimensional-analysis",
+  "topic": 1,
+  "title": "Dimensional analysis",
+  "question": "What does dimensional analysis reveal?",
+  "result": {
+    "force": "M L T⁻²",
+    "massTimesAcceleration": "M L T⁻²",
+    "homogeneous": true
+  },
+  "equations": ["F = ma"],
+  "assumptions": ["SI base dimensions"],
+  "representations": ["unit tree", "equation"]
+}
