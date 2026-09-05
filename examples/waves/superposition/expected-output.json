@@ -1,0 +1,30 @@
+{
+  "id": "superposition",
+  "topic": 8,
+  "title": "Two-wave superposition",
+  "question": "How do component displacements form one resultant?",
+  "parameters": {
+    "first": {
+      "amplitudeMetres": 0.04,
+      "frequencyHertz": 2,
+      "wavelengthMetres": 1.5,
+      "phaseRadians": 0,
+      "direction": 1
+    },
+    "second": {
+      "amplitudeMetres": 0.04,
+      "frequencyHertz": 2,
+      "wavelengthMetres": 1.5,
+      "phaseRadians": 1.57079633,
+      "direction": 1
+    },
+    "positionMetres": 0.2,
+    "timeSeconds": 0.1
+  },
+  "result": {
+    "componentDisplacementsMetres": [-0.01626947, 0.03654182],
+    "resultantDisplacementMetres": 0.02027235
+  },
+  "representations": ["component waves", "resultant wave"],
+  "assumptions": ["linear medium", "signed displacement addition"]
+}

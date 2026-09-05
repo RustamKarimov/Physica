@@ -14,26 +14,40 @@ const MechanicsWorkbench = lazy(() =>
   })),
 );
 
+const WaveOpticsWorkbench = lazy(() =>
+  import("./WaveOpticsWorkbench").then((module) => ({
+    default: module.WaveOpticsWorkbench,
+  })),
+);
+
 export function App() {
-  const [route, setRoute] = useState<"mechanics" | "author" | "archive">(
-    "mechanics",
-  );
+  const [route, setRoute] = useState<
+    "waves" | "mechanics" | "author" | "archive"
+  >("waves");
   return (
     <div className="physica-shell">
       <header className="shell-bar">
         <button
           type="button"
           className="shell-brand"
-          onClick={() => setRoute("mechanics")}
-          aria-label="Open Physica Mechanics Alpha"
+          onClick={() => setRoute("waves")}
+          aria-label="Open Physica Wave and Optics Alpha"
         >
           <span className="shell-mark">P</span>
           <span>
             <b>Physica</b>
-            <small>Mechanics Alpha · Phase 8</small>
+            <small>Wave/Optics Alpha · Phase 9</small>
           </span>
         </button>
         <nav aria-label="Application views">
+          <button
+            type="button"
+            className={route === "waves" ? "active" : ""}
+            aria-current={route === "waves" ? "page" : undefined}
+            onClick={() => setRoute("waves")}
+          >
+            Waves &amp; Optics
+          </button>
           <button
             type="button"
             className={route === "mechanics" ? "active" : ""}
@@ -60,14 +74,24 @@ export function App() {
           </button>
         </nav>
         <span className="shell-status">
-          {route === "mechanics"
-            ? "Seven scientifically linked teaching workflows"
-            : route === "author"
-              ? "No-code mechanics templates and full Library"
-              : "Earlier engineering proofs"}
+          {route === "waves"
+            ? "Shared-state wave, screen, graph and ray workflows"
+            : route === "mechanics"
+              ? "Seven scientifically linked teaching workflows"
+              : route === "author"
+                ? "No-code mechanics templates and full Library"
+                : "Earlier engineering proofs"}
         </span>
       </header>
-      {route === "mechanics" ? (
+      {route === "waves" ? (
+        <Suspense
+          fallback={
+            <div className="archive-loading">Loading Wave/Optics Alpha…</div>
+          }
+        >
+          <WaveOpticsWorkbench onOpenAuthor={() => setRoute("author")} />
+        </Suspense>
+      ) : route === "mechanics" ? (
         <Suspense
           fallback={
             <div className="archive-loading">Loading Mechanics Alpha…</div>

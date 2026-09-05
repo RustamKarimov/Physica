@@ -1,0 +1,27 @@
+{
+  "id": "longitudinal-wave",
+  "topic": 7,
+  "title": "Longitudinal compression wave",
+  "question": "How is particle motion distinguished from pattern motion?",
+  "parameters": {
+    "amplitudeMetres": 0.04,
+    "frequencyHertz": 2,
+    "wavelengthMetres": 1.5,
+    "phaseRadians": 0,
+    "direction": 1,
+    "equilibriumPositionMetres": 0.75,
+    "timeSeconds": 0.2
+  },
+  "result": {
+    "equilibriumPositionMetres": 0.75,
+    "actualPositionMetres": 0.77351141,
+    "particleDisplacementMetres": 0.02351141,
+    "compressionProxy": -0.1355521,
+    "patternSpeedMetresPerSecond": 3
+  },
+  "representations": ["particle row", "compression bands", "direction labels"],
+  "assumptions": [
+    "small longitudinal displacement",
+    "no bulk material transport"
+  ]
+}

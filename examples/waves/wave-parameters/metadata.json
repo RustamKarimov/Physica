@@ -1,0 +1,15 @@
+{
+  "id": "wave-parameters",
+  "title": "Wave parameters",
+  "category": "waves",
+  "topic": 7,
+  "question": "How do frequency and wavelength set the pattern speed?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

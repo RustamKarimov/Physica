@@ -1,0 +1,25 @@
+{
+  "id": "pulse-reflection",
+  "topic": 7,
+  "title": "Pulse reflection at a boundary",
+  "question": "How does an impedance change divide reflected and transmitted energy?",
+  "parameters": {
+    "incidentImpedance": 2,
+    "transmittedImpedance": 5
+  },
+  "result": {
+    "coefficients": {
+      "amplitudeReflection": -0.42857143,
+      "amplitudeTransmission": 0.57142857,
+      "energyReflection": 0.18367347,
+      "energyTransmission": 0.81632653,
+      "energyResidual": 0
+    },
+    "incidentPulse": {
+      "centreMetres": 0.6,
+      "displacementMetres": 0.05
+    }
+  },
+  "representations": ["incident pulse", "reflected pulse", "transmitted pulse"],
+  "assumptions": ["lossless ideal boundary", "one-dimensional scalar pulse"]
+}

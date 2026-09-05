@@ -1,0 +1,22 @@
+{
+  "id": "wave-parameters",
+  "topic": 7,
+  "title": "Wave parameters",
+  "question": "How do frequency and wavelength set the pattern speed?",
+  "parameters": {
+    "frequencyHertz": 12,
+    "wavelengthMetres": 0.25
+  },
+  "result": {
+    "positionMetres": 0,
+    "timeSeconds": 0,
+    "displacementMetres": 0,
+    "particleVelocityMetresPerSecond": -3.01592895,
+    "phaseRadians": 0,
+    "angularFrequencyRadiansPerSecond": 75.39822369,
+    "waveNumberRadiansPerMetre": 25.13274123,
+    "patternSpeedMetresPerSecond": 3
+  },
+  "representations": ["wavelength ruler", "period marker", "waveform graph"],
+  "assumptions": ["uniform wave speed", "single-frequency source"]
+}

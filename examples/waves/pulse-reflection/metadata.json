@@ -1,0 +1,15 @@
+{
+  "id": "pulse-reflection",
+  "title": "Pulse reflection at a boundary",
+  "category": "waves",
+  "topic": 7,
+  "question": "How does an impedance change divide reflected and transmitted energy?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

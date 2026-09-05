@@ -1,0 +1,15 @@
+{
+  "id": "geometrical-optics-overview",
+  "title": "Geometrical optics overview",
+  "category": "optics",
+  "topic": "extended-geometrical-optics",
+  "question": "How do boundary and lens rules locate a ray and its image?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

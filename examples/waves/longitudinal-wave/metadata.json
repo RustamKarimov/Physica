@@ -1,0 +1,15 @@
+{
+  "id": "longitudinal-wave",
+  "title": "Longitudinal compression wave",
+  "category": "waves",
+  "topic": 7,
+  "question": "How is particle motion distinguished from pattern motion?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -122,6 +122,12 @@ importers:
       '@physica/physics-mechanics':
         specifier: workspace:*
         version: link:../../packages/physics-mechanics
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../packages/physics-optics
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../packages/physics-waves
       '@physica/picking':
         specifier: workspace:*
         version: link:../../packages/picking
@@ -923,6 +929,56 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/optics/double-slit:
+    dependencies:
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-optics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/optics/geometrical-optics-overview:
+    dependencies:
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-optics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/optics/physical-optics-overview:
+    dependencies:
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-optics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/optics/single-slit:
+    dependencies:
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-optics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/optics/two-source-interference:
+    dependencies:
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-optics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/physcript/physcript-equation-transform:
     dependencies:
       '@physica/commands':
@@ -1341,6 +1397,66 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/waves/longitudinal-wave:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/waves/progressive-wave:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/waves/pulse-reflection:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/waves/standing-wave:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/waves/superposition:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/waves/wave-parameters:
+    dependencies:
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../../../packages/physics-waves
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/assets:
     dependencies:
       '@physica/commands':
@@ -1447,6 +1563,12 @@ importers:
       '@physica/physics-mechanics':
         specifier: workspace:*
         version: link:../physics-mechanics
+      '@physica/physics-optics':
+        specifier: workspace:*
+        version: link:../physics-optics
+      '@physica/physics-waves':
+        specifier: workspace:*
+        version: link:../physics-waves
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1608,6 +1730,19 @@ importers:
         version: 6.0.3
 
   packages/physics-optics:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
+      '@physica/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@physica/solver-analytical':
+        specifier: workspace:*
+        version: link:../solver-analytical
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1638,6 +1773,19 @@ importers:
         version: 6.0.3
 
   packages/physics-waves:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
+      '@physica/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@physica/solver-analytical':
+        specifier: workspace:*
+        version: link:../solver-analytical
     devDependencies:
       typescript:
         specifier: 'catalog:'

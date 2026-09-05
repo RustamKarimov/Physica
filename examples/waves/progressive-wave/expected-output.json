@@ -1,0 +1,30 @@
+{
+  "id": "progressive-wave",
+  "topic": 7,
+  "title": "Progressive transverse wave",
+  "question": "How does phase travel while medium particles oscillate locally?",
+  "parameters": {
+    "amplitudeMetres": 0.04,
+    "frequencyHertz": 2,
+    "wavelengthMetres": 1.5,
+    "phaseRadians": 0,
+    "direction": 1,
+    "positionMetres": 0.4,
+    "timeSeconds": 0.3
+  },
+  "result": {
+    "positionMetres": 0.4,
+    "timeSeconds": 0.3,
+    "displacementMetres": -0.03464102,
+    "particleVelocityMetresPerSecond": 0.25132741,
+    "phaseRadians": -2.0943951,
+    "angularFrequencyRadiansPerSecond": 12.56637061,
+    "waveNumberRadiansPerMetre": 4.1887902,
+    "patternSpeedMetresPerSecond": 3
+  },
+  "representations": ["waveform", "phase marker", "particle-motion arrow"],
+  "assumptions": [
+    "linear non-dispersive medium",
+    "scalar transverse displacement"
+  ]
+}

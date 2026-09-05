@@ -1,0 +1,15 @@
+{
+  "id": "superposition",
+  "title": "Two-wave superposition",
+  "category": "waves",
+  "topic": 8,
+  "question": "How do component displacements form one resultant?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

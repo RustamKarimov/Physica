@@ -166,6 +166,42 @@ export function ObjectGlyph({ name }: { readonly name: string }) {
       </svg>
     );
   if (
+    key.includes("wave") ||
+    key.includes("string") ||
+    key.includes("slinky") ||
+    key.includes("oscillator")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path
+          d="M5 31c9-25 17-25 26 0s17 25 26 0 13-20 18-4"
+          fill="none"
+          stroke="#62cfc1"
+          strokeWidth="5"
+        />
+        <path d="M5 48h70" stroke="#6e858b" strokeDasharray="4 3" />
+      </svg>
+    );
+  if (
+    key.includes("slit") ||
+    key.includes("optics") ||
+    key.includes("lens") ||
+    key.includes("polarizer") ||
+    key.includes("ray")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path d="M8 30h22m10 0h32" stroke="#f0be68" strokeWidth="4" />
+        <path
+          d="M35 8c-8 12-8 32 0 44 8-12 8-32 0-44z"
+          fill="#5cb5c066"
+          stroke="#82d4de"
+          strokeWidth="2"
+        />
+        <path d="M42 30l28-14m-28 14 28 14" stroke="#ef795f" strokeWidth="2" />
+      </svg>
+    );
+  if (
     key.includes("panel") ||
     key.includes("text") ||
     key.includes("explanation")

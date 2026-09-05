@@ -1,0 +1,15 @@
+{
+  "id": "standing-wave",
+  "title": "Standing wave",
+  "category": "waves",
+  "topic": 8,
+  "question": "Where do equal counter-propagating waves create nodes and antinodes?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "two-source-interference",
+  "title": "Two-source interference",
+  "category": "optics",
+  "topic": 8,
+  "question": "How does exact path difference control intensity?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

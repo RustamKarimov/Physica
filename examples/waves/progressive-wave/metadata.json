@@ -1,0 +1,15 @@
+{
+  "id": "progressive-wave",
+  "title": "Progressive transverse wave",
+  "category": "waves",
+  "topic": 7,
+  "question": "How does phase travel while medium particles oscillate locally?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "geometrical-optics-overview",
+  "topic": "extended-geometrical-optics",
+  "title": "Geometrical optics overview",
+  "question": "How do boundary and lens rules locate a ray and its image?",
+  "parameters": {
+    "incidentIndex": 1,
+    "transmittedIndex": 1.5,
+    "incidentAngleRadians": 0.5235987756,
+    "focalLengthMetres": 0.2,
+    "objectDistanceMetres": 0.6
+  },
+  "result": {
+    "boundary": {
+      "reflectedAngleRadians": 0.5235987756,
+      "refractedAngleRadians": 0.3398369095,
+      "totalInternalReflection": false,
+      "criticalAngleRadians": null
+    },
+    "lens": {
+      "imageDistanceMetres": 0.3,
+      "magnification": -0.5,
+      "imageKind": "real-inverted"
+    }
+  },
+  "representations": [
+    "normal",
+    "incident/refracted rays",
+    "principal rays",
+    "image marker"
+  ],
+  "assumptions": [
+    "thin lens",
+    "geometrical rays",
+    "paraxial principal-ray construction"
+  ]
+}

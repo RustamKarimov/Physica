@@ -1,0 +1,15 @@
+{
+  "id": "single-slit",
+  "title": "Single-slit diffraction",
+  "category": "optics",
+  "topic": 8,
+  "question": "How does aperture width set the diffraction envelope?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

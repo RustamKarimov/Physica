@@ -1,0 +1,15 @@
+{
+  "id": "double-slit",
+  "title": "Double-slit intensity",
+  "category": "optics",
+  "topic": 8,
+  "question": "How do one aperture record and one model drive both screen and graph?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

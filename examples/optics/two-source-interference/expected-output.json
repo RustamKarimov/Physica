@@ -1,0 +1,21 @@
+{
+  "id": "two-source-interference",
+  "topic": 8,
+  "title": "Two-source interference",
+  "question": "How does exact path difference control intensity?",
+  "parameters": {
+    "wavelengthMetres": 0.02,
+    "sourceSeparationMetres": 0.08,
+    "screenDistanceMetres": 2,
+    "screenPositionMetres": 0.25
+  },
+  "result": {
+    "firstPathMetres": 2.0109947787,
+    "secondPathMetres": 2.0209156341,
+    "pathDifferenceMetres": 0.0099208554,
+    "phaseDifferenceRadians": 3.1167286293,
+    "normalizedIntensity": 0.000154547
+  },
+  "representations": ["source geometry", "path ruler", "intensity strip"],
+  "assumptions": ["coherent point sources", "equal source intensity"]
+}

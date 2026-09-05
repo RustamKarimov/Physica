@@ -958,6 +958,127 @@
         "example.spec.ts"
       ],
       "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "progressive-wave",
+      "path": "examples/waves/progressive-wave",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "longitudinal-wave",
+      "path": "examples/waves/longitudinal-wave",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "pulse-reflection",
+      "path": "examples/waves/pulse-reflection",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "wave-parameters",
+      "path": "examples/waves/wave-parameters",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "superposition",
+      "path": "examples/waves/superposition",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "standing-wave",
+      "path": "examples/waves/standing-wave",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "two-source-interference",
+      "path": "examples/optics/two-source-interference",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "single-slit",
+      "path": "examples/optics/single-slit",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "double-slit",
+      "path": "examples/optics/double-slit",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "geometrical-optics-overview",
+      "path": "examples/optics/geometrical-optics-overview",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "physical-optics-overview",
+      "path": "examples/optics/physical-optics-overview",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
     }
   ]
 }

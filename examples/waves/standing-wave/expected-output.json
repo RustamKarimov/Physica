@@ -1,0 +1,29 @@
+{
+  "id": "standing-wave",
+  "topic": 8,
+  "title": "Standing wave",
+  "question": "Where do equal counter-propagating waves create nodes and antinodes?",
+  "parameters": {
+    "componentAmplitudeMetres": 0.03,
+    "frequencyHertz": 2,
+    "wavelengthMetres": 1,
+    "lengthMetres": 2,
+    "positionMetres": 0.25,
+    "timeSeconds": 0
+  },
+  "result": {
+    "displacementMetres": 0.06,
+    "envelopeAmplitudeMetres": 0.06,
+    "nodePositionsMetres": [0, 0.5, 1, 1.5, 2],
+    "antinodePositionsMetres": [0.25, 0.75, 1.25, 1.75]
+  },
+  "representations": [
+    "standing-wave envelope",
+    "node markers",
+    "antinode markers"
+  ],
+  "assumptions": [
+    "equal amplitude and frequency",
+    "opposite propagation directions"
+  ]
+}

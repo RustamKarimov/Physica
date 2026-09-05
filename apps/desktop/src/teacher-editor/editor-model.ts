@@ -20,6 +20,8 @@ import {
 } from "@physica/core-model";
 import type { AdvancedTimelineV1 } from "@physica/storyboard";
 import { registerMechanicsPhysicsLibrary } from "@physica/physics-mechanics";
+import { registerOpticsPhysicsLibrary } from "@physica/physics-optics";
+import { registerWavePhysicsLibrary } from "@physica/physics-waves";
 
 export interface ProjectTemplate {
   readonly id: string;
@@ -118,6 +120,48 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
     itemIds: ["physica:library/ball-on-string-circular-motion"],
     seed: 800_000,
   },
+  {
+    id: "progressive-wave",
+    title: "Progressive wave lesson",
+    description: "String, source, support and displacement probe.",
+    question:
+      "How can the wave pattern move while medium particles remain local?",
+    itemIds: ["physica:library/string-rope-wave-setup"],
+    seed: 810_000,
+  },
+  {
+    id: "standing-wave",
+    title: "Standing-wave explanation",
+    description: "Counter-propagating sources with node and antinode markers.",
+    question: "Why do standing-wave nodes remain fixed?",
+    itemIds: ["physica:library/standing-wave-string"],
+    seed: 820_000,
+  },
+  {
+    id: "double-slit",
+    title: "Double-slit investigation",
+    description: "Coherent source, slit barrier, screen and intensity graph.",
+    question: "How do path and phase difference form the fringe pattern?",
+    itemIds: ["physica:library/double-slit-setup"],
+    seed: 830_000,
+  },
+  {
+    id: "ray-optics",
+    title: "Ray-optics bench",
+    description:
+      "Ray source, refracting boundary, normal and angle indicators.",
+    question: "How does refractive index change a ray's direction?",
+    itemIds: ["physica:library/ray-box-and-boundary"],
+    seed: 840_000,
+  },
+  {
+    id: "polarization",
+    title: "Polarization investigation",
+    description: "Source, polarizer, analyzer and intensity detector.",
+    question: "How does relative axis angle control transmitted intensity?",
+    itemIds: ["physica:library/polarizer-analyzer-setup"],
+    seed: 850_000,
+  },
 ];
 
 export interface EditorSession {
@@ -129,15 +173,17 @@ export interface EditorSession {
 
 export const physicsLibrary = createBuiltInPhysicsLibrary();
 registerMechanicsPhysicsLibrary(physicsLibrary.registries);
-const mechanicsReferences = physicsLibrary.validateReferences();
-if (!mechanicsReferences.ok) throw new Error(mechanicsReferences.error.message);
+registerWavePhysicsLibrary(physicsLibrary.registries);
+registerOpticsPhysicsLibrary(physicsLibrary.registries);
+const builtInReferences = physicsLibrary.validateReferences();
+if (!builtInReferences.ok) throw new Error(builtInReferences.error.message);
 
 export function createEditorSession(template: ProjectTemplate): EditorSession {
   const ids = new DeterministicIdFactory(template.seed);
   const document = createEmptyProject(ids, {
     title: template.title,
     description: template.question,
-    tags: ["teacher-authored", "phase-8", "mechanics-alpha"],
+    tags: ["teacher-authored", "phase-9", "wave-optics-alpha"],
     createdAt: new Date().toISOString(),
   });
   const store = new DefaultProjectStore(

@@ -1,0 +1,35 @@
+{
+  "id": "double-slit",
+  "topic": 8,
+  "title": "Double-slit intensity",
+  "question": "How do one aperture record and one model drive both screen and graph?",
+  "parameters": {
+    "wavelengthMetres": 5.5e-7,
+    "slitSeparationMetres": 0.0003,
+    "slitWidthMetres": 0.00008,
+    "screenDistanceMetres": 2,
+    "peakIntensity": 1,
+    "screenPositionMetres": 0.004
+  },
+  "result": {
+    "screenPositionMetres": 0.004,
+    "angleRadians": 0.0019999973,
+    "pathDifferenceMetres": 6e-7,
+    "phaseDifferenceRadians": 6.8543702627,
+    "envelope": 0.7508087591,
+    "normalizedIntensity": 0.6912174224,
+    "intensity": 0.6912174224,
+    "approximateFringeSpacingMetres": 0.0036666667,
+    "approximation": "Fraunhofer scalar far field"
+  },
+  "representations": [
+    "double slit",
+    "screen strip",
+    "intensity graph",
+    "fringe ruler"
+  ],
+  "assumptions": [
+    "coherent monochromatic sources",
+    "Fraunhofer scalar far field"
+  ]
+}

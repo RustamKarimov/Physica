@@ -1,0 +1,29 @@
+{
+  "id": "physical-optics-overview",
+  "topic": "extended-physical-optics",
+  "title": "Physical optics overview",
+  "question": "How do phase and polarization shape transmitted intensity?",
+  "parameters": {
+    "wavelengthMetres": 5e-7,
+    "slitSpacingMetres": 0.000002,
+    "sourceCount": 5,
+    "angleRadians": 0.2526802551,
+    "polarizerAngleRadians": 1.0471975512
+  },
+  "result": {
+    "grating": {
+      "pathDifferenceMetres": 5e-7,
+      "normalizedIntensity": 1
+    },
+    "polarization": {
+      "transmittedIntensity": 0.25,
+      "transmissionFraction": 0.25
+    }
+  },
+  "representations": [
+    "multi-slit wavefronts",
+    "grating intensity",
+    "polarizer axes"
+  ],
+  "assumptions": ["finite coherent source array", "ideal linear polarizers"]
+}

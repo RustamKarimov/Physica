@@ -1,0 +1,15 @@
+{
+  "id": "physical-optics-overview",
+  "title": "Physical optics overview",
+  "category": "optics",
+  "topic": "extended-physical-optics",
+  "question": "How do phase and polarization shape transmitted intensity?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

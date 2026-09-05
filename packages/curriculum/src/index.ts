@@ -3,6 +3,12 @@ import {
   MECHANICS_LIBRARY_DESCRIPTORS,
   type MechanicsExampleId,
 } from "@physica/physics-mechanics";
+import { OPTICS_EXAMPLE_IDS } from "@physica/physics-optics";
+import {
+  WAVE_EXAMPLE_IDS,
+  WAVE_LIBRARY_DESCRIPTORS,
+  waveLibrarySlug,
+} from "@physica/physics-waves";
 
 export type CurriculumCoverageStatus =
   "UNIMPLEMENTED" | "IMPLEMENTED" | "VALIDATED";
@@ -95,6 +101,20 @@ const CAPABILITIES: Readonly<Record<number, readonly string[]>> = Object.freeze(
       "mechanics.stress-strain",
       "mechanics.young-modulus",
       "mechanics.elastic-plastic",
+    ],
+    7: [
+      "waves.harmonic",
+      "waves.pulse",
+      "waves.longitudinal-medium",
+      "waves.boundary",
+      "waves.pattern-particle-distinction",
+    ],
+    8: [
+      "waves.superposition",
+      "waves.standing-wave",
+      "optics.two-source-interference",
+      "optics.single-slit",
+      "optics.double-slit",
     ],
     12: [
       "mechanics.uniform-circular-motion",
@@ -253,22 +273,67 @@ function mechanicsEvidence(
   return evidence;
 }
 
+function waveEvidence(topicNumber: 7 | 8): CurriculumEvidenceSet {
+  const exampleIds =
+    topicNumber === 7
+      ? WAVE_EXAMPLE_IDS.filter((id) =>
+          [
+            "progressive-wave",
+            "longitudinal-wave",
+            "pulse-reflection",
+            "wave-parameters",
+          ].includes(id),
+        )
+      : [
+          ...WAVE_EXAMPLE_IDS.filter((id) =>
+            ["superposition", "standing-wave"].includes(id),
+          ),
+          ...OPTICS_EXAMPLE_IDS.filter((id) =>
+            ["two-source-interference", "single-slit", "double-slit"].includes(
+              id,
+            ),
+          ),
+        ];
+  return Object.freeze({
+    capabilityIds: CAPABILITIES[topicNumber]!,
+    libraryItemIds: WAVE_LIBRARY_DESCRIPTORS.filter(
+      (descriptor) => descriptor.topic === topicNumber,
+    ).map(
+      (descriptor) => `physica:library/${waveLibrarySlug(descriptor.name)}`,
+    ),
+    exampleIds,
+    scientificTestIds: [
+      `waves.topic-${topicNumber}.reference`,
+      `waves.topic-${topicNumber}.validation`,
+    ],
+    releaseGateIds:
+      topicNumber === 7
+        ? ["wave-optics-alpha.progressive-wave"]
+        : ["wave-optics-alpha.double-slit-shared-state"],
+  });
+}
+
 const PHASE_8_TOPICS = new Set([1, 2, 3, 4, 5, 6, 12]);
 
 export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
   Object.freeze(
     TITLES.map((title, index) => {
       const topicNumber = index + 1;
-      if (!PHASE_8_TOPICS.has(topicNumber))
+      if (
+        !PHASE_8_TOPICS.has(topicNumber) &&
+        topicNumber !== 7 &&
+        topicNumber !== 8
+      )
         return evaluateCurriculumCoverage(
           topicNumber,
           title,
           emptyEvidence(),
           emptyEvidence(),
         );
-      const evidence = mechanicsEvidence(
-        topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12,
-      );
+      const evidence =
+        topicNumber === 7 || topicNumber === 8
+          ? waveEvidence(topicNumber)
+          : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
       return evaluateCurriculumCoverage(topicNumber, title, evidence, evidence);
     }),
   );

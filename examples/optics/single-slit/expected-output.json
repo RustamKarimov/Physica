@@ -1,0 +1,20 @@
+{
+  "id": "single-slit",
+  "topic": 8,
+  "title": "Single-slit diffraction",
+  "question": "How does aperture width set the diffraction envelope?",
+  "parameters": {
+    "wavelengthMetres": 6e-7,
+    "slitWidthMetres": 0.00012,
+    "screenDistanceMetres": 2,
+    "screenPositionMetres": 0.01
+  },
+  "result": {
+    "angleRadians": 0.0049999583,
+    "betaRadians": 3.1415533844,
+    "normalizedIntensity": 2e-10,
+    "intensity": 2e-10
+  },
+  "representations": ["slit geometry", "screen intensity", "diffraction graph"],
+  "assumptions": ["Fraunhofer far field", "monochromatic scalar wave"]
+}

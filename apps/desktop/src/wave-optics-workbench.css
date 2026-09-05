@@ -1,0 +1,378 @@
+.wave-optics-alpha {
+  display: grid;
+  grid-template-columns: 280px minmax(490px, 1fr) 310px;
+  min-height: calc(100vh - 65px);
+  background: #07131b;
+  color: #edf5f6;
+}
+.wo-nav,
+.wo-inspector {
+  padding: 24px 20px;
+  background: #0b1b25;
+  border-right: 1px solid #203944;
+}
+.wo-eyebrow {
+  color: #edbd68;
+  font: 700 11px/1 sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.wo-nav h1 {
+  margin: 8px 0 10px;
+  font:
+    650 26px/1.1 Georgia,
+    serif;
+}
+.wo-nav > p {
+  color: #9eb4bb;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.wo-workflow-list {
+  display: grid;
+  gap: 7px;
+  margin: 22px 0;
+}
+.wo-workflow-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #bdd0d5;
+  text-align: left;
+  cursor: pointer;
+}
+.wo-workflow-list button:hover,
+.wo-workflow-list button:focus-visible {
+  border-color: #3b6171;
+}
+.wo-workflow-list button.active {
+  border-color: #4584a0;
+  background: #173544;
+  color: white;
+}
+.wo-workflow-list i {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #142b37;
+  color: #efc578;
+  font-style: normal;
+}
+.wo-workflow-list span {
+  display: grid;
+  gap: 2px;
+}
+.wo-workflow-list small {
+  color: #82a0a9;
+}
+.wo-open-author {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #b78350;
+  border-radius: 8px;
+  background: #2d221b;
+  color: #ffdaa5;
+  cursor: pointer;
+}
+.wo-stage {
+  min-width: 0;
+  padding: 28px;
+  background: radial-gradient(circle at 50% 28%, #183442 0, #091820 66%);
+}
+.wo-stage header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.wo-stage header span {
+  color: #6dccd5;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wo-stage h2 {
+  margin: 5px 0;
+  font:
+    600 34px/1.1 Georgia,
+    serif;
+}
+.wo-stage header p {
+  max-width: 680px;
+  color: #abc0c5;
+}
+.wo-stage header strong {
+  align-self: start;
+  border: 1px solid #3b8090;
+  border-radius: 20px;
+  padding: 6px 10px;
+  color: #80d7df;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.wo-canvas {
+  display: grid;
+  place-items: center;
+  min-height: 470px;
+  margin-top: 24px;
+  overflow: hidden;
+  border: 1px solid #294a58;
+  border-radius: 14px;
+  background:
+    linear-gradient(#0c1c25e8, #0c1c25e8),
+    linear-gradient(90deg, #1d3540 1px, transparent 1px),
+    linear-gradient(#1d3540 1px, transparent 1px);
+  background-size:
+    auto,
+    28px 28px,
+    28px 28px;
+  box-shadow: 0 25px 70px #0007;
+}
+.wo-canvas svg {
+  width: min(95%, 840px);
+  max-height: 430px;
+  overflow: visible;
+  font:
+    13px system-ui,
+    sans-serif;
+}
+.wo-canvas text {
+  fill: #dcebed;
+}
+.wo-axis,
+.wo-boundary {
+  stroke: #6f8b94;
+  stroke-width: 2;
+}
+.wo-wave {
+  fill: none;
+  stroke: #67d2c4;
+  stroke-width: 5;
+}
+.wo-envelope {
+  fill: none;
+  stroke: #eab95f;
+  stroke-width: 2;
+  stroke-dasharray: 7 6;
+}
+.wo-probe,
+.wo-normal {
+  stroke: #e5b85f;
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.wo-particle,
+.wo-source {
+  fill: #f0755e;
+  stroke: #ffd1a2;
+  stroke-width: 2;
+}
+.wo-node {
+  fill: #f1c570;
+  stroke: #1a3038;
+  stroke-width: 2;
+}
+.wo-rays,
+.wo-ray {
+  fill: none;
+  stroke: #edbd67;
+  stroke-width: 3;
+}
+.wo-ray.secondary {
+  stroke: #69cfc3;
+}
+.wo-barrier {
+  fill: #789097;
+}
+.wo-slit {
+  fill: #0c1c25;
+}
+.wo-intensity {
+  fill: none;
+  stroke: #69cfc3;
+  stroke-width: 3;
+}
+.wo-lens {
+  fill: #5eb3c055;
+  stroke: #7ed2df;
+  stroke-width: 3;
+}
+.wo-object {
+  fill: none;
+  stroke: #ed795f;
+  stroke-width: 4;
+}
+.wo-image {
+  stroke: #69cfc3;
+  stroke-width: 5;
+}
+.wo-beam {
+  stroke: #f0c166;
+  stroke-width: 12;
+  opacity: 0.62;
+}
+.wo-polarizer,
+.wo-analyzer {
+  fill: #16323e;
+  stroke: #71cbd4;
+  stroke-width: 4;
+}
+.wo-axis-line {
+  stroke: #f1bd65;
+  stroke-width: 5;
+}
+.wo-equation {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+  padding: 16px 20px;
+  border-left: 3px solid #e9b85f;
+  background: #132731;
+}
+.wo-equation small {
+  color: #82a1a9;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wo-equation b {
+  color: #fff4d7;
+  font:
+    500 20px/1.4 Georgia,
+    serif;
+}
+.wo-inspector {
+  border-right: 0;
+  border-left: 1px solid #203944;
+}
+.wo-inspector-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.wo-inspector-title span {
+  font-weight: 700;
+}
+.wo-inspector-title b {
+  color: #72cbd3;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.wo-inspector > label {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+}
+.wo-inspector label span {
+  display: flex;
+  justify-content: space-between;
+  color: #b7cbd0;
+  font-size: 12px;
+}
+.wo-inspector output {
+  color: #f2ce88;
+  font-weight: 700;
+}
+.wo-inspector input {
+  width: 100%;
+  accent-color: #e87960;
+}
+.wo-values,
+.wo-assumptions {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #233e49;
+}
+.wo-values h3,
+.wo-assumptions h3 {
+  color: #78969e;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.wo-values div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  color: #9eb6bb;
+}
+.wo-values b {
+  color: #eef7f7;
+  text-align: right;
+}
+.wo-assumptions p {
+  margin: 8px 0;
+  color: #a2b8bd;
+  font-size: 12px;
+}
+.wo-valid {
+  display: grid;
+  gap: 4px;
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid #2c7167;
+  border-radius: 8px;
+  background: #12352f;
+}
+.wo-valid b {
+  color: #79d6bd;
+}
+.wo-valid span {
+  color: #bdd9d2;
+  font-size: 12px;
+  line-height: 1.4;
+}
+@media (max-width: 1120px) {
+  .wave-optics-alpha {
+    grid-template-columns: 235px 1fr;
+  }
+  .wo-inspector {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .wo-inspector-title {
+    grid-column: 1/-1;
+  }
+  .wo-values,
+  .wo-assumptions,
+  .wo-valid {
+    margin-top: 8px;
+  }
+}
+@media (max-width: 760px) {
+  .wave-optics-alpha {
+    display: block;
+  }
+  .wo-workflow-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wo-stage {
+    padding: 18px;
+  }
+  .wo-canvas {
+    min-height: 340px;
+  }
+  .wo-inspector {
+    display: block;
+  }
+  .wo-stage header strong {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-optics-alpha *,
+  .wave-optics-alpha *::before,
+  .wave-optics-alpha *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
