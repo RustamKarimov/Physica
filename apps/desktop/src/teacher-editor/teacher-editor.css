@@ -1,0 +1,637 @@
+.teacher-workspace {
+  min-height: calc(100vh - 62px);
+  background: #0a1114;
+}
+.author-toolbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 16px;
+  border-bottom: 1px solid #26343a;
+  background: #0d1519;
+}
+.author-toolbar > button {
+  padding: 7px 9px;
+  border: 1px solid #314148;
+  border-radius: 3px;
+  font-size: 10px;
+}
+.project-identity {
+  min-width: 0;
+}
+.project-identity b,
+.project-identity span {
+  display: block;
+}
+.project-identity b {
+  font-size: 12px;
+}
+.project-identity span {
+  margin-top: 2px;
+  color: #718288;
+  font:
+    8px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+}
+.toolbar-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.toolbar-actions button {
+  padding: 7px 11px;
+  border: 1px solid #314148;
+  border-radius: 3px;
+  font-size: 9px;
+}
+.toolbar-actions button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.toolbar-actions button.primary {
+  color: #102125;
+  border-color: var(--teacher-teal);
+  background: var(--teacher-teal);
+}
+.editor-grid {
+  min-height: calc(100vh - 118px);
+  display: grid;
+  grid-template-columns: 226px minmax(580px, 1fr) 270px;
+}
+.library-panel,
+.teacher-inspector {
+  min-height: 100%;
+  background: #0d1519;
+}
+.library-panel {
+  border-right: 1px solid #26343a;
+}
+.teacher-inspector {
+  border-left: 1px solid #26343a;
+}
+.panel-heading {
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #26343a;
+}
+.panel-heading span {
+  color: var(--teacher-teal);
+  font:
+    8px "Cascadia Mono",
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.panel-heading b {
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.library-panel > input {
+  width: calc(100% - 22px);
+  margin: 11px;
+  padding: 9px 10px;
+  color: #dce7e4;
+  border: 1px solid #2c3e45;
+  outline: none;
+  background: #091114;
+  font-size: 9px;
+}
+.library-panel > input:focus {
+  border-color: var(--teacher-teal);
+}
+.library-results {
+  max-height: calc(100vh - 230px);
+  padding: 0 8px 12px;
+  overflow: auto;
+}
+.library-results button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  padding: 7px;
+  color: #dce7e4;
+  border: 1px solid transparent;
+  background: #111c20;
+  text-align: left;
+  cursor: pointer;
+}
+.library-results button:hover:not(:disabled) {
+  border-color: #3a595e;
+  background: #152328;
+}
+.library-results button:disabled {
+  opacity: 0.45;
+}
+.library-results svg {
+  width: 48px;
+  height: 38px;
+}
+.library-results b,
+.library-results small {
+  display: block;
+}
+.library-results b {
+  font-size: 10px;
+}
+.library-results small {
+  margin-top: 3px;
+  color: #708389;
+  font:
+    7px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+}
+.library-results em {
+  color: var(--teacher-teal);
+  font: normal 18px sans-serif;
+}
+
+.stage-column {
+  min-width: 0;
+  background: #0a1114;
+}
+.stage-toolbar {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  border-bottom: 1px solid #26343a;
+}
+.mode-switch {
+  display: flex;
+  padding: 3px;
+  border: 1px solid #304148;
+  border-radius: 4px;
+  background: #0c1518;
+}
+.mode-switch button {
+  padding: 6px 12px;
+  color: #849599;
+  border: 0;
+  background: transparent;
+  font:
+    8px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mode-switch button.active {
+  color: #102125;
+  background: var(--teacher-teal);
+}
+.mode-switch button.active.physics {
+  background: var(--teacher-coral);
+}
+.mode-explainer {
+  overflow: hidden;
+  color: #778a8f;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mode-explainer.physics {
+  color: #d78b7e;
+}
+.author-stage {
+  position: relative;
+  height: 405px;
+  overflow: hidden;
+  touch-action: none;
+  background: #111c20;
+}
+.author-stage.physics {
+  box-shadow: inset 0 0 0 1px rgba(239, 116, 94, 0.45);
+}
+.stage-grid-lines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(#385058 1px, transparent 1px),
+    linear-gradient(90deg, #385058 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.stage-axis {
+  position: absolute;
+  z-index: 0;
+  background: #60777d;
+}
+.stage-axis.horizontal {
+  width: 88%;
+  height: 1px;
+  left: 6%;
+  top: 62%;
+}
+.stage-axis.vertical {
+  width: 1px;
+  height: 84%;
+  left: 45%;
+  top: 8%;
+}
+.stage-axis span {
+  position: absolute;
+  color: #769097;
+  font:
+    italic 11px Georgia,
+    serif;
+}
+.stage-axis.horizontal span {
+  right: 2px;
+  top: 7px;
+}
+.stage-axis.vertical span {
+  left: 8px;
+  top: 0;
+}
+.stage-object {
+  position: absolute;
+  z-index: 2;
+  width: 100px;
+  min-height: 84px;
+  padding: 5px 7px 8px;
+  color: #dce9e6;
+  border: 1px solid transparent;
+  background: rgba(10, 18, 21, 0.8);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.stage-object:active {
+  cursor: grabbing;
+}
+.stage-object.selected.layout {
+  border-color: var(--teacher-teal);
+  box-shadow: 0 0 0 3px rgba(88, 199, 183, 0.12);
+}
+.stage-object.selected.physics {
+  border-color: var(--teacher-coral);
+  box-shadow: 0 0 0 3px rgba(239, 116, 94, 0.14);
+}
+.stage-object svg {
+  width: 76px;
+  height: 54px;
+  pointer-events: none;
+}
+.stage-object > span {
+  display: block;
+  overflow: hidden;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.stage-object > i {
+  position: absolute;
+  top: -17px;
+  left: -1px;
+  padding: 2px 5px;
+  color: #102125;
+  background: var(--teacher-teal);
+  font:
+    normal 6px "Cascadia Mono",
+    monospace;
+}
+.stage-object.physics > i {
+  background: var(--teacher-coral);
+}
+.empty-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 7px;
+  color: #72858a;
+}
+.empty-stage b {
+  color: #b0c0c1;
+  font:
+    500 18px Georgia,
+    serif;
+}
+.empty-stage span {
+  font-size: 10px;
+}
+
+.bottom-switcher {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  border-top: 1px solid #26343a;
+  border-bottom: 1px solid #26343a;
+  background: #0d1519;
+}
+.bottom-switcher button {
+  padding: 6px 10px;
+  font-size: 9px;
+}
+.bottom-switcher button.active {
+  color: #e8f1ef;
+  background: #1b2a2f;
+}
+.bottom-switcher span {
+  margin-left: auto;
+  color: #66787e;
+  font:
+    7px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+}
+
+.advanced-timeline,
+.physcript-panel {
+  min-height: 255px;
+  padding: 12px 14px;
+  background: #0b1316;
+}
+.timeline-toolbar,
+.script-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.timeline-toolbar b,
+.timeline-toolbar span,
+.script-toolbar b,
+.script-toolbar span {
+  display: block;
+}
+.timeline-toolbar b,
+.script-toolbar b {
+  font-size: 10px;
+}
+.timeline-toolbar span,
+.script-toolbar span {
+  margin-top: 3px;
+  color: #6f8186;
+  font-size: 8px;
+}
+.timeline-toolbar output {
+  color: var(--teacher-teal);
+  font:
+    12px "Cascadia Mono",
+    monospace;
+}
+.timeline-scrubber {
+  width: 100%;
+  accent-color: var(--teacher-teal);
+}
+.timeline-tracks {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+.timeline-track {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  min-height: 31px;
+}
+.timeline-label {
+  display: grid;
+  grid-template-columns: 8px 1fr;
+  align-content: center;
+  column-gap: 7px;
+  padding: 0 7px;
+  border-right: 1px solid #304047;
+  background: #111c20;
+}
+.timeline-label b {
+  font-size: 8px;
+}
+.timeline-label span {
+  grid-column: 2;
+  color: #62747a;
+  font:
+    6px "Cascadia Mono",
+    monospace;
+}
+.track-dot {
+  grid-row: span 2;
+  width: 6px;
+  height: 6px;
+  align-self: center;
+  border-radius: 50%;
+  background: var(--teacher-teal);
+}
+.track-dot.clock {
+  background: #f1c469;
+}
+.track-dot.audio {
+  background: #b38ce3;
+}
+.track-dot.acquisition {
+  background: #ef745e;
+}
+.timeline-lane {
+  position: relative;
+  overflow: hidden;
+  background: #0f181c;
+}
+.timeline-clip {
+  position: absolute;
+  top: 5px;
+  height: 21px;
+  overflow: hidden;
+  padding: 5px 7px;
+  color: #84989c;
+  border: 1px solid #38545a;
+  background: #193038;
+  font-size: 7px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.timeline-clip.active {
+  color: #112125;
+  border-color: #84d3c7;
+  background: var(--teacher-teal);
+}
+.timeline-playhead {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #fff;
+  box-shadow: 0 0 5px #fff;
+}
+
+.inspector-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: 1px solid #26343a;
+}
+.inspector-tabs button {
+  min-width: 0;
+  padding: 9px 1px;
+  overflow: hidden;
+  color: #65777c;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-size: 6px;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.inspector-tabs button.active {
+  color: #dce8e6;
+  border-bottom-color: var(--teacher-teal);
+}
+.inspector-content {
+  padding: 12px;
+}
+.inspector-content > p {
+  color: #718388;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.inspector-property {
+  display: grid;
+  gap: 4px;
+  padding: 9px 0;
+  border-bottom: 1px solid #233137;
+}
+.inspector-property span {
+  color: #718389;
+  font:
+    7px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+}
+.inspector-property b {
+  overflow: hidden;
+  color: #c8d6d4;
+  font-size: 9px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+}
+.inspector-note {
+  margin-top: 16px;
+  padding: 10px;
+  border-left: 2px solid var(--teacher-teal);
+  background: #111d21;
+}
+.validation-ok,
+.validation-entry {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid #315247;
+  background: #10231d;
+}
+.validation-ok b {
+  color: #72d9a7;
+  font-size: 10px;
+}
+.validation-ok span,
+.validation-entry span {
+  color: #91a29f;
+  font-size: 8px;
+}
+.validation-entry {
+  margin-bottom: 7px;
+  border-color: #744438;
+  background: #241713;
+}
+.validation-entry b {
+  color: var(--teacher-coral);
+  font:
+    7px "Cascadia Mono",
+    monospace;
+  text-transform: uppercase;
+}
+
+.script-toolbar > div:last-child {
+  display: flex;
+  gap: 5px;
+}
+.script-toolbar button {
+  padding: 5px 7px;
+  border: 1px solid #304249;
+  font-size: 7px;
+}
+.script-toolbar button:disabled {
+  opacity: 0.35;
+}
+.script-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 8px;
+  height: 185px;
+}
+.script-grid textarea {
+  width: 100%;
+  resize: none;
+  padding: 10px;
+  color: #d8e8e4;
+  border: 1px solid #2e4148;
+  outline: none;
+  background: #071014;
+  font:
+    9px/1.55 "Cascadia Mono",
+    monospace;
+}
+.script-grid textarea:focus {
+  border-color: var(--teacher-teal);
+}
+.script-diagnostics {
+  padding: 8px;
+  overflow: auto;
+  border: 1px solid #283940;
+  background: #0e181c;
+}
+.script-diagnostics > div {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 7px;
+  background: #211713;
+}
+.script-diagnostics b {
+  color: var(--teacher-coral);
+  font:
+    7px "Cascadia Mono",
+    monospace;
+}
+.script-diagnostics span {
+  color: #87989b;
+  font-size: 8px;
+  line-height: 1.4;
+}
+.script-diagnostics .script-valid {
+  height: 100%;
+  align-content: center;
+  background: #10231d;
+  text-align: center;
+}
+.script-diagnostics .script-valid b {
+  color: #72d9a7;
+  font-size: 10px;
+}
+
+@media (max-width: 1120px) {
+  .editor-grid {
+    grid-template-columns: 210px minmax(560px, 1fr);
+  }
+  .teacher-inspector {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+  }
+}

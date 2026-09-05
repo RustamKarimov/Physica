@@ -29,3 +29,5 @@ export * from "./lesson-flow";
 export * from "./lesson-runtime";
 export * from "./lesson-schedule";
 export * from "./lesson-types";
+export * from "./timeline-types";
+export * from "./timeline";

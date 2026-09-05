@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@physica/assets": "workspace:*",
+    "@physica/commands": "workspace:*",
     "@physica/core-model": "workspace:*",
     "@physica/controls": "workspace:*",
     "@physica/data": "workspace:*",

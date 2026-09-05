@@ -1,0 +1,16 @@
+{
+  "id": "teacher-authoring-workflow",
+  "projectTitle": "Motion question",
+  "scene": "Motion explanation",
+  "entities": ["Ball"],
+  "librarySource": "physica:library/ball",
+  "physicalInitialPosition": { "x": 1.5, "y": 2 },
+  "layoutWritesPhysics": false,
+  "undoExact": true,
+  "redoExact": true,
+  "activeTimelineClips": [
+    { "id": "reveal", "clock": "presentation" },
+    { "id": "record", "clock": "simulation" }
+  ],
+  "validationHasErrors": false
+}

@@ -1,0 +1,14 @@
+{
+  "id": "physcript-projectile",
+  "title": "PhysScript projectile explanation",
+  "category": "physcript",
+  "description": "A deterministic declarative projectile authoring script with model, values, representation, graph, step and pause condition.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": [
+    "parse",
+    "validate",
+    "canonical-serialize",
+    "command-intents"
+  ]
+}

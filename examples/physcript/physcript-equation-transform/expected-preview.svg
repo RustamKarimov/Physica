@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">PhysScript equation transform preview</title>
+  <desc id="desc">Two semantic equation cards are connected by a reversible transform arrow and a teacher step.</desc>
+  <rect width="960" height="540" fill="#091114"/>
+  <text x="54" y="70" fill="#58c7b7" font-family="monospace" font-size="15">PHYSCRIPT · EQUATION WALKTHROUGH</text>
+  <rect x="70" y="155" width="300" height="170" rx="8" fill="#e9efec"/>
+  <rect x="590" y="155" width="300" height="170" rx="8" fill="#e9efec"/>
+  <text x="220" y="228" text-anchor="middle" fill="#142328" font-family="Georgia" font-size="37">F = ma</text>
+  <text x="740" y="228" text-anchor="middle" fill="#142328" font-family="Georgia" font-size="37">a = F / m</text>
+  <text x="220" y="283" text-anchor="middle" fill="#68787a" font-family="monospace" font-size="12">EqStart</text>
+  <text x="740" y="283" text-anchor="middle" fill="#68787a" font-family="monospace" font-size="12">EqSolved</text>
+  <path d="M400 240h130" stroke="#ef745e" stroke-width="5"/>
+  <path d="M530 240l-18-11v22z" fill="#ef745e"/>
+  <rect x="271" y="382" width="418" height="62" rx="5" fill="#14272c" stroke="#385057"/>
+  <text x="480" y="419" text-anchor="middle" fill="#d9e8e4" font-family="sans-serif" font-size="16">Step: Begin with Newton's second law</text>
+  <text x="480" y="490" text-anchor="middle" fill="#73868b" font-family="monospace" font-size="12">Semantic round-trip proof · not final lesson artwork</text>
+</svg>

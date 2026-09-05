@@ -1,0 +1,26 @@
+{
+  "id": "physcript-projectile",
+  "scene": "Projectile explanation",
+  "statementCount": 7,
+  "intentTypes": [
+    "add-model",
+    "set-property",
+    "set-property",
+    "add-representation",
+    "add-graph",
+    "add-step",
+    "add-pause-condition"
+  ],
+  "canonicalLines": [
+    "physica 1",
+    "scene \"Projectile explanation\"",
+    "model Ball type physica:model/projectile-v1",
+    "set Ball.speed = 20 m/s",
+    "set Ball.launch_angle = 45 deg",
+    "show physica:representation/trajectory-v1 of Ball",
+    "graph Ball.vertical_position against time",
+    "step \"Maximum height\"",
+    "pause simulation when Ball.vertical_velocity = 0 m/s"
+  ],
+  "arbitraryCode": false
+}

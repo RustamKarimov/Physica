@@ -1,0 +1,11 @@
+{
+  "id": "physcript-equation-transform",
+  "scene": "Equation rearrangement",
+  "intentTypes": ["add-step", "add-equation-transform"],
+  "semanticRoundTrip": true,
+  "transform": {
+    "kind": "transform-equation",
+    "source": "EqStart",
+    "target": "EqSolved"
+  }
+}

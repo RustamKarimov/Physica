@@ -1,0 +1,9 @@
+{
+  "id": "physcript-equation-transform",
+  "title": "PhysScript equation transform",
+  "category": "physcript",
+  "description": "A canonical declarative equation walkthrough with a teaching step and a semantic transform command intent.",
+  "entry": "run.ts",
+  "expectedPreview": "expected-preview.svg",
+  "capabilities": ["equation-transform", "teaching-step", "round-trip"]
+}
