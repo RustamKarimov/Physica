@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 8 complete — Mechanics Alpha and HC-05 verified
+**Current development phase:** Phase 9 complete — Waves and Optics Alpha verified
 
-**Current task:** Phase 8 and scheduled HC-05 complete; autonomous progression entering Phase 9 Waves and Optics
+**Current task:** Phase 9 Waves and Optics complete; autonomous progression entering Phase 10 Electricity, Circuits and Capacitance
 
-**Next task:** Execute Phase 9 — Waves and Optics, then continue through Phases 10–11 and run scheduled HC-06.
+**Next task:** Execute Phase 10 — Electricity, Circuits and Capacitance, then Phase 11 Fields and run scheduled HC-06.
 
 **Blockers:** None
 
@@ -21,6 +21,24 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-05 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-06 is scheduled after Phase 11, with early-trigger conditions remaining active.
+
+## Phase 9 result
+
+Completed and audited `docs/implementation/PHASE_9_WAVES_OPTICS_SPEC.md` and the full Phase 9 Waves and Optics Alpha. The implementation baseline is commit `de0ee7f`.
+
+`@physica/physics-waves` now owns immutable SI-canonical progressive, longitudinal, reflected-pulse, superposition, standing-wave and beat calculations, plus a scheduler-compatible harmonic-wave `PhysicalModelContract`. `@physica/physics-optics` owns two-source, single-slit, double-slit and grating diffraction, Snell refraction and total internal reflection, thin-lens imaging and Malus-law polarization. Both packages publish teacher-readable validation, exact scenarios and metadata-driven Physics Library contributions without React/editor dependencies or new third-party packages.
+
+`@physica/curriculum` now validates Cambridge Topics 1–8 and 12 from explicit capability, Library, example, scientific-test and release-gate evidence. Exactly 9 of 25 topics are `VALIDATED`; the remaining 16 remain explicitly `UNIMPLEMENTED`.
+
+The launcher now defaults to five usable, no-code Waves and Optics workflows: progressive waves, standing waves, double-slit interference, ray/lens optics and polarization. Their diagrams, equations, controls, assumptions, values and diagnostics derive from the same deterministic scientific state. The Author route contains matching project templates and the combined mechanics, waves and optics Library. Final review corrected floating-point drift at the central fringe, progressive-wave particle displacement and calculated polarizer attenuation.
+
+All 11 mandatory Phase 9 examples ship executable exact output, metadata, README, accessible SVG and truthful pending declarations. The full Gallery now has 98 exactly reconciled projects. Final `.physica`, PNG and WebM capture remains honestly deferred to the shared Phase 20 pipeline.
+
+Verification passed: frozen offline install across 158 workspaces; formatting; ESLint and architecture boundaries; strict TypeScript across 157 scripted workspaces; 102 unit/example/scientific files with 430 tests; 1 architecture file with 2 tests; all three application builds; and `Launch Physica.bat --check` with Tauri 2.11.4 and Cargo 1.94.1. During the combined gate, the 10,000-input scheduler determinism test exceeded its five-second per-test threshold under concurrent suite load; its isolated 17-test file passed in 2.08 seconds, confirming deterministic behavior and classifying the combined result as runner contention rather than a product failure.
+
+The Waves and Optics chunk is approximately 13.75 kB / 4.66 kB gzip and the stable startup chunk is approximately 446.99 kB / 126.52 kB gzip. The on-demand Foundation archive remains approximately 4.654 MB / 1.287 MB gzip and does not block the Phase 9 startup path.
+
+No completed step was reopened, no early health-check trigger fired and no Architecture Blocker exists. Phase 10 Electricity, Circuits and Capacitance is next; HC-06 remains scheduled after Phase 11.
 
 ## Phase 8 and HC-05 result
 
