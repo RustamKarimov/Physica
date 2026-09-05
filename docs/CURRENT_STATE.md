@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 7 complete — Teacher Editor and HC-04 verified
+**Current development phase:** Phase 8 complete — Mechanics Alpha and HC-05 verified
 
-**Current task:** Phase 7 and scheduled HC-04 complete; autonomous progression entering Phase 8 Mechanics
+**Current task:** Phase 8 and scheduled HC-05 complete; autonomous progression entering Phase 9 Waves and Optics
 
-**Next task:** Execute Phase 8 — Mechanics curriculum package for Cambridge Topics 1–6 and 12, then run the Mechanics Alpha release gate and scheduled HC-05.
+**Next task:** Execute Phase 9 — Waves and Optics, then continue through Phases 10–11 and run scheduled HC-06.
 
 **Blockers:** None
 
@@ -20,7 +20,25 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-04 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-05 is scheduled after Phase 8, with early-trigger conditions remaining active.
+**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-05 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-06 is scheduled after Phase 11, with early-trigger conditions remaining active.
+
+## Phase 8 and HC-05 result
+
+Completed and audited `docs/implementation/PHASE_8_MECHANICS_CURRICULUM_SPEC.md`, the full Phase 8 mechanics curriculum package and the scheduled Mechanics Alpha checkpoint. The implementation baseline is commit `a05d52d`; the checkpoint report is `docs/health-checkpoints/HC_05_MECHANICS_ALPHA.md`.
+
+`@physica/physics-mechanics` now owns immutable, SI-canonical calculations for measurements, kinematics, dynamics, statics, energy, deformation and circular motion, with teacher-readable validation and projectile/circular `PhysicalModelContract` implementations. Mechanics contributions register through the public Physics Library; shared foundational objects retain canonical IDs and gain topic metadata. No React/editor dependency, root schema change, clock, scheduler, competing writer, solver redesign or third-party dependency was introduced.
+
+`@physica/curriculum` now records explicit required and demonstrated evidence for all 25 Cambridge 9702 topics. Topics 1–6 and 12 are `VALIDATED`; the remaining 18 are explicitly `UNIMPLEMENTED`. Validation is computed only when every required capability, Library item, example, scientific test and release gate is present.
+
+The desktop launcher defaults to seven usable, no-code Mechanics Alpha workflows: projectile, inclined-plane FBD, pulley, collision, energy transfer, stress–strain and circular motion. Equations, assumptions, diagrams, vectors, values and diagnostics share one deterministic result. The Author route contains matching project templates and the combined mechanics Library. HC-05 corrected ground-contact display, actual-angle incline geometry, friction direction, diagram bounds, navigation semantics and misleading link text, and split oversized implementation files by responsibility.
+
+All 30 mandatory mechanics examples ship executable exact output, metadata, README, accessible SVG and truthful pending declarations. The full Gallery now has 87 exactly reconciled projects. Final `.physica`, PNG and WebM capture remains honestly deferred to the shared Phase 20 pipeline.
+
+Verification passed: frozen offline install across 147 workspaces; formatting; ESLint and architecture boundaries; strict TypeScript across 146 scripted workspaces; 98 unit/example/scientific files with 407 tests; 1 architecture file with 2 tests; 4 focused Phase 8 files with 48 tests; all three application builds; and `Launch Physica.bat --check` with Tauri 2.11.4 and Cargo 1.94.1.
+
+The Mechanics Alpha chunk is approximately 17.07 kB / 5.77 kB gzip and the stable startup chunk is approximately 419.06 kB / 120.01 kB gzip. The on-demand Foundation archive remains approximately 4.654 MB / 1.288 MB gzip and does not block Mechanics startup.
+
+No completed step was reopened and no Architecture Blocker exists. Phase 9 Waves and Optics is next; HC-06 follows the completed Waves/Optics, Electricity and Fields cluster at the end of Phase 11.
 
 ## Phase 7 and HC-04 result
 
