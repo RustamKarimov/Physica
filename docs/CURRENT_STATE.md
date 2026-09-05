@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 6 complete — Physics Runtime Preview and HC-03 verified
+**Current development phase:** Phase 7 complete — Teacher Editor and HC-04 verified
 
-**Current task:** Phase 6 and scheduled HC-03 complete; awaiting Phase 7 phase-level execution
+**Current task:** Phase 7 and scheduled HC-04 complete; autonomous progression entering Phase 8 Mechanics
 
-**Next task:** Execute Phase 7 — Teacher editor completion as one phase-level assignment. Implement Steps 7.1–7.5, then run scheduled HC-04 before Phase 8 Mechanics curriculum work.
+**Next task:** Execute Phase 8 — Mechanics curriculum package for Cambridge Topics 1–6 and 12, then run the Mechanics Alpha release gate and scheduled HC-05.
 
 **Blockers:** None
 
@@ -20,7 +20,23 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
-**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-03 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-04 is scheduled after Phase 7 Step 7.5, with early-trigger conditions remaining active.
+**Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-04 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-05 is scheduled after Phase 8, with early-trigger conditions remaining active.
+
+## Phase 7 and HC-04 result
+
+Completed and audited `docs/implementation/PHASE_7_TEACHER_EDITOR_PHYSSCRIPT_SPEC.md`, all roadmap Steps 7.1–7.5 and the scheduled Teacher Editor checkpoint. The implementation baseline is commit `91f0c24`; the checkpoint report is `docs/health-checkpoints/HC_04_TEACHER_EDITOR.md`.
+
+Delivered the first coherent teacher-authoring shell: metadata-driven templates, authoritative project creation, searchable Physics Library instantiation, meaningful stage glyphs, selection, five inspector tabs, explicit layout versus physical manipulation, undo/redo, JSON snapshot download, an advanced four-track timeline and deterministic PhysScript V1.
+
+`@physica/storyboard` now compiles and evaluates animation, named-clock, audio and acquisition tracks without advancing clocks or writing runtime state. `@physica/commands` now owns PhysScript parsing, line/column recovery diagnostics, semantic validation, canonical serialization and bidirectional JSON-safe command intents without arbitrary execution.
+
+The stable authoring shell is approximately 385.41 kB / 111.02 kB gzip. The earlier 4.664 MB renderer/solver observatory is now an on-demand Foundation archive rather than startup work. HC-04 also separated the 1,566-line combined stylesheet by owner and corrected a PhysScript lint defect.
+
+Three complete Gallery projects were added: `physcript-projectile`, `physcript-equation-transform` and `teacher-authoring-workflow`. All 57 Gallery metadata entries reconcile exactly with the pending-artifact ledger.
+
+Verification passed: frozen install across 117 workspaces; formatting; ESLint and architecture boundaries; strict TypeScript across 116 scripted workspaces; 94 unit/example/scientific files with 359 tests; 1 architecture file with 2 tests; all three application builds; and `Launch Physica.bat --check` with Tauri 2.11.4 and Cargo 1.94.1. The live launcher reached the desktop executable, but the Windows inspection helper exited before capture, so no automated live screenshot is claimed.
+
+No completed step was reopened and no Architecture Blocker exists. Phase 8 Mechanics is next and must cover Cambridge Topics 1–6 and 12 without bias toward the later user-selected random-topic acceptance exercise.
 
 ## Phase 6 and HC-03 result
 
