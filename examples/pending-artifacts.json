@@ -1519,6 +1519,50 @@
         "example.spec.ts"
       ],
       "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "shm-linked-views",
+      "path": "examples/oscillations/shm-linked-views",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "pendulum-shm",
+      "path": "examples/oscillations/pendulum-shm",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "damped-oscillator",
+      "path": "examples/oscillations/damped-oscillator",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "resonance",
+      "path": "examples/oscillations/resonance",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
     }
   ]
 }

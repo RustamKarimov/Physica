@@ -72,6 +72,55 @@ const ALPHA_PARTS: Readonly<Record<string, readonly string[]>> = Object.freeze({
     "Velocity vector",
     "Centripetal-force vector",
   ],
+  "horizontal-mass-spring": [
+    "Support",
+    "Spring",
+    "Mass",
+    "Equilibrium marker",
+    "Displacement vector",
+    "Linked graph panel",
+  ],
+  "vertical-mass-spring": [
+    "Support",
+    "Spring",
+    "Mass",
+    "Equilibrium marker",
+    "Energy bars",
+  ],
+  "simple-pendulum": [
+    "Support",
+    "String",
+    "Pendulum bob",
+    "Equilibrium marker",
+    "Angular arc",
+  ],
+  "damped-oscillator": [
+    "Support",
+    "Spring",
+    "Damper",
+    "Mass",
+    "Damping envelope",
+  ],
+  "driven-spring-oscillator": [
+    "Driver/motor",
+    "Spring",
+    "Mass",
+    "Phase indicator",
+  ],
+  "resonance-demonstration": [
+    "Driver/motor",
+    "Oscillating platform",
+    "Mass",
+    "Resonance curve",
+  ],
+  "coupled-oscillator-extension": [
+    "Support",
+    "Spring A",
+    "Mass A",
+    "Coupling spring",
+    "Mass B",
+    "Spring B",
+  ],
 });
 
 function snapshot(

@@ -4,56 +4,62 @@ import {
   MECHANICS_EXAMPLE_IDS,
   type MechanicsExampleId,
 } from "./scenario-catalog";
+import {
+  OSCILLATION_EXAMPLE_IDS,
+  type OscillationExampleId,
+} from "./oscillation-scenarios";
 
 export interface MechanicsLibraryDescriptor {
   readonly name: string;
   readonly itemClass: LibraryItemClass;
-  readonly topics: readonly (1 | 2 | 3 | 4 | 5 | 6 | 12)[];
+  readonly topics: readonly (1 | 2 | 3 | 4 | 5 | 6 | 12 | 17)[];
   readonly tags: readonly string[];
-  readonly examples: readonly MechanicsExampleId[];
+  readonly examples: readonly (MechanicsExampleId | OscillationExampleId)[];
   readonly defaultParameters?: JsonObject;
 }
 
 const topicExamples = (
   topic: MechanicsLibraryDescriptor["topics"][number],
-): readonly MechanicsExampleId[] =>
-  MECHANICS_EXAMPLE_IDS.filter(
-    (id) =>
-      (
-        ({
-          "units-prefixes": 1,
-          "dimensional-analysis": 1,
-          "vector-components": 1,
-          "uncertainty-repeated-measurements": 1,
-          "constant-velocity": 2,
-          "constant-acceleration": 2,
-          "free-fall": 2,
-          projectile: 2,
-          "motion-graphs-linked": 2,
-          "forces-fbd": 3,
-          "inclined-plane": 3,
-          "pulley-system": 3,
-          "elastic-collision": 3,
-          "inelastic-collision": 3,
-          impulse: 3,
-          "moments-balance": 4,
-          "centre-of-mass-stability": 4,
-          density: 4,
-          "pressure-depth": 4,
-          "energy-conservation": 5,
-          "spring-energy": 5,
-          "work-area": 5,
-          "power-efficiency": 5,
-          "hooke-law": 6,
-          "young-modulus": 6,
-          "stress-strain": 6,
-          "elastic-energy": 6,
-          "uniform-circular-motion": 12,
-          "centripetal-force": 12,
-          "velocity-acceleration-followers": 12,
-        }) as const
-      )[id] === topic,
-  );
+): readonly (MechanicsExampleId | OscillationExampleId)[] =>
+  topic === 17
+    ? OSCILLATION_EXAMPLE_IDS
+    : MECHANICS_EXAMPLE_IDS.filter(
+        (id) =>
+          (
+            ({
+              "units-prefixes": 1,
+              "dimensional-analysis": 1,
+              "vector-components": 1,
+              "uncertainty-repeated-measurements": 1,
+              "constant-velocity": 2,
+              "constant-acceleration": 2,
+              "free-fall": 2,
+              projectile: 2,
+              "motion-graphs-linked": 2,
+              "forces-fbd": 3,
+              "inclined-plane": 3,
+              "pulley-system": 3,
+              "elastic-collision": 3,
+              "inelastic-collision": 3,
+              impulse: 3,
+              "moments-balance": 4,
+              "centre-of-mass-stability": 4,
+              density: 4,
+              "pressure-depth": 4,
+              "energy-conservation": 5,
+              "spring-energy": 5,
+              "work-area": 5,
+              "power-efficiency": 5,
+              "hooke-law": 6,
+              "young-modulus": 6,
+              "stress-strain": 6,
+              "elastic-energy": 6,
+              "uniform-circular-motion": 12,
+              "centripetal-force": 12,
+              "velocity-acceleration-followers": 12,
+            }) as const
+          )[id] === topic,
+      );
 
 export function descriptors(
   itemClass: LibraryItemClass,

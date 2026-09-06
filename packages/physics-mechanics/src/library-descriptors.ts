@@ -3,6 +3,7 @@ import {
   descriptors,
   type MechanicsLibraryDescriptor,
 } from "./library-model-descriptors";
+import { OSCILLATION_LIBRARY_DESCRIPTORS } from "./oscillation-library-descriptors";
 
 const APPARATUS = [
   ...descriptors(
@@ -371,4 +372,5 @@ export const MECHANICS_LIBRARY_DESCRIPTORS = mergeDescriptors([
   ...APPARATUS,
   ...VISUALS,
   ...INSTRUMENTS,
+  ...OSCILLATION_LIBRARY_DESCRIPTORS,
 ]);

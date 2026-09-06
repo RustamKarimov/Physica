@@ -1324,6 +1324,46 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/oscillations/damped-oscillator:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/oscillations/pendulum-shm:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/oscillations/resonance:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/oscillations/shm-linked-views:
+    dependencies:
+      '@physica/physics-mechanics':
+        specifier: workspace:*
+        version: link:../../../packages/physics-mechanics
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/physcript/physcript-equation-transform:
     dependencies:
       '@physica/commands':
@@ -2159,6 +2199,9 @@ importers:
       '@physica/solver-analytical':
         specifier: workspace:*
         version: link:../solver-analytical
+      '@physica/solver-ode':
+        specifier: workspace:*
+        version: link:../solver-ode
       '@physica/units':
         specifier: workspace:*
         version: link:../units

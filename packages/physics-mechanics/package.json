@@ -17,6 +17,7 @@
     "@physica/physics-core": "workspace:*",
     "@physica/plugin-sdk": "workspace:*",
     "@physica/solver-analytical": "workspace:*",
+    "@physica/solver-ode": "workspace:*",
     "@physica/units": "workspace:*"
   },
   "devDependencies": {
