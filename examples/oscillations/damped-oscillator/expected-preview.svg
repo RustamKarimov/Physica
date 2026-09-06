@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Damped oscillator deterministic physics result</title>
+  <desc id="description">How does viscous damping reduce amplitude and mechanical energy? Motion, vector direction, phase and values are labelled as well as coloured.</desc>
+  <rect width="960" height="540" fill="#0d1321"/>
+  <text x="58" y="74" fill="#9eb8ff" font-family="system-ui" font-size="18">PHYSICA · TOPIC 17 · MODEL / LOAD</text>
+  <text x="58" y="132" fill="#ffffff" font-family="system-ui" font-size="34" font-weight="700">Damped oscillator</text>
+  <path d="M80 285h120l25-55 45 110 45-110 45 110 45-55h90" fill="none" stroke="#ffc66d" stroke-width="7"/>
+  <rect x="495" y="245" width="95" height="80" rx="8" fill="#39567d" stroke="#9eb8ff" stroke-width="4"/>
+  <path d="M615 310c42-90 84-90 126 0s84 90 126 0" fill="none" stroke="#78e0c4" stroke-width="5"/>
+  <text x="58" y="395" fill="#d9e7f2" font-family="system-ui" font-size="20">x, v, a, F and energy share one labelled time</text>
+  <text x="58" y="438" fill="#a9bfd0" font-family="ui-monospace" font-size="14">{finalState:{timeSeconds:3.9999999999999587,displacementMetres:-0.0403299680531019,velocityMetresPerSecond:0.034130832</text>
+  <text x="58" y="495" fill="#ffc66d" font-family="system-ui" font-size="16">Deterministic SI-canonical Phase 13 preview</text>
+</svg>

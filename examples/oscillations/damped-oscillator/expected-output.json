@@ -1,0 +1,78 @@
+{
+  "id": "damped-oscillator",
+  "topic": 17,
+  "title": "Damped oscillator",
+  "question": "How does viscous damping reduce amplitude and mechanical energy?",
+  "parameters": {
+    "massKilograms": 1,
+    "springConstantNewtonsPerMetre": 16,
+    "dampingKilogramsPerSecond": 0.8,
+    "driveForceAmplitudeNewtons": 0,
+    "driveAngularFrequencyRadiansPerSecond": 0,
+    "initialDisplacementMetres": 0.2,
+    "durationSeconds": 4
+  },
+  "result": {
+    "finalState": {
+      "timeSeconds": 3.9999999999999587,
+      "displacementMetres": -0.0403299680531019,
+      "velocityMetresPerSecond": 0.03413083280751389,
+      "accelerationMetresPerSecondSquared": 0.6179748226036192,
+      "restoringForceNewtons": 0.6452794888496304,
+      "dampingForceNewtons": -0.027304666246011113,
+      "drivingForceNewtons": 0,
+      "kineticEnergyJoules": 0.0005824568740672332,
+      "potentialEnergyJoules": 0.013012050585313758,
+      "mechanicalEnergyJoules": 0.013594507459380992,
+      "dissipatedPowerWatts": 0.0009319309985075732
+    },
+    "energyTrace": [
+      {
+        "timeSeconds": 0,
+        "energyJoules": 0.32
+      },
+      {
+        "timeSeconds": 0.4000000000000002,
+        "energyJoules": 0.2360707519657945
+      },
+      {
+        "timeSeconds": 0.8000000000000005,
+        "energyJoules": 0.1701749349865428
+      },
+      {
+        "timeSeconds": 1.2000000000000008,
+        "energyJoules": 0.12343006668492071
+      },
+      {
+        "timeSeconds": 1.6000000000000012,
+        "energyJoules": 0.09049296712125751
+      },
+      {
+        "timeSeconds": 2.0000000000000013,
+        "energyJoules": 0.06453226455480955
+      },
+      {
+        "timeSeconds": 2.399999999999993,
+        "energyJoules": 0.04811517790075523
+      },
+      {
+        "timeSeconds": 2.7999999999999843,
+        "energyJoules": 0.03373933739596489
+      },
+      {
+        "timeSeconds": 3.1999999999999758,
+        "energyJoules": 0.02557836638699586
+      },
+      {
+        "timeSeconds": 3.5999999999999672,
+        "energyJoules": 0.01764115806211522
+      },
+      {
+        "timeSeconds": 3.9999999999999587,
+        "energyJoules": 0.013594507459380992
+      }
+    ]
+  },
+  "representations": ["mass-spring-damper", "damping envelope", "energy graph"],
+  "assumptions": ["linear spring", "viscous damping", "fixed-step RK4"]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "pendulum-shm",
+  "topic": 17,
+  "title": "Small-angle pendulum",
+  "question": "When does a pendulum behave as simple harmonic motion?",
+  "parameters": {
+    "lengthMetres": 1.2,
+    "angularAmplitudeRadians": 0.12,
+    "gravitationalAccelerationMetresPerSecondSquared": 9.81,
+    "massKilograms": 0.2,
+    "timeSeconds": 0.8
+  },
+  "result": {
+    "timeSeconds": 0.8,
+    "angleRadians": -0.07881536812846984,
+    "angularVelocityRadiansPerSecond": -0.2587238413441553,
+    "arcDisplacementMetres": -0.09457844175416381,
+    "periodSeconds": 2.1975359457694705,
+    "angularFrequencyRadiansPerSecond": 2.8591956910991594,
+    "kineticEnergyJoules": 0.009639075755502095,
+    "smallAnglePotentialEnergyJoules": 0.007312604244497906,
+    "modelDisclosure": "Small-angle pendulum using sin(theta) approximately theta; |amplitude| <= 0.35 rad."
+  },
+  "representations": [
+    "pendulum",
+    "equilibrium and extremes",
+    "angular displacement",
+    "energy exchange"
+  ],
+  "assumptions": [
+    "small angular amplitude",
+    "point bob",
+    "rigid massless string"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "pendulum-shm",
+  "title": "Small-angle pendulum",
+  "category": "oscillations",
+  "topic": 17,
+  "question": "When does a pendulum behave as simple harmonic motion?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

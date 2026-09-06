@@ -1,0 +1,15 @@
+{
+  "id": "damped-oscillator",
+  "title": "Damped oscillator",
+  "category": "oscillations",
+  "topic": 17,
+  "question": "How does viscous damping reduce amplitude and mechanical energy?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

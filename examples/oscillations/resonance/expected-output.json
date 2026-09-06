@@ -1,0 +1,598 @@
+{
+  "id": "resonance",
+  "topic": 17,
+  "title": "Driven resonance",
+  "question": "How do driving frequency and damping control amplitude and phase lag?",
+  "parameters": {
+    "massKilograms": 1,
+    "springConstantNewtonsPerMetre": 25,
+    "dampingKilogramsPerSecond": 1.2,
+    "driveForceAmplitudeNewtons": 2,
+    "selectedAngularFrequencyRadiansPerSecond": 5
+  },
+  "result": {
+    "selected": {
+      "drivingAngularFrequencyRadiansPerSecond": 5,
+      "amplitudeMetres": 0.3333333333333333,
+      "phaseLagRadians": 1.5707963267948966,
+      "naturalAngularFrequencyRadiansPerSecond": 5,
+      "dampingRatio": 0.12
+    },
+    "curve": [
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0,
+        "amplitudeMetres": 0.08,
+        "phaseLagRadians": 0,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.125,
+        "amplitudeMetres": 0.0800485886051655,
+        "phaseLagRadians": 0.006003680211606863,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.25,
+        "amplitudeMetres": 0.08019469846606814,
+        "phaseLagRadians": 0.01202949489666755,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.375,
+        "amplitudeMetres": 0.08043936762367117,
+        "phaseLagRadians": 0.01809984596407317,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.5,
+        "amplitudeMetres": 0.080784346011282,
+        "phaseLagRadians": 0.024237676864737292,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.625,
+        "amplitudeMetres": 0.08123212589971268,
+        "phaseLagRadians": 0.030466760320716792,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.75,
+        "amplitudeMetres": 0.08178598584751245,
+        "phaseLagRadians": 0.036812007206370394,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 0.875,
+        "amplitudeMetres": 0.08245004955959005,
+        "phaseLagRadians": 0.04329980502385218,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1,
+        "amplitudeMetres": 0.08322936157315372,
+        "phaseLagRadians": 0.04995839572194276,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.125,
+        "amplitudeMetres": 0.08412998230188312,
+        "phaseLagRadians": 0.05681830439482634,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.25,
+        "amplitudeMetres": 0.08515910571160291,
+        "phaseLagRadians": 0.06391283278873403,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.375,
+        "amplitudeMetres": 0.08632520381654947,
+        "phaseLagRadians": 0.07127863470976352,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.5,
+        "amplitudeMetres": 0.08763820333003881,
+        "phaseLagRadians": 0.07895639460049377,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.625,
+        "amplitudeMetres": 0.08910970124894375,
+        "phaseLagRadians": 0.08699163605979558,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.75,
+        "amplitudeMetres": 0.0907532279918623,
+        "phaseLagRadians": 0.09543569436659365,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 1.875,
+        "amplitudeMetres": 0.09258456906922785,
+        "phaseLagRadians": 0.10434689675511082,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2,
+        "amplitudeMetres": 0.09462215930060994,
+        "phaseLagRadians": 0.11379200714370806,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.125,
+        "amplitudeMetres": 0.09688756751884502,
+        "phaseLagRadians": 0.12384800946176265,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.25,
+        "amplitudeMetres": 0.09940609478002628,
+        "phaseLagRadians": 0.1346043273768229,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.375,
+        "amplitudeMetres": 0.10220751566757162,
+        "phaseLagRadians": 0.1461656105610422,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.5,
+        "amplitudeMetres": 0.10532700073778191,
+        "phaseLagRadians": 0.1586552621864014,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.625,
+        "amplitudeMetres": 0.10880626893953277,
+        "phaseLagRadians": 0.172219944200975,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.75,
+        "amplitudeMetres": 0.1126950323273758,
+        "phaseLagRadians": 0.18703538349272572,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 2.875,
+        "amplitudeMetres": 0.11705281164090316,
+        "phaseLagRadians": 0.20331392397731124,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3,
+        "amplitudeMetres": 0.12195121951219513,
+        "phaseLagRadians": 0.22131444234779127,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.125,
+        "amplitudeMetres": 0.12747682513194875,
+        "phaseLagRadians": 0.2413554905754038,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.25,
+        "amplitudeMetres": 0.13373472193783273,
+        "phaseLagRadians": 0.26383287639059916,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.375,
+        "amplitudeMetres": 0.1408528984782051,
+        "phaseLagRadians": 0.2892433826871459,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.5,
+        "amplitudeMetres": 0.14898741663515463,
+        "phaseLagRadians": 0.3182170001987808,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.625,
+        "amplitudeMetres": 0.15832812945908634,
+        "phaseLagRadians": 0.3515609272310688,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.75,
+        "amplitudeMetres": 0.16910400047245544,
+        "phaseLagRadians": 0.3903196047863733,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 3.875,
+        "amplitudeMetres": 0.18158553808207797,
+        "phaseLagRadians": 0.4358558327695102,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4,
+        "amplitudeMetres": 0.19607843137254904,
+        "phaseLagRadians": 0.4899573262537283,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.125,
+        "amplitudeMetres": 0.21289520819412847,
+        "phaseLagRadians": 0.5549674554306929,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.25,
+        "amplitudeMetres": 0.23227737443297877,
+        "phaseLagRadians": 0.6339195204893818,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.375,
+        "amplitudeMetres": 0.2542160696940357,
+        "phaseLagRadians": 0.7306007564243329,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.5,
+        "amplitudeMetres": 0.27809311803741715,
+        "phaseLagRadians": 0.8493502441943257,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.625,
+        "amplitudeMetres": 0.302095200063131,
+        "phaseLagRadians": 0.9941836470214738,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.75,
+        "amplitudeMetres": 0.3226167097076295,
+        "phaseLagRadians": 1.1666988215183167,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 4.875,
+        "amplitudeMetres": 0.33451466877667646,
+        "phaseLagRadians": 1.3628424714479555,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5,
+        "amplitudeMetres": 0.3333333333333333,
+        "phaseLagRadians": 1.5707963267948966,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.125,
+        "amplitudeMetres": 0.3185282558914956,
+        "phaseLagRadians": 1.7737555188431888,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.25,
+        "amplitudeMetres": 0.2940654835210538,
+        "phaseLagRadians": 1.9571046865839015,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.375,
+        "amplitudeMetres": 0.26551397556229583,
+        "phaseLagRadians": 2.1135637416410944,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.5,
+        "amplitudeMetres": 0.2371518345986814,
+        "phaseLagRadians": 2.2427594983851287,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.625,
+        "amplitudeMetres": 0.21121738364200743,
+        "phaseLagRadians": 2.348026643828314,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.75,
+        "amplitudeMetres": 0.18846642132933722,
+        "phaseLagRadians": 2.433732958544622,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 5.875,
+        "amplitudeMetres": 0.1688803616720881,
+        "phaseLagRadians": 2.5039496158471857,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6,
+        "amplitudeMetres": 0.1521275485262189,
+        "phaseLagRadians": 2.5620286682964704,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.125,
+        "amplitudeMetres": 0.1377956421013505,
+        "phaseLagRadians": 2.6105890708960207,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.25,
+        "amplitudeMetres": 0.12549019607843137,
+        "phaseLagRadians": 2.651635327336065,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.375,
+        "amplitudeMetres": 0.1148682559493811,
+        "phaseLagRadians": 2.686694219315242,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.5,
+        "amplitudeMetres": 0.10564391338497794,
+        "phaseLagRadians": 2.71693237104002,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.625,
+        "amplitudeMetres": 0.09758324490682911,
+        "phaseLagRadians": 2.7432477135240294,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.75,
+        "amplitudeMetres": 0.09049621763364536,
+        "phaseLagRadians": 2.7663377774081557,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 6.875,
+        "amplitudeMetres": 0.08422859234065205,
+        "phaseLagRadians": 2.786749874394248,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7,
+        "amplitudeMetres": 0.07865486303050145,
+        "phaseLagRadians": 2.804917834203066,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.125,
+        "amplitudeMetres": 0.07367244973967116,
+        "phaseLagRadians": 2.821188973264953,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.25,
+        "amplitudeMetres": 0.06919705211938151,
+        "phaseLagRadians": 2.835844015953821,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.375,
+        "amplitudeMetres": 0.06515897902398866,
+        "phaseLagRadians": 2.8491119287459945,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.5,
+        "amplitudeMetres": 0.061500263178447145,
+        "phaseLagRadians": 2.8611810653064325,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.625,
+        "amplitudeMetres": 0.0581723938155203,
+        "phaseLagRadians": 2.8722076177747935,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.75,
+        "amplitudeMetres": 0.05513453083212249,
+        "phaseLagRadians": 2.882322084987886,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 7.875,
+        "amplitudeMetres": 0.052352092742986085,
+        "phaseLagRadians": 2.8916342681142835,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8,
+        "amplitudeMetres": 0.04979563481716748,
+        "phaseLagRadians": 2.9002371630143893,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.125,
+        "amplitudeMetres": 0.04743995300807205,
+        "phaseLagRadians": 2.9082100186748803,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.25,
+        "amplitudeMetres": 0.045263364228088396,
+        "phaseLagRadians": 2.915620759822498,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.375,
+        "amplitudeMetres": 0.04324712497722642,
+        "phaseLagRadians": 2.9225279206699595,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.5,
+        "amplitudeMetres": 0.041374959069316715,
+        "phaseLagRadians": 2.9289821997278027,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.625,
+        "amplitudeMetres": 0.03963267184446496,
+        "phaseLagRadians": 2.9350277186061056,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.75,
+        "amplitudeMetres": 0.038007833316004096,
+        "phaseLagRadians": 2.940703047861001,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 8.875,
+        "amplitudeMetres": 0.03648951656183222,
+        "phaseLagRadians": 2.9460420482062486,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9,
+        "amplitudeMetres": 0.03506808062771471,
+        "phaseLagRadians": 2.9510745643961442,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.125,
+        "amplitudeMetres": 0.03373498948496729,
+        "phaseLagRadians": 2.955827000789669,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.25,
+        "amplitudeMetres": 0.032482660342658704,
+        "phaseLagRadians": 2.960322801309752,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.375,
+        "amplitudeMetres": 0.03130433597924359,
+        "phaseLagRadians": 2.9645828516990913,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.5,
+        "amplitudeMetres": 0.030193976823501743,
+        "phaseLagRadians": 2.968625818270064,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.625,
+        "amplitudeMetres": 0.029146169349867187,
+        "phaseLagRadians": 2.9724684344764998,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.75,
+        "amplitudeMetres": 0.028156048011540067,
+        "phaseLagRadians": 2.9761257443974465,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 9.875,
+        "amplitudeMetres": 0.02721922845622988,
+        "phaseLagRadians": 2.979611310467555,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      },
+      {
+        "drivingAngularFrequencyRadiansPerSecond": 10,
+        "amplitudeMetres": 0.026331750184445477,
+        "phaseLagRadians": 2.9829373914033916,
+        "naturalAngularFrequencyRadiansPerSecond": 5,
+        "dampingRatio": 0.12
+      }
+    ]
+  },
+  "representations": [
+    "driven spring",
+    "resonance curve",
+    "phase indicator",
+    "driving-force marker"
+  ],
+  "assumptions": ["linear steady-state response", "viscous damping"]
+}
