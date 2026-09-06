@@ -1,0 +1,15 @@
+{
+  "id": "first-law",
+  "title": "First-law energy ledger",
+  "category": "thermodynamics",
+  "topic": 16,
+  "question": "How are heat, work and internal-energy change reconciled?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "isothermal-process",
+  "title": "Isothermal P–V process",
+  "category": "thermodynamics",
+  "topic": 16,
+  "question": "Why does heat input equal work during ideal-gas expansion?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

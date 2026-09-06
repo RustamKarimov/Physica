@@ -1,0 +1,53 @@
+{
+  "id": "speed-distribution",
+  "topic": 15,
+  "title": "Particle speed distribution",
+  "question": "How does a gas ensemble occupy a range of speeds?",
+  "parameters": {
+    "particleCount": 24,
+    "temperatureKelvin": 300,
+    "seed": 9702
+  },
+  "result": {
+    "equivalentTemperatureKelvin": 300.0000000000001,
+    "meanSquaredSpeed": 267222.38709677424,
+    "speedHistogram": [
+      {
+        "minimumMetresPerSecond": 0,
+        "maximumMetresPerSecond": 117.1785213831464,
+        "count": 1
+      },
+      {
+        "minimumMetresPerSecond": 117.1785213831464,
+        "maximumMetresPerSecond": 234.3570427662928,
+        "count": 0
+      },
+      {
+        "minimumMetresPerSecond": 234.3570427662928,
+        "maximumMetresPerSecond": 351.5355641494392,
+        "count": 1
+      },
+      {
+        "minimumMetresPerSecond": 351.5355641494392,
+        "maximumMetresPerSecond": 468.7140855325856,
+        "count": 9
+      },
+      {
+        "minimumMetresPerSecond": 468.7140855325856,
+        "maximumMetresPerSecond": 585.892606915732,
+        "count": 6
+      },
+      {
+        "minimumMetresPerSecond": 585.892606915732,
+        "maximumMetresPerSecond": 703.0711282988784,
+        "count": 7
+      }
+    ]
+  },
+  "representations": [
+    "particle ensemble",
+    "speed histogram",
+    "mean-speed marker"
+  ],
+  "assumptions": ["seeded 2D teaching distribution"]
+}

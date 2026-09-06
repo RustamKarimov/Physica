@@ -1,0 +1,15 @@
+{
+  "id": "thermometer-calibration",
+  "title": "Thermometer calibration",
+  "category": "temperature",
+  "topic": 14,
+  "question": "How do two fixed points define a linear temperature scale?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

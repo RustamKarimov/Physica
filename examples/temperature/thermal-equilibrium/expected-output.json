@@ -1,0 +1,28 @@
+{
+  "id": "thermal-equilibrium",
+  "topic": 14,
+  "title": "Two-body thermal equilibrium",
+  "question": "How do two isolated bodies approach a shared temperature?",
+  "parameters": {
+    "bodyAInitialKelvin": 360,
+    "bodyBInitialKelvin": 280,
+    "bodyAHeatCapacityJoulesPerKelvin": 500,
+    "bodyBHeatCapacityJoulesPerKelvin": 1000,
+    "conductanceWattsPerKelvin": 25,
+    "timeSeconds": 60
+  },
+  "result": {
+    "timeSeconds": 60,
+    "bodyATemperatureKelvin": 307.2591464820396,
+    "bodyBTemperatureKelvin": 306.3704267589802,
+    "equilibriumTemperatureKelvin": 306.6666666666667,
+    "temperatureDifferenceKelvin": 0.8887197230594097,
+    "totalThermalEnergyJoules": 460000
+  },
+  "representations": [
+    "two thermal blocks",
+    "thermal contact",
+    "temperature-time graph"
+  ],
+  "assumptions": ["constant heat capacities", "isolated two-body system"]
+}

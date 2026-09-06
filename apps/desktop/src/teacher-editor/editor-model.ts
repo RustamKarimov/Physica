@@ -23,6 +23,7 @@ import { registerElectricityPhysicsLibrary } from "@physica/physics-electricity"
 import { registerFieldsPhysicsLibrary } from "@physica/physics-fields";
 import { registerMechanicsPhysicsLibrary } from "@physica/physics-mechanics";
 import { registerOpticsPhysicsLibrary } from "@physica/physics-optics";
+import { registerThermalPhysicsLibrary } from "@physica/physics-thermal";
 import { registerWavePhysicsLibrary } from "@physica/physics-waves";
 
 export interface ProjectTemplate {
@@ -283,6 +284,54 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
     itemIds: ["physica:library/power-transmission-setup"],
     seed: 990_000,
   },
+  {
+    id: "temperature-equilibrium",
+    title: "Temperature and equilibrium lesson",
+    description: "Two thermal bodies, probes and a linked temperature graph.",
+    question: "How does thermal contact produce a shared equilibrium?",
+    itemIds: ["physica:library/two-body-thermal-contact"],
+    seed: 1_000_000,
+  },
+  {
+    id: "thermometer-calibration",
+    title: "Thermometer calibration lesson",
+    description: "Fixed points, thermometric property and calibration graph.",
+    question: "How do fixed points define a temperature scale?",
+    itemIds: ["physica:library/thermometer-calibration-setup"],
+    seed: 1_010_000,
+  },
+  {
+    id: "ideal-gas",
+    title: "Ideal-gas investigation",
+    description: "Gas container, piston, gauges and a shared state table.",
+    question: "How are p, V, n and absolute T constrained?",
+    itemIds: ["physica:library/fixed-volume-gas-container"],
+    seed: 1_020_000,
+  },
+  {
+    id: "particle-gas",
+    title: "Particle gas lesson",
+    description: "Seeded elastic gas, collision counter and speed histogram.",
+    question: "How do molecular collisions connect to gas observables?",
+    itemIds: ["physica:library/2d-molecular-gas-box"],
+    seed: 1_030_000,
+  },
+  {
+    id: "brownian-motion",
+    title: "Brownian motion lesson",
+    description: "Gas ensemble, large tracer and deterministic path.",
+    question: "How do many impacts produce irregular tracer motion?",
+    itemIds: ["physica:library/brownian-motion-cell"],
+    seed: 1_040_000,
+  },
+  {
+    id: "thermodynamic-process",
+    title: "Thermodynamic process lesson",
+    description: "Piston, P–V graph, area shader and energy ledger.",
+    question: "How do heat, work and internal energy remain consistent?",
+    itemIds: ["physica:library/p-v-process-explorer"],
+    seed: 1_050_000,
+  },
 ];
 
 export interface EditorSession {
@@ -298,6 +347,7 @@ registerWavePhysicsLibrary(physicsLibrary.registries);
 registerOpticsPhysicsLibrary(physicsLibrary.registries);
 registerElectricityPhysicsLibrary(physicsLibrary.registries);
 registerFieldsPhysicsLibrary(physicsLibrary.registries);
+registerThermalPhysicsLibrary(physicsLibrary.registries);
 const builtInReferences = physicsLibrary.validateReferences();
 if (!builtInReferences.ok) throw new Error(builtInReferences.error.message);
 
@@ -308,7 +358,8 @@ export function createEditorSession(template: ProjectTemplate): EditorSession {
     description: template.question,
     tags: [
       "teacher-authored",
-      "phase-11",
+      "phase-12",
+      "thermal-gases-alpha",
       "fields-ac-alpha",
       "electricity-circuits-alpha",
     ],

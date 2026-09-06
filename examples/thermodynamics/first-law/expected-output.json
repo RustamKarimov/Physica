@@ -1,0 +1,59 @@
+{
+  "id": "first-law",
+  "topic": 16,
+  "title": "First-law energy ledger",
+  "question": "How are heat, work and internal-energy change reconciled?",
+  "parameters": {
+    "process": "constant-volume",
+    "finalTemperatureKelvin": 360
+  },
+  "result": {
+    "type": "constant-volume",
+    "initial": {
+      "pressurePascals": 103930.7827269155,
+      "volumeCubicMetres": 0.024,
+      "temperatureKelvin": 300,
+      "amountMoles": 1
+    },
+    "final": {
+      "pressurePascals": 124716.93927229858,
+      "volumeCubicMetres": 0.024,
+      "temperatureKelvin": 360,
+      "amountMoles": 1
+    },
+    "points": [
+      {
+        "pressurePascals": 103930.7827269155,
+        "volumeCubicMetres": 0.024,
+        "temperatureKelvin": 300,
+        "amountMoles": 1
+      },
+      {
+        "pressurePascals": 124716.93927229858,
+        "volumeCubicMetres": 0.024,
+        "temperatureKelvin": 360,
+        "amountMoles": 1
+      }
+    ],
+    "workByGasJoules": 0,
+    "heatIntoGasJoules": 748.3016356337912,
+    "internalEnergyChangeJoules": 748.3016356337912,
+    "areaSegments": [
+      {
+        "fromVolumeCubicMetres": 0.024,
+        "toVolumeCubicMetres": 0.024,
+        "averagePressurePascals": 114323.86099960704,
+        "signedWorkJoules": 0
+      }
+    ],
+    "signConvention": "deltaU = Q - W_by",
+    "modelDisclosure": "Monatomic ideal gas heated or cooled at fixed volume."
+  },
+  "representations": [
+    "system boundary",
+    "heat arrow",
+    "energy ledger",
+    "equation"
+  ],
+  "assumptions": ["monatomic ideal gas", "constant volume"]
+}

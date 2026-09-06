@@ -37,26 +37,46 @@ const FieldsWorkbench = lazy(() =>
   })),
 );
 
+const ThermalWorkbench = lazy(() =>
+  import("./ThermalWorkbench").then((module) => ({
+    default: module.ThermalWorkbench,
+  })),
+);
+
 export function App() {
   const [route, setRoute] = useState<
-    "fields" | "electricity" | "waves" | "mechanics" | "author" | "archive"
-  >("fields");
+    | "thermal"
+    | "fields"
+    | "electricity"
+    | "waves"
+    | "mechanics"
+    | "author"
+    | "archive"
+  >("thermal");
   return (
     <div className="physica-shell">
       <header className="shell-bar">
         <button
           type="button"
           className="shell-brand"
-          onClick={() => setRoute("fields")}
-          aria-label="Open Physica Fields and Alternating Currents Alpha"
+          onClick={() => setRoute("thermal")}
+          aria-label="Open Physica Thermal and Gases Alpha"
         >
           <span className="shell-mark">P</span>
           <span>
             <b>Physica</b>
-            <small>Fields/AC Alpha · Phase 11</small>
+            <small>Thermal/Gases Alpha · Phase 12</small>
           </span>
         </button>
         <nav aria-label="Application views">
+          <button
+            type="button"
+            className={route === "thermal" ? "active" : ""}
+            aria-current={route === "thermal" ? "page" : undefined}
+            onClick={() => setRoute("thermal")}
+          >
+            Thermal &amp; Gases
+          </button>
           <button
             type="button"
             className={route === "fields" ? "active" : ""}
@@ -107,20 +127,30 @@ export function App() {
           </button>
         </nav>
         <span className="shell-status">
-          {route === "fields"
-            ? "Gravity, electric and magnetic fields with synchronized AC"
-            : route === "electricity"
-              ? "Solved circuits, meters, characteristics and RC transients"
-              : route === "waves"
-                ? "Shared-state wave, screen, graph and ray workflows"
-                : route === "mechanics"
-                  ? "Seven scientifically linked teaching workflows"
-                  : route === "author"
-                    ? "No-code physics templates and complete registered Library"
-                    : "Earlier engineering proofs"}
+          {route === "thermal"
+            ? "Temperature, particles, gas state and energy-ledger workflows"
+            : route === "fields"
+              ? "Gravity, electric and magnetic fields with synchronized AC"
+              : route === "electricity"
+                ? "Solved circuits, meters, characteristics and RC transients"
+                : route === "waves"
+                  ? "Shared-state wave, screen, graph and ray workflows"
+                  : route === "mechanics"
+                    ? "Seven scientifically linked teaching workflows"
+                    : route === "author"
+                      ? "No-code physics templates and complete registered Library"
+                      : "Earlier engineering proofs"}
         </span>
       </header>
-      {route === "fields" ? (
+      {route === "thermal" ? (
+        <Suspense
+          fallback={
+            <div className="archive-loading">Loading Thermal/Gases Alpha…</div>
+          }
+        >
+          <ThermalWorkbench onOpenAuthor={() => setRoute("author")} />
+        </Suspense>
+      ) : route === "fields" ? (
         <Suspense
           fallback={
             <div className="archive-loading">Loading Fields/AC Alpha…</div>

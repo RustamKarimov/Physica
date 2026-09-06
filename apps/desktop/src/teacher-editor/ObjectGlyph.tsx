@@ -1,6 +1,36 @@
 export function ObjectGlyph({ name }: { readonly name: string }) {
   const key = name.toLowerCase();
   if (
+    key.includes("thermal") ||
+    key.includes("thermometer") ||
+    key.includes("temperature") ||
+    key.includes("gas") ||
+    key.includes("piston") ||
+    key.includes("brownian") ||
+    key.includes("reservoir") ||
+    key.includes("heater")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <rect
+          x="12"
+          y="16"
+          width="48"
+          height="37"
+          rx="4"
+          fill="#213b4a"
+          stroke="#78e0c4"
+          strokeWidth="3"
+        />
+        <path d="M8 16h56" stroke="#bbc3cd" strokeWidth="6" />
+        <circle cx="25" cy="34" r="4" fill="#82c8ff" />
+        <circle cx="41" cy="42" r="4" fill="#82c8ff" />
+        <circle cx="51" cy="28" r="7" fill="#ffc66d" />
+        <path d="M66 48V17" stroke="#ff8067" strokeWidth="4" />
+        <circle cx="66" cy="48" r="7" fill="#ff8067" />
+      </svg>
+    );
+  if (
     key.includes("earth") ||
     key.includes("planet") ||
     key.includes("orbit") ||

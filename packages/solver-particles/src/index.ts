@@ -35,10 +35,18 @@ export interface ParticleObservables {
   readonly meanSquaredSpeed: number;
   readonly collisionCount: number;
 }
+export interface ParticleStepDiagnostics {
+  readonly wallCollisionCount: number;
+  readonly pairCollisionCount: number;
+  readonly wallImpulseKilogramMetresPerSecond: number;
+}
 export class HardParticleSolver {
   private particles: Particle[];
   private timeSeconds = 0;
   private collisionCount = 0;
+  private stepWallCollisionCount = 0;
+  private stepPairCollisionCount = 0;
+  private stepWallImpulse = 0;
   constructor(
     initial: readonly Particle[],
     private readonly bounds: ParticleBounds,
@@ -68,6 +76,9 @@ export class HardParticleSolver {
   step(dt: number): ParticleSnapshot {
     if (!Number.isFinite(dt) || dt <= 0)
       throw new RangeError("Particle step must be positive.");
+    this.stepWallCollisionCount = 0;
+    this.stepPairCollisionCount = 0;
+    this.stepWallImpulse = 0;
     this.particles = this.particles.map((p) => {
       let x = p.x + p.vx * dt;
       let y = p.y + p.vy * dt;
@@ -75,21 +86,29 @@ export class HardParticleSolver {
       let vy = p.vy;
       if (x - p.radius < this.bounds.minX) {
         x = this.bounds.minX + p.radius;
+        this.stepWallCollisionCount += 1;
+        this.stepWallImpulse += (1 + this.restitution) * p.mass * Math.abs(vx);
         vx = Math.abs(vx) * this.restitution;
         this.collisionCount += 1;
       }
       if (x + p.radius > this.bounds.maxX) {
         x = this.bounds.maxX - p.radius;
+        this.stepWallCollisionCount += 1;
+        this.stepWallImpulse += (1 + this.restitution) * p.mass * Math.abs(vx);
         vx = -Math.abs(vx) * this.restitution;
         this.collisionCount += 1;
       }
       if (y - p.radius < this.bounds.minY) {
         y = this.bounds.minY + p.radius;
+        this.stepWallCollisionCount += 1;
+        this.stepWallImpulse += (1 + this.restitution) * p.mass * Math.abs(vy);
         vy = Math.abs(vy) * this.restitution;
         this.collisionCount += 1;
       }
       if (y + p.radius > this.bounds.maxY) {
         y = this.bounds.maxY - p.radius;
+        this.stepWallCollisionCount += 1;
+        this.stepWallImpulse += (1 + this.restitution) * p.mass * Math.abs(vy);
         vy = -Math.abs(vy) * this.restitution;
         this.collisionCount += 1;
       }
@@ -149,6 +168,7 @@ export class HardParticleSolver {
       vx: b.vx + (impulse * nx) / b.mass,
       vy: b.vy + (impulse * ny) / b.mass,
     };
+    this.stepPairCollisionCount += 1;
     this.collisionCount += 1;
   }
   snapshot(): ParticleSnapshot {
@@ -183,6 +203,13 @@ export class HardParticleSolver {
         this.particles.reduce((s, p) => s + p.vx * p.vx + p.vy * p.vy, 0) /
         this.particles.length,
       collisionCount: this.collisionCount,
+    });
+  }
+  stepDiagnostics(): ParticleStepDiagnostics {
+    return Object.freeze({
+      wallCollisionCount: this.stepWallCollisionCount,
+      pairCollisionCount: this.stepPairCollisionCount,
+      wallImpulseKilogramMetresPerSecond: this.stepWallImpulse,
     });
   }
 }

@@ -6,11 +6,11 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 11 and HC-06 complete - Fields/AC preview cluster verified
+**Current development phase:** Phase 12 complete - Thermal/Gases Alpha verified
 
-**Current task:** Phase 11 and scheduled HC-06 complete; autonomous progression entering Phase 12 Thermal, Gases and Thermodynamics
+**Current task:** Phase 12 complete; autonomous progression entering Phase 13 Oscillations and Advanced Periodic Systems
 
-**Next task:** Execute Phase 12 - Thermal, Gases and Thermodynamics, then Phase 13 Oscillations and scheduled HC-07.
+**Next task:** Execute Phase 13 - Oscillations and Advanced Periodic Systems, then perform scheduled HC-07.
 
 **Blockers:** None
 
@@ -21,6 +21,26 @@ Autonomous execution toward the Physica 1.0 Release Candidate is active under `d
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-06 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-07 is scheduled after Phase 13, with early-trigger conditions remaining active.
+
+## Phase 12 result
+
+Completed and audited `docs/implementation/PHASE_12_THERMAL_GASES_THERMODYNAMICS_SPEC.md` and the full Phase 12 Thermal/Gases Alpha.
+
+`@physica/physics-thermal` now owns immutable SI-canonical temperature conversion, two-fixed-point thermometric calibration, energy-conserving two-body thermal contact, validated ideal-gas state solving, kinetic-theory observables, seeded hard-disk teaching gas and Brownian tracer, first-law energy ledgers, constant-volume/constant-pressure/isothermal paths, exact P–V work and deterministic cycle extensions. Analytical temperature and gas models implement the public physics runtime contract; particle evolution delegates to the existing particle solver without React/editor dependencies or new third-party packages.
+
+The Phase 12 scientific audit extended the particle solver with non-persisted per-step wall-collision, pair-collision and wall-impulse diagnostics while preserving its snapshot schema. The teaching ensemble removes centre-of-mass drift and then rescales velocities to the requested kinetic temperature. Isothermal area segments now integrate exactly to the authoritative logarithmic work, and closed-cycle detection compares state values rather than object identity.
+
+`@physica/curriculum` now validates Cambridge Topics 1–10, 12–16 and 18–21 from explicit evidence. Exactly 19 of 25 topics are `VALIDATED`; Topics 11, 17 and 22–25 remain explicitly `UNIMPLEMENTED`. Thermal evidence is isolated in its owning module rather than growing the central registry.
+
+The launcher defaults to six usable Thermal/Gases workflows and retains every earlier subject route. Temperature/equilibrium, ideal-gas state, hard particles, Brownian motion, first-law and P–V work displays derive from shared deterministic results. Six matching Author templates instantiate through the combined metadata-driven Library, and meaningful thermal glyphs replace placeholder initials.
+
+All 12 mandatory Phase 12 examples ship executable exact output, metadata, README, accessible SVG and truthful pending declarations. The full Gallery now has 138 exactly reconciled projects. Final `.physica`, PNG and WebM capture remains owned by Phase 20.
+
+Verification passed: frozen offline install across 198 workspaces; formatting; ESLint and architecture boundaries; strict TypeScript across 197 scripted workspaces; 111 unit/example/scientific files with 516 tests; 1 architecture file with 2 tests; 5 focused thermal/integration files with 44 tests; all three application builds; and `Launch Physica.bat --check` with Tauri 2.11.4 and Cargo 1.94.1.
+
+The Thermal/Gases chunk is approximately 15.26 kB / 5.06 kB gzip and startup is approximately 197.40 kB / 62.13 kB gzip. Teacher Editor remains on demand at approximately 75.40 kB / 20.13 kB gzip. The isolated Foundation archive remains approximately 4.649 MB / 1.286 MB gzip and is recorded debt for Phase 20/HC-10.
+
+No completed step was reopened, no early checkpoint trigger fired and no Architecture Blocker exists. Phase 13 Oscillations and Advanced Periodic Systems is next, followed immediately by scheduled HC-07.
 
 ## Phase 11 and HC-06 result
 

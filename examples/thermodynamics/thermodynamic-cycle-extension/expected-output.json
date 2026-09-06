@@ -1,0 +1,89 @@
+{
+  "id": "thermodynamic-cycle-extension",
+  "topic": 16,
+  "title": "Thermodynamic cycle extension",
+  "question": "How does the orientation and enclosed P–V area set net work?",
+  "parameters": {
+    "path": "clockwise rectangular cycle"
+  },
+  "result": {
+    "type": "cycle",
+    "initial": {
+      "pressurePascals": 100000,
+      "volumeCubicMetres": 0.02,
+      "temperatureKelvin": 240.5447100854521,
+      "amountMoles": 1
+    },
+    "final": {
+      "pressurePascals": 100000,
+      "volumeCubicMetres": 0.02,
+      "temperatureKelvin": 240.5447100854521,
+      "amountMoles": 1
+    },
+    "points": [
+      {
+        "pressurePascals": 100000,
+        "volumeCubicMetres": 0.02,
+        "temperatureKelvin": 240.5447100854521
+      },
+      {
+        "pressurePascals": 200000,
+        "volumeCubicMetres": 0.02,
+        "temperatureKelvin": 481.0894201709042
+      },
+      {
+        "pressurePascals": 200000,
+        "volumeCubicMetres": 0.04,
+        "temperatureKelvin": 962.1788403418084
+      },
+      {
+        "pressurePascals": 100000,
+        "volumeCubicMetres": 0.04,
+        "temperatureKelvin": 481.0894201709042
+      },
+      {
+        "pressurePascals": 100000,
+        "volumeCubicMetres": 0.02,
+        "temperatureKelvin": 240.5447100854521
+      }
+    ],
+    "workByGasJoules": 2000,
+    "heatIntoGasJoules": 2000,
+    "internalEnergyChangeJoules": 0,
+    "areaSegments": [
+      {
+        "fromVolumeCubicMetres": 0.02,
+        "toVolumeCubicMetres": 0.02,
+        "averagePressurePascals": 150000,
+        "signedWorkJoules": 0
+      },
+      {
+        "fromVolumeCubicMetres": 0.02,
+        "toVolumeCubicMetres": 0.04,
+        "averagePressurePascals": 200000,
+        "signedWorkJoules": 4000
+      },
+      {
+        "fromVolumeCubicMetres": 0.04,
+        "toVolumeCubicMetres": 0.04,
+        "averagePressurePascals": 150000,
+        "signedWorkJoules": 0
+      },
+      {
+        "fromVolumeCubicMetres": 0.04,
+        "toVolumeCubicMetres": 0.02,
+        "averagePressurePascals": 100000,
+        "signedWorkJoules": -2000
+      }
+    ],
+    "signConvention": "deltaU = Q - W_by",
+    "modelDisclosure": "Piecewise-linear P–V path using a deterministic signed trapezoidal work integral."
+  },
+  "representations": [
+    "closed P–V path",
+    "signed area",
+    "cycle direction",
+    "energy ledger"
+  ],
+  "assumptions": ["piecewise-linear quasi-static ideal-gas cycle"]
+}

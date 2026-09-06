@@ -276,6 +276,11 @@ describe("Phase 6 specialized adapters", () => {
     solver.step(0.1);
     expect(solver.observables().kineticEnergy).toBeCloseTo(before, 10);
     expect(solver.observables().collisionCount).toBe(1);
+    expect(solver.stepDiagnostics()).toEqual({
+      wallCollisionCount: 1,
+      pairCollisionCount: 0,
+      wallImpulseKilogramMetresPerSecond: 2,
+    });
     solver.restore(initial);
     expect(solver.observables().collisionCount).toBe(0);
   });

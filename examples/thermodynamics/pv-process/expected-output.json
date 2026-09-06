@@ -1,0 +1,59 @@
+{
+  "id": "pv-process",
+  "topic": 16,
+  "title": "Constant-pressure P–V process",
+  "question": "How does graph area equal work done by the gas?",
+  "parameters": {
+    "process": "constant-pressure",
+    "finalTemperatureKelvin": 420
+  },
+  "result": {
+    "type": "constant-pressure",
+    "initial": {
+      "pressurePascals": 103930.7827269155,
+      "volumeCubicMetres": 0.024,
+      "temperatureKelvin": 300,
+      "amountMoles": 1
+    },
+    "final": {
+      "pressurePascals": 103930.7827269155,
+      "volumeCubicMetres": 0.0336,
+      "temperatureKelvin": 420,
+      "amountMoles": 1
+    },
+    "points": [
+      {
+        "pressurePascals": 103930.7827269155,
+        "volumeCubicMetres": 0.024,
+        "temperatureKelvin": 300,
+        "amountMoles": 1
+      },
+      {
+        "pressurePascals": 103930.7827269155,
+        "volumeCubicMetres": 0.0336,
+        "temperatureKelvin": 420,
+        "amountMoles": 1
+      }
+    ],
+    "workByGasJoules": 997.7355141783885,
+    "heatIntoGasJoules": 2494.3387854459716,
+    "internalEnergyChangeJoules": 1496.6032712675833,
+    "areaSegments": [
+      {
+        "fromVolumeCubicMetres": 0.024,
+        "toVolumeCubicMetres": 0.0336,
+        "averagePressurePascals": 103930.7827269155,
+        "signedWorkJoules": 997.7355141783885
+      }
+    ],
+    "signConvention": "deltaU = Q - W_by",
+    "modelDisclosure": "Monatomic ideal gas under a constant external pressure."
+  },
+  "representations": [
+    "weighted piston",
+    "P–V path",
+    "area/work shader",
+    "energy ledger"
+  ],
+  "assumptions": ["monatomic ideal gas", "quasi-static process"]
+}

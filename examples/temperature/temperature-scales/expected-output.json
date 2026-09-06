@@ -1,0 +1,15 @@
+{
+  "id": "temperature-scales",
+  "topic": 14,
+  "title": "Celsius and kelvin scales",
+  "question": "How do Celsius intervals map onto the absolute scale?",
+  "parameters": {
+    "celsius": 25
+  },
+  "result": {
+    "kelvin": 298.15,
+    "celsius": 25
+  },
+  "representations": ["dual thermometer", "Celsius scale", "Kelvin scale"],
+  "assumptions": ["exact conventional offset of 273.15"]
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Thermodynamic cycle extension deterministic physics result</title>
+  <desc id="description">How does the orientation and enclosed P–V area set net work? Direction, process and values are labelled as well as coloured.</desc>
+  <rect width="960" height="540" fill="#101822"/>
+  <text x="58" y="74" fill="#78e0c4" font-family="system-ui" font-size="18">PHYSICA · TOPIC 16 · MODEL / LOAD</text>
+  <text x="58" y="132" fill="#ffffff" font-family="system-ui" font-size="34" font-weight="700">Thermodynamic cycle extension</text>
+  <rect x="100" y="218" width="720" height="126" rx="18" fill="#183044" stroke="#78e0c4" stroke-width="4"/>
+  <path d="M150 307 C260 230 350 333 455 260 S655 230 765 305" fill="none" stroke="#ffc66d" stroke-width="6"/>
+  <text x="58" y="395" fill="#d9e7f2" font-family="system-ui" font-size="20">State and process: labelled · SI values: authoritative</text>
+  <text x="58" y="438" fill="#a9bfd0" font-family="ui-monospace" font-size="14">{type:cycle,initial:{pressurePascals:100000,volumeCubicMetres:0.02,temperatureKelvin:240.5447100854521,amountMole</text>
+  <text x="58" y="495" fill="#ffc66d" font-family="system-ui" font-size="16">Deterministic SI-canonical Phase 12 preview</text>
+</svg>

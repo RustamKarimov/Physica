@@ -1,0 +1,15 @@
+{
+  "id": "gas-compression",
+  "title": "Isothermal gas compression",
+  "category": "ideal-gases",
+  "topic": 15,
+  "question": "Why does pressure double when fixed gas volume halves?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

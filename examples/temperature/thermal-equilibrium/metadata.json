@@ -1,0 +1,15 @@
+{
+  "id": "thermal-equilibrium",
+  "title": "Two-body thermal equilibrium",
+  "category": "temperature",
+  "topic": 14,
+  "question": "How do two isolated bodies approach a shared temperature?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

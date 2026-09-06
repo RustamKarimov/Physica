@@ -1,0 +1,15 @@
+{
+  "id": "brownian-tracer",
+  "title": "Brownian tracer",
+  "category": "ideal-gases",
+  "topic": 15,
+  "question": "How can many deterministic collisions produce an irregular path?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

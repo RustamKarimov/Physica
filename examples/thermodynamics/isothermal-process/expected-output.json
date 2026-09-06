@@ -1,0 +1,210 @@
+{
+  "id": "isothermal-process",
+  "topic": 16,
+  "title": "Isothermal P–V process",
+  "question": "Why does heat input equal work during ideal-gas expansion?",
+  "parameters": {
+    "finalVolumeCubicMetres": 0.048
+  },
+  "result": {
+    "type": "isothermal",
+    "initial": {
+      "pressurePascals": 103930.7827269155,
+      "volumeCubicMetres": 0.024,
+      "temperatureKelvin": 300,
+      "amountMoles": 1
+    },
+    "final": {
+      "pressurePascals": 51965.39136345775,
+      "volumeCubicMetres": 0.048,
+      "temperatureKelvin": 300,
+      "amountMoles": 1
+    },
+    "points": [
+      {
+        "volumeCubicMetres": 0.024,
+        "pressurePascals": 103930.7827269155,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0256,
+        "pressurePascals": 97435.10880648327,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.027200000000000002,
+        "pressurePascals": 91703.63181786661,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0288,
+        "pressurePascals": 86608.98560576292,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0304,
+        "pressurePascals": 82050.61794230172,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.032,
+        "pressurePascals": 77948.08704518662,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.033600000000000005,
+        "pressurePascals": 74236.2733763682,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0352,
+        "pressurePascals": 70861.89731380602,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0368,
+        "pressurePascals": 67780.94525668402,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.038400000000000004,
+        "pressurePascals": 64956.739204322184,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.04,
+        "pressurePascals": 62358.4696361493,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0416,
+        "pressurePascals": 59960.066957835865,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0432,
+        "pressurePascals": 57739.32373717528,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.044800000000000006,
+        "pressurePascals": 55677.20503227615,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.0464,
+        "pressurePascals": 53757.30141047354,
+        "temperatureKelvin": 300
+      },
+      {
+        "volumeCubicMetres": 0.048,
+        "pressurePascals": 51965.39136345775,
+        "temperatureKelvin": 300
+      }
+    ],
+    "workByGasJoules": 1728.9438964931937,
+    "heatIntoGasJoules": 1728.9438964931937,
+    "internalEnergyChangeJoules": 0,
+    "areaSegments": [
+      {
+        "fromVolumeCubicMetres": 0.024,
+        "toVolumeCubicMetres": 0.0256,
+        "averagePressurePascals": 100613.08526798023,
+        "signedWorkJoules": 160.98093642876844
+      },
+      {
+        "fromVolumeCubicMetres": 0.0256,
+        "toVolumeCubicMetres": 0.027200000000000002,
+        "averagePressurePascals": 94511.4659685796,
+        "signedWorkJoules": 151.21834554972745
+      },
+      {
+        "fromVolumeCubicMetres": 0.027200000000000002,
+        "toVolumeCubicMetres": 0.0288,
+        "averagePressurePascals": 89107.78034722213,
+        "signedWorkJoules": 142.57244855555516
+      },
+      {
+        "fromVolumeCubicMetres": 0.0288,
+        "toVolumeCubicMetres": 0.0304,
+        "averagePressurePascals": 84288.72939733644,
+        "signedWorkJoules": 134.86196703573836
+      },
+      {
+        "fromVolumeCubicMetres": 0.0304,
+        "toVolumeCubicMetres": 0.032,
+        "averagePressurePascals": 79964.28351510332,
+        "signedWorkJoules": 127.94285362416537
+      },
+      {
+        "fromVolumeCubicMetres": 0.032,
+        "toVolumeCubicMetres": 0.033600000000000005,
+        "averagePressurePascals": 76061.9992725565,
+        "signedWorkJoules": 121.69919883609072
+      },
+      {
+        "fromVolumeCubicMetres": 0.033600000000000005,
+        "toVolumeCubicMetres": 0.0352,
+        "averagePressurePascals": 72522.9245610413,
+        "signedWorkJoules": 116.03667929766588
+      },
+      {
+        "fromVolumeCubicMetres": 0.0352,
+        "toVolumeCubicMetres": 0.0368,
+        "averagePressurePascals": 69298.59716366655,
+        "signedWorkJoules": 110.87775546186629
+      },
+      {
+        "fromVolumeCubicMetres": 0.0368,
+        "toVolumeCubicMetres": 0.038400000000000004,
+        "averagePressurePascals": 66348.81058651781,
+        "signedWorkJoules": 106.15809693842877
+      },
+      {
+        "fromVolumeCubicMetres": 0.038400000000000004,
+        "toVolumeCubicMetres": 0.04,
+        "averagePressurePascals": 63639.92764445944,
+        "signedWorkJoules": 101.82388423113494
+      },
+      {
+        "fromVolumeCubicMetres": 0.04,
+        "toVolumeCubicMetres": 0.0416,
+        "averagePressurePascals": 61143.59125692549,
+        "signedWorkJoules": 97.82974601108062
+      },
+      {
+        "fromVolumeCubicMetres": 0.0416,
+        "toVolumeCubicMetres": 0.0432,
+        "averagePressurePascals": 58835.72741441703,
+        "signedWorkJoules": 94.1371638630675
+      },
+      {
+        "fromVolumeCubicMetres": 0.0432,
+        "toVolumeCubicMetres": 0.044800000000000006,
+        "averagePressurePascals": 56695.76586919463,
+        "signedWorkJoules": 90.71322539071164
+      },
+      {
+        "fromVolumeCubicMetres": 0.044800000000000006,
+        "toVolumeCubicMetres": 0.0464,
+        "averagePressurePascals": 54706.02502358741,
+        "signedWorkJoules": 87.52964003773933
+      },
+      {
+        "fromVolumeCubicMetres": 0.0464,
+        "toVolumeCubicMetres": 0.048,
+        "averagePressurePascals": 52851.22201965801,
+        "signedWorkJoules": 84.56195523145304
+      }
+    ],
+    "signConvention": "deltaU = Q - W_by",
+    "modelDisclosure": "Quasi-static ideal-gas isothermal path with an exact logarithmic work integral."
+  },
+  "representations": [
+    "thermal reservoir",
+    "piston",
+    "isothermal curve",
+    "area/work shader"
+  ],
+  "assumptions": ["ideal gas", "quasi-static isothermal path"]
+}

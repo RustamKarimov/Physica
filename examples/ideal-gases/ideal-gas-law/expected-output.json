@@ -1,0 +1,28 @@
+{
+  "id": "ideal-gas-law",
+  "topic": 15,
+  "title": "Ideal-gas law",
+  "question": "How do p, V, n and absolute T constrain one another?",
+  "parameters": {
+    "volumeCubicMetres": 0.024,
+    "temperatureKelvin": 300,
+    "amountMoles": 1
+  },
+  "result": {
+    "volumeCubicMetres": 0.024,
+    "temperatureKelvin": 300,
+    "amountMoles": 1,
+    "pressurePascals": 103930.7827269155,
+    "pVJoules": 2494.338785445972,
+    "nRTJoules": 2494.338785445972,
+    "meanTranslationalKineticEnergyJoules": 6.2129205000000004e-21,
+    "modelDisclosure": "Analytical ideal gas: point particles, negligible intermolecular forces and thermal equilibrium."
+  },
+  "representations": [
+    "gas container",
+    "pressure gauge",
+    "temperature readout",
+    "state table"
+  ],
+  "assumptions": ["ideal gas at equilibrium"]
+}

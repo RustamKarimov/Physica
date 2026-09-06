@@ -17,6 +17,7 @@
     "@physica/physics-fields": "workspace:*",
     "@physica/physics-mechanics": "workspace:*",
     "@physica/physics-optics": "workspace:*",
+    "@physica/physics-thermal": "workspace:*",
     "@physica/physics-waves": "workspace:*"
   },
   "devDependencies": {

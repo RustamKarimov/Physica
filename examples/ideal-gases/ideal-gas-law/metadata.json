@@ -1,0 +1,15 @@
+{
+  "id": "ideal-gas-law",
+  "title": "Ideal-gas law",
+  "category": "ideal-gases",
+  "topic": 15,
+  "question": "How do p, V, n and absolute T constrain one another?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

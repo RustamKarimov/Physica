@@ -1,0 +1,15 @@
+{
+  "id": "speed-distribution",
+  "title": "Particle speed distribution",
+  "category": "ideal-gases",
+  "topic": 15,
+  "question": "How does a gas ensemble occupy a range of speeds?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -14,6 +14,7 @@ import {
   WAVE_LIBRARY_DESCRIPTORS,
   waveLibrarySlug,
 } from "@physica/physics-waves";
+import { thermalEvidence } from "./thermal-evidence";
 
 export type CurriculumCoverageStatus =
   "UNIMPLEMENTED" | "IMPLEMENTED" | "VALIDATED";
@@ -401,6 +402,9 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
         topicNumber !== 9 &&
         topicNumber !== 10 &&
         topicNumber !== 13 &&
+        topicNumber !== 14 &&
+        topicNumber !== 15 &&
+        topicNumber !== 16 &&
         topicNumber !== 18 &&
         topicNumber !== 20 &&
         topicNumber !== 21 &&
@@ -413,16 +417,18 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
           emptyEvidence(),
         );
       const evidence =
-        topicNumber === 13 ||
-        topicNumber === 18 ||
-        topicNumber === 20 ||
-        topicNumber === 21
-          ? fieldEvidence(topicNumber)
-          : topicNumber === 9 || topicNumber === 10 || topicNumber === 19
-            ? electricityEvidence(topicNumber)
-            : topicNumber === 7 || topicNumber === 8
-              ? waveEvidence(topicNumber)
-              : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
+        topicNumber === 14 || topicNumber === 15 || topicNumber === 16
+          ? thermalEvidence(topicNumber)
+          : topicNumber === 13 ||
+              topicNumber === 18 ||
+              topicNumber === 20 ||
+              topicNumber === 21
+            ? fieldEvidence(topicNumber)
+            : topicNumber === 9 || topicNumber === 10 || topicNumber === 19
+              ? electricityEvidence(topicNumber)
+              : topicNumber === 7 || topicNumber === 8
+                ? waveEvidence(topicNumber)
+                : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
       return evaluateCurriculumCoverage(topicNumber, title, evidence, evidence);
     }),
   );

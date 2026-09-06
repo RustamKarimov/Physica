@@ -1,0 +1,39 @@
+{
+  "id": "gas-compression",
+  "topic": 15,
+  "title": "Isothermal gas compression",
+  "question": "Why does pressure double when fixed gas volume halves?",
+  "parameters": {
+    "initialVolumeCubicMetres": 0.024,
+    "finalVolumeCubicMetres": 0.012,
+    "temperatureKelvin": 300
+  },
+  "result": {
+    "initial": {
+      "pressurePascals": 103930.7827269155,
+      "volumeCubicMetres": 0.024,
+      "temperatureKelvin": 300,
+      "amountMoles": 1,
+      "pVJoules": 2494.338785445972,
+      "nRTJoules": 2494.338785445972,
+      "meanTranslationalKineticEnergyJoules": 6.2129205000000004e-21,
+      "modelDisclosure": "Analytical ideal gas: point particles, negligible intermolecular forces and thermal equilibrium."
+    },
+    "final": {
+      "volumeCubicMetres": 0.012,
+      "temperatureKelvin": 300,
+      "amountMoles": 1,
+      "pressurePascals": 207861.565453831,
+      "pVJoules": 2494.338785445972,
+      "nRTJoules": 2494.338785445972,
+      "meanTranslationalKineticEnergyJoules": 6.2129205000000004e-21,
+      "modelDisclosure": "Analytical ideal gas: point particles, negligible intermolecular forces and thermal equilibrium."
+    },
+    "pressureRatio": 2,
+    "volumeRatio": 0.5,
+    "temperatureRatio": 1,
+    "velocityScaleFactor": 1
+  },
+  "representations": ["movable piston", "pressure gauge", "P–V graph"],
+  "assumptions": ["fixed amount", "isothermal equilibrium states"]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "thermometer-calibration",
+  "topic": 14,
+  "title": "Thermometer calibration",
+  "question": "How do two fixed points define a linear temperature scale?",
+  "parameters": {
+    "icePointProperty": 100,
+    "steamPointProperty": 138.5,
+    "measuredProperty": 119.25
+  },
+  "result": {
+    "icePointProperty": 100,
+    "steamPointProperty": 138.5,
+    "measuredProperty": 119.25,
+    "celsius": 50,
+    "kelvin": 323.15,
+    "fractionBetweenFixedPoints": 0.5
+  },
+  "representations": [
+    "liquid thermometer",
+    "fixed-point markers",
+    "calibration graph"
+  ],
+  "assumptions": ["thermometric property varies linearly"]
+}

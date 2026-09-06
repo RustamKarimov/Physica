@@ -3,6 +3,7 @@ import { ELECTRICITY_EXAMPLE_IDS } from "@physica/physics-electricity";
 import { FIELD_EXAMPLE_IDS } from "@physica/physics-fields";
 import { MECHANICS_EXAMPLE_IDS } from "@physica/physics-mechanics";
 import { OPTICS_EXAMPLE_IDS } from "@physica/physics-optics";
+import { THERMAL_EXAMPLE_IDS } from "@physica/physics-thermal";
 import { WAVE_EXAMPLE_IDS } from "@physica/physics-waves";
 import {
   CAMBRIDGE_9702_TOPICS,
@@ -12,13 +13,13 @@ import {
 } from "../src";
 
 describe("Cambridge 9702 explicit coverage", () => {
-  it("contains all 25 topics and validates exactly the Phase 11 set", () => {
+  it("contains all 25 topics and validates exactly the Phase 12 set", () => {
     expect(CAMBRIDGE_9702_TOPICS).toHaveLength(25);
     expect(cambridgeCoverageSummary()).toMatchObject({
       topicCount: 25,
-      byStatus: { VALIDATED: 16, IMPLEMENTED: 0, UNIMPLEMENTED: 9 },
+      byStatus: { VALIDATED: 19, IMPLEMENTED: 0, UNIMPLEMENTED: 6 },
       validatedTopicNumbers: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 18, 19, 20, 21,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 18, 19, 20, 21,
       ],
     });
     for (const topicNumber of [1, 2, 3, 4, 5, 6, 12]) {
@@ -71,6 +72,19 @@ describe("Cambridge 9702 explicit coverage", () => {
         .sort(),
     ).toEqual([...FIELD_EXAMPLE_IDS].sort());
     for (const topicNumber of [13, 18, 20, 21]) {
+      const topic = cambridgeTopic(topicNumber)!;
+      expect(topic.status).toBe("VALIDATED");
+      expect(Object.values(topic.gaps).flat()).toEqual([]);
+      expect(topic.required.libraryItemIds.length).toBeGreaterThan(20);
+    }
+    expect(
+      [14, 15, 16]
+        .flatMap(
+          (topicNumber) => cambridgeTopic(topicNumber)!.required.exampleIds,
+        )
+        .sort(),
+    ).toEqual([...THERMAL_EXAMPLE_IDS].sort());
+    for (const topicNumber of [14, 15, 16]) {
       const topic = cambridgeTopic(topicNumber)!;
       expect(topic.status).toBe("VALIDATED");
       expect(Object.values(topic.gaps).flat()).toEqual([]);

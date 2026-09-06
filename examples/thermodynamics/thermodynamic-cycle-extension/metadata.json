@@ -1,0 +1,15 @@
+{
+  "id": "thermodynamic-cycle-extension",
+  "title": "Thermodynamic cycle extension",
+  "category": "thermodynamics",
+  "topic": 16,
+  "question": "How does the orientation and enclosed P–V area set net work?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

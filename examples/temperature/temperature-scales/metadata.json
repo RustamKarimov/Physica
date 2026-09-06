@@ -1,0 +1,15 @@
+{
+  "id": "temperature-scales",
+  "title": "Celsius and kelvin scales",
+  "category": "temperature",
+  "topic": 14,
+  "question": "How do Celsius intervals map onto the absolute scale?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

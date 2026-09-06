@@ -1387,6 +1387,138 @@
         "example.spec.ts"
       ],
       "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "temperature-scales",
+      "path": "examples/temperature/temperature-scales",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "thermometer-calibration",
+      "path": "examples/temperature/thermometer-calibration",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "thermal-equilibrium",
+      "path": "examples/temperature/thermal-equilibrium",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "ideal-gas-law",
+      "path": "examples/ideal-gases/ideal-gas-law",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "gas-particles",
+      "path": "examples/ideal-gases/gas-particles",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "gas-compression",
+      "path": "examples/ideal-gases/gas-compression",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "speed-distribution",
+      "path": "examples/ideal-gases/speed-distribution",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "brownian-tracer",
+      "path": "examples/ideal-gases/brownian-tracer",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "first-law",
+      "path": "examples/thermodynamics/first-law",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "pv-process",
+      "path": "examples/thermodynamics/pv-process",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "isothermal-process",
+      "path": "examples/thermodynamics/isothermal-process",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "thermodynamic-cycle-extension",
+      "path": "examples/thermodynamics/thermodynamic-cycle-extension",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
     }
   ]
 }

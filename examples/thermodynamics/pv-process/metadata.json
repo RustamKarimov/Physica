@@ -1,0 +1,15 @@
+{
+  "id": "pv-process",
+  "title": "Constant-pressure P–V process",
+  "category": "thermodynamics",
+  "topic": 16,
+  "question": "How does graph area equal work done by the gas?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}
