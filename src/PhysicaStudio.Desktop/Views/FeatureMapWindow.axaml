@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PhysicaStudio.Desktop.Views.FeatureMapWindow"
+        Title="Feature Map"
+        Width="900" Height="660" MinWidth="720" MinHeight="520"
+        Background="#0E1722" Foreground="#EAF2FA"
+        FontFamily="avares://Avalonia.Fonts.Inter/Assets#Inter"
+        WindowStartupLocation="CenterOwner">
+  <Grid RowDefinitions="78,54,*,42">
+    <Border Grid.Row="0" Background="#142332" Padding="20,13" BorderBrush="#304458" BorderThickness="0,0,0,1">
+      <StackPanel>
+        <TextBlock Text="Feature Map" FontSize="23" FontWeight="Bold" />
+        <TextBlock Text="One honest inventory of what is visible, usable and scientifically validated." Foreground="#9BB0C3" FontSize="13" Margin="0,5,0,0" />
+      </StackPanel>
+    </Border>
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="16,8">
+      <TextBox PlaceholderText="Search commands, topics and systems…" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" Margin="12,0,0,0">
+        <Border Background="#3A3440" CornerRadius="4" Padding="8,6"><TextBlock Text="Planned" Foreground="#E4BD76" /></Border>
+        <Border Background="#24453F" CornerRadius="4" Padding="8,6"><TextBlock Text="Shell ready" Foreground="#70D9CA" /></Border>
+        <Border Background="#25364A" CornerRadius="4" Padding="8,6"><TextBlock Text="Active: 0" Foreground="#9EC4E8" /></Border>
+        <Border Background="#25364A" CornerRadius="4" Padding="8,6"><TextBlock Text="Validated: 0" Foreground="#9EC4E8" /></Border>
+      </StackPanel>
+    </Grid>
+    <Border Grid.Row="2" Margin="16,0" Background="#111E2B" BorderBrush="#304357" BorderThickness="1" CornerRadius="7">
+      <Grid RowDefinitions="34,*">
+        <Grid Grid.Row="0" ColumnDefinitions="2.1*,0.8*,0.9*,1.1*" Background="#1A2B3A" Margin="1">
+          <TextBlock Text="Capability" Margin="12,8" FontWeight="Bold" FontSize="11" Foreground="#93A9BC" />
+          <TextBlock Grid.Column="1" Text="Phase" Margin="12,8" FontWeight="Bold" FontSize="11" Foreground="#93A9BC" />
+          <TextBlock Grid.Column="2" Text="Status" Margin="12,8" FontWeight="Bold" FontSize="11" Foreground="#93A9BC" />
+          <TextBlock Grid.Column="3" Text="Evidence" Margin="12,8" FontWeight="Bold" FontSize="11" Foreground="#93A9BC" />
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+          <ItemsControl ItemsSource="{Binding Features}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderBrush="#26394C" BorderThickness="0,0,0,1" Padding="0,4">
+                  <Grid ColumnDefinitions="2.1*,0.8*,0.9*,1.1*" MinHeight="39">
+                    <TextBlock Text="{Binding Name}" Margin="12,7" FontSize="12.5" />
+                    <TextBlock Grid.Column="1" Text="{Binding Phase, StringFormat='Phase {0}'}" Margin="12,7" Foreground="#91A7BA" />
+                    <TextBlock Grid.Column="2" Text="{Binding Status}" Margin="12,7" Foreground="#E2BA72" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="3" Text="Manifest + shell inspection" Margin="12,7" Foreground="#8198AC" FontSize="11" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="16,7">
+      <TextBlock Text="Scientific capabilities remain Planned until their validation gates pass." Foreground="#9CB0C1" VerticalAlignment="Center" />
+      <Button Grid.Column="1" Content="Close" Click="Close_Click" Padding="18,6" />
+    </Grid>
+  </Grid>
+</Window>
+

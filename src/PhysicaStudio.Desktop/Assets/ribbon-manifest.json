@@ -1,0 +1,162 @@
+{
+  "tabs": [
+    {
+      "id": "file",
+      "label": "File",
+      "groups": [
+        { "label": "Project", "commands": ["New", "Open", "Recent", "Close", "Project Information"] },
+        { "label": "Save & Recover", "commands": ["Save", "Save As", "Save Copy", "Recover", "Package Assets"] },
+        { "label": "Output", "commands": ["Import", "Export", "Print", "Handouts"] },
+        { "label": "Application", "commands": ["Preferences", "Accessibility Check", "License & Dependency Notices"] }
+      ]
+    },
+    {
+      "id": "home",
+      "label": "Home",
+      "groups": [
+        { "label": "Clipboard", "commands": ["Paste", "Cut", "Copy", "Duplicate", "Format Painter"] },
+        { "label": "Slides", "commands": ["New Slide", "Duplicate Slide", "Delete Slide", "Layout", "Reset", "Section"] },
+        { "label": "Font", "commands": ["Font Family", "Font Size", "Bold", "Italic", "Underline", "Strike", "Font Color", "Highlight", "Case", "Subscript", "Superscript", "Clear Formatting"] },
+        { "label": "Paragraph", "commands": ["Bullets", "Numbering", "Indent", "Alignment", "Spacing", "Text Direction"] },
+        { "label": "Arrange", "commands": ["Order", "Align", "Distribute", "Group", "Ungroup", "Rotate", "Flip", "Lock"] },
+        { "label": "Editing", "commands": ["Find", "Replace", "Select", "Selection Pane"] },
+        { "label": "History", "commands": ["Undo", "Redo", "Command History"] }
+      ]
+    },
+    {
+      "id": "insert",
+      "label": "Insert",
+      "groups": [
+        { "label": "Text", "commands": ["Text Box", "Rich Text", "Title", "Caption", "Callout"] },
+        { "label": "Mathematics", "commands": ["Equation", "Symbol", "Derivation"] },
+        { "label": "Media", "commands": ["Image", "SVG", "Icon", "Audio", "Video"] },
+        { "label": "Drawing", "commands": ["Shape", "Freeform Path", "Connector", "Arrow", "Brace", "Arc", "Dimension"] },
+        { "label": "Scientific", "commands": ["Chart", "Graph", "2D Physics Object", "3D Physics Object", "Instrument", "Probe"] },
+        { "label": "Controls", "commands": ["Slider", "Dial", "Numeric Input", "Toggle", "Checkbox", "Radio Set", "Dropdown", "Button", "Draggable Handle", "Vector Controller"] },
+        { "label": "Navigation", "commands": ["Link", "Action", "Navigation Button"] },
+        { "label": "Page", "commands": ["Table", "Header", "Footer", "Date", "Slide Number", "Attribution"] }
+      ]
+    },
+    {
+      "id": "design",
+      "label": "Design",
+      "groups": [
+        { "label": "Themes", "commands": ["Themes", "Variants", "Colors", "Fonts", "Effects"] },
+        { "label": "Background", "commands": ["Fill", "Gradient", "Image Background", "Transparency"] },
+        { "label": "Canvas", "commands": ["Slide Size", "Orientation", "Guides", "Margins", "Safe Areas"] },
+        { "label": "Templates", "commands": ["Templates", "Layouts", "Save Template", "Import Theme", "Export Theme"] },
+        { "label": "Master", "commands": ["Master Slides", "Master Placeholders", "Theme Editor"] }
+      ]
+    },
+    {
+      "id": "transitions",
+      "label": "Transitions",
+      "groups": [
+        { "label": "Gallery", "commands": ["Subtle", "Reveal", "Spatial", "Morph", "Physics-aware"] },
+        { "label": "Effect", "commands": ["Effect Options", "Direction", "Duration", "Easing", "Transition Sound"] },
+        { "label": "Advance", "commands": ["Manual Advance", "Timed Advance", "Apply Selected", "Apply All"] },
+        { "label": "Preview", "commands": ["Preview Transition"] }
+      ]
+    },
+    {
+      "id": "animate",
+      "label": "Animate",
+      "groups": [
+        { "label": "Add Animation", "commands": ["Search Animations", "Entrance", "Emphasis", "Transform", "Exit", "Motion", "Physics", "Camera", "Custom"] },
+        { "label": "Manim Style", "commands": ["Write", "Create", "Grow", "Trace", "Indicate", "Transform Matching", "Replacement Transform", "Morph", "Draw Border"] },
+        { "label": "Stack", "commands": ["Animation Stack", "Add", "Remove", "Duplicate", "Reorder"] },
+        { "label": "Timing", "commands": ["Trigger", "Delay", "Duration", "Repeat", "Interpolation", "Easing"] },
+        { "label": "Path & Morph", "commands": ["Motion Path", "Path Orientation", "Bézier Editor", "Morph Correspondence"] },
+        { "label": "Tools", "commands": ["Animation Painter", "Preview Selection", "Preview Slide", "Preview Sequence", "Timeline Visibility", "Workspace Presets"] }
+      ]
+    },
+    {
+      "id": "physics",
+      "label": "Physics",
+      "groups": [
+        { "label": "Library", "commands": ["Search Physics Objects", "Topic", "Topic Pack Status"] },
+        { "label": "Model", "commands": ["Environment", "Initial Conditions", "Materials", "Interactions", "Constraints", "Reference Frames", "Coordinate Systems", "Model Selection"] },
+        { "label": "Simulation", "commands": ["Play", "Pause", "Reset", "Step", "Time Scale", "Solver Mode", "Advanced Accuracy"] },
+        { "label": "Representations", "commands": ["Paths", "Trails", "Vectors", "Fields", "Labels", "Values", "Energy Displays"] },
+        { "label": "Measure", "commands": ["Probes", "Measurement Tools", "Compare States"] },
+        { "label": "Events", "commands": ["Physical Events", "Condition Keyframes"] },
+        { "label": "Inspect", "commands": ["Validate Model", "Inspect Observables"] }
+      ]
+    },
+    {
+      "id": "equations",
+      "label": "Equations",
+      "groups": [
+        { "label": "Create", "commands": ["Equation Editor", "Structures", "Symbols", "Common Constants", "Physics Equation Gallery"] },
+        { "label": "Variables", "commands": ["Unit-aware Variables", "Observable Binding", "Numerical Substitution", "Significant Figures", "Scientific Notation"] },
+        { "label": "Derivation", "commands": ["Derivation Steps", "Alignment", "Highlight", "Cancellation"] },
+        { "label": "Animate", "commands": ["Transform Matching", "Write Equation", "Reveal Equation", "Morph Equation"] },
+        { "label": "Access", "commands": ["Accessibility Description"] }
+      ]
+    },
+    {
+      "id": "graphs",
+      "label": "Graphs & Data",
+      "groups": [
+        { "label": "Plot", "commands": ["XY", "Time Series", "Scatter", "Histogram", "Bar", "Error Bar", "Polar", "Phase Space", "Complex Plane", "Spectrum", "Vector Field", "Scalar Field", "Image Plot"] },
+        { "label": "Source", "commands": ["Observable Source", "Dataset Source", "Formula Source", "Sampling Path"] },
+        { "label": "Axes", "commands": ["Axes", "Scales", "Breaks", "Units", "Ranges"] },
+        { "label": "Series", "commands": ["Curves", "Lines", "Markers", "Fills"] },
+        { "label": "Analysis", "commands": ["Best Fit", "Interpolation", "Smoothing", "Uncertainty", "Error Bars"] },
+        { "label": "Live Data", "commands": ["Live Update", "Progressive Drawing", "Data Acquisition", "Import CSV", "Export Data", "Graph Validation"] }
+      ]
+    },
+    {
+      "id": "draw",
+      "label": "Draw",
+      "groups": [
+        { "label": "Ink", "commands": ["Pen", "Pencil", "Highlighter", "Laser"] },
+        { "label": "Style", "commands": ["Thickness", "Ink Color", "Opacity"] },
+        { "label": "Erase", "commands": ["Eraser", "Stroke Eraser", "Clear Ink"] },
+        { "label": "Select", "commands": ["Lasso Select"] },
+        { "label": "Instruments", "commands": ["Ruler", "Protractor", "Compass"] },
+        { "label": "Convert", "commands": ["Ink to Shape", "Ink to Equation"] },
+        { "label": "Layers", "commands": ["Authoring Ink Layer", "Presentation Ink Configuration"] }
+      ]
+    },
+    {
+      "id": "view",
+      "label": "View",
+      "groups": [
+        { "label": "Views", "commands": ["Normal", "Slide Sorter", "Outline", "Notes", "Master", "Presenter"] },
+        { "label": "Panels", "commands": ["Slides Panel", "Inspector", "Timeline", "Animation Stack", "Object Library", "Layers", "Observables"] },
+        { "label": "Guides", "commands": ["Rulers", "Grids", "Guides", "Snapping", "Margins"] },
+        { "label": "Zoom", "commands": ["Zoom", "Fit"] },
+        { "label": "Workspace", "commands": ["2D Workspace", "3D Workspace", "Camera Views", "Multiple Windows"] },
+        { "label": "Appearance", "commands": ["Light Editor", "Dark Editor", "Accessibility Preview", "Performance Overlay"] }
+      ]
+    },
+    {
+      "id": "present",
+      "label": "Present",
+      "groups": [
+        { "label": "Start", "commands": ["From Beginning", "From Current Slide", "From Checkpoint", "Custom Presentation"] },
+        { "label": "Displays", "commands": ["Presenter View", "Audience Display"] },
+        { "label": "Sequence", "commands": ["Keyframe Navigation", "Physics Playback Behavior"] },
+        { "label": "Interaction", "commands": ["Interaction Permissions", "Visible Controls", "Teacher-only Controls"] },
+        { "label": "Tools", "commands": ["Laser Configuration", "Pen Configuration", "Navigation Configuration"] },
+        { "label": "Timing", "commands": ["Rehearse Timing", "Record Timing"] },
+        { "label": "Quality", "commands": ["Resolution", "Performance Mode"] },
+        { "label": "End", "commands": ["End Presentation"] }
+      ]
+    },
+    {
+      "id": "help",
+      "label": "Help",
+      "groups": [
+        { "label": "Learn", "commands": ["Search Commands", "Guided Workflows", "Keyboard Shortcuts", "Physics Model Documentation", "Example Lessons"] },
+        { "label": "Support", "commands": ["Diagnostics", "Report Issue"] },
+        { "label": "Product", "commands": ["About", "Licenses"] }
+      ]
+    }
+  ],
+  "contextualTabs": [
+    "Shape Format", "Text Format", "Image Format", "Table Design", "Table Layout", "Equation Tools", "Graph Tools", "Physics Object Tools", "Vector & Representation Tools", "Interactive Control Tools", "Audio & Video Tools", "Vector Path Tools", "3D Object & Material Tools", "Camera Tools", "Master Layout Tools"
+  ]
+}
+

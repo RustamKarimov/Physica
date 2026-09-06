@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../PhysicaStudio.Document/PhysicaStudio.Document.csproj" />
+    <ProjectReference Include="../PhysicaStudio.Timeline/PhysicaStudio.Timeline.csproj" />
+  </ItemGroup>
+</Project>
+

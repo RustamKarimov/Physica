@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PhysicaStudio.Authoring/PhysicaStudio.Authoring.csproj" />
+    <Project Path="src/PhysicaStudio.Desktop/PhysicaStudio.Desktop.csproj" />
+    <Project Path="src/PhysicaStudio.Document/PhysicaStudio.Document.csproj" />
+    <Project Path="src/PhysicaStudio.Observables/PhysicaStudio.Observables.csproj" />
+    <Project Path="src/PhysicaStudio.Physics/PhysicaStudio.Physics.csproj" />
+    <Project Path="src/PhysicaStudio.Presentation/PhysicaStudio.Presentation.csproj" />
+    <Project Path="src/PhysicaStudio.Rendering2D/PhysicaStudio.Rendering2D.csproj" />
+    <Project Path="src/PhysicaStudio.Rendering3D/PhysicaStudio.Rendering3D.csproj" />
+    <Project Path="src/PhysicaStudio.Timeline/PhysicaStudio.Timeline.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PhysicaStudio.Foundation.Tests/PhysicaStudio.Foundation.Tests.csproj" />
+  </Folder>
+</Solution>
+

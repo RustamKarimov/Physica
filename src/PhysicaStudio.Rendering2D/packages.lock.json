@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "physicastudio.document": {
+        "type": "Project"
+      },
+      "physicastudio.observables": {
+        "type": "Project",
+        "dependencies": {
+          "PhysicaStudio.Document": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}

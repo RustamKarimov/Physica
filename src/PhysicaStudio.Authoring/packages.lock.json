@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "physicastudio.document": {
+        "type": "Project"
+      },
+      "physicastudio.observables": {
+        "type": "Project",
+        "dependencies": {
+          "PhysicaStudio.Document": "[1.0.0, )"
+        }
+      },
+      "physicastudio.physics": {
+        "type": "Project",
+        "dependencies": {
+          "PhysicaStudio.Document": "[1.0.0, )",
+          "PhysicaStudio.Observables": "[1.0.0, )"
+        }
+      },
+      "physicastudio.timeline": {
+        "type": "Project",
+        "dependencies": {
+          "PhysicaStudio.Document": "[1.0.0, )",
+          "PhysicaStudio.Observables": "[1.0.0, )",
+          "PhysicaStudio.Physics": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}

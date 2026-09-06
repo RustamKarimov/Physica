@@ -1,0 +1,443 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PhysicaStudio.Desktop.Views.MainWindow"
+        Title="{Binding ApplicationTitle}"
+        Width="1600" Height="960" MinWidth="1180" MinHeight="720"
+        Background="#0B111A" Foreground="#EAF2FB"
+        FontFamily="avares://Avalonia.Fonts.Inter/Assets#Inter"
+        WindowStartupLocation="CenterScreen">
+  <Window.Resources>
+    <SolidColorBrush x:Key="ChromeBrush" Color="#111B28" />
+    <SolidColorBrush x:Key="PanelBrush" Color="#131F2D" />
+    <SolidColorBrush x:Key="PanelRaisedBrush" Color="#192838" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#2B3C50" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#58D6C7" />
+    <SolidColorBrush x:Key="AccentBlueBrush" Color="#6BB9FF" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#91A4B8" />
+    <SolidColorBrush x:Key="PlannedBrush" Color="#B6C2CE" />
+    <SolidColorBrush x:Key="CanvasBrush" Color="#F5F8FB" />
+  </Window.Resources>
+  <Window.Styles>
+    <Style Selector="Button">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="Padding" Value="10,6" />
+    </Style>
+    <Style Selector="Button.chrome">
+      <Setter Property="Background" Value="#1A2A3A" />
+      <Setter Property="BorderBrush" Value="#33495E" />
+      <Setter Property="Foreground" Value="#DDE9F5" />
+    </Style>
+    <Style Selector="Button.ribbon-command">
+      <Setter Property="Width" Value="78" />
+      <Setter Property="Height" Value="68" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="Background" Value="#182433" />
+      <Setter Property="BorderBrush" Value="#293B4E" />
+      <Setter Property="Foreground" Value="#DCE6F0" />
+      <Setter Property="Opacity" Value="0.72" />
+    </Style>
+    <Style Selector="RadioButton.ribbon-tab">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="15,7" />
+      <Setter Property="Foreground" Value="#AFC0D2" />
+    </Style>
+    <Style Selector="RadioButton.ribbon-tab:checked">
+      <Setter Property="Foreground" Value="#FFFFFF" />
+      <Setter Property="Background" Value="#1E3042" />
+    </Style>
+    <Style Selector="TextBlock.section-title">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Foreground" Value="#8FA5BA" />
+      <Setter Property="LetterSpacing" Value="0.6" />
+    </Style>
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="#182636" />
+      <Setter Property="BorderBrush" Value="#30445A" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="8" />
+    </Style>
+    <Style Selector="TextBox, ComboBox">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="MinHeight" Value="32" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="40,34,112,25,*,28">
+    <!-- Application title and active shell actions -->
+    <Border Grid.Row="0" Background="#0E1722" BorderBrush="#26384B" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="12,0">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+          <Border Width="25" Height="25" CornerRadius="6" Background="#55D5C3">
+            <TextBlock Text="φ" Foreground="#07131A" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <TextBlock Text="{Binding ApplicationTitle}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
+          <Border Background="#243346" CornerRadius="4" Padding="7,3">
+            <TextBlock Text="{Binding DevelopmentBuild}" FontSize="10" FontWeight="Bold" Foreground="#77E4D4" />
+          </Border>
+        </StackPanel>
+        <TextBlock Grid.Column="1" Text="{Binding DocumentTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13" Foreground="#AFC1D3" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
+          <Button Classes="chrome" Click="ShowFeatureMap_Click" Content="{Binding FeatureMapLabel}" />
+          <Button Classes="chrome" Click="ShowPresenter_Click" Background="#2A8178" BorderBrush="#54D4C3" Content="{Binding PresentPreviewLabel}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Primary ribbon tabs -->
+    <Border Grid.Row="1" Background="{StaticResource ChromeBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <ItemsControl ItemsSource="{Binding RibbonTabs}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <RadioButton Classes="ribbon-tab" GroupName="PrimaryRibbon" Content="{Binding Label}" IsChecked="{Binding IsSelected}" Click="RibbonTab_Click" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Manifest rendered ribbon -->
+    <Border Grid.Row="2" Background="#121D2A" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <ItemsControl ItemsSource="{Binding SelectedRibbonGroups}" Margin="8,5,8,3">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="#304256" BorderThickness="0,0,1,0" Padding="5,0" Margin="0,0,3,0">
+                <Grid RowDefinitions="*,20">
+                  <ItemsControl Grid.Row="0" ItemsSource="{Binding Commands}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <Button Classes="ribbon-command" IsEnabled="{Binding IsEnabled}" ToolTip.Tip="{Binding Tooltip}">
+                          <Grid RowDefinitions="30,*">
+                            <TextBlock Grid.Row="0" Text="{Binding Icon}" FontSize="22" HorizontalAlignment="Center" Foreground="#8DD9D1" />
+                            <TextBlock Grid.Row="1" Text="{Binding Label}" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" MaxWidth="66" />
+                          </Grid>
+                        </Button>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                  <TextBlock Grid.Row="1" Text="{Binding Label}" FontSize="10" Foreground="#7F94AA" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Contextual ribbon inventory -->
+    <Border Grid.Row="3" Background="#162433" BorderBrush="#2F4257" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*">
+        <TextBlock Grid.Column="0" Text="CONTEXTUAL" Classes="section-title" VerticalAlignment="Center" Margin="12,0,8,0" Foreground="#F2B96B" />
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Hidden">
+          <ItemsControl ItemsSource="{Binding ContextualTabs}">
+            <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Background="#202E3E" CornerRadius="3" Margin="2,3" Padding="8,2" Opacity="0.72">
+                  <TextBlock Text="{Binding}" FontSize="13" Foreground="#D1A866" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+
+    <!-- Main authoring workspace -->
+    <Grid Grid.Row="4" Background="#0B121B">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="250" />
+        <ColumnDefinition Width="*" MinWidth="360" />
+        <ColumnDefinition Width="300" />
+      </Grid.ColumnDefinitions>
+      <!-- Left navigation and physics object browser -->
+      <Border x:Name="LeftPanel" Grid.Column="0" Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+        <Grid RowDefinitions="38,*,330">
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="10,0,5,0">
+            <TextBlock Text="NAVIGATOR" Classes="section-title" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Classes="chrome" Width="28" Height="27" Padding="0" Content="‹" Click="ToggleLeftPanel_Click" ToolTip.Tip="Collapse navigation and object library" />
+          </Grid>
+          <TabControl Grid.Row="1" Margin="7,0,7,7" FontSize="12">
+            <TabItem Header="Slides">
+              <ScrollViewer>
+                <StackPanel Margin="4" Spacing="8">
+                  <Border Classes="card" BorderBrush="#58D6C7" BorderThickness="2">
+                    <Grid ColumnDefinitions="24,*" RowDefinitions="Auto,Auto">
+                      <TextBlock Text="1" Foreground="#69DACA" FontWeight="Bold" />
+                      <Border Grid.Column="1" Height="86" Background="#EFF4F8" CornerRadius="3">
+                        <Canvas Width="150" Height="84">
+                          <TextBlock Canvas.Left="9" Canvas.Top="8" Text="Standing waves" Foreground="#162536" FontSize="9" FontWeight="Bold" />
+                          <Path Data="M 9,52 C 25,27 42,27 58,52 C 75,77 92,77 108,52 C 124,27 140,27 148,47" Stroke="#2B8C84" StrokeThickness="2" />
+                        </Canvas>
+                      </Border>
+                      <TextBlock Grid.Row="1" Grid.Column="1" Text="Standing wave investigation" Margin="0,5,0,0" FontSize="13" />
+                    </Grid>
+                  </Border>
+                  <Border Classes="card" Opacity="0.75">
+                    <Grid ColumnDefinitions="24,*">
+                      <TextBlock Text="2" Foreground="#91A4B8" />
+                      <Border Grid.Column="1" Height="70" Background="#EDF1F5" CornerRadius="3">
+                        <TextBlock Text="Explanation checkpoint" Foreground="#34485B" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" />
+                      </Border>
+                    </Grid>
+                  </Border>
+                  <Border Classes="card" Opacity="0.75">
+                    <Grid ColumnDefinitions="24,*">
+                      <TextBlock Text="3" Foreground="#91A4B8" />
+                      <Border Grid.Column="1" Height="70" Background="#1A2430" CornerRadius="3">
+                        <TextBlock Text="Dark-background comparison" Foreground="#DBE7F3" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="10" />
+                      </Border>
+                    </Grid>
+                  </Border>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Outline"><TextBlock Text="Slide text hierarchy and equations will appear here." Margin="12" TextWrapping="Wrap" Foreground="#9DB0C2" /></TabItem>
+            <TabItem Header="Sections"><TextBlock Text="Lesson sections · shell ready" Margin="12" Foreground="#9DB0C2" /></TabItem>
+            <TabItem Header="Masters"><TextBlock Text="Master layouts and placeholders · Phase 3" Margin="12" TextWrapping="Wrap" Foreground="#9DB0C2" /></TabItem>
+            <TabItem Header="Assets"><TextBlock Text="Project assets · Phase 2" Margin="12" Foreground="#9DB0C2" /></TabItem>
+          </TabControl>
+
+          <Border Grid.Row="2" BorderBrush="#2C3D50" BorderThickness="0,1,0,0" Padding="9">
+            <Grid RowDefinitions="Auto,Auto,Auto,*">
+              <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                <TextBlock Text="PHYSICS OBJECTS" Classes="section-title" VerticalAlignment="Center" />
+                <Border Grid.Column="1" Background="#3A3440" CornerRadius="4" Padding="6,2"><TextBlock Text="PLANNED" FontSize="9" Foreground="#E6C17A" /></Border>
+              </Grid>
+              <TextBox Grid.Row="1" PlaceholderText="Search objects, apparatus, models…" Margin="0,8,0,6" />
+              <ComboBox Grid.Row="2" ItemsSource="{Binding PhysicsTopics}" SelectedIndex="0" />
+              <ScrollViewer Grid.Row="3" Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding ObjectCards}">
+                  <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Classes="card" Width="118" Height="80" Margin="3" Opacity="0.78" ToolTip.Tip="Recognizable preview shell; activation follows its content pack.">
+                        <Grid ColumnDefinitions="38,*" RowDefinitions="*,Auto">
+                          <TextBlock Text="{Binding Glyph}" FontSize="18" Foreground="#70D7CB" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Category}" FontSize="9" Foreground="#8DA2B6" />
+                          </StackPanel>
+                          <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Status}" FontSize="8.5" Foreground="#D7B271" />
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Center canvas and bottom workspace -->
+      <Grid Grid.Column="1" RowDefinitions="*,Auto" MinWidth="0">
+        <Grid Grid.Row="0" RowDefinitions="36,*" Background="#0D151F">
+          <Border Grid.Row="0" Background="#121F2C" BorderBrush="#2B3D50" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="8,0">
+              <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                <Button Classes="chrome" Content="2D" FontWeight="Bold" Click="Workspace2D_Click" />
+                <Button Classes="chrome" Content="3D" Click="Workspace3D_Click" ToolTip.Tip="3D workspace shell is reserved; renderer activation is planned for a later phase." />
+                <TextBlock Text="{Binding WorkspaceModeDescription}" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="#93A7BA" FontSize="13" />
+              </StackPanel>
+              <TextBlock Grid.Column="1" Text="SLIDE 1 · 16:9" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="section-title" />
+              <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                <Button Classes="chrome" Content="−" Width="30" />
+                <TextBlock Text="78%" Width="42" TextAlignment="Center" VerticalAlignment="Center" FontSize="13" />
+                <Button Classes="chrome" Content="+" Width="30" />
+                <Button Classes="chrome" Content="Fit" />
+              </StackPanel>
+            </Grid>
+          </Border>
+          <Grid Grid.Row="1">
+            <Viewbox Margin="28" Stretch="Uniform">
+              <Border Width="760" Height="427.5">
+                <Viewbox Stretch="Uniform">
+                  <Border Width="1000" Height="562.5" Background="{StaticResource CanvasBrush}" BoxShadow="0 12 34 0 #66000000">
+                <Grid>
+                  <Canvas Width="1000" Height="562.5">
+                    <TextBlock Canvas.Left="54" Canvas.Top="42" Text="STANDING WAVES" Foreground="#173149" FontSize="15" FontWeight="Bold" LetterSpacing="1.8" />
+                    <TextBlock Canvas.Left="54" Canvas.Top="73" Text="How do frequency and tension determine the pattern?" Foreground="#15283A" FontSize="25" FontWeight="SemiBold" />
+                    <TextBlock Canvas.Left="55" Canvas.Top="112" Text="Move through the checkpoints to reveal the model, nodes and evidence." Foreground="#5E7183" FontSize="14" />
+
+                    <Border Canvas.Left="52" Canvas.Top="160" Width="615" Height="300" Background="#FFFFFF" BorderBrush="#CDD8E3" BorderThickness="1" CornerRadius="8">
+                      <Canvas Width="615" Height="300">
+                        <Line StartPoint="45,57" EndPoint="575,57" Stroke="#E8EDF2" StrokeThickness="1" />
+                        <Line StartPoint="45,115" EndPoint="575,115" Stroke="#E8EDF2" StrokeThickness="1" />
+                        <Line StartPoint="45,173" EndPoint="575,173" Stroke="#E8EDF2" StrokeThickness="1" />
+                        <Line StartPoint="45,231" EndPoint="575,231" Stroke="#E8EDF2" StrokeThickness="1" />
+                        <Line StartPoint="45,30" EndPoint="45,258" Stroke="#B5C3D0" StrokeThickness="2" />
+                        <Line StartPoint="575,30" EndPoint="575,258" Stroke="#B5C3D0" StrokeThickness="2" />
+                        <Line StartPoint="45,144" EndPoint="575,144" Stroke="#A6B6C5" StrokeThickness="1" StrokeDashArray="5,4" />
+                        <Path Data="M 45,144 C 89,55 133,55 177,144 C 221,233 265,233 309,144 C 353,55 397,55 441,144 C 485,233 529,233 575,144" Stroke="#198A82" StrokeThickness="5" Fill="Transparent" />
+                        <Path Data="M 45,144 C 89,233 133,233 177,144 C 221,55 265,55 309,144 C 353,233 397,233 441,144 C 485,55 529,55 575,144" Stroke="#55BFB6" StrokeThickness="2" StrokeDashArray="7,5" Fill="Transparent" Opacity="0.7" />
+                        <Ellipse Canvas.Left="38" Canvas.Top="137" Width="14" Height="14" Fill="#174E65" />
+                        <Ellipse Canvas.Left="170" Canvas.Top="137" Width="14" Height="14" Fill="#174E65" />
+                        <Ellipse Canvas.Left="302" Canvas.Top="137" Width="14" Height="14" Fill="#174E65" />
+                        <Ellipse Canvas.Left="434" Canvas.Top="137" Width="14" Height="14" Fill="#174E65" />
+                        <Ellipse Canvas.Left="568" Canvas.Top="137" Width="14" Height="14" Fill="#174E65" />
+                        <TextBlock Canvas.Left="273" Canvas.Top="265" Text="string length L" Foreground="#6A7D8D" FontSize="12" />
+                      </Canvas>
+                    </Border>
+
+                    <Border Canvas.Left="698" Canvas.Top="160" Width="250" Height="138" Background="#122838" CornerRadius="8" Padding="18">
+                      <StackPanel Spacing="9">
+                        <TextBlock Text="MODEL" Foreground="#6FD6CA" FontSize="13" FontWeight="Bold" />
+                        <TextBlock Text="v = √(T / μ)" Foreground="#FFFFFF" FontSize="25" FontFamily="Cambria Math" />
+                        <TextBlock Text="fₙ = nv / 2L" Foreground="#FFFFFF" FontSize="25" FontFamily="Cambria Math" />
+                        <TextBlock Text="Equation rendering activates in Phase 3" Foreground="#93A9BA" FontSize="10" />
+                      </StackPanel>
+                    </Border>
+
+                    <Border Canvas.Left="698" Canvas.Top="317" Width="250" Height="143" Background="#EDF4F7" BorderBrush="#C8D7E0" BorderThickness="1" CornerRadius="8" Padding="15">
+                      <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto"><TextBlock Text="Frequency" Foreground="#233E51" FontWeight="SemiBold" /><TextBlock Grid.Column="1" Text="6.0 Hz" Foreground="#267C76" FontWeight="Bold" /></Grid>
+                        <Slider Minimum="1" Maximum="12" Value="6" IsEnabled="False" />
+                        <Grid ColumnDefinitions="*,Auto"><TextBlock Text="Tension" Foreground="#233E51" FontWeight="SemiBold" /><TextBlock Grid.Column="1" Text="24 N" Foreground="#267C76" FontWeight="Bold" /></Grid>
+                        <Slider Minimum="1" Maximum="50" Value="24" IsEnabled="False" />
+                        <TextBlock Text="Interactive control preview · Planned Phase 5" Foreground="#6F8190" FontSize="9.5" />
+                      </StackPanel>
+                    </Border>
+
+                    <Border Canvas.Left="52" Canvas.Top="482" Background="#EAF1F6" BorderBrush="#C6D4DF" BorderThickness="1" CornerRadius="5" Padding="10,7">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Border Background="#D2A94E" CornerRadius="3" Padding="6,2"><TextBlock Text="SHELL PREVIEW" FontSize="9" FontWeight="Bold" Foreground="#17212A" /></Border>
+                        <TextBlock Text="Visual target only — no simulation, graph or authoring behavior is being claimed." Foreground="#526879" FontSize="13" />
+                      </StackPanel>
+                    </Border>
+                  </Canvas>
+                </Grid>
+                  </Border>
+                </Viewbox>
+              </Border>
+            </Viewbox>
+            <Button x:Name="ExpandLeftButton" IsVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Classes="chrome" Content="›" Click="ToggleLeftPanel_Click" ToolTip.Tip="Expand navigation" />
+            <Button x:Name="ExpandRightButton" IsVisible="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Classes="chrome" Content="‹" Click="ToggleRightPanel_Click" ToolTip.Tip="Expand inspector" />
+          </Grid>
+        </Grid>
+
+        <!-- Timeline and alternate bottom modes -->
+        <Border x:Name="BottomPanel" Grid.Row="1" Height="228" Background="#101B27" BorderBrush="#304256" BorderThickness="0,1,0,0">
+          <Grid RowDefinitions="34,*">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Background="#142231">
+              <TabControl Margin="5,2,0,0" FontSize="13">
+                <TabItem Header="Timeline &amp; Keyframes" />
+                <TabItem Header="Animation Curves" />
+                <TabItem Header="Data Table" />
+                <TabItem Header="Presenter Notes" />
+                <TabItem Header="Event Log" />
+                <TabItem Header="Validation Results" />
+              </TabControl>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="0,0,5,0">
+                <Border Background="#332E3B" CornerRadius="4" Padding="6,2"><TextBlock Text="SHELL READY" Foreground="#E7BE73" FontSize="9" /></Border>
+                <Button Classes="chrome" Width="28" Height="25" Padding="0" Content="⌄" Click="ToggleBottomPanel_Click" ToolTip.Tip="Collapse bottom workspace" />
+              </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" ColumnDefinitions="248,*">
+              <Border Grid.Column="0" BorderBrush="#2B3C50" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="28,28,28,28,28,28">
+                  <TextBlock Grid.Row="0" Text="⌄  Wave system" Margin="10,6" FontWeight="SemiBold" FontSize="13" />
+                  <TextBlock Grid.Row="1" Text="    ≈  String shape" Margin="10,6" Foreground="#AFC1D3" FontSize="13" />
+                  <TextBlock Grid.Row="2" Text="       ◇  Stroke reveal" Margin="10,6" Foreground="#90A5B8" FontSize="13" />
+                  <TextBlock Grid.Row="3" Text="    φ  Frequency parameter" Margin="10,6" Foreground="#AFC1D3" FontSize="13" />
+                  <TextBlock Grid.Row="4" Text="    →  Node representation" Margin="10,6" Foreground="#AFC1D3" FontSize="13" />
+                  <TextBlock Grid.Row="5" Text="◆  Checkpoints &amp; events" Margin="10,6" Foreground="#D7B572" FontSize="13" />
+                </Grid>
+              </Border>
+              <Grid Grid.Column="1" RowDefinitions="28,28,28,28,28,28" ClipToBounds="True">
+                <Canvas Grid.RowSpan="6" Background="#0D1721">
+                  <Line StartPoint="70,0" EndPoint="70,170" Stroke="#54D8C7" StrokeThickness="2" />
+                  <Line StartPoint="180,0" EndPoint="180,170" Stroke="#26394C" />
+                  <Line StartPoint="360,0" EndPoint="360,170" Stroke="#26394C" />
+                  <Line StartPoint="540,0" EndPoint="540,170" Stroke="#26394C" />
+                  <Line StartPoint="720,0" EndPoint="720,170" Stroke="#26394C" />
+                  <TextBlock Canvas.Left="4" Canvas.Top="4" Text="0 s" FontSize="9" Foreground="#71869B" />
+                  <TextBlock Canvas.Left="174" Canvas.Top="4" Text="2 s" FontSize="9" Foreground="#71869B" />
+                  <TextBlock Canvas.Left="354" Canvas.Top="4" Text="4 s" FontSize="9" Foreground="#71869B" />
+                  <TextBlock Canvas.Left="534" Canvas.Top="4" Text="6 s" FontSize="9" Foreground="#71869B" />
+                  <Border Canvas.Left="20" Canvas.Top="35" Width="290" Height="18" Background="#245F78" CornerRadius="3"><TextBlock Text="Physics continues" FontSize="9" HorizontalAlignment="Center" /></Border>
+                  <Border Canvas.Left="90" Canvas.Top="64" Width="220" Height="16" Background="#526A91" CornerRadius="3"><TextBlock Text="Create wave" FontSize="8.5" HorizontalAlignment="Center" /></Border>
+                  <Border Canvas.Left="310" Canvas.Top="92" Width="205" Height="16" Background="#5A467F" CornerRadius="3"><TextBlock Text="f: 6 → 9 Hz" FontSize="8.5" HorizontalAlignment="Center" /></Border>
+                  <Border Canvas.Left="515" Canvas.Top="120" Width="175" Height="16" Background="#35766F" CornerRadius="3"><TextBlock Text="Reveal nodes" FontSize="8.5" HorizontalAlignment="Center" /></Border>
+                  <TextBlock Canvas.Left="303" Canvas.Top="144" Text="◆" Foreground="#F0B85D" FontSize="15" ToolTip.Tip="Condition keyframe: amplitude reaches maximum · pass-through" />
+                  <TextBlock Canvas.Left="508" Canvas.Top="144" Text="◆" Foreground="#FF7A78" FontSize="15" ToolTip.Tip="Checkpoint: reveal nodes · pause for discussion" />
+                  <TextBlock Canvas.Left="684" Canvas.Top="144" Text="◇" Foreground="#77DCCD" FontSize="15" ToolTip.Tip="Pass-through event" />
+                </Canvas>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Border>
+        <Button x:Name="ExpandBottomButton" Grid.Row="1" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Classes="chrome" Content="Timeline &amp; Keyframes ︿" Click="ToggleBottomPanel_Click" />
+      </Grid>
+
+      <!-- Contextual inspector -->
+      <Border x:Name="RightPanel" Grid.Column="2" Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1,0,0,0">
+        <Grid RowDefinitions="38,*,215">
+          <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="5,0,8,0">
+            <Button Classes="chrome" Width="28" Height="27" Padding="0" Content="›" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse inspector" />
+            <TextBlock Grid.Column="1" Text="INSPECTOR" Classes="section-title" VerticalAlignment="Center" Margin="10,0" />
+            <Border Grid.Column="2" Background="#283A4D" CornerRadius="4" Padding="6,2" VerticalAlignment="Center"><TextBlock Text="Wave system" FontSize="9.5" Foreground="#AFC7DA" /></Border>
+          </Grid>
+          <TabControl Grid.Row="1" Margin="7,0,7,7" FontSize="13">
+            <TabItem Header="Content">
+              <ScrollViewer><StackPanel Margin="10" Spacing="10">
+                <TextBlock Text="SELECTION" Classes="section-title" />
+                <Border Classes="card"><Grid ColumnDefinitions="42,*"><TextBlock Text="≈" FontSize="24" Foreground="#6DD6CA" HorizontalAlignment="Center" /><StackPanel Grid.Column="1"><TextBlock Text="Standing wave system" FontWeight="SemiBold" /><TextBlock Text="Physics system · Planned" FontSize="10" Foreground="#D1AC69" /></StackPanel></Grid></Border>
+                <TextBlock Text="Name" Foreground="#8FA4B7" FontSize="13" /><TextBox Text="Standing wave system" IsEnabled="False" />
+                <TextBlock Text="Scene role" Foreground="#8FA4B7" FontSize="13" /><ComboBox SelectedIndex="0" IsEnabled="False"><ComboBoxItem>Primary demonstration</ComboBoxItem></ComboBox>
+              </StackPanel></ScrollViewer>
+            </TabItem>
+            <TabItem Header="Physics"><ScrollViewer><StackPanel Margin="10" Spacing="9"><TextBlock Text="MODEL PARAMETERS" Classes="section-title" /><TextBlock Text="Frequency" /><TextBox Text="6.0 Hz" IsEnabled="False" /><TextBlock Text="Tension" /><TextBox Text="24 N" IsEnabled="False" /><TextBlock Text="Linear density" /><TextBox Text="0.015 kg m⁻¹" IsEnabled="False" /><Border Background="#342F38" CornerRadius="5" Padding="8"><TextBlock Text="Physics kernel activates in Phase 7." Foreground="#E1B96F" TextWrapping="Wrap" /></Border></StackPanel></ScrollViewer></TabItem>
+            <TabItem Header="Geometry"><TextBlock Text="Physical transform and presentation transform will be shown separately." Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+            <TabItem Header="Appearance"><TextBlock Text="Stroke, fill, glow, labels, vectors and dark/light representation styles." Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+            <TabItem Header="Animation"><TextBlock Text="Tracks, clips, triggers, interpolation and effect stack." Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+            <TabItem Header="Bindings"><TextBlock Text="Observable and control bindings · Planned Phase 6–7" Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+            <TabItem Header="Access"><TextBlock Text="Name, description, reading order, contrast and reduced-motion alternative." Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+            <TabItem Header="Validate"><TextBlock Text="Scientific and authoring diagnostics will appear here without hiding limitations." Margin="12" TextWrapping="Wrap" Foreground="#9FB2C4" /></TabItem>
+          </TabControl>
+          <Border Grid.Row="2" BorderBrush="#2C3E51" BorderThickness="0,1,0,0" Padding="10">
+            <Grid RowDefinitions="Auto,Auto,*">
+              <Grid ColumnDefinitions="*,Auto"><TextBlock Text="ANIMATION STACK" Classes="section-title" /><Border Grid.Column="1" Background="#3A3440" CornerRadius="4" Padding="6,2"><TextBlock Text="PLANNED · PHASE 4" FontSize="9" Foreground="#E6C17A" /></Border></Grid>
+              <TextBox Grid.Row="1" PlaceholderText="Search animations…" Margin="0,8" />
+              <StackPanel Grid.Row="2" Spacing="6">
+                <Border Classes="card" Opacity="0.75"><Grid ColumnDefinitions="28,*,Auto"><TextBlock Text="1" Foreground="#7FDACE" /><StackPanel Grid.Column="1"><TextBlock Text="Create wave" FontWeight="SemiBold" /><TextBlock Text="At 0.8 s · 1.2 s" FontSize="9.5" Foreground="#8FA4B8" /></StackPanel><TextBlock Grid.Column="2" Text="◇" Foreground="#8FA4B8" /></Grid></Border>
+                <Border Classes="card" Opacity="0.75"><Grid ColumnDefinitions="28,*,Auto"><TextBlock Text="2" Foreground="#7FDACE" /><StackPanel Grid.Column="1"><TextBlock Text="Reveal nodes" FontWeight="SemiBold" /><TextBlock Text="Condition trigger · pause" FontSize="9.5" Foreground="#8FA4B8" /></StackPanel><TextBlock Grid.Column="2" Text="◆" Foreground="#E6B45F" /></Grid></Border>
+              </StackPanel>
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <!-- Status bar -->
+    <Border Grid.Row="5" Background="#0F1924" BorderBrush="#26384A" BorderThickness="0,1,0,0">
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="10,0">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+          <TextBlock Text="● SHELL READY" Foreground="#65D6C7" FontSize="10" FontWeight="Bold" />
+          <TextBlock Text="0 active scientific capabilities" Foreground="#8FA4B7" FontSize="10" />
+        </StackPanel>
+        <TextBlock Grid.Column="1" Text="Incomplete features remain visible and labelled — Phase 2 is locked pending review" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#A9B9C8" FontSize="10" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+          <TextBlock Text="3 slides" Foreground="#8FA4B7" FontSize="10" />
+          <TextBlock Text="English · en" Foreground="#8FA4B7" FontSize="10" />
+          <TextBlock Text="100% UI scale" Foreground="#8FA4B7" FontSize="10" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="ApplicationTitle" xml:space="preserve"><value>Physica Studio</value></data>
+  <data name="DocumentTitle" xml:space="preserve"><value>Standing Waves — Lesson Design</value></data>
+  <data name="DevelopmentBuild" xml:space="preserve"><value>PHASE 1 · STUDIO SHELL</value></data>
+  <data name="FeatureMap" xml:space="preserve"><value>Feature Map</value></data>
+  <data name="PresentPreview" xml:space="preserve"><value>Present Preview</value></data>
+  <data name="PlannedTooltip" xml:space="preserve"><value>{0} — planned for Phase {1}. Status: Planned. Prerequisite: shell approval and prior phase gates.</value></data>
+  <data name="ShellReadyTooltip" xml:space="preserve"><value>{0} — shell navigation is ready. Final behavior is not implemented.</value></data>
+</root>
+

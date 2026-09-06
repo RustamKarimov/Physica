@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PhysicaStudio.Desktop.Views.PresenterPreviewWindow"
+        Title="Physica Studio — Learner Presentation Preview"
+        Width="1280" Height="800" MinWidth="900" MinHeight="600"
+        Background="#050A0F" Foreground="#F1F7FA"
+        FontFamily="avares://Avalonia.Fonts.Inter/Assets#Inter"
+        WindowStartupLocation="CenterOwner">
+  <Grid RowDefinitions="*,64">
+    <Border Grid.Row="0" Margin="26" Background="#F7FAFC" CornerRadius="8">
+      <Viewbox Stretch="Uniform">
+        <Canvas Width="1120" Height="630">
+          <TextBlock Canvas.Left="70" Canvas.Top="55" Text="Standing waves" Foreground="#132C40" FontSize="32" FontWeight="Bold" />
+          <TextBlock Canvas.Left="72" Canvas.Top="104" Text="How does changing frequency alter the pattern?" Foreground="#5A7081" FontSize="18" />
+          <Border Canvas.Left="70" Canvas.Top="155" Width="710" Height="335" Background="#FFFFFF" BorderBrush="#CAD7E1" BorderThickness="1" CornerRadius="9">
+            <Canvas Width="710" Height="335">
+              <Line StartPoint="50,170" EndPoint="660,170" Stroke="#B2C1CC" StrokeDashArray="6,5" />
+              <Line StartPoint="50,45" EndPoint="50,290" Stroke="#6E8291" StrokeThickness="3" />
+              <Line StartPoint="660,45" EndPoint="660,290" Stroke="#6E8291" StrokeThickness="3" />
+              <Path Data="M 50,170 C 101,66 152,66 203,170 C 254,274 305,274 356,170 C 407,66 458,66 509,170 C 560,274 611,274 660,170" Stroke="#168B82" StrokeThickness="7" Fill="Transparent" />
+              <Ellipse Canvas.Left="43" Canvas.Top="163" Width="14" Height="14" Fill="#174D64" />
+              <Ellipse Canvas.Left="196" Canvas.Top="163" Width="14" Height="14" Fill="#174D64" />
+              <Ellipse Canvas.Left="349" Canvas.Top="163" Width="14" Height="14" Fill="#174D64" />
+              <Ellipse Canvas.Left="502" Canvas.Top="163" Width="14" Height="14" Fill="#174D64" />
+              <Ellipse Canvas.Left="653" Canvas.Top="163" Width="14" Height="14" Fill="#174D64" />
+            </Canvas>
+          </Border>
+          <Border Canvas.Left="815" Canvas.Top="155" Width="235" Height="335" Background="#102838" CornerRadius="9" Padding="20">
+            <StackPanel Spacing="16">
+              <TextBlock Text="EXPLORE" Foreground="#69DACC" FontWeight="Bold" FontSize="12" LetterSpacing="1.5" />
+              <Grid ColumnDefinitions="*,Auto"><TextBlock Text="Frequency" FontSize="15" /><TextBlock Grid.Column="1" Text="6.0 Hz" Foreground="#6EE0D0" FontWeight="Bold" /></Grid>
+              <Slider Minimum="1" Maximum="12" Value="6" IsEnabled="False" />
+              <Grid ColumnDefinitions="*,Auto"><TextBlock Text="Tension" FontSize="15" /><TextBlock Grid.Column="1" Text="24 N" Foreground="#6EE0D0" FontWeight="Bold" /></Grid>
+              <Slider Minimum="1" Maximum="50" Value="24" IsEnabled="False" />
+              <CheckBox Content="Show nodes" IsChecked="True" IsEnabled="False" />
+              <CheckBox Content="Show energy transfer" IsEnabled="False" />
+              <Button Content="Reset investigation" IsEnabled="False" />
+              <TextBlock Text="Interactive controls are presentation objects. They activate in Phase 5 and bind to the authoritative model in Phase 7." TextWrapping="Wrap" FontSize="11" Foreground="#9FB6C5" />
+            </StackPanel>
+          </Border>
+          <Border Canvas.Left="70" Canvas.Top="520" Background="#E9F1F5" CornerRadius="5" Padding="11,7">
+            <TextBlock Text="Checkpoint 2 of 5 · Reveal nodes · Pause for discussion" Foreground="#405C6D" FontSize="13" />
+          </Border>
+          <Border Canvas.Left="827" Canvas.Top="520" Background="#F5E9CD" CornerRadius="5" Padding="11,7">
+            <TextBlock Text="SHELL PREVIEW — controls are not active" Foreground="#705221" FontSize="11" FontWeight="Bold" />
+          </Border>
+        </Canvas>
+      </Viewbox>
+    </Border>
+    <Border Grid.Row="1" Background="#0E1822" BorderBrush="#293B4E" BorderThickness="0,1,0,0">
+      <Grid ColumnDefinitions="*,Auto,*" Margin="18,0">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="9" VerticalAlignment="Center">
+          <Button Content="Pen" IsEnabled="False" />
+          <Button Content="Laser" IsEnabled="False" />
+          <TextBlock Text="Presentation ink is ephemeral" Foreground="#8499AB" VerticalAlignment="Center" FontSize="11" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Button Content="← Previous" IsEnabled="False" />
+          <Button Content="▶ Play to next checkpoint" IsEnabled="False" Background="#287C74" />
+          <Button Content="Next →" IsEnabled="False" />
+        </StackPanel>
+        <Button Grid.Column="2" Content="Close Preview" HorizontalAlignment="Right" VerticalAlignment="Center" Click="Close_Click" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
+
