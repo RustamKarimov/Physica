@@ -1,0 +1,15 @@
+{
+  "id": "electrical-power",
+  "title": "Electrical power",
+  "category": "electricity",
+  "topic": 9,
+  "question": "Why do three equivalent power expressions agree for an ohmic load?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

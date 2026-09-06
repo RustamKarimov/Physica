@@ -1,0 +1,15 @@
+{
+  "id": "charge-current",
+  "title": "Charge and current bookkeeping",
+  "category": "electricity",
+  "topic": 9,
+  "question": "How much signed charge passes when current flows for a measured time?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

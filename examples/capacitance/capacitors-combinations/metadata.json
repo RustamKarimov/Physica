@@ -1,0 +1,15 @@
+{
+  "id": "capacitors-combinations",
+  "title": "Capacitors in combination",
+  "category": "capacitance",
+  "topic": 19,
+  "question": "How do the same capacitors combine differently in series and parallel?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "potential-divider",
+  "topic": 10,
+  "title": "Potential divider",
+  "question": "How does the resistor ratio set the measured output potential?",
+  "parameters": {
+    "sourceVoltageVolts": 12,
+    "upperResistanceOhms": 2000,
+    "lowerResistanceOhms": 4000
+  },
+  "result": {
+    "sourceVoltageVolts": 12,
+    "upperResistanceOhms": 2000,
+    "lowerEffectiveResistanceOhms": 4000,
+    "outputVoltageVolts": 8,
+    "currentAmps": 0.002
+  },
+  "representations": [
+    "divider schematic",
+    "slider marker",
+    "voltmeter",
+    "ratio equation"
+  ],
+  "assumptions": ["unloaded output", "ideal voltmeter"]
+}

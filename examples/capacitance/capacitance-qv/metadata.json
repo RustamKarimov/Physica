@@ -1,0 +1,15 @@
+{
+  "id": "capacitance-qv",
+  "title": "Capacitance and Q–V",
+  "category": "capacitance",
+  "topic": 19,
+  "question": "How does stored charge scale with potential difference?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "resistivity",
+  "title": "Resistivity wire",
+  "category": "electricity",
+  "topic": 9,
+  "question": "How do material, length and area determine resistance?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

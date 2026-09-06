@@ -1,0 +1,15 @@
+{
+  "id": "series-parallel",
+  "title": "Series–parallel D.C. network",
+  "category": "circuits",
+  "topic": 10,
+  "question": "How do branch currents divide while KCL and KVL remain satisfied?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

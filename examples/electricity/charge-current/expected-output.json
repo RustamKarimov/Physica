@@ -1,0 +1,18 @@
+{
+  "id": "charge-current",
+  "topic": 9,
+  "title": "Charge and current bookkeeping",
+  "question": "How much signed charge passes when current flows for a measured time?",
+  "parameters": {
+    "currentAmps": 1.5,
+    "durationSeconds": 12
+  },
+  "result": {
+    "currentAmps": 1.5,
+    "durationSeconds": 12,
+    "transferredChargeCoulombs": 18,
+    "conventionalDirection": "positive"
+  },
+  "representations": ["charge counter", "current arrows", "time readout"],
+  "assumptions": ["steady conventional current"]
+}

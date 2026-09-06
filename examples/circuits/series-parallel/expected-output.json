@@ -1,0 +1,72 @@
+{
+  "id": "series-parallel",
+  "topic": 10,
+  "title": "Series–parallel D.C. network",
+  "question": "How do branch currents divide while KCL and KVL remain satisfied?",
+  "parameters": {
+    "nodes": ["ground", "supply", "junction"],
+    "groundNode": "ground",
+    "branches": [
+      {
+        "id": "series",
+        "fromNode": "supply",
+        "toNode": "junction",
+        "resistanceOhms": 4
+      },
+      {
+        "id": "parallel-a",
+        "fromNode": "junction",
+        "toNode": "ground",
+        "resistanceOhms": 6
+      },
+      {
+        "id": "parallel-b",
+        "fromNode": "junction",
+        "toNode": "ground",
+        "resistanceOhms": 3
+      }
+    ],
+    "sources": [
+      {
+        "id": "cell",
+        "positiveNode": "supply",
+        "negativeNode": "ground",
+        "emfVolts": 12
+      }
+    ]
+  },
+  "result": {
+    "nodePotentialsVolts": {
+      "ground": 0,
+      "junction": 4,
+      "supply": 12
+    },
+    "branchCurrentsAmps": {
+      "series": 2,
+      "parallel-a": 0.666666666667,
+      "parallel-b": 1.33333333333
+    },
+    "sourceCurrentsAmps": {
+      "cell": -2
+    },
+    "branchPowerWatts": {
+      "series": 16,
+      "parallel-a": 2.66666666667,
+      "parallel-b": 5.33333333333
+    },
+    "maximumKclResidualAmps": 2.22044604925e-16,
+    "maximumKvlResidualVolts": 0,
+    "solverResidual": 0,
+    "diagnostics": [
+      "Conventional branch current is positive from fromNode to toNode.",
+      "Ideal voltmeters do not load the circuit; ideal ammeters observe branch current."
+    ]
+  },
+  "representations": [
+    "circuit schematic",
+    "node potentials",
+    "current arrows",
+    "meters"
+  ],
+  "assumptions": ["ideal source", "ohmic resistors", "ideal wires and meters"]
+}

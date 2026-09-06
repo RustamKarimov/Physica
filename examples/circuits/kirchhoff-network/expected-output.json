@@ -1,0 +1,92 @@
+{
+  "id": "kirchhoff-network",
+  "topic": 10,
+  "title": "Kirchhoff bridge network",
+  "question": "Can a multi-loop solution satisfy every node and component equation together?",
+  "parameters": {
+    "nodes": ["ground", "supply", "left", "right"],
+    "groundNode": "ground",
+    "branches": [
+      {
+        "id": "upper-left",
+        "fromNode": "supply",
+        "toNode": "left",
+        "resistanceOhms": 2
+      },
+      {
+        "id": "lower-left",
+        "fromNode": "left",
+        "toNode": "ground",
+        "resistanceOhms": 4
+      },
+      {
+        "id": "upper-right",
+        "fromNode": "supply",
+        "toNode": "right",
+        "resistanceOhms": 3
+      },
+      {
+        "id": "lower-right",
+        "fromNode": "right",
+        "toNode": "ground",
+        "resistanceOhms": 6
+      },
+      {
+        "id": "bridge",
+        "fromNode": "left",
+        "toNode": "right",
+        "resistanceOhms": 5
+      }
+    ],
+    "sources": [
+      {
+        "id": "cell",
+        "positiveNode": "supply",
+        "negativeNode": "ground",
+        "emfVolts": 12
+      }
+    ]
+  },
+  "result": {
+    "nodePotentialsVolts": {
+      "ground": 0,
+      "left": 8,
+      "right": 8,
+      "supply": 12
+    },
+    "branchCurrentsAmps": {
+      "upper-left": 2,
+      "lower-left": 2,
+      "upper-right": 1.33333333333,
+      "lower-right": 1.33333333333,
+      "bridge": 0
+    },
+    "sourceCurrentsAmps": {
+      "cell": -3.33333333333
+    },
+    "branchPowerWatts": {
+      "upper-left": 8,
+      "lower-left": 16,
+      "upper-right": 5.33333333333,
+      "lower-right": 10.6666666667,
+      "bridge": 0
+    },
+    "maximumKclResidualAmps": 0,
+    "maximumKvlResidualVolts": 0,
+    "solverResidual": 8.881784197e-16,
+    "diagnostics": [
+      "Conventional branch current is positive from fromNode to toNode.",
+      "Ideal voltmeters do not load the circuit; ideal ammeters observe branch current."
+    ]
+  },
+  "representations": [
+    "bridge schematic",
+    "KCL panel",
+    "KVL panel",
+    "node-color overlay"
+  ],
+  "assumptions": [
+    "balanced resistive bridge",
+    "simultaneous modified-nodal solve"
+  ]
+}

@@ -1,4 +1,8 @@
 import {
+  ELECTRICITY_EXAMPLE_IDS,
+  electricityLibraryRequirementIds,
+} from "@physica/physics-electricity";
+import {
   MECHANICS_EXAMPLE_IDS,
   MECHANICS_LIBRARY_DESCRIPTORS,
   type MechanicsExampleId,
@@ -116,11 +120,35 @@ const CAPABILITIES: Readonly<Record<number, readonly string[]>> = Object.freeze(
       "optics.single-slit",
       "optics.double-slit",
     ],
+    9: [
+      "electricity.charge-current",
+      "electricity.potential-difference",
+      "electricity.component-characteristic",
+      "electricity.resistivity",
+      "electricity.power",
+    ],
+    10: [
+      "electricity.graph-topology",
+      "electricity.component-ports",
+      "electricity.dc-network-solver",
+      "electricity.internal-resistance",
+      "electricity.potential-divider",
+      "electricity.ideal-meters",
+    ],
     12: [
       "mechanics.uniform-circular-motion",
       "mechanics.centripetal-acceleration",
       "mechanics.centripetal-force",
       "mechanics.radial-tangent-vectors",
+    ],
+    19: [
+      "electricity.capacitor",
+      "electricity.charge-voltage",
+      "electricity.capacitor-energy",
+      "electricity.parallel-plate",
+      "electricity.capacitor-network",
+      "electricity.rc-transient",
+      "electricity.dielectric-extension",
     ],
   },
 );
@@ -313,6 +341,52 @@ function waveEvidence(topicNumber: 7 | 8): CurriculumEvidenceSet {
   });
 }
 
+function electricityEvidence(topicNumber: 9 | 10 | 19): CurriculumEvidenceSet {
+  const exampleIds =
+    topicNumber === 9
+      ? ELECTRICITY_EXAMPLE_IDS.filter((id) =>
+          [
+            "charge-current",
+            "ohmic-resistor",
+            "iv-characteristics",
+            "resistivity",
+            "electrical-power",
+          ].includes(id),
+        )
+      : topicNumber === 10
+        ? ELECTRICITY_EXAMPLE_IDS.filter((id) =>
+            [
+              "series-parallel",
+              "kirchhoff-network",
+              "internal-resistance",
+              "potential-divider",
+            ].includes(id),
+          )
+        : ELECTRICITY_EXAMPLE_IDS.filter((id) =>
+            [
+              "capacitance-qv",
+              "capacitor-energy",
+              "capacitors-combinations",
+              "rc-charging",
+            ].includes(id),
+          );
+  return Object.freeze({
+    capabilityIds: CAPABILITIES[topicNumber]!,
+    libraryItemIds: electricityLibraryRequirementIds(topicNumber),
+    exampleIds,
+    scientificTestIds: [
+      `electricity.topic-${topicNumber}.reference`,
+      `electricity.topic-${topicNumber}.validation`,
+    ],
+    releaseGateIds:
+      topicNumber === 9
+        ? ["electricity-alpha.iv-shared-state"]
+        : topicNumber === 10
+          ? ["electricity-alpha.network-shared-state"]
+          : ["electricity-alpha.rc-shared-state"],
+  });
+}
+
 const PHASE_8_TOPICS = new Set([1, 2, 3, 4, 5, 6, 12]);
 
 export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
@@ -322,7 +396,10 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
       if (
         !PHASE_8_TOPICS.has(topicNumber) &&
         topicNumber !== 7 &&
-        topicNumber !== 8
+        topicNumber !== 8 &&
+        topicNumber !== 9 &&
+        topicNumber !== 10 &&
+        topicNumber !== 19
       )
         return evaluateCurriculumCoverage(
           topicNumber,
@@ -331,9 +408,11 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
           emptyEvidence(),
         );
       const evidence =
-        topicNumber === 7 || topicNumber === 8
-          ? waveEvidence(topicNumber)
-          : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
+        topicNumber === 9 || topicNumber === 10 || topicNumber === 19
+          ? electricityEvidence(topicNumber)
+          : topicNumber === 7 || topicNumber === 8
+            ? waveEvidence(topicNumber)
+            : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
       return evaluateCurriculumCoverage(topicNumber, title, evidence, evidence);
     }),
   );

@@ -1,0 +1,329 @@
+.electricity-alpha {
+  min-height: calc(100vh - 58px);
+  display: grid;
+  grid-template-columns: 270px minmax(420px, 1fr) 310px;
+  background: #07131b;
+  color: #edf7f5;
+}
+.el-nav,
+.el-inspector {
+  padding: 24px 20px;
+  background: #0b1b25;
+  border-right: 1px solid #23404b;
+}
+.el-inspector {
+  border-right: 0;
+  border-left: 1px solid #23404b;
+}
+.el-eyebrow,
+.el-stage header span {
+  color: #65e0be;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.el-nav h1 {
+  font-size: 25px;
+  line-height: 1.05;
+  margin: 12px 0;
+}
+.el-nav > p,
+.el-stage header p {
+  color: #9fb6bf;
+  line-height: 1.45;
+}
+.el-workflow-list {
+  display: grid;
+  gap: 7px;
+  margin: 24px 0;
+}
+.el-workflow-list button {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+  padding: 10px;
+  background: #0d222d;
+  border: 1px solid #28434d;
+  border-radius: 8px;
+  color: #d9e7e8;
+}
+.el-workflow-list button.active {
+  border-color: #65e0be;
+  background: #12332f;
+}
+.el-workflow-list i {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #1b3a42;
+  font-style: normal;
+}
+.el-workflow-list span {
+  display: grid;
+}
+.el-workflow-list small {
+  color: #8ba4ad;
+  margin-top: 3px;
+}
+.el-open-author {
+  width: 100%;
+  padding: 11px;
+  background: #65e0be;
+  color: #07131b;
+  border: 0;
+  border-radius: 7px;
+  font-weight: 800;
+}
+.el-stage {
+  padding: 28px;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 18px;
+}
+.el-stage header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.el-stage h2 {
+  font-size: 30px;
+  margin: 6px 0;
+}
+.el-stage header strong,
+.el-inspector-title b {
+  align-self: flex-start;
+  color: #ffd166;
+  border: 1px solid #78632e;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.el-canvas {
+  flex: 1;
+  min-height: 390px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #244652;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 42%, #123141, #08171f 70%);
+  overflow: hidden;
+}
+.el-canvas svg {
+  width: 100%;
+  max-height: 520px;
+}
+.el-canvas text {
+  fill: #d9e9eb;
+  font: 15px system-ui;
+}
+.el-equation {
+  padding: 14px 18px;
+  border-left: 4px solid #ffd166;
+  background: #10242e;
+  display: grid;
+  gap: 4px;
+}
+.el-equation small {
+  color: #8aa7af;
+}
+.el-equation b {
+  font-size: 18px;
+}
+.el-inspector-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+.el-inspector label {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.el-inspector label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.el-inspector output {
+  color: #65e0be;
+  font-weight: 700;
+}
+.el-inspector input {
+  accent-color: #65e0be;
+}
+.el-switch-control {
+  padding: 9px;
+  border: 1px solid #65e0be;
+  border-radius: 6px;
+  background: #102d38;
+  color: #edf7f5;
+  font-weight: 700;
+}
+.el-values,
+.el-assumptions {
+  border-top: 1px solid #28434d;
+  padding-top: 15px;
+  margin-top: 18px;
+}
+.el-values h3,
+.el-assumptions h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #91aab2;
+}
+.el-values div {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid #172f39;
+}
+.el-values span,
+.el-assumptions p {
+  color: #a9bec4;
+  font-size: 13px;
+}
+.el-values b {
+  font-size: 13px;
+}
+.el-valid {
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid #2b685d;
+  background: #0f2a28;
+  border-radius: 8px;
+  display: grid;
+  gap: 5px;
+}
+.el-valid b {
+  color: #65e0be;
+  font-size: 13px;
+}
+.el-valid span {
+  font-size: 12px;
+  color: #b9cecf;
+}
+.el-wire {
+  fill: none;
+  stroke: #8aa7af;
+  stroke-width: 5;
+}
+.el-resistor {
+  fill: none;
+  stroke: #ffd166;
+  stroke-width: 5;
+}
+.el-cell {
+  stroke: #ff8c69;
+  stroke-width: 7;
+}
+.el-node {
+  fill: #65e0be;
+  stroke: #07131b;
+  stroke-width: 2;
+}
+.el-meter {
+  fill: #102d38;
+  stroke: #ff8c69;
+  stroke-width: 5;
+}
+.el-meter-label {
+  font-size: 28px !important;
+  font-weight: 800;
+}
+.el-probe {
+  fill: none;
+  stroke: #ff8c69;
+  stroke-width: 3;
+  stroke-dasharray: 7 5;
+}
+.el-switch-open {
+  fill: none;
+  stroke: #ff8c69;
+  stroke-width: 5;
+}
+.el-capacitor {
+  stroke: #65e0be;
+  stroke-width: 8;
+}
+.el-charge {
+  fill: #65e0be;
+  opacity: 0.35;
+}
+.el-axis {
+  fill: none;
+  stroke: #66818a;
+  stroke-width: 2;
+}
+.el-graph-primary {
+  fill: none;
+  stroke: #65e0be;
+  stroke-width: 4;
+}
+.el-graph-secondary {
+  fill: none;
+  stroke: #ffd166;
+  stroke-width: 4;
+  stroke-dasharray: 8 6;
+}
+.el-time {
+  stroke: #ff8c69;
+  stroke-width: 3;
+}
+.el-legend {
+  fill: #ffd166 !important;
+}
+.electricity-alpha button:focus-visible,
+.electricity-alpha input:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 3px;
+}
+@media (max-width: 1050px) {
+  .electricity-alpha {
+    grid-template-columns: 230px 1fr;
+  }
+  .el-inspector {
+    grid-column: 1/-1;
+    border-left: 0;
+    border-top: 1px solid #23404b;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .el-inspector-title,
+  .el-values,
+  .el-assumptions,
+  .el-valid {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 760px) {
+  .electricity-alpha {
+    display: block;
+  }
+  .el-nav,
+  .el-stage,
+  .el-inspector {
+    border: 0;
+  }
+  .el-canvas {
+    min-height: 300px;
+  }
+  .el-inspector {
+    display: block;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .electricity-alpha * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

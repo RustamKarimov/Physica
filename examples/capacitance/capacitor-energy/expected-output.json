@@ -1,0 +1,24 @@
+{
+  "id": "capacitor-energy",
+  "topic": 19,
+  "title": "Capacitor energy",
+  "question": "Why do all three capacitor-energy expressions agree?",
+  "parameters": {
+    "capacitanceFarads": 0.002,
+    "voltageVolts": 10
+  },
+  "result": {
+    "capacitanceFarads": 0.002,
+    "voltageVolts": 10,
+    "chargeCoulombs": 0.02,
+    "energyJoules": 0.1,
+    "energyByChargeVoltageJoules": 0.1,
+    "energyByChargeSquaredJoules": 0.1
+  },
+  "representations": [
+    "charge accumulation",
+    "energy display",
+    "equation panel"
+  ],
+  "assumptions": ["ideal capacitor", "quasi-static charging"]
+}

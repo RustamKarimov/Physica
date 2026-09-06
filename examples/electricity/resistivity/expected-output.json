@@ -1,0 +1,28 @@
+{
+  "id": "resistivity",
+  "topic": 9,
+  "title": "Resistivity wire",
+  "question": "How do material, length and area determine resistance?",
+  "parameters": {
+    "resistivityOhmMetres": 1.68e-8,
+    "lengthMetres": 2,
+    "areaSquareMetres": 0.000001
+  },
+  "result": {
+    "resistivityOhmMetres": 1.68e-8,
+    "lengthMetres": 2,
+    "crossSectionAreaSquareMetres": 0.000001,
+    "resistanceOhms": 0.0336
+  },
+  "representations": [
+    "wire geometry",
+    "length marker",
+    "area marker",
+    "resistance readout"
+  ],
+  "assumptions": [
+    "uniform material",
+    "uniform cross-section",
+    "fixed temperature"
+  ]
+}

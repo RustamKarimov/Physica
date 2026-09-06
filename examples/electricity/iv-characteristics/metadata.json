@@ -1,0 +1,15 @@
+{
+  "id": "iv-characteristics",
+  "title": "I–V characteristics",
+  "category": "electricity",
+  "topic": 9,
+  "question": "How does a filament lamp differ from an ohmic resistor?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

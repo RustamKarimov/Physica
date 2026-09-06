@@ -1,6 +1,11 @@
 import "./teacher-editor/authoring-shell.css";
 import { lazy, Suspense, useState } from "react";
-import { TeacherEditor } from "./teacher-editor/TeacherEditor";
+
+const TeacherEditor = lazy(() =>
+  import("./teacher-editor/TeacherEditor").then((module) => ({
+    default: module.TeacherEditor,
+  })),
+);
 
 const FoundationArchive = lazy(() =>
   import("./FoundationArchive").then((module) => ({
@@ -20,26 +25,40 @@ const WaveOpticsWorkbench = lazy(() =>
   })),
 );
 
+const ElectricityWorkbench = lazy(() =>
+  import("./ElectricityWorkbench").then((module) => ({
+    default: module.ElectricityWorkbench,
+  })),
+);
+
 export function App() {
   const [route, setRoute] = useState<
-    "waves" | "mechanics" | "author" | "archive"
-  >("waves");
+    "electricity" | "waves" | "mechanics" | "author" | "archive"
+  >("electricity");
   return (
     <div className="physica-shell">
       <header className="shell-bar">
         <button
           type="button"
           className="shell-brand"
-          onClick={() => setRoute("waves")}
-          aria-label="Open Physica Wave and Optics Alpha"
+          onClick={() => setRoute("electricity")}
+          aria-label="Open Physica Electricity and Circuits Alpha"
         >
           <span className="shell-mark">P</span>
           <span>
             <b>Physica</b>
-            <small>Wave/Optics Alpha · Phase 9</small>
+            <small>Electricity/Circuits Alpha · Phase 10</small>
           </span>
         </button>
         <nav aria-label="Application views">
+          <button
+            type="button"
+            className={route === "electricity" ? "active" : ""}
+            aria-current={route === "electricity" ? "page" : undefined}
+            onClick={() => setRoute("electricity")}
+          >
+            Electricity &amp; Circuits
+          </button>
           <button
             type="button"
             className={route === "waves" ? "active" : ""}
@@ -74,16 +93,28 @@ export function App() {
           </button>
         </nav>
         <span className="shell-status">
-          {route === "waves"
-            ? "Shared-state wave, screen, graph and ray workflows"
-            : route === "mechanics"
-              ? "Seven scientifically linked teaching workflows"
-              : route === "author"
-                ? "No-code mechanics templates and full Library"
-                : "Earlier engineering proofs"}
+          {route === "electricity"
+            ? "Solved circuits, meters, characteristics and RC transients"
+            : route === "waves"
+              ? "Shared-state wave, screen, graph and ray workflows"
+              : route === "mechanics"
+                ? "Seven scientifically linked teaching workflows"
+                : route === "author"
+                  ? "No-code physics templates and complete registered Library"
+                  : "Earlier engineering proofs"}
         </span>
       </header>
-      {route === "waves" ? (
+      {route === "electricity" ? (
+        <Suspense
+          fallback={
+            <div className="archive-loading">
+              Loading Electricity/Circuits Alpha…
+            </div>
+          }
+        >
+          <ElectricityWorkbench onOpenAuthor={() => setRoute("author")} />
+        </Suspense>
+      ) : route === "waves" ? (
         <Suspense
           fallback={
             <div className="archive-loading">Loading Wave/Optics Alpha…</div>
@@ -100,7 +131,15 @@ export function App() {
           <MechanicsWorkbench onOpenAuthor={() => setRoute("author")} />
         </Suspense>
       ) : route === "author" ? (
-        <TeacherEditor />
+        <Suspense
+          fallback={
+            <div className="archive-loading">
+              Loading the teacher authoring workspace…
+            </div>
+          }
+        >
+          <TeacherEditor />
+        </Suspense>
       ) : (
         <Suspense
           fallback={

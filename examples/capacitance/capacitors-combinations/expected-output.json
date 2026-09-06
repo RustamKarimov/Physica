@@ -1,0 +1,19 @@
+{
+  "id": "capacitors-combinations",
+  "topic": 19,
+  "title": "Capacitors in combination",
+  "question": "How do the same capacitors combine differently in series and parallel?",
+  "parameters": {
+    "capacitancesFarads": [0.000003, 0.000006]
+  },
+  "result": {
+    "seriesFarads": 0.000002,
+    "parallelFarads": 0.000009
+  },
+  "representations": [
+    "series network",
+    "parallel network",
+    "equivalent readout"
+  ],
+  "assumptions": ["ideal capacitors", "uncharged before connection"]
+}

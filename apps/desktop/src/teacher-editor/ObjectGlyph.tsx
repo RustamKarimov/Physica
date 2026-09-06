@@ -201,6 +201,80 @@ export function ObjectGlyph({ name }: { readonly name: string }) {
         <path d="M42 30l28-14m-28 14 28 14" stroke="#ef795f" strokeWidth="2" />
       </svg>
     );
+  if (key.includes("capacitor") || key.includes("parallel plate"))
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path
+          d="M8 30h24m16 0h24M32 10v40m16-40v40"
+          stroke="#69d6c4"
+          strokeWidth="5"
+        />
+        <text x="18" y="18" fill="#f5cc72" fontSize="14">
+          +
+        </text>
+        <text x="57" y="18" fill="#f08a6f" fontSize="16">
+          −
+        </text>
+      </svg>
+    );
+  if (
+    key.includes("ammeter") ||
+    key.includes("voltmeter") ||
+    key.includes("meter")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path d="M5 30h12m46 0h12" stroke="#9db6bb" strokeWidth="4" />
+        <circle
+          cx="40"
+          cy="30"
+          r="22"
+          fill="#17333e"
+          stroke="#f08a6f"
+          strokeWidth="4"
+        />
+        <text x="32" y="38" fill="#fff" fontSize="23" fontWeight="700">
+          {key.includes("ammeter") ? "A" : "V"}
+        </text>
+      </svg>
+    );
+  if (key.includes("cell") || key.includes("battery") || key.includes("source"))
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path
+          d="M4 30h25m22 0h25M29 8v44m22-32v20"
+          stroke="#f2c46d"
+          strokeWidth="5"
+        />
+        <text x="12" y="19" fill="#f08a6f" fontSize="15">
+          +
+        </text>
+        <text x="61" y="19" fill="#77d7c9" fontSize="17">
+          −
+        </text>
+      </svg>
+    );
+  if (
+    key.includes("resistor") ||
+    key.includes("circuit") ||
+    key.includes("conductor") ||
+    key.includes("wire") ||
+    key.includes("switch") ||
+    key.includes("potential divider")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path
+          d="M4 30h12l7-14 10 28 10-28 10 28 7-14h16"
+          fill="none"
+          stroke="#68d4c1"
+          strokeWidth="4"
+          strokeLinejoin="round"
+        />
+        <circle cx="16" cy="30" r="4" fill="#f2c46d" />
+        <circle cx="60" cy="30" r="4" fill="#f08a6f" />
+      </svg>
+    );
   if (
     key.includes("panel") ||
     key.includes("text") ||

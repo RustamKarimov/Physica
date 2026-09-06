@@ -1,0 +1,88 @@
+{
+  "id": "iv-characteristics",
+  "topic": 9,
+  "title": "I–V characteristics",
+  "question": "How does a filament lamp differ from an ohmic resistor?",
+  "parameters": {
+    "voltagesVolts": [-6, -3, 0, 3, 6],
+    "curveControl": 1
+  },
+  "result": {
+    "ohmic": [
+      {
+        "kind": "ohmic",
+        "voltageVolts": -6,
+        "currentAmps": -0.6,
+        "effectiveResistanceOhms": 10,
+        "approximation": "constant resistance at fixed temperature"
+      },
+      {
+        "kind": "ohmic",
+        "voltageVolts": -3,
+        "currentAmps": -0.3,
+        "effectiveResistanceOhms": 10,
+        "approximation": "constant resistance at fixed temperature"
+      },
+      {
+        "kind": "ohmic",
+        "voltageVolts": 0,
+        "currentAmps": 0,
+        "effectiveResistanceOhms": 10,
+        "approximation": "constant resistance at fixed temperature"
+      },
+      {
+        "kind": "ohmic",
+        "voltageVolts": 3,
+        "currentAmps": 0.3,
+        "effectiveResistanceOhms": 10,
+        "approximation": "constant resistance at fixed temperature"
+      },
+      {
+        "kind": "ohmic",
+        "voltageVolts": 6,
+        "currentAmps": 0.6,
+        "effectiveResistanceOhms": 10,
+        "approximation": "constant resistance at fixed temperature"
+      }
+    ],
+    "filament": [
+      {
+        "kind": "filament",
+        "voltageVolts": -6,
+        "currentAmps": -0.675675675676,
+        "effectiveResistanceOhms": 8.88,
+        "approximation": "static temperature-dependent teaching curve"
+      },
+      {
+        "kind": "filament",
+        "voltageVolts": -3,
+        "currentAmps": -0.403225806452,
+        "effectiveResistanceOhms": 7.44,
+        "approximation": "static temperature-dependent teaching curve"
+      },
+      {
+        "kind": "filament",
+        "voltageVolts": 0,
+        "currentAmps": 0,
+        "effectiveResistanceOhms": 6,
+        "approximation": "static temperature-dependent teaching curve"
+      },
+      {
+        "kind": "filament",
+        "voltageVolts": 3,
+        "currentAmps": 0.403225806452,
+        "effectiveResistanceOhms": 7.44,
+        "approximation": "static temperature-dependent teaching curve"
+      },
+      {
+        "kind": "filament",
+        "voltageVolts": 6,
+        "currentAmps": 0.675675675676,
+        "effectiveResistanceOhms": 8.88,
+        "approximation": "static temperature-dependent teaching curve"
+      }
+    ]
+  },
+  "representations": ["component symbols", "I–V graph", "resistance readout"],
+  "assumptions": ["static teaching curves", "temperature history omitted"]
+}

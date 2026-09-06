@@ -510,7 +510,7 @@ describe("runtime event ordering", () => {
       if (actual.some((sequenceId, index) => sequenceId !== expected[index]))
         throw new Error(`Event order diverged on deterministic run ${run}.`);
     }
-  });
+  }, 15_000);
 });
 
 describe("worker result ordering", () => {

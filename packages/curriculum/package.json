@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@physica/physics-electricity": "workspace:*",
     "@physica/physics-mechanics": "workspace:*",
     "@physica/physics-optics": "workspace:*",
     "@physica/physics-waves": "workspace:*"

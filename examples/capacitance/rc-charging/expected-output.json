@@ -1,0 +1,30 @@
+{
+  "id": "rc-charging",
+  "topic": 19,
+  "title": "RC charging transient",
+  "question": "What changes after exactly one time constant?",
+  "parameters": {
+    "sourceVoltageVolts": 12,
+    "resistanceOhms": 2000,
+    "capacitanceFarads": 0.0005,
+    "initialVoltageVolts": 0,
+    "timeSeconds": 1
+  },
+  "result": {
+    "timeSeconds": 1,
+    "timeConstantSeconds": 1,
+    "voltageVolts": 7.58544670594,
+    "chargeCoulombs": 0.00379272335297,
+    "currentAmps": 0.00220727664703,
+    "energyJoules": 0.0143847504322,
+    "completionFraction": 0.632120558829
+  },
+  "representations": [
+    "charging circuit",
+    "plate charge",
+    "V–t graph",
+    "I–t graph",
+    "time-constant marker"
+  ],
+  "assumptions": ["ideal first-order RC circuit", "constant 12 V source"]
+}

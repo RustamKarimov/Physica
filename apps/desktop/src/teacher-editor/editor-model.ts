@@ -19,6 +19,7 @@ import {
   type SceneId,
 } from "@physica/core-model";
 import type { AdvancedTimelineV1 } from "@physica/storyboard";
+import { registerElectricityPhysicsLibrary } from "@physica/physics-electricity";
 import { registerMechanicsPhysicsLibrary } from "@physica/physics-mechanics";
 import { registerOpticsPhysicsLibrary } from "@physica/physics-optics";
 import { registerWavePhysicsLibrary } from "@physica/physics-waves";
@@ -162,6 +163,61 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
     itemIds: ["physica:library/polarizer-analyzer-setup"],
     seed: 850_000,
   },
+  {
+    id: "charge-current",
+    title: "Charge and current lesson",
+    description:
+      "Charge reservoir, conductor, ammeter, timer and live counter.",
+    question: "How does current determine transferred charge over time?",
+    itemIds: ["physica:library/current-charge-time-setup"],
+    seed: 860_000,
+  },
+  {
+    id: "iv-characteristics",
+    title: "I–V investigation",
+    description:
+      "Source, filament lamp, meters and linked characteristic graph.",
+    question: "How does a filament lamp depart from ohmic behavior?",
+    itemIds: ["physica:library/filament-lamp-iv-apparatus"],
+    seed: 870_000,
+  },
+  {
+    id: "resistivity",
+    title: "Resistivity investigation",
+    description: "Test wire, geometry markers and electrical probes.",
+    question: "How do material and conductor geometry determine resistance?",
+    itemIds: ["physica:library/resistivity-wire-apparatus"],
+    seed: 880_000,
+  },
+  {
+    id: "dc-network",
+    title: "D.C. network lesson",
+    description:
+      "Source, branches, nodes, meters and Kirchhoff equation panel.",
+    question: "How do node potentials determine every branch current?",
+    itemIds: ["physica:library/kirchhoff-multi-loop-circuit"],
+    seed: 890_000,
+  },
+  {
+    id: "cell-divider",
+    title: "Cell and divider lesson",
+    description: "Internal resistance, load, potential divider and voltmeters.",
+    question: "How are emf, lost volts and divider output related?",
+    itemIds: [
+      "physica:library/internal-resistance-circuit",
+      "physica:library/potential-divider-apparatus",
+    ],
+    seed: 900_000,
+  },
+  {
+    id: "rc-charging",
+    title: "RC charging lesson",
+    description:
+      "Source, switch, resistor, capacitor and synchronized V–t/I–t graphs.",
+    question: "What changes during each RC time constant?",
+    itemIds: ["physica:library/rc-charging-circuit"],
+    seed: 910_000,
+  },
 ];
 
 export interface EditorSession {
@@ -175,6 +231,7 @@ export const physicsLibrary = createBuiltInPhysicsLibrary();
 registerMechanicsPhysicsLibrary(physicsLibrary.registries);
 registerWavePhysicsLibrary(physicsLibrary.registries);
 registerOpticsPhysicsLibrary(physicsLibrary.registries);
+registerElectricityPhysicsLibrary(physicsLibrary.registries);
 const builtInReferences = physicsLibrary.validateReferences();
 if (!builtInReferences.ok) throw new Error(builtInReferences.error.message);
 
@@ -183,7 +240,7 @@ export function createEditorSession(template: ProjectTemplate): EditorSession {
   const document = createEmptyProject(ids, {
     title: template.title,
     description: template.question,
-    tags: ["teacher-authored", "phase-9", "wave-optics-alpha"],
+    tags: ["teacher-authored", "phase-10", "electricity-circuits-alpha"],
     createdAt: new Date().toISOString(),
   });
   const store = new DefaultProjectStore(

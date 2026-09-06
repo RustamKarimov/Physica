@@ -1,0 +1,20 @@
+{
+  "id": "electrical-power",
+  "topic": 9,
+  "title": "Electrical power",
+  "question": "Why do three equivalent power expressions agree for an ohmic load?",
+  "parameters": {
+    "voltageVolts": 9,
+    "resistanceOhms": 3
+  },
+  "result": {
+    "voltageVolts": 9,
+    "resistanceOhms": 3,
+    "currentAmps": 3,
+    "powerWatts": 27,
+    "powerByCurrentSquaredWatts": 27,
+    "powerByVoltageSquaredWatts": 27
+  },
+  "representations": ["energy-flow arrows", "power meter", "equation panel"],
+  "assumptions": ["ohmic load", "steady D.C."]
+}

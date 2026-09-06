@@ -1,0 +1,20 @@
+{
+  "id": "ohmic-resistor",
+  "topic": 9,
+  "title": "Ohmic resistor",
+  "question": "How do potential difference, current and power share one state?",
+  "parameters": {
+    "voltageVolts": 12,
+    "resistanceOhms": 6
+  },
+  "result": {
+    "voltageVolts": 12,
+    "resistanceOhms": 6,
+    "currentAmps": 2,
+    "powerWatts": 24,
+    "powerByCurrentSquaredWatts": 24,
+    "powerByVoltageSquaredWatts": 24
+  },
+  "representations": ["resistor", "ammeter", "voltmeter", "power meter"],
+  "assumptions": ["constant temperature", "ohmic response"]
+}

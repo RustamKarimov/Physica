@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ELECTRICITY_EXAMPLE_IDS } from "@physica/physics-electricity";
 import { MECHANICS_EXAMPLE_IDS } from "@physica/physics-mechanics";
 import { OPTICS_EXAMPLE_IDS } from "@physica/physics-optics";
 import { WAVE_EXAMPLE_IDS } from "@physica/physics-waves";
@@ -10,12 +11,12 @@ import {
 } from "../src";
 
 describe("Cambridge 9702 explicit coverage", () => {
-  it("contains all 25 topics and validates exactly the Phase 9 set", () => {
+  it("contains all 25 topics and validates exactly the Phase 10 set", () => {
     expect(CAMBRIDGE_9702_TOPICS).toHaveLength(25);
     expect(cambridgeCoverageSummary()).toMatchObject({
       topicCount: 25,
-      byStatus: { VALIDATED: 9, IMPLEMENTED: 0, UNIMPLEMENTED: 16 },
-      validatedTopicNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 12],
+      byStatus: { VALIDATED: 12, IMPLEMENTED: 0, UNIMPLEMENTED: 13 },
+      validatedTopicNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 19],
     });
     for (const topicNumber of [1, 2, 3, 4, 5, 6, 12]) {
       const topic = cambridgeTopic(topicNumber)!;
@@ -46,6 +47,19 @@ describe("Cambridge 9702 explicit coverage", () => {
         .filter((id) => !id.endsWith("optics-overview"))
         .sort(),
     );
+    expect(
+      [9, 10, 19]
+        .flatMap(
+          (topicNumber) => cambridgeTopic(topicNumber)!.required.exampleIds,
+        )
+        .sort(),
+    ).toEqual([...ELECTRICITY_EXAMPLE_IDS].sort());
+    for (const topicNumber of [9, 10, 19]) {
+      const topic = cambridgeTopic(topicNumber)!;
+      expect(topic.status).toBe("VALIDATED");
+      expect(Object.values(topic.gaps).flat()).toEqual([]);
+      expect(topic.required.libraryItemIds.length).toBeGreaterThan(20);
+    }
   });
   it("never infers VALIDATED when one evidence item is absent", () => {
     const required = {

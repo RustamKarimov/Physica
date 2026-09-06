@@ -1,0 +1,20 @@
+{
+  "id": "capacitance-qv",
+  "topic": 19,
+  "title": "Capacitance and Q–V",
+  "question": "How does stored charge scale with potential difference?",
+  "parameters": {
+    "capacitanceFarads": 0.0005,
+    "voltageVolts": 12
+  },
+  "result": {
+    "capacitanceFarads": 0.0005,
+    "voltageVolts": 12,
+    "chargeCoulombs": 0.006,
+    "energyJoules": 0.036,
+    "energyByChargeVoltageJoules": 0.036,
+    "energyByChargeSquaredJoules": 0.036
+  },
+  "representations": ["capacitor plates", "charge symbols", "Q–V graph"],
+  "assumptions": ["constant ideal capacitance"]
+}

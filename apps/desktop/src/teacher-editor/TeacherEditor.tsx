@@ -104,9 +104,9 @@ function ProjectHome({
           download the project snapshot.
         </span>
         <small>
-          Mechanics plus five Wave/Optics Alpha templates and their complete
-          metadata-driven Libraries are available now. Native .physica packaging
-          and final export arrive in Phase 20.
+          Mechanics, Waves/Optics and six Electricity/Circuits Alpha templates
+          share the complete metadata-driven Libraries. Native .physica
+          packaging and final export arrive in Phase 20.
         </small>
       </div>
     </main>

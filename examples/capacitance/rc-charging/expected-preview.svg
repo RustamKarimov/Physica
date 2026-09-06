@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">RC charging transient deterministic physics result</title>
+  <desc id="description">What changes after exactly one time constant? The schematic uses labelled components and line styles as well as colour.</desc>
+  <rect width="960" height="540" fill="#071521"/>
+  <text x="54" y="62" fill="#7ee8c7" font-family="system-ui" font-size="17" font-weight="700">PHYSICA · DETERMINISTIC ELECTRICAL MODEL</text>
+  <text x="54" y="105" fill="#f4f7fb" font-family="system-ui" font-size="30" font-weight="700">RC charging transient</text>
+  <path d="M95 250H215M265 250H390L410 225L440 275L470 225L500 275L530 250H665M715 250H855V410H95V250" fill="none" stroke="#7ee8c7" stroke-width="7"/>
+  <path d="M225 215V285M252 230V270" stroke="#ffd166" stroke-width="7"/>
+  <circle cx="690" cy="250" r="27" fill="#102b3b" stroke="#ff8c69" stroke-width="5"/>
+  <text x="680" y="260" fill="#fff" font-family="system-ui" font-size="25" font-weight="700">V</text>
+  <text x="105" y="232" fill="#ffd166" font-family="system-ui" font-size="16">SOURCE + −</text>
+  <text x="410" y="205" fill="#f4f7fb" font-family="system-ui" font-size="16">MODEL / LOAD</text>
+  <text x="656" y="205" fill="#ff8c69" font-family="system-ui" font-size="16">BOUND METER</text>
+  <path d="M145 364H340" stroke="#6e8ea3" stroke-width="2" stroke-dasharray="8 7"/>
+  <path d="M145 397C200 380 245 330 300 350S390 405 455 326" fill="none" stroke="#ffd166" stroke-width="4"/>
+  <text x="510" y="350" fill="#9fb7c6" font-family="system-ui" font-size="15">Representations</text>
+  <text x="510" y="380" fill="#f4f7fb" font-family="system-ui" font-size="16">1. charging circuit</text>
+  <text x="510" y="407" fill="#f4f7fb" font-family="system-ui" font-size="16">2. plate charge</text>
+  <text x="510" y="434" fill="#f4f7fb" font-family="system-ui" font-size="16">3. V–t graph</text>
+  <text x="510" y="461" fill="#f4f7fb" font-family="system-ui" font-size="16">4. I–t graph</text>
+  <text x="54" y="505" fill="#9fb7c6" font-family="system-ui" font-size="15">What changes after exactly one time constant?</text>
+</svg>

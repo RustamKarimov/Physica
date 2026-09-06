@@ -1,0 +1,15 @@
+{
+  "id": "kirchhoff-network",
+  "title": "Kirchhoff bridge network",
+  "category": "circuits",
+  "topic": 10,
+  "question": "Can a multi-loop solution satisfy every node and component equation together?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

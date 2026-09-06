@@ -1,0 +1,26 @@
+{
+  "id": "internal-resistance",
+  "topic": 10,
+  "title": "Cell with internal resistance",
+  "question": "Where do terminal p.d. and lost volts come from under load?",
+  "parameters": {
+    "emfVolts": 12,
+    "internalResistanceOhms": 1,
+    "loadResistanceOhms": 5
+  },
+  "result": {
+    "emfVolts": 12,
+    "currentAmps": 2,
+    "terminalPotentialDifferenceVolts": 10,
+    "lostVolts": 2,
+    "loadPowerWatts": 20,
+    "internalPowerWatts": 4
+  },
+  "representations": [
+    "cell model",
+    "load",
+    "terminal voltmeter",
+    "power split"
+  ],
+  "assumptions": ["constant emf", "lumped internal resistance"]
+}

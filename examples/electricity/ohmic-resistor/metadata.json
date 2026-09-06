@@ -1,0 +1,15 @@
+{
+  "id": "ohmic-resistor",
+  "title": "Ohmic resistor",
+  "category": "electricity",
+  "topic": 9,
+  "question": "How do potential difference, current and power share one state?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

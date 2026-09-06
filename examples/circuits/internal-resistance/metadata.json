@@ -1,0 +1,15 @@
+{
+  "id": "internal-resistance",
+  "title": "Cell with internal resistance",
+  "category": "circuits",
+  "topic": 10,
+  "question": "Where do terminal p.d. and lost volts come from under load?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}
