@@ -26,14 +26,16 @@ The new native Physica Studio shell is implemented and awaiting the mandatory us
 - Example wave content is static shell data. It is not a simulation and no scientific validation is claimed.
 - Search fields, filters, gallery items, timeline clips, inspector inputs, presentation controls, and master-slide content are visual shells only.
 - The 3D selector changes workspace status text but no WebGPU renderer is active.
-- macOS compilation is configured in CI but requires the first remote matrix run for evidence.
+- GitHub Actions run `34056067142` passed on both Windows and macOS for commit `df3362b7b07cec7df483e05f92a9f3c57b1d5d3d`.
 
 ## Verification
 
 - Windows launcher: `Launch Physica.bat` starts a responsive native window.
 - Debug solution build: zero warnings and zero errors.
 - Foundation tests: manifest coverage, readiness honesty, shell surfaces, public document contracts, and dependency direction.
-- Release and locked-restore results are recorded in `docs/CURRENT_STATE.md` after the final gate run.
+- Locked Release restore/build: zero warnings and zero errors; foundation tests: 5/5 passing.
+- Windows CI job: https://github.com/RustamKarimov/Physica/actions/runs/34056067142/job/101548076720
+- macOS CI job: https://github.com/RustamKarimov/Physica/actions/runs/34056067142/job/101548076875
 
 ## Gate
 

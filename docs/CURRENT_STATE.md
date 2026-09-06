@@ -46,7 +46,7 @@ The prior JavaScript/Tauri Physica implementation is not an architectural founda
 
 Review the Phase 1 shell for readability, ribbon organization, workspace density, panel behavior, timeline vocabulary, object-library organization, and learner presentation quality. Phase 2 must not begin until this gate is approved.
 
-The macOS launcher and CI job are configured. Native macOS build evidence will be added after the first GitHub Actions matrix run.
+Cross-platform CI run `34056067142` passed on both `windows-latest` and `macos-latest` for Studio commit `df3362b7b07cec7df483e05f92a9f3c57b1d5d3d`.
 
 ## Explicitly not active
 
