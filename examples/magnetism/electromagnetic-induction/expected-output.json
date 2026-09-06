@@ -1,0 +1,27 @@
+{
+  "id": "electromagnetic-induction",
+  "topic": 20,
+  "title": "Electromagnetic induction",
+  "question": "How does changing flux linkage determine emf and polarity?",
+  "parameters": {
+    "turns": 200,
+    "previousFluxWebers": 0.002,
+    "currentFluxWebers": 0.005,
+    "deltaSeconds": 0.1
+  },
+  "result": {
+    "previousFlux": 0.002,
+    "currentFlux": 0.005,
+    "emfVolts": -5.999999999999999
+  },
+  "representations": [
+    "coil pair",
+    "flux surface",
+    "emf graph",
+    "polarity arrow"
+  ],
+  "assumptions": [
+    "uniform flux through every turn",
+    "constant rate over interval"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "transformer",
+  "title": "Ideal transformer",
+  "category": "alternating-current",
+  "topic": 21,
+  "question": "How do turns set voltage, current and conserved ideal power?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

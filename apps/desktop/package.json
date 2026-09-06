@@ -20,6 +20,7 @@
     "@physica/mathematics": "workspace:*",
     "@physica/physics-mechanics": "workspace:*",
     "@physica/physics-electricity": "workspace:*",
+    "@physica/physics-fields": "workspace:*",
     "@physica/physics-optics": "workspace:*",
     "@physica/physics-waves": "workspace:*",
     "@physica/picking": "workspace:*",

@@ -1,0 +1,15 @@
+{
+  "id": "gravitational-potential",
+  "title": "Gravitational potential",
+  "category": "gravity",
+  "topic": 13,
+  "question": "How are potential and field connected outside Earth?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

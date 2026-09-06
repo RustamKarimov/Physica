@@ -1,0 +1,59 @@
+{
+  "id": "gravity-field",
+  "topic": 13,
+  "title": "Earth gravitational field",
+  "question": "How do direction and magnitude change around a spherical source?",
+  "parameters": {
+    "sourceMassKilograms": 5.972e24,
+    "probe": {
+      "x": 6371000,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "result": {
+    "field": {
+      "x": -9.819973426224687,
+      "y": 0,
+      "z": 0
+    },
+    "samples": [
+      {
+        "position": {
+          "x": 6371000,
+          "y": 0,
+          "z": 0
+        },
+        "vector": {
+          "x": -9.819973426224687,
+          "y": 0,
+          "z": 0
+        },
+        "magnitude": 9.819973426224687
+      },
+      {
+        "position": {
+          "x": 0,
+          "y": 6371000,
+          "z": 0
+        },
+        "vector": {
+          "x": 0,
+          "y": -9.819973426224687,
+          "z": 0
+        },
+        "magnitude": 9.819973426224687
+      }
+    ]
+  },
+  "representations": [
+    "Earth",
+    "field-vector grid",
+    "field lines",
+    "moving probe"
+  ],
+  "assumptions": [
+    "Newtonian point-mass exterior field",
+    "Earth treated as spherical"
+  ]
+}

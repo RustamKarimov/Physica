@@ -31,26 +31,40 @@ const ElectricityWorkbench = lazy(() =>
   })),
 );
 
+const FieldsWorkbench = lazy(() =>
+  import("./FieldsWorkbench").then((module) => ({
+    default: module.FieldsWorkbench,
+  })),
+);
+
 export function App() {
   const [route, setRoute] = useState<
-    "electricity" | "waves" | "mechanics" | "author" | "archive"
-  >("electricity");
+    "fields" | "electricity" | "waves" | "mechanics" | "author" | "archive"
+  >("fields");
   return (
     <div className="physica-shell">
       <header className="shell-bar">
         <button
           type="button"
           className="shell-brand"
-          onClick={() => setRoute("electricity")}
-          aria-label="Open Physica Electricity and Circuits Alpha"
+          onClick={() => setRoute("fields")}
+          aria-label="Open Physica Fields and Alternating Currents Alpha"
         >
           <span className="shell-mark">P</span>
           <span>
             <b>Physica</b>
-            <small>Electricity/Circuits Alpha · Phase 10</small>
+            <small>Fields/AC Alpha · Phase 11</small>
           </span>
         </button>
         <nav aria-label="Application views">
+          <button
+            type="button"
+            className={route === "fields" ? "active" : ""}
+            aria-current={route === "fields" ? "page" : undefined}
+            onClick={() => setRoute("fields")}
+          >
+            Fields &amp; AC
+          </button>
           <button
             type="button"
             className={route === "electricity" ? "active" : ""}
@@ -93,18 +107,28 @@ export function App() {
           </button>
         </nav>
         <span className="shell-status">
-          {route === "electricity"
-            ? "Solved circuits, meters, characteristics and RC transients"
-            : route === "waves"
-              ? "Shared-state wave, screen, graph and ray workflows"
-              : route === "mechanics"
-                ? "Seven scientifically linked teaching workflows"
-                : route === "author"
-                  ? "No-code physics templates and complete registered Library"
-                  : "Earlier engineering proofs"}
+          {route === "fields"
+            ? "Gravity, electric and magnetic fields with synchronized AC"
+            : route === "electricity"
+              ? "Solved circuits, meters, characteristics and RC transients"
+              : route === "waves"
+                ? "Shared-state wave, screen, graph and ray workflows"
+                : route === "mechanics"
+                  ? "Seven scientifically linked teaching workflows"
+                  : route === "author"
+                    ? "No-code physics templates and complete registered Library"
+                    : "Earlier engineering proofs"}
         </span>
       </header>
-      {route === "electricity" ? (
+      {route === "fields" ? (
+        <Suspense
+          fallback={
+            <div className="archive-loading">Loading Fields/AC Alpha…</div>
+          }
+        >
+          <FieldsWorkbench onOpenAuthor={() => setRoute("author")} />
+        </Suspense>
+      ) : route === "electricity" ? (
         <Suspense
           fallback={
             <div className="archive-loading">

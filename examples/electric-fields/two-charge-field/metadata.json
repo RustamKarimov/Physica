@@ -1,0 +1,15 @@
+{
+  "id": "two-charge-field",
+  "title": "Two-charge electric field",
+  "category": "electric-fields",
+  "topic": 18,
+  "question": "How do vector contributions form a dipole field?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "solenoid-field",
+  "topic": 20,
+  "title": "Long-solenoid field",
+  "question": "How do turns density and current set the interior field?",
+  "parameters": {
+    "turns": 600,
+    "currentAmperes": 2,
+    "lengthMetres": 0.5
+  },
+  "result": {
+    "fieldTeslas": 0.0030159289474462015
+  },
+  "representations": [
+    "solenoid",
+    "current arrows",
+    "field lines",
+    "Hall probe"
+  ],
+  "assumptions": ["long ideal air-core solenoid", "uniform interior field"]
+}

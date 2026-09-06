@@ -1,0 +1,15 @@
+{
+  "id": "two-mass-zero-point",
+  "title": "Two-mass zero-field point",
+  "category": "gravity",
+  "topic": 13,
+  "question": "Where do equal gravitational contributions cancel?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

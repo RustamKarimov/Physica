@@ -1,0 +1,24 @@
+{
+  "id": "charged-particle-b",
+  "topic": 20,
+  "title": "Charged particle in uniform B",
+  "question": "Why does magnetic force curve the path without changing speed?",
+  "parameters": {
+    "massKilograms": 1.67262192595e-27,
+    "speedMetresPerSecond": 2000000,
+    "chargeCoulombs": 1.602176634e-19,
+    "fieldTeslas": 0.5
+  },
+  "result": {
+    "radiusMetres": 0.04175873971583585,
+    "angularSpeedRadiansPerSecond": 47894165.71500493,
+    "periodSeconds": 1.3118894991443824e-7
+  },
+  "representations": [
+    "particle path",
+    "velocity vector",
+    "force vector",
+    "B markers"
+  ],
+  "assumptions": ["velocity perpendicular to uniform B", "non-relativistic"]
+}

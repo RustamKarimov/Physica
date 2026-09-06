@@ -20,6 +20,7 @@ import {
 } from "@physica/core-model";
 import type { AdvancedTimelineV1 } from "@physica/storyboard";
 import { registerElectricityPhysicsLibrary } from "@physica/physics-electricity";
+import { registerFieldsPhysicsLibrary } from "@physica/physics-fields";
 import { registerMechanicsPhysicsLibrary } from "@physica/physics-mechanics";
 import { registerOpticsPhysicsLibrary } from "@physica/physics-optics";
 import { registerWavePhysicsLibrary } from "@physica/physics-waves";
@@ -218,6 +219,70 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
     itemIds: ["physica:library/rc-charging-circuit"],
     seed: 910_000,
   },
+  {
+    id: "gravity-field",
+    title: "Gravitational field lesson",
+    description: "Earth, field probe, vector grid and potential graph.",
+    question: "How are gravitational field and potential linked?",
+    itemIds: ["physica:library/earth-satellite-system"],
+    seed: 920_000,
+  },
+  {
+    id: "circular-orbit",
+    title: "Circular orbit lesson",
+    description: "Earth, satellite, orbit path, vectors and energy panel.",
+    question: "How does orbital radius determine speed, period and energy?",
+    itemIds: ["physica:library/circular-orbit-setup"],
+    seed: 930_000,
+  },
+  {
+    id: "electric-field",
+    title: "Electric field lesson",
+    description: "Signed source, field probe, vector grid and equipotentials.",
+    question: "How do source sign and position determine E and V?",
+    itemIds: ["physica:library/two-charge-field"],
+    seed: 940_000,
+  },
+  {
+    id: "charged-particle-plates",
+    title: "Charged-particle deflection",
+    description: "Parallel plates, electron, force vector and trajectory.",
+    question: "How does an electric field alter particle motion?",
+    itemIds: ["physica:library/charged-particle-between-plates"],
+    seed: 950_000,
+  },
+  {
+    id: "magnetic-force",
+    title: "Magnetic force lesson",
+    description: "Current-carrying wire, B-field markers and force vector.",
+    question: "How are current, field and force directions related?",
+    itemIds: ["physica:library/force-on-current-carrying-wire"],
+    seed: 960_000,
+  },
+  {
+    id: "induction",
+    title: "Induction lesson",
+    description: "Coil pair, flux surface and signed emf graph.",
+    question: "Why does induced emf oppose the flux change?",
+    itemIds: ["physica:library/induction-coil-pair"],
+    seed: 970_000,
+  },
+  {
+    id: "ac-rms",
+    title: "AC and RMS lesson",
+    description: "Sinusoidal source, oscilloscope and RMS marker.",
+    question: "How does RMS describe the heating effect of AC?",
+    itemIds: ["physica:library/ac-source-oscilloscope"],
+    seed: 980_000,
+  },
+  {
+    id: "transformer",
+    title: "Transformer lesson",
+    description: "Primary, secondary, core, waveforms and power-flow panel.",
+    question: "How does turns ratio enable efficient power transmission?",
+    itemIds: ["physica:library/power-transmission-setup"],
+    seed: 990_000,
+  },
 ];
 
 export interface EditorSession {
@@ -232,6 +297,7 @@ registerMechanicsPhysicsLibrary(physicsLibrary.registries);
 registerWavePhysicsLibrary(physicsLibrary.registries);
 registerOpticsPhysicsLibrary(physicsLibrary.registries);
 registerElectricityPhysicsLibrary(physicsLibrary.registries);
+registerFieldsPhysicsLibrary(physicsLibrary.registries);
 const builtInReferences = physicsLibrary.validateReferences();
 if (!builtInReferences.ok) throw new Error(builtInReferences.error.message);
 
@@ -240,7 +306,12 @@ export function createEditorSession(template: ProjectTemplate): EditorSession {
   const document = createEmptyProject(ids, {
     title: template.title,
     description: template.question,
-    tags: ["teacher-authored", "phase-10", "electricity-circuits-alpha"],
+    tags: [
+      "teacher-authored",
+      "phase-11",
+      "fields-ac-alpha",
+      "electricity-circuits-alpha",
+    ],
     createdAt: new Date().toISOString(),
   });
   const store = new DefaultProjectStore(

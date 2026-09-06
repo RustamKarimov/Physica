@@ -1,0 +1,28 @@
+{
+  "id": "electric-potential",
+  "topic": 18,
+  "title": "Electric potential",
+  "question": "How does potential change with distance from a charge?",
+  "parameters": {
+    "charge": {
+      "id": "q",
+      "chargeCoulombs": 2e-9,
+      "positionMetres": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "radiusMetres": 0.2
+  },
+  "result": {
+    "potentialVolts": 89.87551792299999,
+    "fieldNewtonsPerCoulomb": {
+      "x": 449.37758961499986,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "representations": ["equipotential curves", "potential graph", "field probe"],
+  "assumptions": ["zero potential at infinity", "electrostatic point charge"]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "circular-orbit",
+  "title": "Circular Earth orbit",
+  "category": "gravity",
+  "topic": 13,
+  "question": "How do altitude, speed, period and energy remain linked?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

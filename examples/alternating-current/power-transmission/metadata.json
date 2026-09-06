@@ -1,0 +1,15 @@
+{
+  "id": "power-transmission",
+  "title": "Power transmission",
+  "category": "alternating-current",
+  "topic": 21,
+  "question": "Why does stepping voltage up reduce line heating?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "transformer",
+  "topic": 21,
+  "title": "Ideal transformer",
+  "question": "How do turns set voltage, current and conserved ideal power?",
+  "parameters": {
+    "primaryTurns": 500,
+    "secondaryTurns": 100,
+    "primaryVoltageVolts": 230,
+    "primaryCurrentAmperes": 1
+  },
+  "result": {
+    "turnsRatio": 0.2,
+    "secondaryVoltageVolts": 46,
+    "secondaryCurrentAmperes": 5,
+    "inputPowerWatts": 230,
+    "outputPowerWatts": 230
+  },
+  "representations": [
+    "transformer core",
+    "primary and secondary coils",
+    "input/output waveforms"
+  ],
+  "assumptions": ["ideal transformer", "no leakage or resistive loss"]
+}

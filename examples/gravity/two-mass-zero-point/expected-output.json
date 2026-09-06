@@ -1,0 +1,46 @@
+{
+  "id": "two-mass-zero-point",
+  "topic": 13,
+  "title": "Two-mass zero-field point",
+  "question": "Where do equal gravitational contributions cancel?",
+  "parameters": {
+    "sources": [
+      {
+        "id": "left",
+        "massKilograms": 40000000000,
+        "positionMetres": {
+          "x": -3,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "right",
+        "massKilograms": 40000000000,
+        "positionMetres": {
+          "x": 3,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ],
+    "probe": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "result": {
+    "field": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "representations": [
+    "two masses",
+    "opposed field arrows",
+    "zero-point marker"
+  ],
+  "assumptions": ["Newtonian point masses", "linear superposition"]
+}

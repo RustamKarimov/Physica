@@ -1,5 +1,68 @@
 export function ObjectGlyph({ name }: { readonly name: string }) {
   const key = name.toLowerCase();
+  if (
+    key.includes("earth") ||
+    key.includes("planet") ||
+    key.includes("orbit") ||
+    key.includes("satellite")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <ellipse
+          cx="40"
+          cy="30"
+          rx="31"
+          ry="20"
+          fill="none"
+          stroke="#82d8ff"
+          strokeWidth="2"
+          strokeDasharray="4 3"
+        />
+        <circle
+          cx="40"
+          cy="30"
+          r="13"
+          fill="#2875a5"
+          stroke="#6ee3bd"
+          strokeWidth="2"
+        />
+        <circle cx="70" cy="30" r="5" fill="#ffc66d" />
+      </svg>
+    );
+  if (key.includes("charge") || key.includes("electric field"))
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <circle cx="40" cy="30" r="16" fill="#ff8067" />
+        <path
+          d="M40 20v20M30 30h20M8 30h14m36 0h14"
+          stroke="#fff"
+          strokeWidth="3"
+        />
+        <path
+          d="M16 24l7 6-7 6m48-12 7 6-7 6"
+          fill="none"
+          stroke="#82d8ff"
+          strokeWidth="2"
+        />
+      </svg>
+    );
+  if (
+    key.includes("magnetic") ||
+    key.includes("solenoid") ||
+    key.includes("coil") ||
+    key.includes("transformer")
+  )
+    return (
+      <svg viewBox="0 0 80 60" aria-hidden="true">
+        <path
+          d="M8 30h9c0-17 12-17 12 0s12 17 12 0 12-17 12 0 12 17 12 0h7"
+          fill="none"
+          stroke="#ffc66d"
+          strokeWidth="4"
+        />
+        <path d="M13 12h54M13 48h54" stroke="#82d8ff" strokeWidth="3" />
+      </svg>
+    );
   if (key.includes("ball") || key.includes("mass"))
     return (
       <svg viewBox="0 0 80 60" aria-hidden="true">

@@ -1,0 +1,28 @@
+{
+  "id": "power-transmission",
+  "topic": 21,
+  "title": "Power transmission",
+  "question": "Why does stepping voltage up reduce line heating?",
+  "parameters": {
+    "powerWatts": 1000000,
+    "lineResistanceOhms": 4
+  },
+  "result": {
+    "lowVoltage": {
+      "currentAmperes": 100,
+      "lineLossWatts": 40000,
+      "deliveredPowerWatts": 960000
+    },
+    "highVoltage": {
+      "currentAmperes": 10,
+      "lineLossWatts": 400,
+      "deliveredPowerWatts": 999600
+    }
+  },
+  "representations": [
+    "step-up transformer",
+    "transmission line",
+    "power-flow panel"
+  ],
+  "assumptions": ["fixed transmitted input power", "purely resistive line"]
+}

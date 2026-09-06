@@ -122,6 +122,9 @@ importers:
       '@physica/physics-electricity':
         specifier: workspace:*
         version: link:../../packages/physics-electricity
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../packages/physics-fields
       '@physica/physics-mechanics':
         specifier: workspace:*
         version: link:../../packages/physics-mechanics
@@ -263,6 +266,36 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.4.0)
+
+  examples/alternating-current/ac-waveform-rms:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/alternating-current/power-transmission:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/alternating-current/transformer:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
 
   examples/animation/camera-follow:
     dependencies:
@@ -491,6 +524,46 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/electric-fields/charged-particle-plates:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/electric-fields/electric-potential:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/electric-fields/point-charge-field:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/electric-fields/two-charge-field:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/electricity/charge-current:
     dependencies:
       '@physica/physics-electricity':
@@ -676,6 +749,46 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  examples/gravity/circular-orbit:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/gravity/gravitational-potential:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/gravity/gravity-field:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/gravity/two-mass-zero-point:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   examples/library/bind-instrument:
     dependencies:
       '@physica/assets':
@@ -734,6 +847,46 @@ importers:
       '@physica/core-model':
         specifier: workspace:*
         version: link:../../../packages/core-model
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/magnetism/charged-particle-b:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/magnetism/electromagnetic-induction:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/magnetism/force-on-current:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
+    devDependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  examples/magnetism/solenoid-field:
+    dependencies:
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../../../packages/physics-fields
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -1696,6 +1849,9 @@ importers:
       '@physica/physics-electricity':
         specifier: workspace:*
         version: link:../physics-electricity
+      '@physica/physics-fields':
+        specifier: workspace:*
+        version: link:../physics-fields
       '@physica/physics-mechanics':
         specifier: workspace:*
         version: link:../physics-mechanics
@@ -1833,6 +1989,19 @@ importers:
         version: 6.0.3
 
   packages/physics-fields:
+    dependencies:
+      '@physica/core-model':
+        specifier: workspace:*
+        version: link:../core-model
+      '@physica/physics-core':
+        specifier: workspace:*
+        version: link:../physics-core
+      '@physica/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@physica/solver-ode':
+        specifier: workspace:*
+        version: link:../solver-ode
     devDependencies:
       typescript:
         specifier: 'catalog:'

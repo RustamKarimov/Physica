@@ -1,0 +1,15 @@
+{
+  "id": "ac-waveform-rms",
+  "title": "AC waveform and RMS",
+  "category": "alternating-current",
+  "topic": 21,
+  "question": "How does RMS relate a sinusoid to equivalent heating?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

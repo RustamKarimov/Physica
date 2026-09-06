@@ -3,6 +3,12 @@ import {
   electricityLibraryRequirementIds,
 } from "@physica/physics-electricity";
 import {
+  FIELD_EXAMPLE_IDS,
+  fieldLibraryRequirementIds,
+  runFieldScenario,
+  type FieldTopic,
+} from "@physica/physics-fields";
+import {
   MECHANICS_EXAMPLE_IDS,
   MECHANICS_LIBRARY_DESCRIPTORS,
   type MechanicsExampleId,
@@ -141,6 +147,21 @@ const CAPABILITIES: Readonly<Record<number, readonly string[]>> = Object.freeze(
       "mechanics.centripetal-force",
       "mechanics.radial-tangent-vectors",
     ],
+    13: [
+      "fields.newtonian-point-mass-gravity",
+      "fields.gravitational-potential",
+      "fields.superposition",
+      "fields.orbital-integrator",
+      "fields.circular-orbit",
+    ],
+    18: [
+      "fields.point-charge-electric-field",
+      "fields.uniform-electric-field",
+      "fields.electric-potential",
+      "fields.electric-superposition",
+      "fields.charged-particle-dynamics",
+      "fields.numerical-potential-extension",
+    ],
     19: [
       "electricity.capacitor",
       "electricity.charge-voltage",
@@ -149,6 +170,21 @@ const CAPABILITIES: Readonly<Record<number, readonly string[]>> = Object.freeze(
       "electricity.capacitor-network",
       "electricity.rc-transient",
       "electricity.dielectric-extension",
+    ],
+    20: [
+      "fields.magnetic-vector-field",
+      "fields.lorentz-force",
+      "fields.force-on-current",
+      "fields.charged-particle-magnetic-motion",
+      "fields.flux-induction",
+      "fields.solenoid-approximation",
+    ],
+    21: [
+      "fields.sinusoidal-source",
+      "fields.rms",
+      "fields.ideal-transformer",
+      "fields.periodic-circuit-source",
+      "fields.phasor-frequency-extension",
     ],
   },
 );
@@ -387,6 +423,28 @@ function electricityEvidence(topicNumber: 9 | 10 | 19): CurriculumEvidenceSet {
   });
 }
 
+function fieldEvidence(topicNumber: FieldTopic): CurriculumEvidenceSet {
+  return Object.freeze({
+    capabilityIds: CAPABILITIES[topicNumber]!,
+    libraryItemIds: fieldLibraryRequirementIds(topicNumber),
+    exampleIds: FIELD_EXAMPLE_IDS.filter(
+      (id) => runFieldScenario(id).topic === topicNumber,
+    ),
+    scientificTestIds: [
+      `fields.topic-${topicNumber}.reference`,
+      `fields.topic-${topicNumber}.validation`,
+    ],
+    releaseGateIds:
+      topicNumber === 13
+        ? ["fields-alpha.gravity-shared-state"]
+        : topicNumber === 18
+          ? ["fields-alpha.electric-shared-state"]
+          : topicNumber === 20
+            ? ["fields-alpha.magnetic-shared-state"]
+            : ["fields-alpha.ac-transformer-shared-state"],
+  });
+}
+
 const PHASE_8_TOPICS = new Set([1, 2, 3, 4, 5, 6, 12]);
 
 export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
@@ -399,6 +457,10 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
         topicNumber !== 8 &&
         topicNumber !== 9 &&
         topicNumber !== 10 &&
+        topicNumber !== 13 &&
+        topicNumber !== 18 &&
+        topicNumber !== 20 &&
+        topicNumber !== 21 &&
         topicNumber !== 19
       )
         return evaluateCurriculumCoverage(
@@ -408,11 +470,16 @@ export const CAMBRIDGE_9702_TOPICS: readonly CurriculumTopicCoverage[] =
           emptyEvidence(),
         );
       const evidence =
-        topicNumber === 9 || topicNumber === 10 || topicNumber === 19
-          ? electricityEvidence(topicNumber)
-          : topicNumber === 7 || topicNumber === 8
-            ? waveEvidence(topicNumber)
-            : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
+        topicNumber === 13 ||
+        topicNumber === 18 ||
+        topicNumber === 20 ||
+        topicNumber === 21
+          ? fieldEvidence(topicNumber)
+          : topicNumber === 9 || topicNumber === 10 || topicNumber === 19
+            ? electricityEvidence(topicNumber)
+            : topicNumber === 7 || topicNumber === 8
+              ? waveEvidence(topicNumber)
+              : mechanicsEvidence(topicNumber as 1 | 2 | 3 | 4 | 5 | 6 | 12);
       return evaluateCurriculumCoverage(topicNumber, title, evidence, evidence);
     }),
   );

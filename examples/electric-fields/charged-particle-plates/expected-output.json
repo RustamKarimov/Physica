@@ -1,0 +1,31 @@
+{
+  "id": "charged-particle-plates",
+  "topic": 18,
+  "title": "Electron between parallel plates",
+  "question": "How does a uniform electric field deflect an electron?",
+  "parameters": {
+    "voltageVolts": 200,
+    "separationMetres": 0.05,
+    "durationSeconds": 1e-9
+  },
+  "result": {
+    "positionMetres": {
+      "x": 0.02,
+      "y": 0.000351764002212356,
+      "z": 0
+    },
+    "velocityMetresPerSecond": {
+      "x": 20000000,
+      "y": 703528.004424712,
+      "z": 0
+    },
+    "timeSeconds": 1e-9
+  },
+  "representations": [
+    "parallel plates",
+    "electron",
+    "force vector",
+    "trajectory"
+  ],
+  "assumptions": ["uniform field", "non-relativistic", "gravity neglected"]
+}

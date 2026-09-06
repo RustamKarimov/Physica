@@ -1,0 +1,86 @@
+{
+  "id": "point-charge-field",
+  "topic": 18,
+  "title": "Point-charge field",
+  "question": "How does a positive charge set field direction and magnitude?",
+  "parameters": {
+    "charge": {
+      "id": "q",
+      "chargeCoulombs": 2e-9,
+      "positionMetres": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "probe": {
+      "x": 0.25,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "result": {
+    "field": {
+      "x": 287.6016573536,
+      "y": 0,
+      "z": 0
+    },
+    "line": {
+      "seed": {
+        "x": 0.1,
+        "y": 0,
+        "z": 0
+      },
+      "points": [
+        {
+          "x": 0.1,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.12000000000000001,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.14,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.16,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.18,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.19999999999999998,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.21999999999999997,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.23999999999999996,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0.25999999999999995,
+          "y": 0,
+          "z": 0
+        }
+      ],
+      "direction": 1
+    }
+  },
+  "representations": ["positive charge", "field lines", "vector-field probe"],
+  "assumptions": ["electrostatic point charge", "vacuum"]
+}

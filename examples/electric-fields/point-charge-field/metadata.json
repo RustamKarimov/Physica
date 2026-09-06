@@ -1,0 +1,15 @@
+{
+  "id": "point-charge-field",
+  "title": "Point-charge field",
+  "category": "electric-fields",
+  "topic": 18,
+  "question": "How does a positive charge set field direction and magnitude?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

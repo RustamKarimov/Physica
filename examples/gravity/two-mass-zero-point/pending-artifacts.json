@@ -1,0 +1,10 @@
+{
+  "exampleId": "two-mass-zero-point",
+  "requiredWhenAvailable": [
+    "example.physica",
+    "expected.png",
+    "preview.webm",
+    "example.spec.ts"
+  ],
+  "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+}

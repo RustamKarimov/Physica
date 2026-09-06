@@ -1222,6 +1222,171 @@
         "example.spec.ts"
       ],
       "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "gravity-field",
+      "path": "examples/gravity/gravity-field",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "two-mass-zero-point",
+      "path": "examples/gravity/two-mass-zero-point",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "gravitational-potential",
+      "path": "examples/gravity/gravitational-potential",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "circular-orbit",
+      "path": "examples/gravity/circular-orbit",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "point-charge-field",
+      "path": "examples/electric-fields/point-charge-field",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "two-charge-field",
+      "path": "examples/electric-fields/two-charge-field",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "electric-potential",
+      "path": "examples/electric-fields/electric-potential",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "charged-particle-plates",
+      "path": "examples/electric-fields/charged-particle-plates",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "force-on-current",
+      "path": "examples/magnetism/force-on-current",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "charged-particle-b",
+      "path": "examples/magnetism/charged-particle-b",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "solenoid-field",
+      "path": "examples/magnetism/solenoid-field",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "electromagnetic-induction",
+      "path": "examples/magnetism/electromagnetic-induction",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "ac-waveform-rms",
+      "path": "examples/alternating-current/ac-waveform-rms",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "transformer",
+      "path": "examples/alternating-current/transformer",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
+    },
+    {
+      "id": "power-transmission",
+      "path": "examples/alternating-current/power-transmission",
+      "pending": [
+        "example.physica",
+        "expected.png",
+        "preview.webm",
+        "example.spec.ts"
+      ],
+      "gate": "Phase 20 shared example runtime, package writer and gallery capture complete"
     }
   ]
 }

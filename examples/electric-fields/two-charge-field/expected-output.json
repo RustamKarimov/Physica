@@ -1,0 +1,41 @@
+{
+  "id": "two-charge-field",
+  "topic": 18,
+  "title": "Two-charge electric field",
+  "question": "How do vector contributions form a dipole field?",
+  "parameters": {
+    "sources": [
+      {
+        "id": "positive",
+        "chargeCoulombs": 2e-9,
+        "positionMetres": {
+          "x": -0.1,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "negative",
+        "chargeCoulombs": -2e-9,
+        "positionMetres": {
+          "x": 0.1,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "result": {
+    "fieldAtTop": {
+      "x": 1271.031763720127,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "representations": [
+    "positive and negative charge",
+    "field lines",
+    "vector grid"
+  ],
+  "assumptions": ["electrostatic point charges", "linear superposition"]
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title description">
+  <title id="title">Power transmission deterministic physics result</title>
+  <desc id="description">Why does stepping voltage up reduce line heating? Direction and polarity are labelled as well as coloured.</desc>
+  <rect width="960" height="540" fill="#07131f"/>
+  <text x="58" y="74" fill="#82d8ff" font-family="system-ui" font-size="18">PHYSICA · TOPIC 21 · MODEL / LOAD</text>
+  <text x="58" y="132" fill="#ffffff" font-family="system-ui" font-size="34" font-weight="700">Power transmission</text>
+  <line x1="110" y1="300" x2="820" y2="300" stroke="#5ed6a7" stroke-width="5"/>
+  <path d="M820 300l-24-14v28z" fill="#5ed6a7"/>
+  <circle cx="260" cy="300" r="48" fill="#17354e" stroke="#82d8ff" stroke-width="4"/>
+  <text x="260" y="308" text-anchor="middle" fill="#ffffff" font-family="system-ui" font-size="20">SOURCE</text>
+  <text x="58" y="395" fill="#d9e7f2" font-family="system-ui" font-size="20">Direction: labelled arrow → · Polarity/sign shown in values</text>
+  <text x="58" y="438" fill="#a9bfd0" font-family="ui-monospace" font-size="14">lowVoltage:currentAmperes:100,lineLossWatts:40000,deliveredPowerWatts:960000,highVoltage:currentAmperes:10,lin</text>
+  <text x="58" y="495" fill="#ffc66d" font-family="system-ui" font-size="16">Deterministic SI-canonical Phase 11 preview</text>
+</svg>

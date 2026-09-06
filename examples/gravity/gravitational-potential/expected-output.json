@@ -1,0 +1,19 @@
+{
+  "id": "gravitational-potential",
+  "topic": 13,
+  "title": "Gravitational potential",
+  "question": "How are potential and field connected outside Earth?",
+  "parameters": {
+    "radiusMetres": 7000000
+  },
+  "result": {
+    "potentialJoulesPerKilogram": -56941313.71428572,
+    "fieldNewtonsPerKilogram": {
+      "x": -8.134473387755103,
+      "y": 0,
+      "z": 0
+    }
+  },
+  "representations": ["potential curve", "equipotential shells", "field arrow"],
+  "assumptions": ["zero potential at infinity", "spherical Earth"]
+}

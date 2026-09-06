@@ -1,0 +1,15 @@
+{
+  "id": "charged-particle-plates",
+  "title": "Electron between parallel plates",
+  "category": "electric-fields",
+  "topic": 18,
+  "question": "How does a uniform electric field deflect an electron?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

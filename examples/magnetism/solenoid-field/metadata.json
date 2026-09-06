@@ -1,0 +1,15 @@
+{
+  "id": "solenoid-field",
+  "title": "Long-solenoid field",
+  "category": "magnetism",
+  "topic": 20,
+  "question": "How do turns density and current set the interior field?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

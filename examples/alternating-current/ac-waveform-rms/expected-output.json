@@ -1,0 +1,25 @@
+{
+  "id": "ac-waveform-rms",
+  "topic": 21,
+  "title": "AC waveform and RMS",
+  "question": "How does RMS relate a sinusoid to equivalent heating?",
+  "parameters": {
+    "peakVolts": 325,
+    "frequencyHertz": 50,
+    "timeSeconds": 0.005
+  },
+  "result": {
+    "instantaneous": 325,
+    "peak": 325,
+    "rms": 229.80970388562793,
+    "frequencyHertz": 50,
+    "periodSeconds": 0.02,
+    "phaseRadians": 0
+  },
+  "representations": [
+    "oscilloscope waveform",
+    "RMS marker",
+    "direction reversal"
+  ],
+  "assumptions": ["ideal sinusoid", "steady frequency"]
+}

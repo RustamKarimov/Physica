@@ -1,0 +1,15 @@
+{
+  "id": "force-on-current",
+  "title": "Force on a current",
+  "category": "magnetism",
+  "topic": 20,
+  "question": "How do B, I, length and orientation set wire force?",
+  "entry": "run.ts",
+  "expectedOutput": "expected-output.json",
+  "expectedPreview": "expected-preview.svg",
+  "deterministic": true,
+  "accessibility": {
+    "previewHasTextAlternative": true,
+    "colorIsNotSoleIndicator": true
+  }
+}

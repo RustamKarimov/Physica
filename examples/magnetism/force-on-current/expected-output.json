@@ -1,0 +1,17 @@
+{
+  "id": "force-on-current",
+  "topic": 20,
+  "title": "Force on a current",
+  "question": "How do B, I, length and orientation set wire force?",
+  "parameters": {
+    "fieldTeslas": 0.4,
+    "currentAmperes": 3,
+    "lengthMetres": 0.2,
+    "angleRadians": 1.5707963267948966
+  },
+  "result": {
+    "forceNewtons": 0.24000000000000005
+  },
+  "representations": ["wire", "current direction", "B field", "force vector"],
+  "assumptions": ["uniform magnetic field", "straight active wire segment"]
+}

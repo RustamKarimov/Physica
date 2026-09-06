@@ -1,0 +1,25 @@
+{
+  "id": "circular-orbit",
+  "topic": 13,
+  "title": "Circular Earth orbit",
+  "question": "How do altitude, speed, period and energy remain linked?",
+  "parameters": {
+    "radiusMetres": 6771000,
+    "satelliteMassKilograms": 1000
+  },
+  "result": {
+    "speedMetresPerSecond": 7672.4904132836045,
+    "periodSeconds": 5544.933316730677,
+    "escapeSpeedMetresPerSecond": 10850.539999643228,
+    "kineticEnergyJoules": 29433554570.96441,
+    "potentialEnergyJoules": -58867109141.92882,
+    "totalEnergyJoules": -29433554570.96441
+  },
+  "representations": [
+    "orbit",
+    "velocity vector",
+    "energy bars",
+    "period clock"
+  ],
+  "assumptions": ["circular Newtonian orbit", "Earth fixed at origin"]
+}
