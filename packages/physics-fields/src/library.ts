@@ -195,8 +195,22 @@ const RAW_DESCRIPTORS: readonly FieldLibraryDescriptor[] = [
   ]),
 ];
 
-const byId = new Map<string, FieldLibraryDescriptor>();
+const classesByBaseId = new Map<string, Set<LibraryItemClass>>();
 for (const descriptor of RAW_DESCRIPTORS) {
+  const classes = classesByBaseId.get(descriptor.id) ?? new Set();
+  classes.add(descriptor.itemClass);
+  classesByBaseId.set(descriptor.id, classes);
+}
+
+const byId = new Map<string, FieldLibraryDescriptor>();
+for (const rawDescriptor of RAW_DESCRIPTORS) {
+  const descriptor =
+    classesByBaseId.get(rawDescriptor.id)!.size > 1
+      ? {
+          ...rawDescriptor,
+          id: `${rawDescriptor.id}-${rawDescriptor.itemClass}`,
+        }
+      : rawDescriptor;
   const existing = byId.get(descriptor.id);
   if (existing) {
     byId.set(descriptor.id, {
@@ -375,7 +389,10 @@ export function registerFieldsPhysicsLibrary(
           visual: { style: "scientific-diagram" },
         },
       ],
-      dimensionality: "3D",
+      dimensionality:
+        descriptor.topics.length === 1 && descriptor.topics[0] === 21
+          ? "2D"
+          : "3D",
       exampleIds: FIELD_EXAMPLE_IDS,
       requiredCoreRange: ">=0.0.0",
       requiredPlugins: [],

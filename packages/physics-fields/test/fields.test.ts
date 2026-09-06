@@ -184,6 +184,11 @@ describe("Phase 11 catalog and scenarios", () => {
     expect(new Set(FIELD_LIBRARY_DESCRIPTORS.map((item) => item.id)).size).toBe(
       FIELD_LIBRARY_DESCRIPTORS.length,
     );
+    expect(
+      FIELD_LIBRARY_DESCRIPTORS.filter(
+        (item) => item.name.toLowerCase() === "solenoid",
+      ).map((item) => item.itemClass),
+    ).toEqual(["smart-model", "visual-object"]);
     const registries = createPhysicsLibraryRegistries();
     registerFieldsPhysicsLibrary(registries);
     for (const descriptor of FIELD_LIBRARY_DESCRIPTORS)
