@@ -13,133 +13,157 @@ import {
   createEmptyScene,
   DeterministicIdFactory,
   registeredTypeId,
+  type SceneId,
 } from "@physica/core-model";
-import {
-  compileAdvancedTimeline,
-  evaluateAdvancedTimeline,
-  type AdvancedTimelineV1,
-} from "@physica/storyboard";
+import { parseProjectJson, serializeProjectJson } from "@physica/serialization";
 
 export function runTeacherAuthoringWorkflow() {
   const ids = new DeterministicIdFactory(7_400_000);
   const project = createEmptyProject(ids, {
-    title: "Motion question",
-    description: "How does position change?",
-    tags: ["teacher-authored"],
-    createdAt: "2026-09-01T00:00:00.000Z",
+    title: "Forces lesson",
+    description: "How does force change motion?",
+    tags: ["teacher-authored", "teacher-workflow-recovery"],
+    createdAt: "2026-09-06T00:00:00.000Z",
   });
   const store = new DefaultProjectStore(
     project,
     createBuiltinCommandRegistry(),
     ids,
   );
-  const scene = createEmptyScene(ids, "Motion explanation");
-  const sceneResult = store.dispatch(
-    command(ids, BUILTIN_COMMAND_TYPES.addScene, { scene }),
-  );
-  if (!sceneResult.ok) throw new Error(sceneResult.error.message);
+  const opening = {
+    ...createEmptyScene(ids, "Explore the force"),
+    metadata: {
+      "physica:lesson/objective":
+        "Connect a larger resultant force to a larger acceleration.",
+      "physica:lesson/notes": "Ask learners to predict before changing force.",
+      "physica:lesson/durationSeconds": 25,
+    },
+  };
+  const explanation = {
+    ...createEmptyScene(ids, "Explain the relationship"),
+    metadata: {
+      "physica:lesson/objective": "Use F = ma to explain the observation.",
+      "physica:lesson/notes": "Keep mass constant during the comparison.",
+      "physica:lesson/durationSeconds": 35,
+    },
+  };
+  addScene(opening.id, opening);
+  addScene(explanation.id, explanation);
 
   const catalog = createBuiltInPhysicsLibrary();
-  const planned = planLibraryInstantiation(catalog, {
-    itemId: registeredTypeId("physica:library/ball"),
-    destinationSceneId: scene.id,
-    idFactory: ids,
-  });
-  if (!planned.ok) throw new Error(planned.error.message);
-  const libraryResult = store.dispatch(
-    command(ids, BUILTIN_COMMAND_TYPES.instantiateLibraryItem, planned.value),
+  const ballId = instantiate("physica:library/ball", opening.id);
+  const textId = instantiate(
+    "physica:library/text-explanation",
+    explanation.id,
   );
-  if (!libraryResult.ok) throw new Error(libraryResult.error.message);
+  instantiate("physica:library/equation-panel", explanation.id);
 
-  const entity = store.getDocument().scenes[0]!.entityDefinitions[0]!;
-  const component = entity.componentInstances[0]!;
-  const moveResult = store.dispatch(
-    command(ids, BUILTIN_COMMAND_TYPES.setComponentInitialState, {
-      sceneId: scene.id,
-      entityId: entity.id,
-      componentInstanceId: component.instanceId,
+  const ball = store
+    .getDocument()
+    .scenes[0]!.entityDefinitions.find((entity) => entity.id === ballId)!;
+  const ballComponent = ball.componentInstances[0]!;
+  dispatch(
+    BUILTIN_COMMAND_TYPES.setComponentInitialState,
+    {
+      sceneId: opening.id,
+      entityId: ball.id,
+      componentInstanceId: ballComponent.instanceId,
       initialState: {
-        ...component.initialState,
+        ...ballComponent.initialState,
         positionX: 1.5,
         positionY: 2,
       },
-    }),
+    },
+    "Edit physical starting position",
   );
-  if (!moveResult.ok) throw new Error(moveResult.error.message);
-  const afterMove = store.getDocument();
-  const undoExact =
-    store.undo().ok &&
-    store.getDocument().scenes[0]!.entityDefinitions[0]!.componentInstances[0]!
-      .initialState.positionX === undefined;
-  const redoExact =
-    store.redo().ok &&
-    JSON.stringify(store.getDocument()) === JSON.stringify(afterMove);
+  dispatch(
+    BUILTIN_COMMAND_TYPES.setEntityPresentation,
+    {
+      sceneId: opening.id,
+      entityId: ball.id,
+      name: "Demonstration ball",
+      visualDefaults: { x: 310, y: 245 },
+    },
+    "Arrange ball on slide",
+  );
 
-  const timeline: AdvancedTimelineV1 = {
-    schemaVersion: 1,
-    tracks: [
-      {
-        id: "explanation",
-        name: "Animation",
-        kind: "animation",
-        clockKey: "presentation",
-        clips: [
-          {
-            id: "reveal",
-            label: "Reveal ball",
-            startSeconds: 0,
-            durationSeconds: 3,
-            clockKey: "presentation",
-            payload: { target: "ball" },
-          },
-        ],
+  const text = store
+    .getDocument()
+    .scenes[1]!.entityDefinitions.find((entity) => entity.id === textId)!;
+  dispatch(
+    BUILTIN_COMMAND_TYPES.setEntityPresentation,
+    {
+      sceneId: explanation.id,
+      entityId: text.id,
+      name: "Lesson explanation",
+      visualDefaults: {
+        x: 300,
+        y: 210,
+        content:
+          "For the same mass, doubling the resultant force doubles acceleration.",
       },
-      {
-        id: "measure",
-        name: "Data acquisition",
-        kind: "acquisition",
-        clockKey: "simulation",
-        clips: [
-          {
-            id: "record",
-            label: "Record position",
-            startSeconds: 1,
-            durationSeconds: 3,
-            clockKey: "simulation",
-            payload: { cadenceSeconds: 0.1 },
-          },
-        ],
-      },
-    ],
-  };
-  const compiled = compileAdvancedTimeline(timeline);
-  if (!compiled.ok) throw new Error(compiled.issues[0]?.message);
-  const snapshot = evaluateAdvancedTimeline(compiled.value, 2);
-  if (!snapshot.ok) throw new Error(snapshot.issues[0]?.message);
+    },
+    "Author lesson explanation",
+  );
+
+  const authored = store.getDocument();
+  const serialized = serializeProjectJson(authored);
+  if (!serialized.ok) throw new Error(serialized.error.message);
+  const reopened = parseProjectJson(serialized.value);
+  if (!reopened.ok) throw new Error(reopened.error.message);
+  const reserialized = serializeProjectJson(reopened.value.document);
+  if (!reserialized.ok) throw new Error(reserialized.error.message);
 
   return {
     id: "teacher-authoring-workflow",
-    projectTitle: store.getDocument().metadata.title,
-    scene: store.getDocument().scenes[0]!.name,
-    entities: store
-      .getDocument()
-      .scenes[0]!.entityDefinitions.map((candidate) => candidate.name),
-    librarySource:
-      store.getDocument().scenes[0]!.entityDefinitions[0]!
-        .componentInstances[0]!.sourceLibraryItem?.libraryItemId,
-    physicalInitialPosition: {
-      x: store.getDocument().scenes[0]!.entityDefinitions[0]!
-        .componentInstances[0]!.initialState.positionX,
-      y: store.getDocument().scenes[0]!.entityDefinitions[0]!
-        .componentInstances[0]!.initialState.positionY,
+    projectTitle: authored.metadata.title,
+    sceneOrder: authored.presentationFlow.sceneOrder.map(
+      (sceneId) => authored.scenes.find((scene) => scene.id === sceneId)!.name,
+    ),
+    openingObjective:
+      authored.scenes[0]!.metadata?.["physica:lesson/objective"],
+    openingNotes: authored.scenes[0]!.metadata?.["physica:lesson/notes"],
+    ball: {
+      name: authored.scenes[0]!.entityDefinitions[0]!.name,
+      physicalPosition: {
+        x: authored.scenes[0]!.entityDefinitions[0]!.componentInstances[0]!
+          .initialState.positionX,
+        y: authored.scenes[0]!.entityDefinitions[0]!.componentInstances[0]!
+          .initialState.positionY,
+      },
+      presentationPosition:
+        authored.scenes[0]!.entityDefinitions[0]!.visualDefaults,
     },
-    layoutWritesPhysics: false,
-    undoExact,
-    redoExact,
-    activeTimelineClips: snapshot.value.activeClips.map((entry) => ({
-      id: entry.clip.id,
-      clock: entry.clockKey,
-    })),
-    validationHasErrors: store.validate().hasErrors,
+    explanation: authored.scenes[1]!.entityDefinitions.find(
+      (entity) => entity.name === "Lesson explanation",
+    )?.visualDefaults?.content,
+    serializationRoundTrip: reserialized.value === serialized.value,
+    validationHasErrors: reopened.value.validation.hasErrors,
   };
+
+  function addScene(sceneId: SceneId, scene: typeof opening) {
+    dispatch(BUILTIN_COMMAND_TYPES.addScene, { scene }, "Add scene " + sceneId);
+  }
+
+  function instantiate(itemId: string, sceneId: SceneId) {
+    const planned = planLibraryInstantiation(catalog, {
+      itemId: registeredTypeId(itemId),
+      destinationSceneId: sceneId,
+      idFactory: ids,
+    });
+    if (!planned.ok) throw new Error(planned.error.message);
+    dispatch(
+      BUILTIN_COMMAND_TYPES.instantiateLibraryItem,
+      planned.value,
+      "Add Library item",
+    );
+    return planned.value.snapshot.entityDefinitions[0]!.id;
+  }
+
+  function dispatch(type: string, payload: object, label: string) {
+    const result = store.dispatch(
+      command(ids, registeredTypeId(type), payload, label),
+    );
+    if (!result.ok) throw new Error(result.error.message);
+  }
 }

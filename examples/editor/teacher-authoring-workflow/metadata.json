@@ -2,7 +2,7 @@
   "id": "teacher-authoring-workflow",
   "title": "Teacher authoring workflow",
   "category": "editor",
-  "description": "A deterministic project-store workflow creates a scene, adds a Physics Library ball, edits physical initial state and evaluates separate presentation and simulation timeline tracks.",
+  "description": "A teacher creates an ordered two-scene lesson, adds Physics Library content, edits physical and presentation state separately, authors notes and reopens the serialized project exactly.",
   "entry": "run.ts",
   "expectedPreview": "expected-preview.svg",
   "capabilities": [
@@ -10,6 +10,8 @@
     "physics-library",
     "undo-redo",
     "physical-drag-command",
-    "multi-clock-timeline"
+    "multi-scene-presentation",
+    "teacher-notes",
+    "serialization-round-trip"
   ]
 }

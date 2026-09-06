@@ -6,6 +6,7 @@ import {
   type AddScenePayload,
   type RemoveScenePayload,
   type ReorderScenesPayload,
+  type SetScenePropertiesPayload,
 } from "./contract";
 import {
   findScene,
@@ -214,8 +215,74 @@ const reorderScenesHandler: CommandHandler<ReorderScenesPayload> = {
   },
 };
 
+const setScenePropertiesHandler: CommandHandler<SetScenePropertiesPayload> = {
+  validate(document, current) {
+    const scene = findScene(document, current.payload.sceneId);
+    if (!scene)
+      return [
+        issue("scene-not-found", "Scene does not exist.", "payload.sceneId", [
+          current.payload.sceneId,
+        ]),
+      ];
+    return current.payload.name.trim().length > 0
+      ? []
+      : [
+          issue(
+            "invalid-scene-name",
+            "Scene name must not be empty.",
+            "payload.name",
+          ),
+        ];
+  },
+  apply(document, current, context) {
+    const previous = findScene(document, current.payload.sceneId)!;
+    const nextScene = (() => {
+      if (current.payload.metadata === undefined) {
+        const { metadata: _metadata, ...withoutMetadata } = previous;
+        void _metadata;
+        return { ...withoutMetadata, name: current.payload.name.trim() };
+      }
+      return {
+        ...previous,
+        name: current.payload.name.trim(),
+        metadata: current.payload.metadata,
+      };
+    })();
+    return {
+      document: {
+        ...document,
+        scenes: document.scenes.map((scene) =>
+          scene.id === previous.id ? nextScene : scene,
+        ),
+      },
+      inverse: command(
+        context.idFactory,
+        BUILTIN_COMMAND_TYPES.setSceneProperties,
+        {
+          sceneId: previous.id,
+          name: previous.name,
+          ...(previous.metadata === undefined
+            ? {}
+            : { metadata: previous.metadata }),
+        },
+      ),
+      changes: [
+        {
+          kind: "replace",
+          path: "scenes/" + previous.id,
+          relatedIds: [previous.id],
+        },
+      ],
+    };
+  },
+};
+
 export function registerSceneCommands(registry: CommandRegistry): void {
   registry.register(BUILTIN_COMMAND_TYPES.addScene, addSceneHandler);
   registry.register(BUILTIN_COMMAND_TYPES.removeScene, removeSceneHandler);
   registry.register(BUILTIN_COMMAND_TYPES.reorderScenes, reorderScenesHandler);
+  registry.register(
+    BUILTIN_COMMAND_TYPES.setSceneProperties,
+    setScenePropertiesHandler,
+  );
 }

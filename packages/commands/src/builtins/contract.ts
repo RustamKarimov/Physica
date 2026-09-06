@@ -26,6 +26,7 @@ export const BUILTIN_COMMAND_TYPES = {
   addScene: registeredTypeId("physica:command/add-scene"),
   removeScene: registeredTypeId("physica:command/remove-scene"),
   reorderScenes: registeredTypeId("physica:command/reorder-scenes"),
+  setSceneProperties: registeredTypeId("physica:command/set-scene-properties"),
   addEntity: registeredTypeId("physica:command/add-entity"),
   removeEntity: registeredTypeId("physica:command/remove-entity"),
   addComponent: registeredTypeId("physica:command/add-component"),
@@ -35,6 +36,9 @@ export const BUILTIN_COMMAND_TYPES = {
   ),
   setComponentInitialState: registeredTypeId(
     "physica:command/set-component-initial-state",
+  ),
+  setEntityPresentation: registeredTypeId(
+    "physica:command/set-entity-presentation",
   ),
   addSystem: registeredTypeId("physica:command/add-system"),
   removeSystem: registeredTypeId("physica:command/remove-system"),
@@ -59,6 +63,12 @@ export interface RemoveScenePayload {
 
 export interface ReorderScenesPayload {
   readonly sceneOrder: readonly SceneId[];
+}
+
+export interface SetScenePropertiesPayload {
+  readonly sceneId: SceneId;
+  readonly name: string;
+  readonly metadata?: JsonObject;
 }
 
 export interface AddEntityPayload {
@@ -99,6 +109,13 @@ export interface SetComponentInitialStatePayload {
   readonly initialState: JsonObject;
 }
 
+export interface SetEntityPresentationPayload {
+  readonly sceneId: SceneId;
+  readonly entityId: EntityId;
+  readonly name: string;
+  readonly visualDefaults?: JsonObject;
+}
+
 export interface AddSystemPayload {
   readonly sceneId: SceneId;
   readonly system: SystemDefinition;
@@ -134,12 +151,14 @@ export type BuiltinCommand = Command<
   | AddScenePayload
   | RemoveScenePayload
   | ReorderScenesPayload
+  | SetScenePropertiesPayload
   | AddEntityPayload
   | RemoveEntityPayload
   | AddComponentPayload
   | RemoveComponentPayload
   | SetComponentConfigurationPayload
   | SetComponentInitialStatePayload
+  | SetEntityPresentationPayload
   | AddSystemPayload
   | RemoveSystemPayload
   | AddRepresentationPayload

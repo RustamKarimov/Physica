@@ -13,6 +13,6 @@ describe("teacher-authoring-workflow example", () => {
       "utf8",
     );
     expect(svg).toContain('role="img"');
-    expect(svg).toContain("Advanced timeline");
+    expect(svg).toContain("Teacher authoring");
   });
 });

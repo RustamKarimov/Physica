@@ -16,6 +16,7 @@ import {
   type RemoveEntityPayload,
   type SetComponentConfigurationPayload,
   type SetComponentInitialStatePayload,
+  type SetEntityPresentationPayload,
 } from "./contract";
 import {
   findComponent,
@@ -383,6 +384,82 @@ const setComponentInitialStateHandler: CommandHandler<SetComponentInitialStatePa
     },
   };
 
+const setEntityPresentationHandler: CommandHandler<SetEntityPresentationPayload> =
+  {
+    validate(document, current) {
+      const entity = findEntity(
+        document,
+        current.payload.sceneId,
+        current.payload.entityId,
+      );
+      if (!entity)
+        return [
+          issue(
+            "entity-not-found",
+            "Entity does not exist in the Scene.",
+            "payload.entityId",
+            [current.payload.entityId],
+          ),
+        ];
+      return current.payload.name.trim().length > 0
+        ? []
+        : [
+            issue(
+              "invalid-entity-name",
+              "Object name must not be empty.",
+              "payload.name",
+            ),
+          ];
+    },
+    apply(document, current, context) {
+      const payload = current.payload;
+      const previous = findEntity(document, payload.sceneId, payload.entityId)!;
+      return {
+        document: replaceScene(document, payload.sceneId, (scene) => ({
+          ...scene,
+          entityDefinitions: scene.entityDefinitions.map((entity) => {
+            if (entity.id !== payload.entityId) return entity;
+            if (payload.visualDefaults === undefined) {
+              const { visualDefaults: _visualDefaults, ...withoutVisual } =
+                entity;
+              void _visualDefaults;
+              return { ...withoutVisual, name: payload.name.trim() };
+            }
+            return {
+              ...entity,
+              name: payload.name.trim(),
+              visualDefaults: payload.visualDefaults,
+            };
+          }),
+        })),
+        inverse: command(
+          context.idFactory,
+          BUILTIN_COMMAND_TYPES.setEntityPresentation,
+          {
+            sceneId: payload.sceneId,
+            entityId: payload.entityId,
+            name: previous.name,
+            ...(previous.visualDefaults === undefined
+              ? {}
+              : { visualDefaults: previous.visualDefaults }),
+          },
+        ),
+        changes: [
+          {
+            kind: "replace",
+            path:
+              "scenes/" +
+              payload.sceneId +
+              "/entities/" +
+              payload.entityId +
+              "/presentation",
+            relatedIds: [payload.entityId],
+          },
+        ],
+      };
+    },
+  };
+
 export function registerEntityComponentCommands(
   registry: CommandRegistry,
 ): void {
@@ -400,5 +477,9 @@ export function registerEntityComponentCommands(
   registry.register(
     BUILTIN_COMMAND_TYPES.setComponentInitialState,
     setComponentInitialStateHandler,
+  );
+  registry.register(
+    BUILTIN_COMMAND_TYPES.setEntityPresentation,
+    setEntityPresentationHandler,
   );
 }

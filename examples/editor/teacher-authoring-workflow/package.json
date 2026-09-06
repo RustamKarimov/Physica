@@ -10,6 +10,7 @@
     "@physica/assets": "workspace:*",
     "@physica/commands": "workspace:*",
     "@physica/core-model": "workspace:*",
+    "@physica/serialization": "workspace:*",
     "@physica/storyboard": "workspace:*"
   },
   "devDependencies": {

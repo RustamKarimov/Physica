@@ -12,9 +12,13 @@ import {
 import {
   createEmptyProject,
   createEmptyScene,
+  CryptoIdFactory,
   DeterministicIdFactory,
   registeredTypeId,
   type EntityId,
+  type IdFactory,
+  type JsonObject,
+  type ProjectDocument,
   type RegisteredTypeId,
   type SceneId,
 } from "@physica/core-model";
@@ -335,7 +339,7 @@ export const PROJECT_TEMPLATES: readonly ProjectTemplate[] = [
 ];
 
 export interface EditorSession {
-  readonly ids: DeterministicIdFactory;
+  readonly ids: IdFactory;
   readonly store: ProjectStore;
   readonly sceneId: SceneId;
   readonly template: ProjectTemplate;
@@ -358,6 +362,7 @@ export function createEditorSession(template: ProjectTemplate): EditorSession {
     description: template.question,
     tags: [
       "teacher-authored",
+      "teacher-workflow-recovery",
       "phase-12",
       "thermal-gases-alpha",
       "fields-ac-alpha",
@@ -389,13 +394,54 @@ export function createEditorSession(template: ProjectTemplate): EditorSession {
   return session;
 }
 
+export function createEditorSessionFromDocument(
+  document: ProjectDocument,
+): EditorSession {
+  const ids = new CryptoIdFactory();
+  const store = new DefaultProjectStore(
+    document,
+    createBuiltinCommandRegistry(),
+    ids,
+  );
+  let sceneId =
+    document.presentationFlow.entrySceneId ?? document.scenes[0]?.id;
+  if (!sceneId) {
+    const scene = createEmptyScene(ids, "Opening");
+    const result = store.dispatch(
+      command(
+        ids,
+        BUILTIN_COMMAND_TYPES.addScene,
+        { scene },
+        "Create opening scene",
+      ),
+    );
+    if (!result.ok) throw new Error(result.error.message);
+    sceneId = scene.id;
+  }
+  store.markSaved();
+  return {
+    ids,
+    store,
+    sceneId,
+    template: {
+      id: "opened-project",
+      title: document.metadata.title,
+      description: document.metadata.description ?? "Opened lesson project.",
+      question: document.metadata.description ?? "",
+      itemIds: [],
+      seed: 0,
+    },
+  };
+}
+
 export function addLibraryItem(
   session: EditorSession,
   itemId: RegisteredTypeId,
+  sceneId: SceneId = session.sceneId,
 ): readonly EntityId[] {
   const plan = planLibraryInstantiation(physicsLibrary, {
     itemId,
-    destinationSceneId: session.sceneId,
+    destinationSceneId: sceneId,
     idFactory: session.ids,
   });
   if (!plan.ok) throw new Error(plan.error.message);
@@ -413,13 +459,14 @@ export function addLibraryItem(
 
 export function setPhysicalPosition(
   session: EditorSession,
+  sceneId: SceneId,
   entityId: EntityId,
   x: number,
   y: number,
 ): boolean {
   const scene = session.store
     .getDocument()
-    .scenes.find((candidate) => candidate.id === session.sceneId);
+    .scenes.find((candidate) => candidate.id === sceneId);
   const entity = scene?.entityDefinitions.find(
     (candidate) => candidate.id === entityId,
   );
@@ -430,7 +477,7 @@ export function setPhysicalPosition(
       session.ids,
       BUILTIN_COMMAND_TYPES.setComponentInitialState,
       {
-        sceneId: session.sceneId,
+        sceneId,
         entityId,
         componentInstanceId: component.instanceId,
         initialState: { ...component.initialState, positionX: x, positionY: y },
@@ -439,6 +486,117 @@ export function setPhysicalPosition(
     ),
   );
   return result.ok;
+}
+
+export function addLessonScene(session: EditorSession, name: string): SceneId {
+  const scene = {
+    ...createEmptyScene(session.ids, name),
+    metadata: {
+      "physica:lesson/objective": "",
+      "physica:lesson/notes": "",
+      "physica:lesson/durationSeconds": 15,
+    },
+  };
+  const result = session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.addScene,
+      { scene },
+      "Add lesson scene",
+    ),
+  );
+  if (!result.ok) throw new Error(result.error.message);
+  return scene.id;
+}
+
+export function removeLessonScene(
+  session: EditorSession,
+  sceneId: SceneId,
+): boolean {
+  if (session.store.getDocument().scenes.length <= 1) return false;
+  return session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.removeScene,
+      { sceneId },
+      "Remove lesson scene",
+    ),
+  ).ok;
+}
+
+export function reorderLessonScenes(
+  session: EditorSession,
+  sceneOrder: readonly SceneId[],
+): boolean {
+  return session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.reorderScenes,
+      { sceneOrder },
+      "Reorder lesson scenes",
+    ),
+  ).ok;
+}
+
+export function setSceneDetails(
+  session: EditorSession,
+  sceneId: SceneId,
+  name: string,
+  metadata: JsonObject,
+): boolean {
+  return session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.setSceneProperties,
+      { sceneId, name, metadata },
+      "Edit scene details",
+    ),
+  ).ok;
+}
+
+export function setEntityPresentation(
+  session: EditorSession,
+  sceneId: SceneId,
+  entityId: EntityId,
+  name: string,
+  visualDefaults: JsonObject,
+): boolean {
+  return session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.setEntityPresentation,
+      { sceneId, entityId, name, visualDefaults },
+      "Edit object presentation",
+    ),
+  ).ok;
+}
+
+export function setEntityInitialValue(
+  session: EditorSession,
+  sceneId: SceneId,
+  entityId: EntityId,
+  key: string,
+  value: string | number | boolean,
+): boolean {
+  const entity = session.store
+    .getDocument()
+    .scenes.find((candidate) => candidate.id === sceneId)
+    ?.entityDefinitions.find((candidate) => candidate.id === entityId);
+  const component = entity?.componentInstances[0];
+  if (!component) return false;
+  return session.store.dispatch(
+    command(
+      session.ids,
+      BUILTIN_COMMAND_TYPES.setComponentInitialState,
+      {
+        sceneId,
+        entityId,
+        componentInstanceId: component.instanceId,
+        initialState: { ...component.initialState, [key]: value },
+      },
+      "Edit physical initial value",
+    ),
+  ).ok;
 }
 
 export const TEACHER_TIMELINE: AdvancedTimelineV1 = {

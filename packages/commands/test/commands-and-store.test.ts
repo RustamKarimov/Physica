@@ -100,6 +100,15 @@ function inverseCases(): readonly CommandCase[] {
         sceneOrder: [second.id, first.id],
       }),
     });
+    cases.push({
+      name: "SetSceneProperties",
+      document: connected,
+      command: command(ids, BUILTIN_COMMAND_TYPES.setSceneProperties, {
+        sceneId: first.id,
+        name: "Renamed scene",
+        metadata: { durationSeconds: 18, notes: "Teacher prompt" },
+      }),
+    });
   }
   {
     const { ids, document } = createFixtureProject(2300);
@@ -161,6 +170,16 @@ function inverseCases(): readonly CommandCase[] {
         entityId: owner.id,
         componentInstanceId: owner.componentInstances[0]!.instanceId,
         initialState: { position: [1, 2, 3] },
+      }),
+    });
+    cases.push({
+      name: "SetEntityPresentation",
+      document,
+      command: command(ids, BUILTIN_COMMAND_TYPES.setEntityPresentation, {
+        sceneId: scene.id,
+        entityId: owner.id,
+        name: "Renamed object",
+        visualDefaults: { x: 320, y: 180, width: 160 },
       }),
     });
     cases.push({

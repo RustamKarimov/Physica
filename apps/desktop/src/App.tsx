@@ -52,23 +52,31 @@ export function App() {
     | "mechanics"
     | "author"
     | "archive"
-  >("thermal");
+  >("author");
   return (
     <div className="physica-shell">
       <header className="shell-bar">
         <button
           type="button"
           className="shell-brand"
-          onClick={() => setRoute("thermal")}
-          aria-label="Open Physica Thermal and Gases Alpha"
+          onClick={() => setRoute("author")}
+          aria-label="Open Physica Teacher Studio"
         >
           <span className="shell-mark">P</span>
           <span>
             <b>Physica</b>
-            <small>Thermal/Gases Alpha · Phase 12</small>
+            <small>Teacher Studio · Early acceptance build</small>
           </span>
         </button>
         <nav aria-label="Application views">
+          <button
+            type="button"
+            className={route === "author" ? "active" : ""}
+            aria-current={route === "author" ? "page" : undefined}
+            onClick={() => setRoute("author")}
+          >
+            Create lesson
+          </button>
           <button
             type="button"
             className={route === "thermal" ? "active" : ""}
@@ -111,14 +119,6 @@ export function App() {
           </button>
           <button
             type="button"
-            className={route === "author" ? "active" : ""}
-            aria-current={route === "author" ? "page" : undefined}
-            onClick={() => setRoute("author")}
-          >
-            Author
-          </button>
-          <button
-            type="button"
             className={route === "archive" ? "active" : ""}
             aria-current={route === "archive" ? "page" : undefined}
             onClick={() => setRoute("archive")}
@@ -127,18 +127,18 @@ export function App() {
           </button>
         </nav>
         <span className="shell-status">
-          {route === "thermal"
-            ? "Temperature, particles, gas state and energy-ledger workflows"
-            : route === "fields"
-              ? "Gravity, electric and magnetic fields with synchronized AC"
-              : route === "electricity"
-                ? "Solved circuits, meters, characteristics and RC transients"
-                : route === "waves"
-                  ? "Shared-state wave, screen, graph and ray workflows"
-                  : route === "mechanics"
-                    ? "Seven scientifically linked teaching workflows"
-                    : route === "author"
-                      ? "No-code physics templates and complete registered Library"
+          {route === "author"
+            ? "Create scenes, author content, save and preview a lesson"
+            : route === "thermal"
+              ? "Temperature, particles, gas state and energy-ledger workflows"
+              : route === "fields"
+                ? "Gravity, electric and magnetic fields with synchronized AC"
+                : route === "electricity"
+                  ? "Solved circuits, meters, characteristics and RC transients"
+                  : route === "waves"
+                    ? "Shared-state wave, screen, graph and ray workflows"
+                    : route === "mechanics"
+                      ? "Seven scientifically linked teaching workflows"
                       : "Earlier engineering proofs"}
         </span>
       </header>

@@ -1,3 +1,7 @@
 # Teacher authoring workflow
 
-This example executes the same authority boundaries used by the Phase 7 desktop: project commands create the document, the Physics Library supplies snapshot content, physical manipulation changes initial state through one command, and timeline evaluation reads explicit clocks without advancing them. Presentation layout remains transient and cannot change physics.
+This example executes the teacher-facing recovery workflow through the same
+document and command boundaries used by the desktop. It creates two ordered
+lesson scenes, adds Physics Library objects, stores learning objectives and
+teacher notes, edits physical initial state separately from presentation
+layout, authors explanatory content and verifies an exact serialization reopen.

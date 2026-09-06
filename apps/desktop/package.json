@@ -30,6 +30,7 @@
     "@physica/renderer-pixi": "workspace:*",
     "@physica/renderer-svg": "workspace:*",
     "@physica/renderer-three": "workspace:*",
+    "@physica/serialization": "workspace:*",
     "@physica/storyboard": "workspace:*",
     "@physica/solver-algebraic": "workspace:*",
     "@physica/solver-analytical": "workspace:*",

@@ -6,21 +6,91 @@
 
 **Mandatory governance:** Every future session must read `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md` before continuing project work.
 
-**Current development phase:** Phase 12 complete - Thermal/Gases Alpha verified
+**Current development phase:** Teacher Workflow Recovery checkpoint 1 complete — teacher evaluation requested
 
-**Current task:** Phase 12 complete; autonomous progression entering Phase 13 Oscillations and Advanced Periodic Systems
+**Current task:** Validate the first real blank-lesson-to-presentation teacher workflow through the launcher
 
-**Next task:** Execute Phase 13 - Oscillations and Advanced Periodic Systems, then perform scheduled HC-07.
+**Next task:** Correct teacher-reported workflow problems, then complete editable presentation timing/playback and renderer-backed lesson objects before curriculum progression resumes.
 
-**Blockers:** None
+**Blockers:** No architecture blocker. Curriculum progression is intentionally paused at this user-directed acceptance checkpoint; Phase 13 remains preserved, uncommitted work in progress and is not complete.
 
 ## Autonomous execution status
+
+The user's product-direction correction adds an explicit teacher acceptance
+checkpoint before further curriculum expansion. Autonomous execution remains
+active, but Phase 13 progression must not resume until the teacher-first
+workflow has been inspected and its material usability findings have been
+addressed.
 
 Autonomous execution toward the Physica 1.0 Release Candidate is active under `docs/AUTONOMOUS_EXECUTION_PROTOCOL.md`. The protocol is a permanent project governance document and must be read together with `AGENTS.md` and this operational state at the start of every future work session. Ordinary verified phases continue without user confirmation; progression stops only under the protocol's Architecture Blocker conditions or at the Physica 1.0 Release Candidate boundary.
 
 **User observation requirement:** Keep `Launch Physica.bat` working as the one-click Windows development launcher. As soon as a phase produces meaningful visible UI, expose it through this live Tauri development app so the user can observe progress. Do not add installer/executable packaging merely for progress observation.
 
 **Project health governance:** `docs/PROJECT_HEALTH_CHECKPOINTS.md` is active. HC-00 through HC-06 passed after repairs and are recorded under `docs/health-checkpoints/`. HC-07 is scheduled after Phase 13, with early-trigger conditions remaining active.
+
+## Teacher Workflow Recovery checkpoint 1
+
+Implemented and audited
+docs/implementation/TEACHER_WORKFLOW_RECOVERY_SPEC.md after user feedback
+showed that the subject Alpha workbenches were being mistaken for the product
+and did not demonstrate the primary teacher journey.
+
+The launcher now opens the Teacher Studio by default. A teacher can create a
+blank lesson or choose a starter, create/select/rename/reorder/remove scenes,
+add metadata-driven Physics Library objects to the selected scene, persist
+presentation layout separately from physical initial state, edit scene
+objectives and teacher notes, edit object explanation/formula content and
+simple physical initial values, undo/redo edits, preview the ordered scenes in
+a distinct teacher presentation surface, download a validated canonical JSON
+development snapshot and reopen it.
+
+The subject-specific Mechanics, Waves/Optics, Electricity, Fields and Thermal
+Alphas remain accessible as secondary engineering demonstrations. They are no
+longer the default or the measure of teacher-facing product readiness.
+
+The shared commands package now provides undoable set-scene-properties and
+set-entity-presentation commands. No root schema, ADR, solver, clock,
+scientific authority or third-party dependency changed. The desktop only added
+an architecture-compatible dependency on the existing serialization package.
+The 643-line combined editor was split into a 60-line session shell, a
+119-line project home and a 467-line authoring workspace; the reusable lesson
+stage, presentation preview, inspector and layout helper remain separately
+owned.
+
+The existing teacher-authoring-workflow Gallery fixture now creates two ordered
+scenes, persists objectives/notes, separates physical and presentation
+positions, authors explanation content and proves a canonical serialization
+round trip. The browser acceptance test executes the visible workflow from a
+blank lesson through presentation preview.
+
+Verification passed:
+
+- repository formatting;
+- ESLint and architecture boundaries;
+- strict TypeScript across 201 scripted workspaces;
+- 113 unit/example/scientific files with 535 tests;
+- 1 architecture file with 2 tests;
+- focused command and teacher Gallery tests: 2 files and 24 tests;
+- teacher browser acceptance: 1 Playwright test;
+- desktop, web viewer and Gallery builds;
+- Launch Physica.bat --check with Tauri 2.11.4 and Cargo 1.94.1.
+
+Current screenshots are docs/teacher-workflow-home.png and
+docs/teacher-workflow-checkpoint.png.
+
+Honest limitations at this checkpoint:
+
+- the presentation preview is manual scene navigation, not authored timed
+  playback;
+- most apparatus still uses semantic SVG previews rather than final
+  renderer-backed scene representations;
+- equations and graphs are editable presentation placeholders rather than the
+  completed semantic authoring experience;
+- JSON snapshots are a development bridge, not the final atomic ZIP-based
+  .physica package;
+- audio, transitions and export remain later work;
+- Phase 13 Oscillations work is preserved in the working tree but is not wired,
+  verified or claimed complete.
 
 ## Phase 12 result
 

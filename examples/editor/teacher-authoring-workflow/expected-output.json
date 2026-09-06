@@ -1,16 +1,15 @@
 {
   "id": "teacher-authoring-workflow",
-  "projectTitle": "Motion question",
-  "scene": "Motion explanation",
-  "entities": ["Ball"],
-  "librarySource": "physica:library/ball",
-  "physicalInitialPosition": { "x": 1.5, "y": 2 },
-  "layoutWritesPhysics": false,
-  "undoExact": true,
-  "redoExact": true,
-  "activeTimelineClips": [
-    { "id": "reveal", "clock": "presentation" },
-    { "id": "record", "clock": "simulation" }
-  ],
+  "projectTitle": "Forces lesson",
+  "sceneOrder": ["Explore the force", "Explain the relationship"],
+  "openingObjective": "Connect a larger resultant force to a larger acceleration.",
+  "openingNotes": "Ask learners to predict before changing force.",
+  "ball": {
+    "name": "Demonstration ball",
+    "physicalPosition": { "x": 1.5, "y": 2 },
+    "presentationPosition": { "x": 310, "y": 245 }
+  },
+  "explanation": "For the same mass, doubling the resultant force doubles acceleration.",
+  "serializationRoundTrip": true,
   "validationHasErrors": false
 }
