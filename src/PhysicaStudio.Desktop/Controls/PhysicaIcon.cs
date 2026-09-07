@@ -84,6 +84,11 @@ public sealed class PhysicaIcon : Control
                     context.DrawLine(pen, P(.32, y), P(.82, y));
                 }
                 break;
+            case "more":
+                context.DrawEllipse(brush, null, P(.22, .5), w * .065, h * .065);
+                context.DrawEllipse(brush, null, P(.5, .5), w * .065, h * .065);
+                context.DrawEllipse(brush, null, P(.78, .5), w * .065, h * .065);
+                break;
             case "mass":
                 context.DrawEllipse(brush, null, P(.5, .54), w * .28, h * .28);
                 context.DrawEllipse(Brushes.White, null, P(.41, .44), w * .055, h * .055);

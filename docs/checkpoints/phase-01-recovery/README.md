@@ -14,6 +14,10 @@
 - `concept-01-grouped-ribbon-native.png` — native grouped-ribbon state.
 - `concept-01-objects-gallery-open-1672x941.png` — normalized proof of the expanded Objects command gallery.
 - `concept-01-objects-gallery-open-native.png` — native proof of the expanded Objects command gallery.
+- `concept-01-ribbon-refined-1672x941.png` — normalized evenly spaced ribbon with full command names and integrated More launchers.
+- `concept-01-ribbon-refined-native.png` — native refined-ribbon capture.
+- `concept-01-ribbon-refined-gallery-1672x941.png` — normalized proof of the borderless ribbon-style Objects gallery.
+- `concept-01-ribbon-refined-gallery-native.png` — native refined-gallery capture.
 
 The screenshots are captured from the running Avalonia application. The approved concept image is not embedded in the application.
 
@@ -22,8 +26,9 @@ The screenshots are captured from the running Avalonia application. The approved
 - 30 px custom title bar and quick-access controls.
 - 32 px ribbon tabs with Physics selected.
 - 88 px compact Physics ribbon organized into Clipboard, Objects, Environment, Measurements, Representations, Constraints, and Validate.
-- Hybrid ribbon groups show at most two quick commands plus an always-active chevron; each chevron opens the complete icon gallery for that group.
-- Planned commands remain visible with explicit status inside the gallery but do not claim unfinished functionality.
+- Hybrid ribbon groups show at most two quick commands plus an always-active, full-size More command; each launcher opens the complete icon gallery for that group.
+- Groups divide the command band evenly rather than bunching together, and command widths adapt within controlled bounds so full names remain readable.
+- Planned commands remain visible with explicit status inside a borderless ribbon-style gallery but do not claim unfinished functionality.
 - Distinct vector icons rather than Unicode command glyphs.
 - 224 px collapsible slide dock with five rendered lesson thumbnails.
 - Fluid center workbench with a retained 16:9 scientific scene.

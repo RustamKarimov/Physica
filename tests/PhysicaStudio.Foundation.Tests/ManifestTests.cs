@@ -68,7 +68,9 @@ public sealed class ManifestTests
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
 
         Assert.Contains("ItemsSource=\"{Binding FeaturedCommands}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("<UniformGrid Rows=\"1\" />", xaml, StringComparison.Ordinal);
         Assert.Contains("Classes=\"ribbon-group-dropdown\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Text=\"More\"", xaml, StringComparison.Ordinal);
         Assert.Contains("<Button.Flyout>", xaml, StringComparison.Ordinal);
         Assert.Contains("ItemsSource=\"{Binding Commands}\"", xaml, StringComparison.Ordinal);
         Assert.DoesNotContain("Classes=\"ribbon-group-dropdown\" IsEnabled=\"False\"", xaml, StringComparison.Ordinal);

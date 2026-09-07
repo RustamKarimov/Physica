@@ -29,8 +29,9 @@ Implementation restarted with the single concept-01 authoring slice defined in `
 The Windows concept-01 slice now includes:
 
 - Custom dark window chrome and compact manifest-driven Physics ribbon.
-- A hybrid ribbon density model: every group exposes at most two quick commands and an always-active gallery chevron that reveals the complete command inventory.
-- Group galleries retain visible icons and readiness labels for Planned commands without enabling unfinished product behavior.
+- A hybrid ribbon density model: every group exposes at most two quick commands and an always-active, full-size `More` command that reveals the complete command inventory.
+- Ribbon groups share the available band width evenly, with restrained separators and content-aware command widths; visible names no longer clip or split single words.
+- Group galleries use the same borderless icon-and-label language as the ribbon while retaining quiet readiness labels for Planned commands without enabling unfinished product behavior.
 - Distinct vector icons for every visible ribbon command.
 - Five presentation-quality standing-wave lesson thumbnails.
 - A retained 16:9 standing-wave scene with material supports, phase traces, node/antinode annotations, an equation card, frequency control, and legend.
