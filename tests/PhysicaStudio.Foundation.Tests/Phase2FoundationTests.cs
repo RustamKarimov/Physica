@@ -301,4 +301,27 @@ public sealed class Phase2FoundationTests
         viewModel.Undo();
         Assert.Equal(initialCount, viewModel.Slides.Count);
     }
+
+    [Fact]
+    public void StudioViewModel_ReordersSlidesAndAssignsNewSectionUndoably()
+    {
+        var ribbon = new RibbonManifest(
+        [
+            new RibbonTabDefinition("home", "Home", [new RibbonGroupDefinition("Slides", ["Section"])]),
+            new RibbonTabDefinition("physics", "Physics", [new RibbonGroupDefinition("Objects", ["Mass"])])
+        ], []);
+        var viewModel = new StudioShellViewModel(ribbon, new FeatureManifest([], 2, []));
+        var selectedId = viewModel.ActiveSlide.Id;
+
+        viewModel.MoveActiveSlide(-1);
+        Assert.Equal(selectedId, viewModel.Session.CurrentProject.Slides[1].Id);
+
+        viewModel.AddSectionForActiveSlide();
+        Assert.Single(viewModel.Session.CurrentProject.Sections);
+        Assert.Equal(viewModel.Session.CurrentProject.Sections[0].Id, viewModel.ActiveSlide.SectionId);
+
+        viewModel.Undo();
+        Assert.Null(viewModel.ActiveSlide.SectionId);
+        Assert.Empty(viewModel.Session.CurrentProject.Sections);
+    }
 }

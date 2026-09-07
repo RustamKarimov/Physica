@@ -24,4 +24,18 @@
   <data name="LastSlideRequired" xml:space="preserve"><value>A lesson must contain at least one slide</value></data>
   <data name="UndoCompleted" xml:space="preserve"><value>Undo completed</value></data>
   <data name="RedoCompleted" xml:space="preserve"><value>Redo completed</value></data>
+  <data name="SlideMoved" xml:space="preserve"><value>Slide order updated</value></data>
+  <data name="SlideAlreadyAtEdge" xml:space="preserve"><value>The selected slide is already at that edge</value></data>
+  <data name="SectionAdded" xml:space="preserve"><value>Section added and assigned to the selected slide</value></data>
+  <data name="SectionName" xml:space="preserve"><value>Section {0}</value></data>
+  <data name="UntitledLesson" xml:space="preserve"><value>Untitled lesson</value></data>
+  <data name="OpenLessonTitle" xml:space="preserve"><value>Open Physica lesson</value></data>
+  <data name="SaveLessonTitle" xml:space="preserve"><value>Save Physica lesson</value></data>
+  <data name="SaveCopyLessonTitle" xml:space="preserve"><value>Save a copy of this Physica lesson</value></data>
+  <data name="PhysicaLessonFileType" xml:space="preserve"><value>Physica lesson</value></data>
+  <data name="OpenCancelled" xml:space="preserve"><value>Open cancelled</value></data>
+  <data name="SaveCancelled" xml:space="preserve"><value>Save cancelled</value></data>
+  <data name="ProjectCopySaved" xml:space="preserve"><value>Project copy saved</value></data>
+  <data name="NoRecoveryAvailable" xml:space="preserve"><value>No recovery snapshots are available</value></data>
+  <data name="RecoveryPreserveFailed" xml:space="preserve"><value>Could not preserve recovery: {0}</value></data>
 </root>

@@ -15,7 +15,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private static readonly HashSet<string> ImplementedPhase2Commands = new(StringComparer.Ordinal)
     {
         "New", "Open", "Save", "Save As", "Save Copy", "Recover", "Close",
-        "New Slide", "Duplicate Slide", "Delete Slide", "Undo", "Redo",
+        "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -170,7 +170,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectWorkspace(StudioWorkspace workspace) => StudioWorkspace = workspace;
 
-    public void NewProject(string title = "Untitled lesson") => ReplaceSession(AuthoringSession.CreateNew(title), AppText.NewProjectCreated);
+    public void NewProject(string? title = null) =>
+        ReplaceSession(AuthoringSession.CreateNew(title ?? AppText.UntitledLesson), AppText.NewProjectCreated);
 
     public void LoadProject(LessonProject project, string path) =>
         ReplaceSession(new AuthoringSession(project, path), AppText.ProjectOpened);
@@ -222,6 +223,29 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
         _session.Execute(ProjectCommands.DeleteSlide(_session.ActiveSlideId));
         StatusMessage = AppText.SlideDeleted;
+        RefreshFromSession();
+    }
+
+    public void MoveActiveSlide(int offset)
+    {
+        var currentIndex = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
+        var destination = currentIndex + offset;
+        if (destination < 0 || destination >= _session.CurrentProject.Slides.Count)
+        {
+            StatusMessage = AppText.SlideAlreadyAtEdge;
+            return;
+        }
+
+        _session.Execute(ProjectCommands.MoveSlide(_session.ActiveSlideId, destination));
+        StatusMessage = AppText.SlideMoved;
+        RefreshFromSession();
+    }
+
+    public void AddSectionForActiveSlide()
+    {
+        var name = AppText.SectionName(_session.CurrentProject.Sections.Count + 1);
+        _session.Execute(ProjectCommands.AddSectionAndAssignSlide(name, _session.ActiveSlideId));
+        StatusMessage = AppText.SectionAdded;
         RefreshFromSession();
     }
 

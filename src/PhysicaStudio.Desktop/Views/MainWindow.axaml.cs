@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using PhysicaStudio.Authoring;
+using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
 
@@ -130,6 +131,9 @@ public sealed partial class MainWindow : Window
                 case "Delete Slide":
                     _viewModel.DeleteActiveSlide();
                     break;
+                case "Section":
+                    _viewModel.AddSectionForActiveSlide();
+                    break;
                 case "Undo":
                     _viewModel.Undo();
                     break;
@@ -155,23 +159,72 @@ public sealed partial class MainWindow : Window
     private void NewSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.AddSlide();
     private void DuplicateSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DuplicateActiveSlide();
     private void DeleteSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DeleteActiveSlide();
+    private void MoveSlideUp_Click(object? sender, RoutedEventArgs e) => _viewModel.MoveActiveSlide(-1);
+    private void MoveSlideDown_Click(object? sender, RoutedEventArgs e) => _viewModel.MoveActiveSlide(1);
     private void Undo_Click(object? sender, RoutedEventArgs e) => _viewModel.Undo();
     private void Redo_Click(object? sender, RoutedEventArgs e) => _viewModel.Redo();
     private async void SaveProject_Click(object? sender, RoutedEventArgs e) =>
         await SaveProjectAsync(forcePicker: false, saveCopy: false);
 
+    private async void Window_KeyDown(object? sender, KeyEventArgs e)
+    {
+        var hasPlatformCommandModifier = e.KeyModifiers.HasFlag(KeyModifiers.Control)
+            || e.KeyModifiers.HasFlag(KeyModifiers.Meta);
+        if (!hasPlatformCommandModifier)
+        {
+            return;
+        }
+
+        switch (e.Key)
+        {
+            case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+                await SaveProjectAsync(forcePicker: true, saveCopy: false);
+                e.Handled = true;
+                break;
+            case Key.S:
+                await SaveProjectAsync(forcePicker: false, saveCopy: false);
+                e.Handled = true;
+                break;
+            case Key.Z:
+                _viewModel.Undo();
+                e.Handled = true;
+                break;
+            case Key.Y:
+                _viewModel.Redo();
+                e.Handled = true;
+                break;
+            case Key.N:
+                await SaveRecoveryIfNeededAsync();
+                _viewModel.NewProject();
+                e.Handled = true;
+                break;
+            case Key.O:
+                await OpenProjectAsync();
+                e.Handled = true;
+                break;
+            case Key.Up when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+                _viewModel.MoveActiveSlide(-1);
+                e.Handled = true;
+                break;
+            case Key.Down when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
+                _viewModel.MoveActiveSlide(1);
+                e.Handled = true;
+                break;
+        }
+    }
+
     private async Task OpenProjectAsync()
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open Physica lesson",
+            Title = AppText.OpenLessonTitle,
             AllowMultiple = false,
             FileTypeFilter = [PhysicaProjectFileType],
         });
         var path = files.FirstOrDefault()?.TryGetLocalPath();
         if (path is null)
         {
-            _viewModel.SetStatus("Open cancelled");
+            _viewModel.SetStatus(AppText.OpenCancelled);
             return;
         }
 
@@ -187,7 +240,7 @@ public sealed partial class MainWindow : Window
         {
             var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
-                Title = saveCopy ? "Save a copy of this Physica lesson" : "Save Physica lesson",
+                Title = saveCopy ? AppText.SaveCopyLessonTitle : AppText.SaveLessonTitle,
                 SuggestedFileName = $"{SanitizeFileName(_viewModel.Session.CurrentProject.Title)}{ProjectFormat.FileExtension}",
                 DefaultExtension = ProjectFormat.FileExtension.TrimStart('.'),
                 FileTypeChoices = [PhysicaProjectFileType],
@@ -198,14 +251,14 @@ public sealed partial class MainWindow : Window
 
         if (path is null)
         {
-            _viewModel.SetStatus("Save cancelled");
+            _viewModel.SetStatus(AppText.SaveCancelled);
             return;
         }
 
         await PhysicaProjectPackage.SaveAsync(_viewModel.Session.CurrentProject, path);
         if (saveCopy)
         {
-            _viewModel.SetStatus("Project copy saved");
+            _viewModel.SetStatus(AppText.ProjectCopySaved);
             return;
         }
 
@@ -219,7 +272,7 @@ public sealed partial class MainWindow : Window
         var snapshot = (await _recoveryStore.ListAsync()).FirstOrDefault();
         if (snapshot is null)
         {
-            _viewModel.SetStatus("No recovery snapshots are available");
+            _viewModel.SetStatus(AppText.NoRecoveryAvailable);
             return;
         }
 
@@ -256,7 +309,7 @@ public sealed partial class MainWindow : Window
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             _closeInProgress = false;
-            _viewModel.SetStatus($"Could not preserve recovery: {exception.Message}");
+            _viewModel.SetStatus(AppText.RecoveryPreserveFailed(exception.Message));
         }
     }
 
@@ -264,10 +317,10 @@ public sealed partial class MainWindow : Window
     {
         var invalid = Path.GetInvalidFileNameChars().ToHashSet();
         var sanitized = new string(value.Select(character => invalid.Contains(character) ? '-' : character).ToArray()).Trim();
-        return string.IsNullOrWhiteSpace(sanitized) ? "Untitled lesson" : sanitized;
+        return string.IsNullOrWhiteSpace(sanitized) ? AppText.UntitledLesson : sanitized;
     }
 
-    private static FilePickerFileType PhysicaProjectFileType { get; } = new("Physica lesson")
+    private static FilePickerFileType PhysicaProjectFileType { get; } = new(AppText.PhysicaLessonFileType)
     {
         Patterns = ["*.physica"],
         MimeTypes = ["application/vnd.physica.lesson"],

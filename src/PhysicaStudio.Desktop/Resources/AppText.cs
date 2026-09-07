@@ -24,6 +24,24 @@ public static class AppText
     public static string LastSlideRequired => Get(nameof(LastSlideRequired));
     public static string UndoCompleted => Get(nameof(UndoCompleted));
     public static string RedoCompleted => Get(nameof(RedoCompleted));
+    public static string SlideMoved => Get(nameof(SlideMoved));
+    public static string SlideAlreadyAtEdge => Get(nameof(SlideAlreadyAtEdge));
+    public static string SectionAdded => Get(nameof(SectionAdded));
+    public static string UntitledLesson => Get(nameof(UntitledLesson));
+    public static string OpenLessonTitle => Get(nameof(OpenLessonTitle));
+    public static string SaveLessonTitle => Get(nameof(SaveLessonTitle));
+    public static string SaveCopyLessonTitle => Get(nameof(SaveCopyLessonTitle));
+    public static string PhysicaLessonFileType => Get(nameof(PhysicaLessonFileType));
+    public static string OpenCancelled => Get(nameof(OpenCancelled));
+    public static string SaveCancelled => Get(nameof(SaveCancelled));
+    public static string ProjectCopySaved => Get(nameof(ProjectCopySaved));
+    public static string NoRecoveryAvailable => Get(nameof(NoRecoveryAvailable));
+
+    public static string SectionName(int number) =>
+        string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);
+
+    public static string RecoveryPreserveFailed(string message) =>
+        string.Format(CultureInfo.CurrentCulture, Get(nameof(RecoveryPreserveFailed)), message);
 
     public static string PlannedTooltip(string command, int phase) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(PlannedTooltip)), command, phase);

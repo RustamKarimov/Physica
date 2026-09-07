@@ -10,6 +10,7 @@
         Background="{StaticResource ChromeBaseBrush}"
         WindowDecorations="None"
         WindowState="FullScreen"
+        KeyDown="Window_KeyDown"
         WindowStartupLocation="CenterScreen">
   <Grid RowDefinitions="30,32,88,*,24">
     <!-- Custom title bar -->
@@ -244,6 +245,12 @@
               <Button Classes="title-tool" Click="NewSlide_Click" ToolTip.Tip="New slide"><controls:PhysicaIcon IconKey="add" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
               <Button Classes="title-tool" Click="DuplicateSlide_Click" ToolTip.Tip="Duplicate selected slide"><controls:PhysicaIcon IconKey="duplicate" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
               <Button Classes="title-tool" Click="DeleteSlide_Click" ToolTip.Tip="Delete selected slide"><controls:PhysicaIcon IconKey="delete" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
+              <Button Classes="title-tool" Click="MoveSlideUp_Click" ToolTip.Tip="Move selected slide up">
+                <Path Data="M 3,8 L 8,3 L 13,8" Stroke="#8FA0AD" StrokeThickness="1.4" />
+              </Button>
+              <Button Classes="title-tool" Click="MoveSlideDown_Click" ToolTip.Tip="Move selected slide down">
+                <Path Data="M 3,4 L 8,9 L 13,4" Stroke="#8FA0AD" StrokeThickness="1.4" />
+              </Button>
             </StackPanel>
           </Border>
         </Grid>

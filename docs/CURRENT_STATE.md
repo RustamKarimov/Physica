@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 project/slide workflow active; canvas, section, design, and viewport activation remain
+**Current activity:** Phase 2 project/slide workflow active; canvas editing, advanced section management, design, and viewport activation remain
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 
@@ -71,25 +71,27 @@ The user explicitly authorized Phase 2 implementation after accepting the regene
 
 ## Phase 2 implementation checkpoint
 
-Completed in the first functional slice:
+Completed across the first two functional slices:
 
 - Binding implementation specification covering every Phase 2 part and compatibility rule.
 - Versioned immutable project, slide, section, theme, canvas, guide, snap, scene-node, and separated transform contracts.
 - Validation, normalization, unknown-field preservation, migration routing, safe `.physica` ZIP save/load, and external recovery snapshots.
 - UI-independent authoring session with stable state identities, dirty tracking, bounded undo/redo, slide/section commands, node/layer commands, and deterministic snapping.
-- Active New, Open, Save, Save As, Save Copy, Recover, Close, New Slide, Duplicate Slide, Delete Slide, Undo, and Redo commands.
+- Active New, Open, Save, Save As, Save Copy, Recover, Close, New Slide, Duplicate Slide, Delete Slide, Section, Undo, and Redo commands.
+- Slide selection and deterministic up/down ordering, plus atomic section creation and assignment: one section action is one history entry and one undo removes both the assignment and section.
+- Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
 - Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
 - Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
 
-Verification: the full solution builds with zero warnings and errors, and all 24 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, locked-node, identity, snapping, and session-backed Desktop-state coverage.
+Verification: the full solution builds with zero warnings and errors, and all 25 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, atomic section assignment, slide ordering, locked-node, identity, snapping, and session-backed Desktop-state coverage.
 
 Still required for the Phase 2 gate:
 
-- Desktop section management and slide reordering.
+- Section rename/delete/reassignment UX, section-aware navigator grouping, and drag reorder; basic section creation/assignment and ordered move controls are active.
 - Pointer selection, drag, resize, rotation, multi-selection, grouping, and layer panel activation.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
 - Automated recovery scheduling and recovery chooser UX.
-- Keyboard/accessibility workflow coverage and Windows/macOS acceptance runs.
+- Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
 - Representative Phase 2 lesson project and user functional-canvas approval.
 
 ## Platform status

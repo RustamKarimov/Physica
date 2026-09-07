@@ -99,6 +99,17 @@ public static class ProjectCommands
         return project with { Sections = sections };
     });
 
+    public static IProjectCommand AddSectionAndAssignSlide(string name, Guid slideId) =>
+        Command("Add section and assign slide", project =>
+        {
+            RequireName(name, "Section name");
+            FindSlideIndex(project.Slides, slideId);
+
+            var section = new SlideSection(Guid.NewGuid(), name, project.Sections.Count);
+            var withSection = project with { Sections = project.Sections.Append(section).ToArray() };
+            return ReplaceSlide(withSection, slideId, slide => slide with { SectionId = section.Id });
+        });
+
     public static IProjectCommand RenameSection(Guid sectionId, string name) => Command("Rename section", project =>
     {
         RequireName(name, "Section name");
