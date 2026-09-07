@@ -3,7 +3,7 @@
              x:Class="PhysicaStudio.Desktop.App"
              RequestedThemeVariant="Dark">
   <Application.Styles>
-    <FluentTheme />
+    <FluentTheme DensityStyle="Compact" />
+    <StyleInclude Source="avares://PhysicaStudio.Desktop/Themes/PhysicaTheme.axaml" />
   </Application.Styles>
 </Application>
-

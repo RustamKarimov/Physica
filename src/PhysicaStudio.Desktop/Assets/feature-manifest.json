@@ -5,7 +5,7 @@
     { "id": "studio.ribbon", "name": "Manifest-driven ribbon", "phase": 1, "status": "Shell ready" },
     { "id": "studio.panels", "name": "Collapsible workspace panels", "phase": 1, "status": "Shell ready" },
     { "id": "studio.timeline", "name": "Multi-track timeline shell", "phase": 1, "status": "Shell ready" },
-    { "id": "studio.object-library", "name": "Searchable physics object library", "phase": 1, "status": "Shell ready" },
+    { "id": "studio.object-library", "name": "Searchable physics object library", "phase": 1, "status": "Planned" },
     { "id": "studio.feature-map", "name": "Feature Map", "phase": 1, "status": "Shell ready" },
     { "id": "studio.presenter-preview", "name": "Learner presentation preview", "phase": 1, "status": "Shell ready" },
     { "id": "authoring.project", "name": "Project save and recovery", "phase": 2, "status": "Planned" },
@@ -23,4 +23,3 @@
     { "id": "output.exports", "name": "Image, document and video exports", "phase": 18, "status": "Planned" }
   ]
 }
-

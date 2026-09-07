@@ -1,6 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PhysicaStudio.Desktop.ViewModels"
+        xmlns:services="using:PhysicaStudio.Desktop.Services"
         x:Class="PhysicaStudio.Desktop.Views.FeatureMapWindow"
+        x:DataType="vm:StudioShellViewModel"
         Title="Feature Map"
         Width="900" Height="660" MinWidth="720" MinHeight="520"
         Background="#0E1722" Foreground="#EAF2FA"
@@ -33,7 +36,7 @@
         <ScrollViewer Grid.Row="1">
           <ItemsControl ItemsSource="{Binding Features}">
             <ItemsControl.ItemTemplate>
-              <DataTemplate>
+              <DataTemplate x:DataType="services:FeatureDefinition">
                 <Border BorderBrush="#26394C" BorderThickness="0,0,0,1" Padding="0,4">
                   <Grid ColumnDefinitions="2.1*,0.8*,0.9*,1.1*" MinHeight="39">
                     <TextBlock Text="{Binding Name}" Margin="12,7" FontSize="12.5" />
@@ -54,4 +57,3 @@
     </Grid>
   </Grid>
 </Window>
-

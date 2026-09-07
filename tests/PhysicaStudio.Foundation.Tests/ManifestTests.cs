@@ -37,7 +37,7 @@ public sealed class ManifestTests
     }
 
     [Fact]
-    public void DesktopShell_ExposesCollapsiblePanelsAndHonestPreviewLabels()
+    public void DesktopShell_ExposesCollapsiblePanelsAndQuietHonestReadiness()
     {
         var root = FindRepositoryRoot();
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
@@ -45,8 +45,19 @@ public sealed class ManifestTests
         Assert.Contains("x:Name=\"LeftPanel\"", xaml, StringComparison.Ordinal);
         Assert.Contains("x:Name=\"RightPanel\"", xaml, StringComparison.Ordinal);
         Assert.Contains("x:Name=\"BottomPanel\"", xaml, StringComparison.Ordinal);
-        Assert.Contains("SHELL PREVIEW", xaml, StringComparison.Ordinal);
-        Assert.Contains("no simulation, graph or authoring behavior is being claimed", xaml, StringComparison.Ordinal);
+        Assert.Contains("Text=\"PREVIEW\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Physics runtime: planned", xaml, StringComparison.Ordinal);
+        Assert.Contains("Auto-save activates in Phase 2", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("SHELL PREVIEW", xaml, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Desktop_UsesCompiledBindingsForQualificationBuild()
+    {
+        var root = FindRepositoryRoot();
+        var project = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "PhysicaStudio.Desktop.csproj"));
+
+        Assert.Contains("<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>", project, StringComparison.Ordinal);
     }
 
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
@@ -65,4 +76,3 @@ public sealed class ManifestTests
         return directory?.FullName ?? throw new DirectoryNotFoundException("Could not locate PhysicaStudio.slnx.");
     }
 }
-

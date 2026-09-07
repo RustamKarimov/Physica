@@ -29,10 +29,27 @@ public sealed class ArchitectureTests
             "LessonProject", "SlideDocument", "MasterSlide", "ThemeDefinition", "SceneNode", "PhysicsEntity",
             "PhysicsSystem", "ObservableDefinition", "RepresentationBinding", "AnimationTrack", "AnimationClip",
             "Keyframe", "PhysicsCondition", "InteractiveControl", "PresentationCheckpoint", "Camera2D", "Camera3D",
-            "PresenterConfiguration"
+            "PresenterConfiguration", "AssetReference", "AssetVariant", "ContentPackManifest"
         };
 
         Assert.All(expected, name => Assert.Contains(name, names));
+    }
+
+    [Fact]
+    public void QualificationContracts_RemainUiIndependent()
+    {
+        var authoringNames = typeof(PhysicaStudio.Authoring.DesignTokenSet).Assembly.ExportedTypes
+            .Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
+        var renderingNames = typeof(PhysicaStudio.Rendering2D.SceneSnapshot).Assembly.ExportedTypes
+            .Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
+        var timelineNames = typeof(PhysicaStudio.Timeline.TimelineViewportQuery).Assembly.ExportedTypes
+            .Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
+
+        Assert.Contains("IconDescriptor", authoringNames);
+        Assert.Contains("RibbonCommandDescriptor", authoringNames);
+        Assert.Contains("BackgroundJobRequest", authoringNames);
+        Assert.Contains("RenderLayerSnapshot", renderingNames);
+        Assert.Contains("TimelineRenderBatch", timelineNames);
     }
 
     private static string FindRepositoryRoot()
@@ -46,4 +63,3 @@ public sealed class ArchitectureTests
         return directory?.FullName ?? throw new DirectoryNotFoundException("Could not locate PhysicaStudio.slnx.");
     }
 }
-

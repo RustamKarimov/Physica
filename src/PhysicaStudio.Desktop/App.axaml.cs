@@ -13,10 +13,15 @@ public sealed partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
+            var preview = Environment.GetEnvironmentVariable("PHYSICA_PREVIEW_MODE")?.Trim().ToLowerInvariant();
+            desktop.MainWindow = preview switch
+            {
+                "presenter-dark" => new PresenterPreviewWindow(PresenterPreviewMode.Dark),
+                "presenter-interactive" => new PresenterPreviewWindow(PresenterPreviewMode.Interactive),
+                _ => new MainWindow(preview)
+            };
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 }
-

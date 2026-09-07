@@ -4,7 +4,7 @@
 **Active milestone:** Phase 1 visual recovery and architecture qualification
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Mandatory stop:** Gates A–C and explicit user approval before Phase 2
-**Current activity:** Interface implementation paused; approved-reference analysis and design-system review
+**Current activity:** Concept-01 authoring slice regenerated; awaiting user visual review
 
 ## Binding visual authority
 
@@ -14,15 +14,41 @@ The screenshots in `docs/checkpoints/phase-01/` record the rejected shell. They 
 
 ## Design specification gate
 
-On 2026-09-07 the user stopped the iterative shell implementation because it was proceeding without a sufficiently explicit reference analysis. No further visible interface implementation may continue until these three documents are reviewed as one design package:
+On 2026-09-07 the user stopped the iterative shell implementation because it was proceeding without a sufficiently explicit reference analysis. The user subsequently authorized regeneration from these three documents as one design package:
 
 1. `docs/product/REFERENCE_IMAGE_ANALYSIS.md`
 2. `docs/product/INTERFACE_STRUCTURE.md`
 3. `docs/product/VISUAL_DESIGN_SYSTEM.md`
 
-The machine-readable values are stored in `docs/product/visual-design-tokens.json`. The current uncommitted shell code is experimental work-in-progress, not an approved baseline and not evidence that Gate A has passed.
+The machine-readable values are stored in `docs/product/visual-design-tokens.json`.
 
-After the design package is accepted, implementation restarts with the single concept-01 authoring slice defined in `INTERFACE_STRUCTURE.md`. It must be compared directly with the approved reference before the other four qualification slices are implemented.
+Implementation restarted with the single concept-01 authoring slice defined in `INTERFACE_STRUCTURE.md`. It has been compared directly with the approved reference, but it is not an approved baseline until the user accepts it.
+
+## Concept-01 regeneration checkpoint
+
+The Windows concept-01 slice now includes:
+
+- Custom dark window chrome and compact manifest-driven Physics ribbon.
+- Distinct vector icons for every visible ribbon command.
+- Five presentation-quality standing-wave lesson thumbnails.
+- A retained 16:9 standing-wave scene with material supports, phase traces, node/antinode annotations, an equation card, frequency control, and legend.
+- Collapsible slide, inspector, and timeline regions.
+- Compact, aligned Physics, Appearance, and Bindings inspector sections.
+- Batched timeline rendering with semantic property, condition, pause, and pass-through colors.
+- Quiet, honest Preview and planned-runtime status.
+
+Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all seven foundation tests pass, and `Launch Physica.bat` opens a responsive window.
+
+Still required before Gate A:
+
+- User approval of concept-01.
+- Animation/timeline reference slice.
+- Graph/binding reference slice.
+- Dark presenter reference slice.
+- Light interactive presenter reference slice.
+- macOS captures.
+
+Gate B interaction qualification and Gate C performance qualification remain incomplete.
 
 ## Current execution boundary
 

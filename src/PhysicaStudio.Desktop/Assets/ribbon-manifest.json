@@ -74,13 +74,13 @@
       "id": "physics",
       "label": "Physics",
       "groups": [
-        { "label": "Library", "commands": ["Search Physics Objects", "Topic", "Topic Pack Status"] },
-        { "label": "Model", "commands": ["Environment", "Initial Conditions", "Materials", "Interactions", "Constraints", "Reference Frames", "Coordinate Systems", "Model Selection"] },
-        { "label": "Simulation", "commands": ["Play", "Pause", "Reset", "Step", "Time Scale", "Solver Mode", "Advanced Accuracy"] },
-        { "label": "Representations", "commands": ["Paths", "Trails", "Vectors", "Fields", "Labels", "Values", "Energy Displays"] },
-        { "label": "Measure", "commands": ["Probes", "Measurement Tools", "Compare States"] },
-        { "label": "Events", "commands": ["Physical Events", "Condition Keyframes"] },
-        { "label": "Inspect", "commands": ["Validate Model", "Inspect Observables"] }
+        { "label": "Clipboard", "commands": ["Undo", "Redo", "Paste"] },
+        { "label": "Objects", "commands": ["Mass", "Point Mass", "String", "Rod", "Block", "More"] },
+        { "label": "Environment", "commands": ["Gravity", "Air Drag", "Medium", "Walls", "More"] },
+        { "label": "Measurements", "commands": ["Ruler", "Protractor", "Timer", "Sensor", "More"] },
+        { "label": "Representations", "commands": ["Vectors", "Trace", "Path", "Field", "More"] },
+        { "label": "Constraints", "commands": ["Fixed Point", "Guide", "Limit", "Joint", "More"] },
+        { "label": "Validate", "commands": ["Check Model", "Diagnostics"] }
       ]
     },
     {
@@ -159,4 +159,3 @@
     "Shape Format", "Text Format", "Image Format", "Table Design", "Table Layout", "Equation Tools", "Graph Tools", "Physics Object Tools", "Vector & Representation Tools", "Interactive Control Tools", "Audio & Video Tools", "Vector Path Tools", "3D Object & Material Tools", "Camera Tools", "Master Layout Tools"
   ]
 }
-
