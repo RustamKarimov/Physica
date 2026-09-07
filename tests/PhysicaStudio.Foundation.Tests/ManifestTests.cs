@@ -68,12 +68,32 @@ public sealed class ManifestTests
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
 
         Assert.Contains("ItemsSource=\"{Binding FeaturedCommands}\"", xaml, StringComparison.Ordinal);
-        Assert.Contains("<UniformGrid Rows=\"1\" />", xaml, StringComparison.Ordinal);
+        Assert.Contains("HorizontalAlignment=\"Left\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("<StackPanel Orientation=\"Horizontal\" />", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("<UniformGrid Rows=\"1\" />", xaml, StringComparison.Ordinal);
         Assert.Contains("Classes=\"ribbon-group-dropdown\"", xaml, StringComparison.Ordinal);
         Assert.Contains("Text=\"More\"", xaml, StringComparison.Ordinal);
         Assert.Contains("<Button.Flyout>", xaml, StringComparison.Ordinal);
         Assert.Contains("ItemsSource=\"{Binding Commands}\"", xaml, StringComparison.Ordinal);
         Assert.DoesNotContain("Classes=\"ribbon-group-dropdown\" IsEnabled=\"False\"", xaml, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void DesktopShell_StartsMaximizedWithExitAndPolishedInspectorSpacing()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var theme = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Themes", "PhysicaTheme.axaml"));
+
+        Assert.Contains("WindowState=\"Maximized\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.Name=\"Exit Physica Studio\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("x:Name=\"InspectorScrollViewer\"", xaml, StringComparison.Ordinal);
+        Assert.Matches("InspectorScrollViewer[\\s\\S]*?VerticalScrollBarVisibility=\\\"Hidden\\\"", xaml);
+        Assert.Contains("VerticalAlignment=\"Center\" Margin=\"2,1,0,0\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("<Setter Property=\"Margin\" Value=\"8,6,8,0\" />", theme, StringComparison.Ordinal);
+        Assert.Contains("<Setter Property=\"CornerRadius\" Value=\"3\" />", theme, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -4,7 +4,9 @@
 **Active milestone:** Phase 1 visual recovery and architecture qualification
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Mandatory stop:** Gates A–C and explicit user approval before Phase 2
-**Current activity:** Concept-01 authoring slice regenerated with compact expandable ribbon groups; awaiting user visual review
+**Current activity:** Concept-01 authoring slice polished for maximized startup, natural-width ribbon groups, and inspector spacing; awaiting user visual review
+
+The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`.
 
 ## Binding visual authority
 
@@ -30,17 +32,20 @@ The Windows concept-01 slice now includes:
 
 - Custom dark window chrome and compact manifest-driven Physics ribbon.
 - A hybrid ribbon density model: every group exposes at most two quick commands and an always-active, full-size `More` command that reveals the complete command inventory.
-- Ribbon groups share the available band width evenly, with restrained separators and content-aware command widths; visible names no longer clip or split single words.
+- Ribbon groups use natural content widths with explicit breathing space; they no longer stretch merely to fill the available band, and visible names do not clip or split single words.
 - Group galleries use the same borderless icon-and-label language as the ribbon while retaining quiet readiness labels for Planned commands without enabling unfinished product behavior.
+- The desktop shell starts maximized while retaining visible minimize, restore, and explicitly named Exit controls.
+- The title disclosure arrow is explicitly sized and vertically aligned with the product name.
 - Distinct vector icons for every visible ribbon command.
 - Five presentation-quality standing-wave lesson thumbnails.
 - A retained 16:9 standing-wave scene with material supports, phase traces, node/antinode annotations, an equation card, frequency control, and legend.
 - Collapsible slide, inspector, and timeline regions.
-- Compact, aligned Physics, Appearance, and Bindings inspector sections.
+- Compact, aligned Physics, Appearance, and Bindings inspector sections with external spacing and bordered rounded headers.
+- The inspector remains wheel-scrollable without displaying a persistent vertical scrollbar.
 - Batched timeline rendering with semantic property, condition, pause, and pass-through colors.
 - Quiet, honest Preview and planned-runtime status.
 
-Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all nine foundation tests pass, and `Launch Physica.bat` opens a responsive window. Windows accessibility automation also verifies that every Physics group gallery launcher is enabled and invokable while its unfinished child commands remain disabled.
+Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all ten foundation tests pass, and `Launch Physica.bat` opens a responsive window. Windows accessibility automation also verifies that every Physics group gallery launcher is enabled and invokable while its unfinished child commands remain disabled.
 
 Still required before Gate A:
 
