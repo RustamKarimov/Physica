@@ -1,8 +1,54 @@
 # Current State
 
-**Product:** Physica Studio — clean native rebuild  
-**Active milestone:** Phase 1 Studio shell complete — awaiting user approval  
-**Mandatory stop:** Shell approval gate before Phase 2
+**Product:** Physica Studio — professional native physics lesson authoring system
+**Active milestone:** Phase 1 visual recovery and architecture qualification
+**Review result:** The original Phase 1 shell was rejected on 2026-09-06
+**Mandatory stop:** Gates A–C and explicit user approval before Phase 2
+**Current activity:** Interface implementation paused; approved-reference analysis and design-system review
+
+## Binding visual authority
+
+The seven images in `docs/product/approved-concepts/` are the minimum visual-quality references for Physica Studio. They are not loose layout sketches. The recovered interface may improve their scientific details and usability, but it may not reduce their polish, density, legibility, icon quality, scientific artwork, or presentation quality.
+
+The screenshots in `docs/checkpoints/phase-01/` record the rejected shell. They are retained as negative evidence and must never be used as visual baselines.
+
+## Design specification gate
+
+On 2026-09-07 the user stopped the iterative shell implementation because it was proceeding without a sufficiently explicit reference analysis. No further visible interface implementation may continue until these three documents are reviewed as one design package:
+
+1. `docs/product/REFERENCE_IMAGE_ANALYSIS.md`
+2. `docs/product/INTERFACE_STRUCTURE.md`
+3. `docs/product/VISUAL_DESIGN_SYSTEM.md`
+
+The machine-readable values are stored in `docs/product/visual-design-tokens.json`. The current uncommitted shell code is experimental work-in-progress, not an approved baseline and not evidence that Gate A has passed.
+
+After the design package is accepted, implementation restarts with the single concept-01 authoring slice defined in `INTERFACE_STRUCTURE.md`. It must be compared directly with the approved reference before the other four qualification slices are implemented.
+
+## Current execution boundary
+
+Phase 1 is being rebuilt as five qualification slices:
+
+1. Main authoring studio.
+2. Timeline and animation workspace.
+3. Graph and physics-binding workspace.
+4. Dark learner presentation.
+5. Light interactive presentation.
+
+No Phase 2 project editing, animation runtime, physics solver, scientific graph engine, content pack, export system, installer, or update-channel work may begin before the recovered shell passes its visual, interaction, and performance gates and receives explicit user approval.
+
+## Platform status
+
+C# 14, .NET 10, and Avalonia 12.1 remain provisional. Avalonia is the native windowing, input, accessibility, and composition host; Physica owns the visible design system, ribbon, canvas, timeline, and presentation rendering.
+
+The qualification implementation must use:
+
+- Custom Physica control templates and vector icons rather than stock control appearance or Unicode glyphs.
+- A retained scene model rendered as batches rather than one UI control per scene object.
+- A viewport-based timeline rather than one UI control per keyframe.
+- Compiled bindings.
+- Lazy, indexed content contracts suitable for multi-gigabyte installations and projects.
+
+If the recovered shell cannot meet the approved visual references and performance targets on Windows and macOS after one focused optimization cycle, Phase 2 remains blocked and the Desktop implementation moves to Qt Quick/C++ behind the same UI-independent contracts.
 
 ## Session protocol
 
@@ -25,30 +71,24 @@ The prior JavaScript/Tauri Physica implementation is not an architectural founda
 - Verified local bundle `D:\Programming\Codex\Physica-Legacy-Backup-20260906\Physica-legacy-all.bundle`.
 - Local tracked-change patch `D:\Programming\Codex\Physica-Legacy-Backup-20260906\legacy-tracked-wip.patch`.
 
-## Completed in the rebuild
+## Preserved foundation
 
 - Legacy recovery bundle and remote tags verified.
 - New orphan history created.
 - .NET 10 SDK installed and pinned.
 - Architecture boundaries, governance, dependency ledger, and cross-platform project layout established.
 - Seven approved concept images preserved under `docs/product/approved-concepts/`.
-- Complete manifest-driven ribbon: 13 primary tabs, all approved command groups, and 15 contextual ribbon categories.
-- Collapsible slide/object navigator, contextual inspector, animation stack, and multi-track timeline shell.
-- Topic-dropdown and search-based physics object library with recognizable symbolic previews and readiness badges.
-- 2D and reserved 3D workspace selectors, Master/outline/section/assets surfaces, and graph/observable command galleries.
-- Native Feature Map and learner-facing Present Preview with interactive-control shells.
-- Windows launcher smoke test: responsive native window started successfully from `Launch Physica.bat`.
-- Deterministic locked restore and Release build: zero warnings and zero errors.
-- Foundation suite: 5/5 tests passing.
-- Checkpoint evidence recorded in `docs/checkpoints/phase-01/`.
+- The manifest-driven inventory of 13 primary ribbon tabs, all approved command groups, and 15 contextual categories remains reusable.
+- The localization foundation, feature readiness model, launch scripts, cross-platform CI, and domain package boundaries remain valid.
+- The rejected Desktop XAML, placeholder icon mapping, and simplistic scientific artwork are not compatibility surfaces.
 
-## Awaiting user approval
+## Explicitly not complete
 
-Review the Phase 1 shell for readability, ribbon organization, workspace density, panel behavior, timeline vocabulary, object-library organization, and learner presentation quality. Phase 2 must not begin until this gate is approved.
-
-Cross-platform CI run `34056067142` passed on both `windows-latest` and `macos-latest` for Studio commit `df3362b7b07cec7df483e05f92a9f3c57b1d5d3d`.
-
-## Explicitly not active
+- Phase 1 visual qualification.
+- Windows/macOS screenshot baselines for the recovered shell.
+- Interaction qualification.
+- Performance qualification.
+- User approval of the recovered shell.
 
 - Project editing and persistence.
 - Physics solvers and objects.
@@ -56,5 +96,4 @@ Cross-platform CI run `34056067142` passed on both `windows-latest` and `macos-l
 - Timeline mutation and animation rendering.
 - Export, installers, and update channel.
 
-Those capabilities remain visible as Planned. No code may represent them as complete.
-
+Those capabilities remain visible as Planned. No documentation or feature status may describe Phase 1 as complete until all five qualification conditions are satisfied.
