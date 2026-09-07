@@ -7,12 +7,12 @@
 
 ## ADR-002 — Interface-first activation
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** The complete Studio shell and command inventory are implemented and reviewed before functional authoring or physics work. Commands carry explicit readiness metadata and remain disabled when Planned.
 
 ## ADR-003 — Professional multi-track timeline
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** Object, property, physics-system, parameter, representation, camera, audio, interaction, event, marker, and checkpoint tracks share one authoritative timeline. Story cards cannot replace it.
 
 ## ADR-004 — Dual clock and condition authority
@@ -44,3 +44,13 @@
 
 **Status:** Accepted
 **Decision:** Scientific scenes and dense timelines are rendered from immutable snapshots and viewport batches. Physica must not allocate one Avalonia control per scene object, graph sample, keyframe, or installed asset. Content and project assets are indexed and loaded progressively.
+
+## ADR-010 — Phase 2 immutable document and command boundary
+
+**Status:** Accepted
+**Decision:** Saved lesson state is represented by immutable, versioned, UI-independent document snapshots. All editor mutations are issued through `PhysicaStudio.Authoring` commands with deterministic validation and undo/redo publication. Avalonia views may hold selection and viewport state but never become saved project authority.
+
+## ADR-011 — User-authorized Phase 2 start with qualification debt retained
+
+**Status:** Accepted by explicit user direction on 2026-09-07
+**Decision:** The regenerated main authoring shell is accepted as the visual foundation for Phase 2. Remaining Phase 1 reference slices and cross-platform performance qualification remain tracked obligations and may not be falsely marked complete or omitted from later release gates. Ribbon icon refinements, including Font and Paragraph groups, are deferred until their functional phase.

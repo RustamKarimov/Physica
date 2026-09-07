@@ -1,6 +1,6 @@
 {
   "featureStates": ["Planned", "Shell ready", "Preview", "Active", "Validated"],
-  "activePhase": 1,
+  "activePhase": 2,
   "surfaces": [
     { "id": "studio.ribbon", "name": "Manifest-driven ribbon", "phase": 1, "status": "Shell ready" },
     { "id": "studio.panels", "name": "Collapsible workspace panels", "phase": 1, "status": "Shell ready" },
@@ -8,8 +8,8 @@
     { "id": "studio.object-library", "name": "Searchable physics object library", "phase": 1, "status": "Planned" },
     { "id": "studio.feature-map", "name": "Feature Map", "phase": 1, "status": "Shell ready" },
     { "id": "studio.presenter-preview", "name": "Learner presentation preview", "phase": 1, "status": "Shell ready" },
-    { "id": "authoring.project", "name": "Project save and recovery", "phase": 2, "status": "Planned" },
-    { "id": "authoring.canvas", "name": "Canvas selection and transforms", "phase": 2, "status": "Planned" },
+    { "id": "authoring.project", "name": "Project save and recovery", "phase": 2, "status": "Active" },
+    { "id": "authoring.canvas", "name": "Canvas selection and transforms", "phase": 2, "status": "Shell ready" },
     { "id": "design.content", "name": "Text, equations, shapes, paths and media", "phase": 3, "status": "Planned" },
     { "id": "design.masters", "name": "Templates and master slides", "phase": 3, "status": "Planned" },
     { "id": "animation.timeline", "name": "Timeline editing and keyframes", "phase": 4, "status": "Planned" },

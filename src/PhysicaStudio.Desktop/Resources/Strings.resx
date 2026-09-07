@@ -11,5 +11,17 @@
   <data name="PresentPreview" xml:space="preserve"><value>Present Preview</value></data>
   <data name="PlannedTooltip" xml:space="preserve"><value>{0} — planned for Phase {1}. Status: Planned. Prerequisite: shell approval and prior phase gates.</value></data>
   <data name="ShellReadyTooltip" xml:space="preserve"><value>{0} — shell navigation is ready. Final behavior is not implemented.</value></data>
+  <data name="ActiveTooltip" xml:space="preserve"><value>{0} — active in Phase 2.</value></data>
+  <data name="ActiveUnavailableTooltip" xml:space="preserve"><value>{0} — active in Phase 2, but unavailable in the current document state.</value></data>
+  <data name="ProjectFoundationReady" xml:space="preserve"><value>Project and slide foundation active</value></data>
+  <data name="NewProjectCreated" xml:space="preserve"><value>New project created</value></data>
+  <data name="ProjectOpened" xml:space="preserve"><value>Project opened</value></data>
+  <data name="ProjectSaved" xml:space="preserve"><value>Project saved</value></data>
+  <data name="RecoveryOpened" xml:space="preserve"><value>Recovery snapshot opened — save to keep it</value></data>
+  <data name="SlideAdded" xml:space="preserve"><value>Slide added</value></data>
+  <data name="SlideDuplicated" xml:space="preserve"><value>Slide duplicated</value></data>
+  <data name="SlideDeleted" xml:space="preserve"><value>Slide deleted</value></data>
+  <data name="LastSlideRequired" xml:space="preserve"><value>A lesson must contain at least one slide</value></data>
+  <data name="UndoCompleted" xml:space="preserve"><value>Undo completed</value></data>
+  <data name="RedoCompleted" xml:space="preserve"><value>Redo completed</value></data>
 </root>
-

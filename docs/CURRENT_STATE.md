@@ -1,12 +1,12 @@
 # Current State
 
 **Product:** Physica Studio — professional native physics lesson authoring system
-**Active milestone:** Phase 1 visual recovery and architecture qualification
+**Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
-**Mandatory stop:** Gates A–C and explicit user approval before Phase 2
-**Current activity:** Concept-01 authoring slice polished for exclusive full-screen startup and optically centered inspector sections; awaiting user visual review
+**Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
+**Current activity:** Phase 2 project/slide workflow active; canvas, section, design, and viewport activation remain
 
-The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`.
+The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 
 ## Binding visual authority
 
@@ -45,11 +45,10 @@ The Windows concept-01 slice now includes:
 - Batched timeline rendering with semantic property, condition, pause, and pass-through colors.
 - Quiet, honest Preview and planned-runtime status.
 
-Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all ten foundation tests pass, and `Launch Physica.bat` opens a responsive window. Windows accessibility automation also verifies that every Physics group gallery launcher is enabled and invokable while its unfinished child commands remain disabled.
+Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The shell checkpoint built with zero warnings and errors, and `Launch Physica.bat` opens a responsive window. Windows accessibility automation also verifies that every Physics group gallery launcher is enabled and invokable while its unfinished child commands remain disabled.
 
-Still required before Gate A:
+Remaining Phase 1 qualification debt:
 
-- User approval of concept-01.
 - Animation/timeline reference slice.
 - Graph/binding reference slice.
 - Dark presenter reference slice.
@@ -68,7 +67,30 @@ Phase 1 is being rebuilt as five qualification slices:
 4. Dark learner presentation.
 5. Light interactive presentation.
 
-No Phase 2 project editing, animation runtime, physics solver, scientific graph engine, content pack, export system, installer, or update-channel work may begin before the recovered shell passes its visual, interaction, and performance gates and receives explicit user approval.
+The user explicitly authorized Phase 2 implementation after accepting the regenerated main authoring shell. The remaining Phase 1 qualification slices stay open and must be completed before release qualification. Animation runtime, physics solvers, scientific graph engines, content packs, export systems, installers, and the update channel remain outside Phase 2.
+
+## Phase 2 implementation checkpoint
+
+Completed in the first functional slice:
+
+- Binding implementation specification covering every Phase 2 part and compatibility rule.
+- Versioned immutable project, slide, section, theme, canvas, guide, snap, scene-node, and separated transform contracts.
+- Validation, normalization, unknown-field preservation, migration routing, safe `.physica` ZIP save/load, and external recovery snapshots.
+- UI-independent authoring session with stable state identities, dirty tracking, bounded undo/redo, slide/section commands, node/layer commands, and deterministic snapping.
+- Active New, Open, Save, Save As, Save Copy, Recover, Close, New Slide, Duplicate Slide, Delete Slide, Undo, and Redo commands.
+- Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
+- Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
+
+Verification: the full solution builds with zero warnings and errors, and all 24 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, locked-node, identity, snapping, and session-backed Desktop-state coverage.
+
+Still required for the Phase 2 gate:
+
+- Desktop section management and slide reordering.
+- Pointer selection, drag, resize, rotation, multi-selection, grouping, and layer panel activation.
+- Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
+- Automated recovery scheduling and recovery chooser UX.
+- Keyboard/accessibility workflow coverage and Windows/macOS acceptance runs.
+- Representative Phase 2 lesson project and user functional-canvas approval.
 
 ## Platform status
 

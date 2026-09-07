@@ -1,44 +1,93 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using PhysicaStudio.Authoring;
+using PhysicaStudio.Desktop.Controls;
+using PhysicaStudio.Desktop.Models;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.Services;
+using PhysicaStudio.Document;
 
 namespace PhysicaStudio.Desktop.ViewModels;
 
 public sealed class StudioShellViewModel : INotifyPropertyChanged
 {
+    private static readonly HashSet<string> ImplementedPhase2Commands = new(StringComparer.Ordinal)
+    {
+        "New", "Open", "Save", "Save As", "Save Copy", "Recover", "Close",
+        "New Slide", "Duplicate Slide", "Delete Slide", "Undo", "Redo",
+    };
+
     private RibbonTabViewModel? _selectedRibbonTab;
     private string _workspaceMode = "2D";
     private StudioWorkspace _studioWorkspace = StudioWorkspace.Authoring;
+    private AuthoringSession _session;
+    private string _statusMessage = AppText.ProjectFoundationReady;
 
     public StudioShellViewModel()
+        : this(ManifestLoader.LoadRibbon(), ManifestLoader.LoadFeatures())
     {
-        var ribbon = ManifestLoader.LoadRibbon();
+    }
+
+    public StudioShellViewModel(
+        RibbonManifest ribbon,
+        FeatureManifest featureManifest,
+        AuthoringSession? session = null)
+    {
+        _session = session ?? CreateReferenceSession();
+        _session.StateChanged += Session_StateChanged;
+
         RibbonTabs = new ObservableCollection<RibbonTabViewModel>(
-            ribbon.Tabs.Select((tab, index) => new RibbonTabViewModel(
+            ribbon.Tabs.Select(tab => new RibbonTabViewModel(
                 tab.Id,
                 tab.Label,
                 tab.Groups.Select(group => new RibbonGroupViewModel(
                     group.Label,
-                    group.Commands.Select(command => RibbonCommandViewModel.Planned(command, PhaseFor(tab.Id), IconFor(command))).ToArray())).ToArray(),
+                    group.Commands.Select(command => RibbonCommandViewModel.Create(
+                        $"{tab.Id}.{Slug(group.Label)}.{Slug(command)}",
+                        command,
+                        PhaseFor(tab.Id),
+                        IconFor(command))).ToArray())).ToArray(),
                 tab.Id == "physics")));
 
         ContextualTabs = ribbon.ContextualTabs;
         _selectedRibbonTab = RibbonTabs.First(tab => tab.IsSelected);
-        Features = ManifestLoader.LoadFeatures().Surfaces;
+        Features = featureManifest.Surfaces;
+        Slides = new ObservableCollection<SlideItemViewModel>();
+        RefreshFromSession();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public string ApplicationTitle => AppText.ApplicationTitle;
-    public string DocumentTitle => AppText.DocumentTitle;
+    public string DocumentTitle => $"{_session.CurrentProject.Title}{ProjectFormat.FileExtension}{(HasUnsavedChanges ? "*" : string.Empty)}";
     public string DevelopmentBuild => AppText.DevelopmentBuild;
     public string FeatureMapLabel => AppText.FeatureMap;
     public string PresentPreviewLabel => AppText.PresentPreview;
     public ObservableCollection<RibbonTabViewModel> RibbonTabs { get; }
     public IReadOnlyList<string> ContextualTabs { get; }
     public IReadOnlyList<FeatureDefinition> Features { get; }
+    public ObservableCollection<SlideItemViewModel> Slides { get; }
+    public AuthoringSession Session => _session;
+    public bool CanUndo => _session.CanUndo;
+    public bool CanRedo => _session.CanRedo;
+    public bool CanSave => _session.HasUnsavedChanges || _session.CurrentPath is null;
+    public bool HasUnsavedChanges => _session.HasUnsavedChanges;
+    public bool ShowStandingWaveReference => ActiveSlide.Name.Contains("Standing", StringComparison.OrdinalIgnoreCase);
+    public string SlideSurfaceColor => ActiveSlide.Background.Color;
+
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        private set
+        {
+            if (_statusMessage == value) return;
+            _statusMessage = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public SlideDocument ActiveSlide => _session.CurrentProject.Slides.Single(slide => slide.Id == _session.ActiveSlideId);
 
     public IReadOnlyList<string> PhysicsTopics { get; } =
     [
@@ -84,11 +133,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         get => _selectedRibbonTab ?? RibbonTabs[0];
         private set
         {
-            if (ReferenceEquals(_selectedRibbonTab, value))
-            {
-                return;
-            }
-
+            if (ReferenceEquals(_selectedRibbonTab, value)) return;
             _selectedRibbonTab = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(SelectedRibbonGroups));
@@ -102,11 +147,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         get => _workspaceMode;
         set
         {
-            if (_workspaceMode == value)
-            {
-                return;
-            }
-
+            if (_workspaceMode == value) return;
             _workspaceMode = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(WorkspaceModeDescription));
@@ -129,6 +170,153 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectWorkspace(StudioWorkspace workspace) => StudioWorkspace = workspace;
 
+    public void NewProject(string title = "Untitled lesson") => ReplaceSession(AuthoringSession.CreateNew(title), AppText.NewProjectCreated);
+
+    public void LoadProject(LessonProject project, string path) =>
+        ReplaceSession(new AuthoringSession(project, path), AppText.ProjectOpened);
+
+    public void LoadRecovery(RecoverySnapshot snapshot) =>
+        ReplaceSession(new AuthoringSession(snapshot.Project, snapshot.OriginalPath, isNew: true), AppText.RecoveryOpened);
+
+    public void MarkSaved(string path)
+    {
+        _session.MarkSaved(path);
+        StatusMessage = AppText.ProjectSaved;
+        RefreshFromSession();
+    }
+
+    public void SetStatus(string status) => StatusMessage = status;
+
+    public void SelectSlide(Guid slideId)
+    {
+        _session.SelectSlide(slideId);
+        RefreshFromSession();
+    }
+
+    public void AddSlide()
+    {
+        var number = _session.CurrentProject.Slides.Count + 1;
+        _session.Execute(ProjectCommands.AddSlide($"Slide {number}", _session.ActiveSlideId, ActiveSlide.SectionId));
+        var index = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
+        _session.SelectSlide(_session.CurrentProject.Slides[index + 1].Id);
+        StatusMessage = AppText.SlideAdded;
+        RefreshFromSession();
+    }
+
+    public void DuplicateActiveSlide()
+    {
+        var sourceIndex = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
+        _session.Execute(ProjectCommands.DuplicateSlide(_session.ActiveSlideId));
+        _session.SelectSlide(_session.CurrentProject.Slides[sourceIndex + 1].Id);
+        StatusMessage = AppText.SlideDuplicated;
+        RefreshFromSession();
+    }
+
+    public void DeleteActiveSlide()
+    {
+        if (_session.CurrentProject.Slides.Count == 1)
+        {
+            StatusMessage = AppText.LastSlideRequired;
+            return;
+        }
+
+        _session.Execute(ProjectCommands.DeleteSlide(_session.ActiveSlideId));
+        StatusMessage = AppText.SlideDeleted;
+        RefreshFromSession();
+    }
+
+    public void Undo()
+    {
+        if (_session.Undo()) StatusMessage = AppText.UndoCompleted;
+        RefreshFromSession();
+    }
+
+    public void Redo()
+    {
+        if (_session.Redo()) StatusMessage = AppText.RedoCompleted;
+        RefreshFromSession();
+    }
+
+    private static AuthoringSession CreateReferenceSession()
+    {
+        var names = new[] { "Introduction", "Harmonics", "Standing Waves", "Energy in a standing wave", "Applications" };
+        var project = LessonProject.Create("Standing Waves Lesson") with
+        {
+            Slides = names.Select(SlideDocument.Create).ToArray(),
+        };
+        var session = new AuthoringSession(project, isNew: true);
+        session.SelectSlide(project.Slides[2].Id);
+        return session;
+    }
+
+    private void ReplaceSession(AuthoringSession session, string status)
+    {
+        _session.StateChanged -= Session_StateChanged;
+        _session = session;
+        _session.StateChanged += Session_StateChanged;
+        StatusMessage = status;
+        RefreshFromSession();
+    }
+
+    private void Session_StateChanged(object? sender, AuthoringStateChangedEventArgs e) => RefreshFromSession();
+
+    private void RefreshFromSession()
+    {
+        Slides.Clear();
+        for (var index = 0; index < _session.CurrentProject.Slides.Count; index++)
+        {
+            var slide = _session.CurrentProject.Slides[index];
+            Slides.Add(new SlideItemViewModel(
+                slide.Id,
+                index + 1,
+                slide.Name,
+                VariantFor(slide.Name, index),
+                slide.Id == _session.ActiveSlideId,
+                slide.IsHidden));
+        }
+
+        RefreshCommandAvailability();
+        OnPropertyChanged(nameof(DocumentTitle));
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
+        OnPropertyChanged(nameof(CanSave));
+        OnPropertyChanged(nameof(HasUnsavedChanges));
+        OnPropertyChanged(nameof(ActiveSlide));
+        OnPropertyChanged(nameof(ShowStandingWaveReference));
+        OnPropertyChanged(nameof(SlideSurfaceColor));
+    }
+
+    private void RefreshCommandAvailability()
+    {
+        foreach (var command in RibbonTabs.SelectMany(tab => tab.Groups).SelectMany(group => group.Commands))
+        {
+            if (!ImplementedPhase2Commands.Contains(command.Label))
+            {
+                command.SetPlanned();
+                continue;
+            }
+
+            var enabled = command.Label switch
+            {
+                "Undo" => CanUndo,
+                "Redo" => CanRedo,
+                "Save" => CanSave,
+                "Delete Slide" => _session.CurrentProject.Slides.Count > 1,
+                _ => true,
+            };
+            command.SetActive(enabled);
+        }
+    }
+
+    private static SlideThumbnailVariant VariantFor(string name, int index)
+    {
+        if (name.Contains("Harmonic", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Harmonics;
+        if (name.Contains("Standing", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.StandingWave;
+        if (name.Contains("Energy", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Energy;
+        if (name.Contains("Application", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Applications;
+        return index == 0 ? SlideThumbnailVariant.Introduction : SlideThumbnailVariant.Introduction;
+    }
+
     private static int PhaseFor(string tabId) => tabId switch
     {
         "file" or "home" or "design" or "view" => 2,
@@ -139,6 +327,20 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         "physics" => 7,
         _ => 1
     };
+
+    private static string Slug(string value)
+    {
+        var slug = new string(value
+            .ToLowerInvariant()
+            .Select(character => char.IsLetterOrDigit(character) ? character : '-')
+            .ToArray());
+        while (slug.Contains("--", StringComparison.Ordinal))
+        {
+            slug = slug.Replace("--", "-", StringComparison.Ordinal);
+        }
+
+        return slug.Trim('-');
+    }
 
     private static string IconFor(string command)
     {
@@ -173,7 +375,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         if (normalized.Contains("underline")) return "underline";
         if (normalized.Contains("bullet") || normalized.Contains("numbering") || normalized.Contains("section")) return "list";
         if (normalized.Contains("save")) return "save";
-        if (normalized.Contains("open") || normalized.Contains("import")) return "open";
+        if (normalized.Contains("open") || normalized.Contains("import") || normalized.Contains("recover")) return "open";
         if (normalized.Contains("play") || normalized.Contains("preview") || normalized.Contains("present")) return "play";
         if (normalized.Contains("pause")) return "pause";
         if (normalized.Contains("graph") || normalized.Contains("plot") || normalized.Contains("curve")) return "graph";
@@ -188,7 +390,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         if (normalized.Contains("slide") || normalized.Contains("master")) return "slide";
         if (normalized.Contains("undo")) return "undo";
         if (normalized.Contains("redo")) return "redo";
-        if (normalized.Contains("delete") || normalized.Contains("clear") || normalized.Contains("remove")) return "delete";
+        if (normalized.Contains("delete") || normalized.Contains("clear") || normalized.Contains("remove") || normalized == "close") return "delete";
         if (normalized.Contains("add") || normalized.Contains("new")) return "add";
         if (normalized.Contains("search") || normalized.Contains("find")) return "search";
         if (normalized.Contains("lock")) return "lock";
@@ -240,33 +442,100 @@ public sealed class RibbonTabViewModel : INotifyPropertyChanged
     }
 }
 
-public sealed class RibbonGroupViewModel
+public sealed class RibbonGroupViewModel : INotifyPropertyChanged
 {
     public RibbonGroupViewModel(string label, IReadOnlyList<RibbonCommandViewModel> commands)
     {
         Label = label;
         Commands = commands;
         FeaturedCommands = commands.Take(2).ToArray();
+        foreach (var command in commands)
+        {
+            command.PropertyChanged += (_, _) =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GalleryStatus)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GallerySummary)));
+            };
+        }
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
     public string Label { get; }
     public IReadOnlyList<RibbonCommandViewModel> Commands { get; }
     public IReadOnlyList<RibbonCommandViewModel> FeaturedCommands { get; }
     public string GalleryTooltip => $"Show all {Label} commands";
-    public string GalleryStatus => Commands.Any(command => command.IsEnabled) ? "MIXED" : "PLANNED";
+    public string GalleryStatus => Commands.Any(command => command.IsImplemented) ? "MIXED" : "PLANNED";
     public string GallerySummary => $"{Commands.Count} commands · {Commands.Count(command => command.IsEnabled)} available";
 }
 
-public sealed record RibbonCommandViewModel(
-    string Label,
-    string Icon,
-    int Phase,
-    string Status,
-    string Tooltip,
-    bool IsEnabled)
+public sealed class RibbonCommandViewModel : INotifyPropertyChanged
 {
+    private string _status;
+    private string _tooltip;
+    private bool _isEnabled;
+    private bool _isImplemented;
+
+    private RibbonCommandViewModel(string id, string label, string icon, int phase)
+    {
+        Id = id;
+        Label = label;
+        Icon = icon;
+        Phase = phase;
+        _status = "PLANNED";
+        _tooltip = AppText.PlannedTooltip(label, phase);
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public string Id { get; }
+    public string Label { get; }
+    public string Icon { get; }
+    public int Phase { get; }
+    public string Status => _status;
+    public string Tooltip => _tooltip;
+    public bool IsEnabled => _isEnabled;
+    public bool IsImplemented => _isImplemented;
+
+    public static RibbonCommandViewModel Create(string id, string label, int phase, string icon) => new(id, label, icon, phase);
+
     public static RibbonCommandViewModel Planned(string label, int phase, string icon) =>
-        new(label, icon, phase, "PLANNED", AppText.PlannedTooltip(label, phase), false);
+        new($"planned.{SlugForTest(label)}", label, icon, phase);
+
+    public void SetActive(bool enabled)
+    {
+        SetState(true, enabled, "ACTIVE", enabled ? AppText.ActiveTooltip(Label) : AppText.ActiveUnavailableTooltip(Label));
+    }
+
+    public void SetPlanned() => SetState(false, false, "PLANNED", AppText.PlannedTooltip(Label, Phase));
+
+    private void SetState(bool implemented, bool enabled, string status, string tooltip)
+    {
+        if (_isImplemented == implemented && _isEnabled == enabled && _status == status && _tooltip == tooltip) return;
+        _isImplemented = implemented;
+        _isEnabled = enabled;
+        _status = status;
+        _tooltip = tooltip;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsImplemented)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEnabled)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tooltip)));
+    }
+
+    private static string SlugForTest(string value) => value.ToLowerInvariant().Replace(' ', '-');
+}
+
+public sealed record SlideItemViewModel(
+    Guid Id,
+    int Number,
+    string Name,
+    SlideThumbnailVariant Variant,
+    bool IsSelected,
+    bool IsHidden)
+{
+    public string Background => IsSelected ? "#132433" : "#101D27";
+    public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
+    public string NumberForeground => IsSelected ? "#168CFF" : "#8EA0AC";
+    public string TextForeground => IsSelected ? "#EDF3F7" : "#C8D2D9";
+    public double Opacity => IsHidden ? 0.55 : 1;
 }
 
 public sealed record ObjectCardViewModel(string Name, string Category, string PreviewKind, string Status);

@@ -1,0 +1,337 @@
+using PhysicaStudio.Document;
+
+namespace PhysicaStudio.Authoring;
+
+public static class ProjectCommands
+{
+    public static IProjectCommand RenameProject(string title) => Command("Rename project", project =>
+    {
+        RequireName(title, "Project title");
+        return project with { Title = title };
+    });
+
+    public static IProjectCommand AddSlide(string name, Guid? afterSlideId = null, Guid? sectionId = null) =>
+        Command("Add slide", project =>
+        {
+            RequireName(name, "Slide name");
+            if (sectionId is not null && project.Sections.All(section => section.Id != sectionId))
+            {
+                throw new AuthoringCommandException("The requested section does not exist.");
+            }
+
+            var slide = SlideDocument.Create(name) with { SectionId = sectionId };
+            var slides = project.Slides.ToList();
+            var insertionIndex = afterSlideId is null
+                ? slides.Count
+                : FindSlideIndex(slides, afterSlideId.Value) + 1;
+            slides.Insert(insertionIndex, slide);
+            return project with { Slides = slides };
+        });
+
+    public static IProjectCommand DuplicateSlide(Guid slideId) => Command("Duplicate slide", project =>
+    {
+        var slides = project.Slides.ToList();
+        var sourceIndex = FindSlideIndex(slides, slideId);
+        var source = slides[sourceIndex];
+        var idMap = source.Nodes.ToDictionary(node => node.Id, _ => Guid.NewGuid());
+        var nodes = source.Nodes.Select(node => node with
+        {
+            Id = idMap[node.Id],
+            ParentId = node.ParentId is Guid parentId ? idMap[parentId] : null,
+        }).ToArray();
+        var duplicate = source with
+        {
+            Id = Guid.NewGuid(),
+            Name = $"{source.Name} copy",
+            Nodes = nodes,
+        };
+        slides.Insert(sourceIndex + 1, duplicate);
+        return project with { Slides = slides };
+    });
+
+    public static IProjectCommand DeleteSlide(Guid slideId) => Command("Delete slide", project =>
+    {
+        if (project.Slides.Count == 1)
+        {
+            throw new AuthoringCommandException("A lesson must contain at least one slide.");
+        }
+
+        var slides = project.Slides.Where(slide => slide.Id != slideId).ToArray();
+        if (slides.Length == project.Slides.Count)
+        {
+            throw new AuthoringCommandException("The slide does not exist.");
+        }
+
+        return project with { Slides = slides };
+    });
+
+    public static IProjectCommand RenameSlide(Guid slideId, string name) => Command("Rename slide", project =>
+    {
+        RequireName(name, "Slide name");
+        return ReplaceSlide(project, slideId, slide => slide with { Name = name });
+    });
+
+    public static IProjectCommand MoveSlide(Guid slideId, int destinationIndex) => Command("Move slide", project =>
+    {
+        if (destinationIndex < 0 || destinationIndex >= project.Slides.Count)
+        {
+            throw new AuthoringCommandException("The slide destination is outside the lesson.");
+        }
+
+        var slides = project.Slides.ToList();
+        var sourceIndex = FindSlideIndex(slides, slideId);
+        var slide = slides[sourceIndex];
+        slides.RemoveAt(sourceIndex);
+        slides.Insert(destinationIndex, slide);
+        return project with { Slides = slides };
+    });
+
+    public static IProjectCommand SetSlideHidden(Guid slideId, bool isHidden) =>
+        Command(isHidden ? "Hide slide" : "Show slide", project =>
+            ReplaceSlide(project, slideId, slide => slide with { IsHidden = isHidden }));
+
+    public static IProjectCommand AddSection(string name) => Command("Add section", project =>
+    {
+        RequireName(name, "Section name");
+        var sections = project.Sections
+            .Append(new SlideSection(Guid.NewGuid(), name, project.Sections.Count))
+            .ToArray();
+        return project with { Sections = sections };
+    });
+
+    public static IProjectCommand RenameSection(Guid sectionId, string name) => Command("Rename section", project =>
+    {
+        RequireName(name, "Section name");
+        var found = false;
+        var sections = project.Sections.Select(section =>
+        {
+            if (section.Id != sectionId)
+            {
+                return section;
+            }
+
+            found = true;
+            return section with { Name = name };
+        }).ToArray();
+        if (!found)
+        {
+            throw new AuthoringCommandException("The section does not exist.");
+        }
+
+        return project with { Sections = sections };
+    });
+
+    public static IProjectCommand AssignSlideToSection(Guid slideId, Guid? sectionId) => Command("Assign slide section", project =>
+    {
+        if (sectionId is not null && project.Sections.All(section => section.Id != sectionId))
+        {
+            throw new AuthoringCommandException("The section does not exist.");
+        }
+
+        return ReplaceSlide(project, slideId, slide => slide with { SectionId = sectionId });
+    });
+
+    public static IProjectCommand AddNode(Guid slideId, SceneNode node) => Command("Add object", project =>
+    {
+        if (project.Slides.SelectMany(slide => slide.Nodes).Any(existing => existing.Id == node.Id))
+        {
+            throw new AuthoringCommandException("The scene node ID already exists.");
+        }
+
+        return ReplaceSlide(project, slideId, slide => slide with
+        {
+            Nodes = slide.Nodes.Append(node with { LayerIndex = slide.Nodes.Count }).ToArray(),
+        });
+    });
+
+    public static IProjectCommand DuplicateNode(Guid slideId, Guid nodeId) => Command("Duplicate object", project =>
+        ReplaceSlide(project, slideId, slide =>
+        {
+            var node = FindNode(slide, nodeId);
+            var copy = node with
+            {
+                Id = Guid.NewGuid(),
+                Name = $"{node.Name} copy",
+                ParentId = null,
+                LayerIndex = slide.Nodes.Count,
+                Geometry = node.Geometry with { X = node.Geometry.X + 20, Y = node.Geometry.Y + 20 },
+            };
+            return slide with { Nodes = slide.Nodes.Append(copy).ToArray() };
+        }));
+
+    public static IProjectCommand DeleteNode(Guid slideId, Guid nodeId) => Command("Delete object", project =>
+        ReplaceSlide(project, slideId, slide =>
+        {
+            var node = FindNode(slide, nodeId);
+            if (node.IsLocked)
+            {
+                throw new AuthoringCommandException("Unlock the object before deleting it.");
+            }
+
+            var nodes = slide.Nodes
+                .Where(candidate => candidate.Id != nodeId)
+                .Select(candidate => candidate.ParentId == nodeId ? candidate with { ParentId = null } : candidate)
+                .Select((candidate, index) => candidate with { LayerIndex = index })
+                .ToArray();
+            return slide with { Nodes = nodes };
+        }));
+
+    public static IProjectCommand SetNodePresentationTransform(
+        Guid slideId,
+        Guid nodeId,
+        PresentationTransform2D transform) => Command("Transform object", project =>
+            ReplaceNode(project, slideId, nodeId, node =>
+            {
+                RequireUnlocked(node);
+                return node with { PresentationTransform = transform };
+            }));
+
+    public static IProjectCommand SetNodeGeometry(Guid slideId, Guid nodeId, NodeGeometry geometry) =>
+        Command("Resize object", project => ReplaceNode(project, slideId, nodeId, node =>
+        {
+            RequireUnlocked(node);
+            return node with { Geometry = geometry };
+        }));
+
+    public static IProjectCommand SetNodeLocked(Guid slideId, Guid nodeId, bool isLocked) =>
+        Command(isLocked ? "Lock object" : "Unlock object", project =>
+            ReplaceNode(project, slideId, nodeId, node => node with { IsLocked = isLocked }));
+
+    public static IProjectCommand SetNodeVisible(Guid slideId, Guid nodeId, bool isVisible) =>
+        Command(isVisible ? "Show object" : "Hide object", project =>
+            ReplaceNode(project, slideId, nodeId, node => node with { IsVisible = isVisible }));
+
+    public static IProjectCommand MoveNodeToLayer(Guid slideId, Guid nodeId, int destinationIndex) => Command("Reorder object", project =>
+        ReplaceSlide(project, slideId, slide =>
+        {
+            if (destinationIndex < 0 || destinationIndex >= slide.Nodes.Count)
+            {
+                throw new AuthoringCommandException("The layer destination is outside the slide.");
+            }
+
+            var nodes = slide.Nodes.ToList();
+            var sourceIndex = nodes.FindIndex(node => node.Id == nodeId);
+            if (sourceIndex < 0)
+            {
+                throw new AuthoringCommandException("The scene node does not exist.");
+            }
+
+            if (nodes[sourceIndex].IsLocked)
+            {
+                throw new AuthoringCommandException("Unlock the object before reordering it.");
+            }
+
+            var node = nodes[sourceIndex];
+            nodes.RemoveAt(sourceIndex);
+            nodes.Insert(destinationIndex, node);
+            return slide with { Nodes = nodes.Select((candidate, index) => candidate with { LayerIndex = index }).ToArray() };
+        }));
+
+    public static IProjectCommand SetSlideBackground(Guid slideId, SlideBackground background) =>
+        Command("Change slide background", project => ReplaceSlide(project, slideId, slide => slide with { Background = background }));
+
+    public static IProjectCommand SetSlideGuides(Guid slideId, IReadOnlyList<GuideDefinition> guides) =>
+        Command("Change slide guides", project => ReplaceSlide(project, slideId, slide => slide with { Guides = guides }));
+
+    public static IProjectCommand SetSnapSettings(Guid slideId, SnapSettings settings) =>
+        Command("Change snapping", project => ReplaceSlide(project, slideId, slide => slide with { SnapSettings = settings }));
+
+    public static IProjectCommand SetTheme(ThemeDefinition theme) =>
+        Command("Change theme", project => project with { Theme = theme });
+
+    public static IProjectCommand SetCanvas(CanvasDefinition canvas) =>
+        Command("Change slide size", project => project with { Canvas = canvas });
+
+    private static IProjectCommand Command(string description, Func<LessonProject, LessonProject> apply) =>
+        new ProjectCommand(Guid.NewGuid(), description, apply);
+
+    private static LessonProject ReplaceSlide(
+        LessonProject project,
+        Guid slideId,
+        Func<SlideDocument, SlideDocument> update)
+    {
+        var found = false;
+        var slides = project.Slides.Select(slide =>
+        {
+            if (slide.Id != slideId)
+            {
+                return slide;
+            }
+
+            found = true;
+            return update(slide);
+        }).ToArray();
+        if (!found)
+        {
+            throw new AuthoringCommandException("The slide does not exist.");
+        }
+
+        return project with { Slides = slides };
+    }
+
+    private static LessonProject ReplaceNode(
+        LessonProject project,
+        Guid slideId,
+        Guid nodeId,
+        Func<SceneNode, SceneNode> update) => ReplaceSlide(project, slideId, slide =>
+        {
+            var found = false;
+            var nodes = slide.Nodes.Select(node =>
+            {
+                if (node.Id != nodeId)
+                {
+                    return node;
+                }
+
+                found = true;
+                return update(node);
+            }).ToArray();
+            if (!found)
+            {
+                throw new AuthoringCommandException("The scene node does not exist.");
+            }
+
+            return slide with { Nodes = nodes };
+        });
+
+    private static int FindSlideIndex(IReadOnlyList<SlideDocument> slides, Guid slideId)
+    {
+        for (var index = 0; index < slides.Count; index++)
+        {
+            if (slides[index].Id == slideId)
+            {
+                return index;
+            }
+        }
+
+        throw new AuthoringCommandException("The slide does not exist.");
+    }
+
+    private static SceneNode FindNode(SlideDocument slide, Guid nodeId) =>
+        slide.Nodes.FirstOrDefault(node => node.Id == nodeId)
+        ?? throw new AuthoringCommandException("The scene node does not exist.");
+
+    private static void RequireUnlocked(SceneNode node)
+    {
+        if (node.IsLocked)
+        {
+            throw new AuthoringCommandException("Unlock the object before changing it.");
+        }
+    }
+
+    private static void RequireName(string value, string label)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new AuthoringCommandException($"{label} cannot be empty.");
+        }
+    }
+
+    private sealed record ProjectCommand(
+        Guid Id,
+        string Description,
+        Func<LessonProject, LessonProject> ApplyDelegate) : IProjectCommand
+    {
+        public LessonProject Apply(LessonProject project) => ApplyDelegate(project);
+    }
+}

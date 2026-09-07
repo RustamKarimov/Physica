@@ -24,15 +24,17 @@ public sealed class ManifestTests
     }
 
     [Fact]
-    public void FeatureManifest_ClaimsNoActiveOrValidatedProductCapability()
+    public void FeatureManifest_ActivatesOnlyTheImplementedPhase2Foundation()
     {
         var root = FindRepositoryRoot();
         var path = Path.Combine(root, "src", "PhysicaStudio.Desktop", "Assets", "feature-manifest.json");
         var manifest = JsonSerializer.Deserialize<FeatureManifest>(File.ReadAllText(path), JsonOptions());
 
         Assert.NotNull(manifest);
-        Assert.Equal(1, manifest.ActivePhase);
-        Assert.DoesNotContain(manifest.Surfaces, feature => feature.Status is "Active" or "Validated");
+        Assert.Equal(2, manifest.ActivePhase);
+        Assert.DoesNotContain(manifest.Surfaces, feature => feature.Status == "Validated");
+        Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.project" && feature.Status == "Active");
+        Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.canvas" && feature.Status == "Shell ready");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "physics.kernel" && feature.Status == "Planned");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "studio.presenter-preview" && feature.Status == "Shell ready");
     }
@@ -48,7 +50,9 @@ public sealed class ManifestTests
         Assert.Contains("x:Name=\"BottomPanel\"", xaml, StringComparison.Ordinal);
         Assert.Contains("Text=\"PREVIEW\"", xaml, StringComparison.Ordinal);
         Assert.Contains("Physics runtime: planned", xaml, StringComparison.Ordinal);
-        Assert.Contains("Auto-save activates in Phase 2", xaml, StringComparison.Ordinal);
+        Assert.Contains("Project recovery: active", xaml, StringComparison.Ordinal);
+        Assert.Contains("ItemsSource=\"{Binding Slides}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"RibbonCommand_Click\"", xaml, StringComparison.Ordinal);
         Assert.DoesNotContain("SHELL PREVIEW", xaml, StringComparison.Ordinal);
     }
 

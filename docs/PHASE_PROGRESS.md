@@ -7,8 +7,8 @@
 | Phase | Scope | Status | Exit gate |
 | --- | --- | --- | --- |
 | 0 | Repository replacement, governance, architecture boundaries, launchers and CI foundation | Complete | Clean new foundation, documented governance and synchronized repository |
-| 1 | Complete professional visual studio shell and framework qualification | In progress — mandatory user review | Five approved-reference slices, interaction proof, Windows/macOS qualification, and explicit user approval |
-| 2 | Project and slide foundation | Blocked by Phase 1 | New/open/save/recovery, slides and sections, selection/transforms, layers, undo/redo, themes, zoom, guides, snapping and versioned project format |
+| 1 | Complete professional visual studio shell and framework qualification | Main authoring shell accepted; remaining qualification debt tracked | Remaining reference slices plus Windows/macOS interaction and performance qualification |
+| 2 | Project and slide foundation | In progress — project/slide workflow active | New/open/save/recovery, slides and sections, selection/transforms, layers, undo/redo, themes, zoom, guides, snapping and versioned project format |
 | 3 | Presentation design foundation | Planned | Text, equations, shapes, media, formatting, Bézier editing, templates, masters, tables and annotations |
 | 4 | Professional timeline and native Manim-style animation | Planned | Multi-track timeline, keyframes, curves, create/write/transform effects, motion paths, morphing, camera and transitions |
 | 5 | Presenter and classroom interaction | Planned | Full-screen presentation, checkpoints, presenter view, interactive controls, pointer, ephemeral ink and audience-display workflow |
@@ -41,4 +41,4 @@
 | Windows visual, interaction and performance qualification | Planned |
 | macOS visual, interaction and performance qualification | Planned |
 
-Phase 2 cannot begin until the complete Phase 1 shell passes its mandatory review gate. Readiness badges continue to distinguish Planned, Preview, Active and Validated capabilities throughout development.
+The user authorized Phase 2 to begin on 2026-09-07 after accepting the regenerated main authoring shell. Remaining Phase 1 slices and cross-platform qualification stay visible as release debt. Readiness badges continue to distinguish Planned, Preview, Active and Validated capabilities throughout development.
