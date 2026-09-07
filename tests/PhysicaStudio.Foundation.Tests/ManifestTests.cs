@@ -79,7 +79,7 @@ public sealed class ManifestTests
     }
 
     [Fact]
-    public void DesktopShell_StartsMaximizedWithExitAndPolishedInspectorSpacing()
+    public void DesktopShell_StartsFullScreenWithExitAndCenteredInspectorHeaders()
     {
         var root = FindRepositoryRoot();
         var xaml = File.ReadAllText(
@@ -87,12 +87,13 @@ public sealed class ManifestTests
         var theme = File.ReadAllText(
             Path.Combine(root, "src", "PhysicaStudio.Desktop", "Themes", "PhysicaTheme.axaml"));
 
-        Assert.Contains("WindowState=\"Maximized\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("WindowState=\"FullScreen\"", xaml, StringComparison.Ordinal);
         Assert.Contains("AutomationProperties.Name=\"Exit Physica Studio\"", xaml, StringComparison.Ordinal);
         Assert.Contains("x:Name=\"InspectorScrollViewer\"", xaml, StringComparison.Ordinal);
         Assert.Matches("InspectorScrollViewer[\\s\\S]*?VerticalScrollBarVisibility=\\\"Hidden\\\"", xaml);
         Assert.Contains("VerticalAlignment=\"Center\" Margin=\"2,1,0,0\"", xaml, StringComparison.Ordinal);
-        Assert.Contains("<Setter Property=\"Margin\" Value=\"8,6,8,0\" />", theme, StringComparison.Ordinal);
+        Assert.Equal(3, xaml.Split("<Grid ColumnDefinitions=\"Auto,*\" VerticalAlignment=\"Center\">", StringSplitOptions.None).Length - 1);
+        Assert.Contains("<Setter Property=\"Margin\" Value=\"8,12,8,4\" />", theme, StringComparison.Ordinal);
         Assert.Contains("<Setter Property=\"CornerRadius\" Value=\"3\" />", theme, StringComparison.Ordinal);
     }
 

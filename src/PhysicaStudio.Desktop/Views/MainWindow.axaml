@@ -9,7 +9,7 @@
         MinWidth="1180" MinHeight="720"
         Background="{StaticResource ChromeBaseBrush}"
         WindowDecorations="None"
-        WindowState="Maximized"
+        WindowState="FullScreen"
         WindowStartupLocation="CenterScreen">
   <Grid RowDefinitions="30,32,88,*,24">
     <!-- Custom title bar -->
@@ -41,7 +41,7 @@
           <Button Classes="window-command" Click="MinimizeWindow_Click" ToolTip.Tip="Minimize">
             <Path Data="M 0,0 L 10,0" Stroke="#AAB7C1" StrokeThickness="1.2" />
           </Button>
-          <Button Classes="window-command" Click="MaximizeWindow_Click" ToolTip.Tip="Maximize">
+          <Button Classes="window-command" Click="MaximizeWindow_Click" ToolTip.Tip="Restore window">
             <Rectangle Width="10" Height="8" Stroke="#AAB7C1" StrokeThickness="1.1" />
           </Button>
           <Button Classes="window-command close"
@@ -329,7 +329,7 @@
                         VerticalScrollBarVisibility="Hidden">
             <StackPanel>
               <Border Classes="inspector-section-header">
-                <Grid ColumnDefinitions="Auto,*">
+                <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
                   <Path Data="M 2,3 L 7,8 L 12,3" Stroke="#91A2AE" StrokeThickness="1.3" />
                   <TextBlock Grid.Column="1" Text="Physics" FontSize="13" FontWeight="SemiBold" Margin="7,0,0,0" />
                 </Grid>
@@ -368,7 +368,7 @@
               </StackPanel>
 
               <Border Classes="inspector-section-header">
-                <Grid ColumnDefinitions="Auto,*">
+                <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
                   <Path Data="M 2,3 L 7,8 L 12,3" Stroke="#91A2AE" StrokeThickness="1.3" />
                   <TextBlock Grid.Column="1" Text="Appearance" FontSize="13" FontWeight="SemiBold" Margin="7,0,0,0" />
                 </Grid>
@@ -405,7 +405,7 @@
               </StackPanel>
 
               <Border Classes="inspector-section-header">
-                <Grid ColumnDefinitions="Auto,*">
+                <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
                   <Path Data="M 2,3 L 7,8 L 12,3" Stroke="#91A2AE" StrokeThickness="1.3" />
                   <TextBlock Grid.Column="1" Text="Bindings" FontSize="13" FontWeight="SemiBold" Margin="7,0,0,0" />
                 </Grid>

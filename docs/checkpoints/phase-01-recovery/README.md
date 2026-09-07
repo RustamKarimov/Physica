@@ -27,12 +27,13 @@ The screenshots are captured from the running Avalonia application. The approved
 - 32 px ribbon tabs with Physics selected.
 - 88 px compact Physics ribbon organized into Clipboard, Objects, Environment, Measurements, Representations, Constraints, and Validate.
 - Hybrid ribbon groups show at most two quick commands plus an always-active, full-size More command; each launcher opens the complete icon gallery for that group.
-- Groups divide the command band evenly rather than bunching together, and command widths adapt within controlled bounds so full names remain readable.
+- Groups use natural content widths with deliberate internal padding rather than stretching to fill the command band; full command names remain readable.
 - Planned commands remain visible with explicit status inside a borderless ribbon-style gallery but do not claim unfinished functionality.
 - Distinct vector icons rather than Unicode command glyphs.
 - 224 px collapsible slide dock with five rendered lesson thumbnails.
 - Fluid center workbench with a retained 16:9 scientific scene.
 - 344 px collapsible contextual inspector.
+- Inspector disclosure headers use increased section separation and vertically centered chevrons and labels.
 - 260 px collapsible batched timeline.
 - 24 px status bar with honest Preview and planned-runtime state.
 - Material standing-wave supports, phase envelope, nodes, antinode, equilibrium line, frequency control, equation, and legend.
@@ -40,8 +41,9 @@ The screenshots are captured from the running Avalonia application. The approved
 ## Verification
 
 - `dotnet build PhysicaStudio.slnx --no-restore`: passed with zero warnings and zero errors.
-- `dotnet test PhysicaStudio.slnx --no-restore`: 9 passed, 0 failed.
-- `Launch Physica.bat`: opened a responsive `Physica Studio` window.
+- `dotnet test PhysicaStudio.slnx --no-build --no-restore`: 10 passed, 0 failed.
+- `Launch Physica.bat`: opened a responsive `Physica Studio` window in exclusive full-screen mode.
+- Windows monitor geometry probe: window bounds `0,0–1920,1080` exactly matched monitor bounds `0,0–1920,1080`, confirming that the taskbar area is covered.
 - Windows UI Automation invoked `Show all Objects commands` successfully and confirmed all seven Physics group launchers are enabled.
 - Native and normalized screenshots captured from the launcher-started process.
 

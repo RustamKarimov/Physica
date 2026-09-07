@@ -49,8 +49,15 @@ public sealed partial class MainWindow : Window
 
     private void CloseWindow_Click(object? sender, RoutedEventArgs e) => Close();
 
-    private void ToggleMaximize() =>
-        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+    private void ToggleMaximize()
+    {
+        WindowState = WindowState switch
+        {
+            WindowState.FullScreen => WindowState.Normal,
+            WindowState.Maximized => WindowState.Normal,
+            _ => WindowState.Maximized,
+        };
+    }
 
     private void RibbonTab_Click(object? sender, RoutedEventArgs e)
     {
