@@ -4,7 +4,7 @@
 **Active milestone:** Phase 1 visual recovery and architecture qualification
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Mandatory stop:** Gates A–C and explicit user approval before Phase 2
-**Current activity:** Concept-01 authoring slice regenerated; awaiting user visual review
+**Current activity:** Concept-01 authoring slice regenerated with compact expandable ribbon groups; awaiting user visual review
 
 ## Binding visual authority
 
@@ -29,6 +29,8 @@ Implementation restarted with the single concept-01 authoring slice defined in `
 The Windows concept-01 slice now includes:
 
 - Custom dark window chrome and compact manifest-driven Physics ribbon.
+- A hybrid ribbon density model: every group exposes at most two quick commands and an always-active gallery chevron that reveals the complete command inventory.
+- Group galleries retain visible icons and readiness labels for Planned commands without enabling unfinished product behavior.
 - Distinct vector icons for every visible ribbon command.
 - Five presentation-quality standing-wave lesson thumbnails.
 - A retained 16:9 standing-wave scene with material supports, phase traces, node/antinode annotations, an equation card, frequency control, and legend.
@@ -37,7 +39,7 @@ The Windows concept-01 slice now includes:
 - Batched timeline rendering with semantic property, condition, pause, and pass-through colors.
 - Quiet, honest Preview and planned-runtime status.
 
-Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all seven foundation tests pass, and `Launch Physica.bat` opens a responsive window.
+Windows evidence is stored in `docs/checkpoints/phase-01-recovery/`. The solution builds with zero warnings and errors, all nine foundation tests pass, and `Launch Physica.bat` opens a responsive window. Windows accessibility automation also verifies that every Physics group gallery launcher is enabled and invokable while its unfinished child commands remain disabled.
 
 Still required before Gate A:
 

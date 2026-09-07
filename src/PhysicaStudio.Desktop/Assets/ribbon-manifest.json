@@ -75,11 +75,11 @@
       "label": "Physics",
       "groups": [
         { "label": "Clipboard", "commands": ["Undo", "Redo", "Paste"] },
-        { "label": "Objects", "commands": ["Mass", "Point Mass", "String", "Rod", "Block", "More"] },
-        { "label": "Environment", "commands": ["Gravity", "Air Drag", "Medium", "Walls", "More"] },
-        { "label": "Measurements", "commands": ["Ruler", "Protractor", "Timer", "Sensor", "More"] },
-        { "label": "Representations", "commands": ["Vectors", "Trace", "Path", "Field", "More"] },
-        { "label": "Constraints", "commands": ["Fixed Point", "Guide", "Limit", "Joint", "More"] },
+        { "label": "Objects", "commands": ["Mass", "Point Mass", "String", "Rod", "Block"] },
+        { "label": "Environment", "commands": ["Gravity", "Air Drag", "Medium", "Walls"] },
+        { "label": "Measurements", "commands": ["Ruler", "Protractor", "Timer", "Sensor"] },
+        { "label": "Representations", "commands": ["Vectors", "Trace", "Path", "Field"] },
+        { "label": "Constraints", "commands": ["Fixed Point", "Guide", "Limit", "Joint"] },
         { "label": "Validate", "commands": ["Check Model", "Diagnostics"] }
       ]
     },

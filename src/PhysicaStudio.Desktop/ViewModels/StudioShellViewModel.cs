@@ -240,7 +240,22 @@ public sealed class RibbonTabViewModel : INotifyPropertyChanged
     }
 }
 
-public sealed record RibbonGroupViewModel(string Label, IReadOnlyList<RibbonCommandViewModel> Commands);
+public sealed class RibbonGroupViewModel
+{
+    public RibbonGroupViewModel(string label, IReadOnlyList<RibbonCommandViewModel> commands)
+    {
+        Label = label;
+        Commands = commands;
+        FeaturedCommands = commands.Take(2).ToArray();
+    }
+
+    public string Label { get; }
+    public IReadOnlyList<RibbonCommandViewModel> Commands { get; }
+    public IReadOnlyList<RibbonCommandViewModel> FeaturedCommands { get; }
+    public string GalleryTooltip => $"Show all {Label} commands";
+    public string GalleryStatus => Commands.Any(command => command.IsEnabled) ? "MIXED" : "PLANNED";
+    public string GallerySummary => $"{Commands.Count} commands · {Commands.Count(command => command.IsEnabled)} available";
+}
 
 public sealed record RibbonCommandViewModel(
     string Label,

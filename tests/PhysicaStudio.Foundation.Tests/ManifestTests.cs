@@ -1,6 +1,7 @@
 using System.Text.Json;
 using PhysicaStudio.Desktop.Models;
 using PhysicaStudio.Desktop.Services;
+using PhysicaStudio.Desktop.ViewModels;
 
 namespace PhysicaStudio.Foundation.Tests;
 
@@ -58,6 +59,33 @@ public sealed class ManifestTests
         var project = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "PhysicaStudio.Desktop.csproj"));
 
         Assert.Contains("<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>", project, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void DesktopRibbon_UsesCompactGroupsWithActiveCompleteGalleries()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+
+        Assert.Contains("ItemsSource=\"{Binding FeaturedCommands}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Classes=\"ribbon-group-dropdown\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("<Button.Flyout>", xaml, StringComparison.Ordinal);
+        Assert.Contains("ItemsSource=\"{Binding Commands}\"", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("Classes=\"ribbon-group-dropdown\" IsEnabled=\"False\"", xaml, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void DesktopRibbon_FeaturesAtMostTwoCommandsWithoutLosingGroupInventory()
+    {
+        var commands = Enumerable.Range(1, 5)
+            .Select(index => RibbonCommandViewModel.Planned($"Command {index}", 3, "gallery"))
+            .ToArray();
+        var group = new RibbonGroupViewModel("Test group", commands);
+
+        Assert.Equal(2, group.FeaturedCommands.Count);
+        Assert.Equal(commands.Take(2), group.FeaturedCommands);
+        Assert.Equal(commands, group.Commands);
+        Assert.Equal("Show all Test group commands", group.GalleryTooltip);
     }
 
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)

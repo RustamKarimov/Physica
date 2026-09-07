@@ -10,6 +10,10 @@
 - `concept-01-comparison.png` — approved reference and regenerated application side by side.
 - `concept-01-regenerated-1672x941.png` — normalized comparison viewport.
 - `concept-01-regenerated-native.png` — native Windows DPI capture at 1942 × 1102.
+- `concept-01-grouped-ribbon-1672x941.png` — normalized compact grouped-ribbon state.
+- `concept-01-grouped-ribbon-native.png` — native grouped-ribbon state.
+- `concept-01-objects-gallery-open-1672x941.png` — normalized proof of the expanded Objects command gallery.
+- `concept-01-objects-gallery-open-native.png` — native proof of the expanded Objects command gallery.
 
 The screenshots are captured from the running Avalonia application. The approved concept image is not embedded in the application.
 
@@ -18,6 +22,8 @@ The screenshots are captured from the running Avalonia application. The approved
 - 30 px custom title bar and quick-access controls.
 - 32 px ribbon tabs with Physics selected.
 - 88 px compact Physics ribbon organized into Clipboard, Objects, Environment, Measurements, Representations, Constraints, and Validate.
+- Hybrid ribbon groups show at most two quick commands plus an always-active chevron; each chevron opens the complete icon gallery for that group.
+- Planned commands remain visible with explicit status inside the gallery but do not claim unfinished functionality.
 - Distinct vector icons rather than Unicode command glyphs.
 - 224 px collapsible slide dock with five rendered lesson thumbnails.
 - Fluid center workbench with a retained 16:9 scientific scene.
@@ -29,8 +35,9 @@ The screenshots are captured from the running Avalonia application. The approved
 ## Verification
 
 - `dotnet build PhysicaStudio.slnx --no-restore`: passed with zero warnings and zero errors.
-- `dotnet test PhysicaStudio.slnx --no-build --no-restore`: 7 passed, 0 failed.
+- `dotnet test PhysicaStudio.slnx --no-restore`: 9 passed, 0 failed.
 - `Launch Physica.bat`: opened a responsive `Physica Studio` window.
+- Windows UI Automation invoked `Show all Objects commands` successfully and confirmed all seven Physics group launchers are enabled.
 - Native and normalized screenshots captured from the launcher-started process.
 
 ## Honest limitations
@@ -40,4 +47,3 @@ The screenshots are captured from the running Avalonia application. The approved
 - Animation, graph, and presenter slices remain unapproved experimental work and are not part of this checkpoint.
 - macOS fidelity, interaction qualification, performance ceilings, and accessibility automation are not yet complete.
 - Gate A remains open until the user approves this slice and the remaining four slices are reviewed.
-

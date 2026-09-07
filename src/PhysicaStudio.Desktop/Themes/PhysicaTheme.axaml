@@ -144,6 +144,53 @@
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="Opacity" Value="0.68" />
   </Style>
+  <Style Selector="Button.ribbon-group-dropdown">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="67" />
+    <Setter Property="MinHeight" Value="67" />
+    <Setter Property="Padding" Value="4,5" />
+    <Setter Property="Margin" Value="1,0" />
+    <Setter Property="Background" Value="#09141C" />
+    <Setter Property="BorderBrush" Value="#2D404E" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="Button.ribbon-group-dropdown:pointerover">
+    <Setter Property="Background" Value="#203746" />
+    <Setter Property="BorderBrush" Value="#4B697D" />
+  </Style>
+  <Style Selector="Button.ribbon-group-dropdown:pressed">
+    <Setter Property="Background" Value="#27485A" />
+    <Setter Property="BorderBrush" Value="{StaticResource SelectionBrush}" />
+  </Style>
+  <Style Selector="Border.ribbon-gallery">
+    <Setter Property="Padding" Value="14" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Background" Value="#111F29" />
+    <Setter Property="BorderBrush" Value="#3A5263" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BoxShadow" Value="0 10 28 0 #99000000" />
+  </Style>
+  <Style Selector="Button.ribbon-gallery-command">
+    <Setter Property="Width" Value="88" />
+    <Setter Property="Height" Value="82" />
+    <Setter Property="MinHeight" Value="82" />
+    <Setter Property="Padding" Value="5,6" />
+    <Setter Property="Margin" Value="2" />
+    <Setter Property="Background" Value="#142630" />
+    <Setter Property="BorderBrush" Value="#2A414F" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.ribbon-gallery-command:pointerover">
+    <Setter Property="Background" Value="#203B49" />
+    <Setter Property="BorderBrush" Value="#4A6B7E" />
+  </Style>
+  <Style Selector="Button.ribbon-gallery-command:disabled">
+    <Setter Property="Opacity" Value="0.74" />
+    <Setter Property="Background" Value="#12232D" />
+    <Setter Property="BorderBrush" Value="#273C49" />
+  </Style>
   <Style Selector="Button.panel-collapse">
     <Setter Property="Width" Value="28" />
     <Setter Property="Height" Value="28" />

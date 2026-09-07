@@ -87,7 +87,8 @@
             <DataTemplate x:DataType="vm:RibbonGroupViewModel">
               <Border BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,1,0" Padding="3,0">
                 <Grid RowDefinitions="*,16">
-                  <ItemsControl ItemsSource="{Binding Commands}">
+                  <Grid ColumnDefinitions="Auto,28">
+                  <ItemsControl ItemsSource="{Binding FeaturedCommands}">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
@@ -105,6 +106,62 @@
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
+                  <Button Grid.Column="1"
+                          Classes="ribbon-group-dropdown"
+                          ToolTip.Tip="{Binding GalleryTooltip}"
+                          AutomationProperties.Name="{Binding GalleryTooltip}">
+                    <Grid RowDefinitions="*,17">
+                      <controls:PhysicaIcon IconKey="gallery" Width="17" Height="17"
+                                            Stroke="#8FA6B6" HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                      <Path Grid.Row="1" Data="M 0,0 L 4,4 L 8,0"
+                            Stroke="#9EB0BD" StrokeThickness="1.35"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Button.Flyout>
+                      <Flyout ShowMode="Standard">
+                        <Border Classes="ribbon-gallery" Width="430" MaxHeight="440">
+                          <Grid RowDefinitions="Auto,Auto,*">
+                            <Grid ColumnDefinitions="*,Auto">
+                              <TextBlock Text="{Binding Label}" FontSize="15" FontWeight="SemiBold"
+                                         Foreground="#E6EDF2" />
+                              <Border Grid.Column="1" Classes="readiness-badge" Padding="7,2">
+                                <TextBlock Text="{Binding GalleryStatus}" FontSize="10" Foreground="#9CB0BE" />
+                              </Border>
+                            </Grid>
+                            <TextBlock Grid.Row="1" Text="{Binding GallerySummary}" Margin="0,2,0,10"
+                                       FontSize="11.5" Foreground="#7F94A3" />
+                            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                              <ItemsControl ItemsSource="{Binding Commands}">
+                                <ItemsControl.ItemsPanel>
+                                  <ItemsPanelTemplate><WrapPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate x:DataType="vm:RibbonCommandViewModel">
+                                    <Button Classes="ribbon-gallery-command"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            ToolTip.Tip="{Binding Tooltip}">
+                                      <Grid RowDefinitions="30,*,15">
+                                        <controls:PhysicaIcon IconKey="{Binding Icon}" Width="23" Height="23"
+                                                              Stroke="#C2CFD8" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="1" Text="{Binding Label}" FontSize="12.5"
+                                                   Foreground="#D2DCE3" TextWrapping="Wrap"
+                                                   TextAlignment="Center" MaxWidth="76" />
+                                        <TextBlock Grid.Row="2" Text="{Binding Status}" FontSize="9.5"
+                                                   Foreground="#718797" HorizontalAlignment="Center" />
+                                      </Grid>
+                                    </Button>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+                            </ScrollViewer>
+                          </Grid>
+                        </Border>
+                      </Flyout>
+                    </Button.Flyout>
+                  </Button>
+                  </Grid>
                   <TextBlock Grid.Row="1" Text="{Binding Label}" FontSize="11"
                              Foreground="#718493" HorizontalAlignment="Center" />
                 </Grid>
