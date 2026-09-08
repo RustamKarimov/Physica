@@ -28,8 +28,8 @@
     </section>
 
     <section class="audit-box">
-      <h2>Current Phase 2 warning</h2>
-      <p>Project persistence and several slide operations work, but Phase 2 is not complete. Document-driven thumbnails, functional canvas manipulation, layers, zoom/pan, guides, snapping controls, recovery selection, accessibility proof, macOS proof, and the representative authoring workflow remain open.</p>
+      <h2>Phase 2 acceptance recovery</h2>
+      <p>Later-phase work is blocked at Shared-renderer Gate 1. Model and view-model tests do not establish teacher-visible behavior. The binding three-gate status is maintained in <a href="docs/acceptance/PHASE_02_ACCEPTANCE_MATRIX.md">the Phase 2 acceptance matrix</a>.</p>
     </section>
 
     <div class="toolbar">
@@ -68,24 +68,24 @@
       </details>
 
       <details class="phase" open>
-        <summary><span class="phase-number">Phase 2</span><span class="phase-title"><h2>Project and slide foundation</h2><small>Reliable authoring document, slide organization, canvas, and recovery</small></span><span class="pill active">In progress</span></summary>
-        <div class="phase-content"><div class="gate">Gate: create, organize, edit, save, close, reopen, and recover a representative lesson on Windows and macOS.</div><ul class="feature-list">
+        <summary><span class="phase-number">Phase 2</span><span class="phase-title"><h2>Project and slide foundation</h2><small>Reliable authoring document, slide organization, canvas, and recovery</small></span><span class="pill blocked">Acceptance recovery</span></summary>
+        <div class="phase-content"><div class="gate">Gates in order: shared renderer, slide navigator, then complete canvas/project workflow. Every gate requires interaction evidence and user approval.</div><ul class="feature-list">
           <li class="feature"><span class="status complete">Complete</span><span><strong>Immutable document contracts</strong><small>Projects, sections, slides, nodes, themes, canvas, guides, and separate transforms.</small></span></li>
           <li class="feature"><span class="status complete">Complete</span><span><strong>Validation and normalization</strong><small>Identity, references, geometry, ordering, and parent-cycle checks.</small></span></li>
           <li class="feature"><span class="status active">Active</span><span><strong>.physica save/open</strong><small>Versioned ZIP, migration boundary, unknown-field preservation, and safe temporary write.</small></span></li>
           <li class="feature"><span class="status partial">Partial</span><span><strong>Recovery</strong><small>External snapshots work; timed autosave and recovery chooser remain.</small></span></li>
           <li class="feature"><span class="status active">Active</span><span><strong>Undo/redo authority</strong><small>Immutable snapshots and atomic multi-slide commands.</small></span></li>
-          <li class="feature"><span class="status active">Active</span><span><strong>Slide selection</strong><small>Single, Ctrl/Command toggle, and Shift range selection.</small></span></li>
-          <li class="feature"><span class="status active">Active</span><span><strong>Slide ordering</strong><small>Keyboard/buttons plus native drag-and-drop handle; block movement is one undo entry.</small></span></li>
+          <li class="feature"><span class="status partial">UI wired</span><span><strong>Slide selection</strong><small>Backend and handlers exist; real Ctrl/Command, Shift, focus, and visual-state evidence is missing.</small></span></li>
+          <li class="feature"><span class="status blocked">Failing</span><span><strong>Slide ordering</strong><small>Current handle-based dragging lacks the required direct drag, insertion, edge-scroll, and application-level proof.</small></span></li>
           <li class="feature"><span class="status partial">Partial</span><span><strong>Sections</strong><small>Atomic assignment and visible headings work; rename, delete, reassignment, and collapse remain.</small></span></li>
-          <li class="feature"><span class="status active">Active</span><span><strong>Project close/start center</strong><small>Close returns to New/Open/Recent; title-bar Exit ends the app.</small></span></li>
-          <li class="feature"><span class="status partial">Partial</span><span><strong>Thumbnails</strong><small>Blank slides are honestly blank; live document-rendered thumbnails remain required.</small></span></li>
+          <li class="feature"><span class="status partial">UI wired</span><span><strong>Project close/start center</strong><small>The path exists but lacks full lifecycle and edited-scene acceptance proof.</small></span></li>
+          <li class="feature"><span class="status blocked">Failing</span><span><strong>Thumbnails</strong><small>Hard-coded variants are not exact document renders and aspect ratio is unreliable.</small></span></li>
           <li class="feature"><span class="status planned">Planned</span><span><strong>Retained authoring canvas</strong><small>Pointer selection, drag, resize, rotate, multi-object transforms.</small></span></li>
           <li class="feature"><span class="status planned">Planned</span><span><strong>Layers and grouping</strong><small>Rename, order, group, ungroup, lock, hide, and selection pane.</small></span></li>
           <li class="feature"><span class="status planned">Planned</span><span><strong>Zoom and pan</strong><small>Visible controls, fit modes, keyboard/mouse gestures, transient viewport state.</small></span></li>
           <li class="feature"><span class="status planned">Planned</span><span><strong>Guides, grid, and snapping</strong><small>UI controls and DPI-independent interaction proof; logical snap engine exists.</small></span></li>
           <li class="feature"><span class="status planned">Planned</span><span><strong>Themes and slide design</strong><small>Background, slide size, orientation, margins, and safe areas.</small></span></li>
-          <li class="feature"><span class="status planned">Planned</span><span><strong>Phase acceptance</strong><small>Accessible representative workflow, Windows/macOS launch and user approval.</small></span></li>
+          <li class="feature"><span class="status blocked">Blocked</span><span><strong>Phase acceptance</strong><small>Requires all three gates, Windows/macOS evidence, representative workflow, and user approval.</small></span></li>
         </ul></div>
       </details>
 

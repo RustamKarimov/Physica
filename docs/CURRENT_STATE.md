@@ -4,10 +4,22 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 project/slide workflow active; canvas editing, advanced section management, design, and viewport activation remain
+**Current activity:** Phase 2 acceptance recovery; production feature work is frozen at Gate 1 until the shared-renderer, slide-navigator, and complete-Phase-2 gates pass
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
+The binding visible-feature verification procedure is `skills/physica-acceptance-audit/SKILL.md`. Phase 2 evidence and blocking status are maintained in `docs/acceptance/PHASE_02_ACCEPTANCE_MATRIX.md`.
+
+## Acceptance-control system
+
+The user rejected test-count-based completion claims on 2026-09-08. All user-visible work now advances through four acceptance states: **Model only**, **UI wired**, **Interaction verified**, and **User accepted**.
+
+- A build or unit-test result proves only the layer it exercises.
+- Actual pointer, keyboard, focus, scrolling, resizing, and drag-and-drop workflows require launcher-driven application evidence.
+- Computer-driven verification is required when the Computer capability and its instructions are available.
+- A failed blocking matrix row prevents later-phase work.
+- Phase 2 has three mandatory user checkpoints: shared renderer, slide navigator, and complete Phase 2.
+- Chat reports must separate model/service, UI component, rendered-output, and end-to-end results rather than reporting only a total test count.
 
 ## Binding visual authority
 
@@ -88,7 +100,7 @@ Completed across the first two functional slices:
 - Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
 - Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
 
-Verification: the full solution builds with zero warnings and errors, and all 31 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, multi-selection, atomic section assignment, multi-slide ordering/deletion, blank-thumbnail state, project-close state, recent projects, locked-node, identity, snapping, session-backed Desktop state, and complete-roadmap coverage.
+Prior automated result: the full solution built with zero warnings and errors and the then-current suite reported 31 passing tests. That result covers model, service, direct session/view-model, and structural checks only. It is not evidence that the real pointer, keyboard, focus, layout, thumbnail, drag/drop, canvas, project-lifecycle, or cross-platform workflows pass. No UI feature may be promoted from this aggregate count.
 
 The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_AUDIT.md`. Its verdict is binding: Phase 2 is incomplete, and backend-only contracts are not teacher-accessible features.
 

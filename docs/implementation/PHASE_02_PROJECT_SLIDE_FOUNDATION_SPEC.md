@@ -245,6 +245,8 @@ Redo is cleared by any new committed command after undo.
 
 ## 11. Phase 2 acceptance workflow
 
+The binding execution and evidence procedure is `skills/physica-acceptance-audit/SKILL.md`; live status is maintained in `docs/acceptance/PHASE_02_ACCEPTANCE_MATRIX.md`. Backend or direct view-model tests may establish **Model only** but cannot establish UI interaction or phase completion.
+
 The checkpoint project will demonstrate:
 
 1. Create a lesson and rename it.
@@ -257,3 +259,5 @@ The checkpoint project will demonstrate:
 8. Make an unsaved edit, restart, recover it, and save safely.
 
 Phase 2 is complete only when this workflow passes on Windows and macOS and the user approves the functional canvas checkpoint.
+
+The workflow is reviewed through three mandatory gates in order: shared renderer, slide navigator, and complete Phase 2. A blocking failure or missing user approval keeps Phase 3 suspended.

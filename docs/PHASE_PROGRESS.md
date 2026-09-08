@@ -4,13 +4,13 @@
 
 **Authority:** Status recorded here must agree with the project constitution, approved decisions, owning specifications, and checkpoint evidence. A visible shell is not treated as a completed functional capability.
 
-For a complete expandable feature list, open the repository-root `PROJECT_PROGRESS.html`. The Phase 2 critical assessment is `docs/checkpoints/phase-02/PHASE_02_CRITICAL_AUDIT.md`.
+For a complete expandable feature list, open the repository-root `PROJECT_PROGRESS.html`. The Phase 2 critical assessment is `docs/checkpoints/phase-02/PHASE_02_CRITICAL_AUDIT.md`; the binding gate status is `docs/acceptance/PHASE_02_ACCEPTANCE_MATRIX.md`.
 
 | Phase | Scope | Status | Exit gate |
 | --- | --- | --- | --- |
 | 0 | Repository replacement, governance, architecture boundaries, launchers and CI foundation | Complete | Clean new foundation, documented governance and synchronized repository |
 | 1 | Complete professional visual studio shell and framework qualification | Main authoring shell accepted; remaining qualification debt tracked | Remaining reference slices plus Windows/macOS interaction and performance qualification |
-| 2 | Project and slide foundation | In progress — project/slide workflow active | New/open/save/recovery, slides and sections, selection/transforms, layers, undo/redo, themes, zoom, guides, snapping and versioned project format |
+| 2 | Project and slide foundation | In progress — acceptance recovery; blocked at shared-renderer Gate 1 | Three user-accepted gates: shared renderer, slide navigator, and complete canvas/project workflow |
 | 3 | Presentation design foundation | Planned | Text, equations, shapes, media, formatting, Bézier editing, templates, masters, tables and annotations |
 | 4 | Professional timeline and native Manim-style animation | Planned | Multi-track timeline, keyframes, curves, create/write/transform effects, motion paths, morphing, camera and transitions |
 | 5 | Presenter and classroom interaction | Planned | Full-screen presentation, checkpoints, presenter view, interactive controls, pointer, ephemeral ink and audience-display workflow |
