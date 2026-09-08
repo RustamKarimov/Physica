@@ -29,6 +29,16 @@ public static class AppText
     public static string SectionAdded => Get(nameof(SectionAdded));
     public static string SlideRenamed => Get(nameof(SlideRenamed));
     public static string SectionRenamed => Get(nameof(SectionRenamed));
+    public static string SectionCollapsed => Get(nameof(SectionCollapsed));
+    public static string SectionExpanded => Get(nameof(SectionExpanded));
+    public static string SlidesAssignedToSection => Get(nameof(SlidesAssignedToSection));
+    public static string SectionMoved => Get(nameof(SectionMoved));
+    public static string SectionAlreadyAtEdge => Get(nameof(SectionAlreadyAtEdge));
+    public static string SectionRemoved => Get(nameof(SectionRemoved));
+    public static string MoveSelectedSlidesHere => Get(nameof(MoveSelectedSlidesHere));
+    public static string MoveSectionUp => Get(nameof(MoveSectionUp));
+    public static string MoveSectionDown => Get(nameof(MoveSectionDown));
+    public static string RemoveSection => Get(nameof(RemoveSection));
     public static string UntitledLesson => Get(nameof(UntitledLesson));
     public static string OpenLessonTitle => Get(nameof(OpenLessonTitle));
     public static string SaveLessonTitle => Get(nameof(SaveLessonTitle));
@@ -45,6 +55,9 @@ public static class AppText
     public static string OpenExistingLesson => Get(nameof(OpenExistingLesson));
     public static string RecentLessons => Get(nameof(RecentLessons));
     public static string NoRecentLessons => Get(nameof(NoRecentLessons));
+
+    public static string SectionSlideCount(int count) =>
+        string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);
 
     public static string SectionName(int number) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);

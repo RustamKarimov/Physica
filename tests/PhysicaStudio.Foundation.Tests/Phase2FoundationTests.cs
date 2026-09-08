@@ -487,7 +487,7 @@ public sealed class Phase2FoundationTests
         Assert.Equal([0, 1], session.CurrentProject.Sections.Select(section => section.Order));
 
         session.Execute(ProjectCommands.RenameSection(topSectionId, "Opening investigation"));
-        session.Execute(ProjectCommands.MoveSlides([slides[3].Id], slides[0].Id, placeAfterTarget: false));
+        session.Execute(ProjectCommands.MoveSection(bottomSectionId, topSectionId, placeAfterTarget: false));
 
         Assert.Equal(bottomSectionId, session.CurrentProject.Sections[0].Id);
         Assert.Equal("Section 1", session.CurrentProject.Sections[0].Name);
@@ -554,5 +554,95 @@ public sealed class Phase2FoundationTests
         Assert.Equal("Foundations", viewModel.Session.CurrentProject.Sections.Single().Name);
         Assert.Equal(sectionId, viewModel.Slides.Single(slide => slide.Id == slideId).SectionId);
         Assert.True(viewModel.CanUndo);
+    }
+
+    [Fact]
+    public void MovingSlidesAcrossASectionBoundaryReassignsThemAndUndoRestoresBothOrderAndSection()
+    {
+        var slides = Enumerable.Range(1, 5)
+            .Select(index => SlideDocument.Create($"Slide {index}", DocumentNameKind.Automatic))
+            .ToArray();
+        var firstSection = SlideSection.Create("Opening", 0);
+        var secondSection = SlideSection.Create("Investigation", 1);
+        var project = LessonProject.Create("Lesson", FixedTime) with
+        {
+            Sections = [firstSection, secondSection],
+            Slides =
+            [
+                slides[0] with { SectionId = firstSection.Id },
+                slides[1] with { SectionId = firstSection.Id },
+                slides[2],
+                slides[3] with { SectionId = secondSection.Id },
+                slides[4] with { SectionId = secondSection.Id },
+            ],
+        };
+        var session = new AuthoringSession(project);
+
+        session.Execute(ProjectCommands.MoveSlides([slides[2].Id], slides[3].Id, placeAfterTarget: true));
+
+        Assert.Equal(secondSection.Id, session.CurrentProject.Slides.Single(slide => slide.Id == slides[2].Id).SectionId);
+        Assert.Equal([slides[0].Id, slides[1].Id, slides[3].Id, slides[2].Id, slides[4].Id],
+            session.CurrentProject.Slides.Select(slide => slide.Id));
+
+        Assert.True(session.Undo());
+        Assert.Null(session.CurrentProject.Slides.Single(slide => slide.Id == slides[2].Id).SectionId);
+        Assert.Equal(slides.Select(slide => slide.Id), session.CurrentProject.Slides.Select(slide => slide.Id));
+    }
+
+    [Fact]
+    public void SectionAssignmentMovementAndRemovalAreAtomicAndKeepSlides()
+    {
+        var slides = Enumerable.Range(1, 4)
+            .Select(index => SlideDocument.Create($"Slide {index}", DocumentNameKind.Automatic))
+            .ToArray();
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = slides });
+        session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides([slides[0].Id, slides[1].Id]));
+        var firstSectionId = session.CurrentProject.Slides[0].SectionId!.Value;
+        session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides([slides[2].Id, slides[3].Id]));
+        var secondSectionId = session.CurrentProject.Slides[2].SectionId!.Value;
+
+        session.Execute(ProjectCommands.MoveSection(secondSectionId, firstSectionId, placeAfterTarget: false));
+        Assert.Equal([slides[2].Id, slides[3].Id, slides[0].Id, slides[1].Id],
+            session.CurrentProject.Slides.Select(slide => slide.Id));
+
+        session.Execute(ProjectCommands.AssignSlidesToSection([slides[0].Id, slides[1].Id], secondSectionId));
+        Assert.Single(session.CurrentProject.Sections);
+        Assert.All(session.CurrentProject.Slides, slide => Assert.Equal(secondSectionId, slide.SectionId));
+
+        session.Execute(ProjectCommands.RemoveSection(secondSectionId));
+        Assert.Empty(session.CurrentProject.Sections);
+        Assert.All(session.CurrentProject.Slides, slide => Assert.Null(slide.SectionId));
+        Assert.Equal(4, session.CurrentProject.Slides.Count);
+
+        Assert.True(session.Undo());
+        Assert.Single(session.CurrentProject.Sections);
+        Assert.All(session.CurrentProject.Slides, slide => Assert.Equal(secondSectionId, slide.SectionId));
+    }
+
+    [Fact]
+    public void StudioViewModelCollapsesAndExpandsASectionWithoutChangingTheDocument()
+    {
+        var slides = Enumerable.Range(1, 3).Select(index => SlideDocument.Create($"Slide {index}")).ToArray();
+        var section = SlideSection.Create("Investigation", 0);
+        var project = LessonProject.Create("Lesson", FixedTime) with
+        {
+            Sections = [section],
+            Slides = slides.Select(slide => slide with { SectionId = section.Id }).ToArray(),
+        };
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []),
+            new AuthoringSession(project));
+        var revision = viewModel.Session.Revision;
+
+        viewModel.ToggleSectionCollapsed(section.Id);
+
+        Assert.Single(viewModel.Slides, slide => slide.ShowSectionHeader);
+        Assert.All(viewModel.Slides, slide => Assert.False(slide.ShowSlideCard));
+        Assert.Equal(revision, viewModel.Session.Revision);
+
+        viewModel.ToggleSectionCollapsed(section.Id);
+        Assert.All(viewModel.Slides, slide => Assert.True(slide.ShowSlideCard));
+        Assert.Equal(revision, viewModel.Session.Revision);
     }
 }

@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
     private bool _slideDragStarted;
     private Guid? _slideDropTargetId;
     private bool _slideDropAfter;
+    private Guid? _sectionActionTargetId;
 
     public MainWindow() : this(null)
     {
@@ -568,6 +569,72 @@ public sealed partial class MainWindow : Window
         {
             BeginSectionRename(sectionId);
         }
+    }
+
+    private void ToggleSection_Click(object? sender, RoutedEventArgs e)
+    {
+        if (TryGetSectionId(sender, out var sectionId))
+        {
+            _viewModel.ToggleSectionCollapsed(sectionId);
+        }
+        e.Handled = true;
+    }
+
+    private void SectionActions_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: SlideItemViewModel { SectionId: Guid sectionId } })
+        {
+            _sectionActionTargetId = sectionId;
+        }
+    }
+
+    private void AssignSelectedSlidesToSection_Click(object? sender, RoutedEventArgs e)
+    {
+        ExecuteSectionAction(sender, _viewModel.AssignSelectedSlidesToSection);
+    }
+
+    private void MoveSectionUp_Click(object? sender, RoutedEventArgs e) =>
+        ExecuteSectionAction(sender, sectionId => _viewModel.MoveSection(sectionId, -1));
+
+    private void MoveSectionDown_Click(object? sender, RoutedEventArgs e) =>
+        ExecuteSectionAction(sender, sectionId => _viewModel.MoveSection(sectionId, 1));
+
+    private void RemoveSection_Click(object? sender, RoutedEventArgs e) =>
+        ExecuteSectionAction(sender, _viewModel.RemoveSection);
+
+    private void ExecuteSectionAction(object? sender, Action<Guid> action)
+    {
+        if (!TryGetSectionId(sender, out var sectionId))
+        {
+            return;
+        }
+
+        try
+        {
+            action(sectionId);
+        }
+        catch (AuthoringCommandException exception)
+        {
+            _viewModel.SetStatus(exception.Message);
+        }
+    }
+
+    private bool TryGetSectionId(object? sender, out Guid sectionId)
+    {
+        if (sender is Control { DataContext: SlideItemViewModel { SectionId: Guid id } })
+        {
+            sectionId = id;
+            return true;
+        }
+
+        if (_sectionActionTargetId is Guid targetId)
+        {
+            sectionId = targetId;
+            return true;
+        }
+
+        sectionId = default;
+        return false;
     }
 
     private void DuplicateSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DuplicateActiveSlide();

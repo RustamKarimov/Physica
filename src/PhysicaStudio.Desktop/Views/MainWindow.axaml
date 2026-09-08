@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:PhysicaStudio.Desktop.ViewModels"
         xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+        xmlns:resources="using:PhysicaStudio.Desktop.Resources"
         x:Class="PhysicaStudio.Desktop.Views.MainWindow"
         x:DataType="vm:StudioShellViewModel"
         Title="{Binding ApplicationTitle}"
@@ -221,8 +222,17 @@
                             Background="#142731"
                             BorderBrush="#285064"
                             BorderThickness="0,0,0,1">
-                      <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="7">
-                        <Ellipse Width="6" Height="6" Fill="#25C9C3" VerticalAlignment="Center" />
+                      <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="5">
+                        <Button Classes="section-tool" Width="22" Height="22" Padding="5"
+                                Click="ToggleSection_Click" ToolTip.Tip="Collapse or expand section"
+                                AutomationProperties.Name="Collapse or expand section">
+                          <Path Data="M 4,2 L 9,7 L 4,12" Stroke="#8FB8C3" StrokeThickness="1.4"
+                                RenderTransformOrigin="50%,50%">
+                            <Path.RenderTransform>
+                              <RotateTransform Angle="{Binding SectionChevronAngle}" />
+                            </Path.RenderTransform>
+                          </Path>
+                        </Button>
                         <Grid Grid.Column="1">
                           <TextBlock x:Name="SectionNameLabel" Text="{Binding SectionName}" FontSize="11.5"
                                      FontWeight="SemiBold" Foreground="#BBD9E0"
@@ -239,15 +249,38 @@
                                    LostFocus="SectionNameEditor_LostFocus"
                                    AutomationProperties.Name="Rename section" />
                         </Grid>
-                        <Button Grid.Column="2" Classes="title-tool" Width="24" Height="22" Padding="4"
+                        <TextBlock Grid.Column="2" Text="{Binding SectionSummary}" FontSize="10.5"
+                                   Foreground="#6F8795" VerticalAlignment="Center" />
+                        <Button Grid.Column="3" Classes="section-tool" Width="24" Height="22" Padding="4"
                                 Click="RenameSection_Click" ToolTip.Tip="Rename section"
                                 AutomationProperties.Name="Rename section">
                           <controls:PhysicaIcon IconKey="edit" Width="13" Height="13" Stroke="#8FB8C3"
                                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Button>
+                        <Button Grid.Column="4" Classes="section-tool" Width="24" Height="22" Padding="4"
+                                Click="SectionActions_Click"
+                                ToolTip.Tip="Section actions" AutomationProperties.Name="Section actions">
+                          <controls:PhysicaIcon IconKey="more" Width="13" Height="13" Stroke="#8FB8C3"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                          <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedRight">
+                              <MenuItem Header="{x:Static resources:AppText.MoveSelectedSlidesHere}"
+                                        Click="AssignSelectedSlidesToSection_Click" />
+                              <Separator />
+                              <MenuItem Header="{x:Static resources:AppText.MoveSectionUp}"
+                                        Click="MoveSectionUp_Click" />
+                              <MenuItem Header="{x:Static resources:AppText.MoveSectionDown}"
+                                        Click="MoveSectionDown_Click" />
+                              <Separator />
+                              <MenuItem Header="{x:Static resources:AppText.RemoveSection}"
+                                        Click="RemoveSection_Click" />
+                            </MenuFlyout>
+                          </Button.Flyout>
+                        </Button>
                       </Grid>
                     </Border>
                     <Border Classes="slide-navigator-item"
+                            IsVisible="{Binding ShowSlideCard}"
                             Focusable="True"
                             PointerPressed="SlideItem_PointerPressed"
                             PointerMoved="SlideItem_PointerMoved"

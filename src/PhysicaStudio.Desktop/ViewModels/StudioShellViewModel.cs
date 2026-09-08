@@ -25,6 +25,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private string _statusMessage = AppText.ProjectFoundationReady;
     private bool _isProjectOpen = true;
     private readonly ISlideSceneSnapshotBuilder _sceneBuilder = new SlideSceneSnapshotBuilder();
+    private readonly HashSet<Guid> _collapsedSectionIds = [];
 
     public StudioShellViewModel()
         : this(ManifestLoader.LoadRibbon(), ManifestLoader.LoadFeatures())
@@ -318,6 +319,55 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         StatusMessage = AppText.SectionRenamed;
     }
 
+    public void ToggleSectionCollapsed(Guid sectionId)
+    {
+        var collapsed = !_collapsedSectionIds.Remove(sectionId);
+        if (collapsed)
+        {
+            _collapsedSectionIds.Add(sectionId);
+        }
+
+        foreach (var slide in Slides.Where(slide => slide.SectionId == sectionId))
+        {
+            slide.SetSectionCollapsed(collapsed);
+        }
+        StatusMessage = collapsed ? AppText.SectionCollapsed : AppText.SectionExpanded;
+    }
+
+    public void AssignSelectedSlidesToSection(Guid sectionId)
+    {
+        _session.Execute(ProjectCommands.AssignSlidesToSection(_session.SelectedSlideIds, sectionId));
+        StatusMessage = AppText.SlidesAssignedToSection;
+    }
+
+    public void MoveSection(Guid sectionId, int offset)
+    {
+        var populatedSectionIds = _session.CurrentProject.Sections
+            .Where(section => _session.CurrentProject.Slides.Any(slide => slide.SectionId == section.Id))
+            .Select(section => section.Id)
+            .ToArray();
+        var sourceIndex = Array.IndexOf(populatedSectionIds, sectionId);
+        var targetIndex = sourceIndex + offset;
+        if (sourceIndex < 0 || targetIndex < 0 || targetIndex >= populatedSectionIds.Length)
+        {
+            StatusMessage = AppText.SectionAlreadyAtEdge;
+            return;
+        }
+
+        _session.Execute(ProjectCommands.MoveSection(
+            sectionId,
+            populatedSectionIds[targetIndex],
+            placeAfterTarget: offset > 0));
+        StatusMessage = AppText.SectionMoved;
+    }
+
+    public void RemoveSection(Guid sectionId)
+    {
+        _session.Execute(ProjectCommands.RemoveSection(sectionId));
+        _collapsedSectionIds.Remove(sectionId);
+        StatusMessage = AppText.SectionRemoved;
+    }
+
     public void Undo()
     {
         if (_session.Undo()) StatusMessage = AppText.UndoCompleted;
@@ -341,6 +391,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         _session.StateChanged -= Session_StateChanged;
         _session = session;
         _session.StateChanged += Session_StateChanged;
+        _collapsedSectionIds.Clear();
         _isProjectOpen = true;
         StatusMessage = status;
         RefreshFromSession();
@@ -397,6 +448,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     private void RefreshFromSession()
     {
+        _collapsedSectionIds.RemoveWhere(sectionId =>
+            _session.CurrentProject.Sections.All(section => section.Id != sectionId));
         Slides.Clear();
         Guid? previousSectionId = null;
         for (var index = 0; index < _session.CurrentProject.Slides.Count; index++)
@@ -416,7 +469,11 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 slide.IsHidden,
                 section?.Id,
                 section?.Name,
-                section is not null && section.Id != previousSectionId));
+                section is not null && section.Id != previousSectionId,
+                section is not null && _collapsedSectionIds.Contains(section.Id),
+                section is null
+                    ? 0
+                    : _session.CurrentProject.Slides.Count(candidate => candidate.SectionId == section.Id)));
             previousSectionId = slide.SectionId;
         }
 
@@ -675,6 +732,7 @@ public sealed class RibbonCommandViewModel : INotifyPropertyChanged
 public sealed class SlideItemViewModel : INotifyPropertyChanged
 {
     private bool _isSelected;
+    private bool _isSectionCollapsed;
 
     public SlideItemViewModel(
         Guid id,
@@ -686,7 +744,9 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
         bool isHidden,
         Guid? sectionId = null,
         string? sectionName = null,
-        bool showSectionHeader = false)
+        bool showSectionHeader = false,
+        bool isSectionCollapsed = false,
+        int sectionSlideCount = 0)
     {
         Id = id;
         Number = number;
@@ -698,6 +758,8 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
         SectionName = sectionName;
         SectionId = sectionId;
         ShowSectionHeader = showSectionHeader;
+        _isSectionCollapsed = isSectionCollapsed;
+        SectionSlideCount = sectionSlideCount;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -712,6 +774,11 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
     public string? SectionName { get; }
     public bool ShowSectionHeader { get; }
     public Guid? SectionId { get; }
+    public bool IsSectionCollapsed => _isSectionCollapsed;
+    public bool ShowSlideCard => SectionId is null || !_isSectionCollapsed;
+    public double SectionChevronAngle => _isSectionCollapsed ? 0 : 90;
+    public int SectionSlideCount { get; }
+    public string SectionSummary => AppText.SectionSlideCount(SectionSlideCount);
     public string Background => IsSelected ? "#132433" : "#101D27";
     public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
     public string NumberForeground => IsSelected ? "#168CFF" : "#8EA0AC";
@@ -731,6 +798,19 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BorderBrush)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberForeground)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextForeground)));
+    }
+
+    public void SetSectionCollapsed(bool isCollapsed)
+    {
+        if (_isSectionCollapsed == isCollapsed)
+        {
+            return;
+        }
+
+        _isSectionCollapsed = isCollapsed;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSectionCollapsed)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowSlideCard)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SectionChevronAngle)));
     }
 }
 

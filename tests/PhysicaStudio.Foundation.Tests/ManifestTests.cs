@@ -156,6 +156,27 @@ public sealed class ManifestTests
         Assert.Contains("_viewModel.RenameSlide", code, StringComparison.Ordinal);
         Assert.Contains("_viewModel.RenameSection", code, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void SlideNavigatorExposesCompleteSectionControlsAndRoutesEveryAction()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
+
+        Assert.Contains("Click=\"ToggleSection_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"AssignSelectedSlidesToSection_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"MoveSectionUp_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"MoveSectionDown_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"RemoveSection_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("IsVisible=\"{Binding ShowSlideCard}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.ToggleSectionCollapsed", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.AssignSelectedSlidesToSection", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.MoveSection", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.RemoveSection", code, StringComparison.Ordinal);
+    }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true

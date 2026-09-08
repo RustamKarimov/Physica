@@ -270,6 +270,20 @@
     <Setter Property="BorderBrush" Value="#526A79" />
   </Style>
 
+  <Style Selector="Button.section-tool">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.section-tool:pointerover">
+    <Setter Property="Background" Value="#203946" />
+  </Style>
+  <Style Selector="Button.section-tool:pressed">
+    <Setter Property="Background" Value="#285064" />
+  </Style>
+
   <Style Selector="Button.dialog-action">
     <Setter Property="MinHeight" Value="38" />
     <Setter Property="Padding" Value="14,8" />

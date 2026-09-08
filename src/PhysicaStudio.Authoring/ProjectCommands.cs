@@ -116,12 +116,16 @@ public static class ProjectCommands
                 return project;
             }
 
-            var moving = project.Slides.Where(slide => ids.Contains(slide.Id)).ToArray();
+            var targetSectionId = project.Slides.Single(slide => slide.Id == targetSlideId).SectionId;
+            var moving = project.Slides
+                .Where(slide => ids.Contains(slide.Id))
+                .Select(slide => slide with { SectionId = targetSectionId })
+                .ToArray();
             var remaining = project.Slides.Where(slide => !ids.Contains(slide.Id)).ToList();
             var targetIndex = FindSlideIndex(remaining, targetSlideId);
             var insertionIndex = targetIndex + (placeAfterTarget ? 1 : 0);
             remaining.InsertRange(insertionIndex, moving);
-            return project with { Slides = remaining };
+            return RemoveUnusedSections(project with { Slides = remaining });
         });
 
     public static IProjectCommand SetSlideHidden(Guid slideId, bool isHidden) =>
@@ -160,13 +164,25 @@ public static class ProjectCommands
             }
 
             var section = SlideSection.Create(name, project.Sections.Count, nameKind);
-            var withSection = project with { Sections = project.Sections.Append(section).ToArray() };
-            return withSection with
+            var moving = project.Slides
+                .Where(slide => ids.Contains(slide.Id))
+                .Select(slide => slide with { SectionId = section.Id })
+                .ToArray();
+            var firstSelectedIndex = project.Slides
+                .Select((slide, index) => (slide, index))
+                .Where(item => ids.Contains(item.slide.Id))
+                .Min(item => item.index);
+            var remaining = project.Slides.Where(slide => !ids.Contains(slide.Id)).ToList();
+            var insertionIndex = project.Slides
+                .Take(firstSelectedIndex)
+                .Count(slide => !ids.Contains(slide.Id));
+            remaining.InsertRange(insertionIndex, moving);
+
+            return RemoveUnusedSections(project with
             {
-                Slides = withSection.Slides
-                    .Select(slide => ids.Contains(slide.Id) ? slide with { SectionId = section.Id } : slide)
-                    .ToArray(),
-            };
+                Sections = project.Sections.Append(section).ToArray(),
+                Slides = remaining,
+            });
         });
 
     public static IProjectCommand RenameSection(Guid sectionId, string name) => Command("Rename section", project =>
@@ -191,14 +207,90 @@ public static class ProjectCommands
         return project with { Sections = sections };
     });
 
-    public static IProjectCommand AssignSlideToSection(Guid slideId, Guid? sectionId) => Command("Assign slide section", project =>
+    public static IProjectCommand AssignSlideToSection(Guid slideId, Guid? sectionId) =>
+        AssignSlidesToSection([slideId], sectionId);
+
+    public static IProjectCommand AssignSlidesToSection(IEnumerable<Guid> slideIds, Guid? sectionId) => Command("Assign slide section", project =>
     {
         if (sectionId is not null && project.Sections.All(section => section.Id != sectionId))
         {
             throw new AuthoringCommandException("The section does not exist.");
         }
 
-        return ReplaceSlide(project, slideId, slide => slide with { SectionId = sectionId });
+        var ids = slideIds.Distinct().ToHashSet();
+        if (ids.Count == 0 || ids.Any(id => project.Slides.All(slide => slide.Id != id)))
+        {
+            throw new AuthoringCommandException("A selected slide does not exist.");
+        }
+
+        var moving = project.Slides
+            .Where(slide => ids.Contains(slide.Id))
+            .Select(slide => slide with { SectionId = sectionId })
+            .ToArray();
+        var firstSelectedIndex = project.Slides
+            .Select((slide, index) => (slide, index))
+            .Where(item => ids.Contains(item.slide.Id))
+            .Min(item => item.index);
+        var remaining = project.Slides.Where(slide => !ids.Contains(slide.Id)).ToList();
+        var insertionIndex = sectionId is Guid targetSectionId
+            ? LastSectionSlideIndex(remaining, targetSectionId) + 1
+            : project.Slides.Take(firstSelectedIndex).Count(slide => !ids.Contains(slide.Id));
+        if (sectionId is not null && insertionIndex == 0)
+        {
+            insertionIndex = remaining.Count;
+        }
+        remaining.InsertRange(insertionIndex, moving);
+        return RemoveUnusedSections(project with { Slides = remaining });
+    });
+
+    public static IProjectCommand MoveSection(Guid sectionId, Guid targetSectionId, bool placeAfterTarget) =>
+        Command("Move section", project =>
+        {
+            if (sectionId == targetSectionId)
+            {
+                return project;
+            }
+            if (project.Sections.All(section => section.Id != sectionId)
+                || project.Sections.All(section => section.Id != targetSectionId))
+            {
+                throw new AuthoringCommandException("The section does not exist.");
+            }
+
+            var moving = project.Slides.Where(slide => slide.SectionId == sectionId).ToArray();
+            if (moving.Length == 0)
+            {
+                throw new AuthoringCommandException("The section has no slides to move.");
+            }
+            var remaining = project.Slides.Where(slide => slide.SectionId != sectionId).ToList();
+            var targetIndexes = remaining
+                .Select((slide, index) => (slide, index))
+                .Where(item => item.slide.SectionId == targetSectionId)
+                .Select(item => item.index)
+                .ToArray();
+            if (targetIndexes.Length == 0)
+            {
+                throw new AuthoringCommandException("The target section has no slides.");
+            }
+
+            var insertionIndex = placeAfterTarget ? targetIndexes.Max() + 1 : targetIndexes.Min();
+            remaining.InsertRange(insertionIndex, moving);
+            return project with { Slides = remaining };
+        });
+
+    public static IProjectCommand RemoveSection(Guid sectionId) => Command("Remove section", project =>
+    {
+        if (project.Sections.All(section => section.Id != sectionId))
+        {
+            throw new AuthoringCommandException("The section does not exist.");
+        }
+
+        return project with
+        {
+            Sections = project.Sections.Where(section => section.Id != sectionId).ToArray(),
+            Slides = project.Slides
+                .Select(slide => slide.SectionId == sectionId ? slide with { SectionId = null } : slide)
+                .ToArray(),
+        };
     });
 
     public static IProjectCommand AddNode(Guid slideId, SceneNode node) => Command("Add object", project =>
@@ -375,6 +467,31 @@ public static class ProjectCommands
         }
 
         throw new AuthoringCommandException("The slide does not exist.");
+    }
+
+    private static int LastSectionSlideIndex(IReadOnlyList<SlideDocument> slides, Guid sectionId)
+    {
+        for (var index = slides.Count - 1; index >= 0; index--)
+        {
+            if (slides[index].SectionId == sectionId)
+            {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    private static LessonProject RemoveUnusedSections(LessonProject project)
+    {
+        var usedSectionIds = project.Slides
+            .Where(slide => slide.SectionId.HasValue)
+            .Select(slide => slide.SectionId!.Value)
+            .ToHashSet();
+        return project with
+        {
+            Sections = project.Sections.Where(section => usedSectionIds.Contains(section.Id)).ToArray(),
+        };
     }
 
     private static SceneNode FindNode(SlideDocument slide, Guid nodeId) =>
