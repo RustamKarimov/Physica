@@ -36,17 +36,17 @@ Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer
 
 | Requirement | Current state | Blocking finding | Required evidence |
 | --- | --- | --- | --- |
-| Single selection and active-slide behavior | UI wired | User found the prior control failed; pointer-routing correction awaits live proof | Computer-driven click/focus run and accessibility-state check |
+| Single selection and active-slide behavior | UI wired | Selection now updates stable thumbnail instances; real click/focus proof is Not run | Computer-driven click/focus run and accessibility-state check |
 | Ctrl/Command toggle selection | UI wired | Corrected surface preserves modifier input; real workflow is Not run | Real modifier-click workflow on Windows and macOS |
-| Shift range selection with stable anchor | UI wired | Corrected surface preserves modifier input; gesture and anchor proof is Not run | Forward and reverse ranges with visual-state assertions |
-| Direct thumbnail drag, threshold, and insertion indicator | UI wired | Whole-tile threshold drag and indicators compile; application-level proof is Not run | Drag from thumbnail body with before/after captures |
-| Automatic scrolling during drag | Not implemented | No accepted edge-scroll behavior | Drag first/last slides beyond the visible viewport |
-| Contiguous and non-contiguous selected-slide movement | Model only | Command exists; UI and product semantics are incomplete | Ordered-ID assertions, visual drop proof, undo, and redo |
+| Shift range selection with stable anchor | UI wired | Prior native-drag crash is removed and stable-instance regressions pass; real modifier gesture is Not run | Forward and reverse ranges with visual-state assertions |
+| Direct thumbnail drag, threshold, and insertion indicator | UI wired | Internal pointer-capture drag and before/after indicators compile; application-level proof is Not run | Drag from thumbnail body with before/after captures |
+| Automatic scrolling during drag | UI wired | Edge-scroll logic is connected; sustained real pointer behavior is Not run | Drag first/last slides beyond the visible viewport |
+| Contiguous and non-contiguous selected-slide movement | UI wired | Selected-block command and internal gesture are connected; visual drop, undo, and redo proof is Not run | Ordered-ID assertions, visual drop proof, undo, and redo |
 | Delete, duplicate, reorder, undo, and redo respect selection/focus context | UI wired | Window-level keyboard behavior is unverified | Navigator, text-editing, canvas, and no-selection scenarios |
 | Sections support create, rename, collapse, reorder, reassignment, and removal | Model only | Only basic creation/assignment is available | Full section workflow, round trip, undo, and redo |
 | Gate 2 user approval | Not run | Gate 1 and all preceding Gate 2 rows must pass | Review captures and user decision |
 
-Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md`. Tested correction commit: `86fb9c819cb436942e447d7a28af275d4a57320d`.
+Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md` and `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`. Latest tested correction commit: `5499ea5b59bfeae9387e41a8458889f5d0e421f8`.
 
 ## Gate 3 — Complete Phase 2
 
@@ -66,10 +66,10 @@ Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigato
 
 | Layer | Current evidence | May prove | Does not prove |
 | --- | --- | --- | --- |
-| Model/service and render contracts | 39 passed on 2026-09-08 | Validation, serialization, command results, history, snapping calculations, scene mapping, aspect math, and invalidation | Pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
+| Model/service and render contracts | 46 passed on 2026-09-08, including 3 focused navigator regressions | Validation, serialization, command results, history, selection stability, event classification, snapping calculations, scene mapping, aspect math, and invalidation | Real pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
 | UI component | No accepted gate evidence | Real-control input and visual-state changes | Complete lifecycle or cross-platform behavior |
 | Rendered output | No accepted gate evidence | Aspect ratio, content equivalence, invalidation, visual regression | Usability or user approval |
-| End-to-end | Launcher-started process responsive; no accepted interaction evidence | Process startup only | Real controls, visual equivalence, or user approval |
+| End-to-end | Rebuilt launcher-started process responsive; Computer controller failed before input, so no accepted interaction evidence | Process startup only | Real controls, visual equivalence, or user approval |
 
 ## Required gate record
 

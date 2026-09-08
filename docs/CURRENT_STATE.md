@@ -32,9 +32,9 @@ Gate 1 is **not accepted**. The Computer controller failed before application in
 
 Gate 2 must not begin until Gate 1 has application-level evidence and explicit user approval.
 
-The user then reported that the real navigator could not select even one slide, could not start a drag, and kept fixed-size thumbnails when the left panel was resized. The failures were traced to button-owned pointer routing, handle-only drag initiation, and view-model-owned pixel dimensions. Commit `86fb9c819cb436942e447d7a28af275d4a57320d` replaces them with a focusable navigator surface, whole-tile threshold dragging, visible insertion indicators, preserved multi-selection drag intent, and layout-owned aspect-ratio sizing.
+The user then reported that the real navigator could not select even one slide, could not start a drag, and kept fixed-size thumbnails when the left panel was resized. A first correction addressed those visible symptoms but retained an invalid interaction architecture. The subsequent real-app failure was captured as an unhandled Windows COM exception from Avalonia native drag/drop after selection rebuilt the pointer's source visual.
 
-The corrected solution builds with zero warnings/errors and reports 43 passing tests. Computer initialization still fails before application input, so the correction remains **UI wired**, not Interaction verified. Evidence and manual reproduction steps are in `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md`.
+Commit `5499ea5b59bfeae9387e41a8458889f5d0e421f8` removes native OLE drag/drop, implements synchronous internal pointer-capture reordering with insertion targeting and edge scrolling, keeps thumbnail instances stable during selection, removes duplicate scene rebuilds, and contains gesture exceptions. The solution builds with zero warnings/errors; three focused regressions and all 46 tests pass. Computer initialization still fails before application input, so the correction remains **UI wired**, not Interaction verified. Detailed evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`.
 
 ## Binding visual authority
 
@@ -108,7 +108,7 @@ Completed across the first two functional slices:
 - Active New, Open, Save, Save As, Save Copy, Recover, Close, New Slide, Duplicate Slide, Delete Slide, Section, Undo, and Redo commands.
 - Slide selection and deterministic up/down ordering, plus atomic section creation and assignment: one section action is one history entry and one undo removes both the assignment and section.
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
-- Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and native drag-and-drop ordering for selected slide blocks.
+- Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and internal pointer-capture ordering for selected slide blocks; real pointer acceptance remains pending.
 - Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
 - Visible section headings and multi-slide atomic section assignment.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
