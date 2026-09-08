@@ -20,6 +20,7 @@ The user rejected test-count-based completion claims on 2026-09-08. All user-vis
 - A failed blocking matrix row prevents later-phase work.
 - Phase 2 has three mandatory user checkpoints: shared renderer, slide navigator, and complete Phase 2.
 - Chat reports must separate model/service, UI component, rendered-output, and end-to-end results rather than reporting only a total test count.
+- Development launchers now refuse to start a second Physica process. Windows checks for `PhysicaStudio.Desktop.exe`; macOS checks the corresponding process command. A repeated launch reports that the app is already running and exits successfully instead of reaching `dotnet run` and producing a locked-file build error.
 
 ## Phase 2 Gate 1 implementation status
 
