@@ -101,7 +101,7 @@ public sealed class SceneRendererTests
         {
             var document = viewModel.Session.CurrentProject.Slides.Single(candidate => candidate.Id == slide.Id);
             Assert.Equal(document.Nodes.Count, slide.Scene.Layers.Count);
-            Assert.Equal(16d / 9d, slide.PreviewWidth / slide.PreviewHeight, 8);
+            Assert.Equal(16d / 9d, slide.PreviewAspectRatio, 8);
         });
     }
 

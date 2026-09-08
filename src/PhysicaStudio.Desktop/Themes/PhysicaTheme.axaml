@@ -256,18 +256,18 @@
     <Setter Property="BorderBrush" Value="{StaticResource SelectionBrush}" />
   </Style>
 
-  <Style Selector="Button.slide-navigator-item">
+  <Style Selector="Border.slide-navigator-item">
     <Setter Property="Margin" Value="0,0,0,8" />
-    <Setter Property="Padding" Value="0" />
-    <Setter Property="MinHeight" Value="0" />
-    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="Transparent" />
-    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="5" />
   </Style>
-  <Style Selector="Button.slide-navigator-item:pointerover">
-    <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BorderBrush" Value="Transparent" />
+  <Style Selector="Border.slide-navigator-item:pointerover">
+    <Setter Property="Background" Value="#0D1B24" />
+  </Style>
+  <Style Selector="Border.slide-navigator-item:focus">
+    <Setter Property="BorderBrush" Value="#526A79" />
   </Style>
 
   <Style Selector="Button.dialog-action">

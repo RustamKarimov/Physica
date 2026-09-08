@@ -18,6 +18,11 @@ public sealed partial class MainWindow : Window
     private readonly RecentProjectStore _recentProjectStore;
     private bool _closeAuthorized;
     private bool _closeInProgress;
+    private Guid? _pendingSlideDragId;
+    private Point? _slideDragStart;
+    private PointerPressedEventArgs? _slideDragTrigger;
+    private KeyModifiers _slidePressModifiers;
+    private bool _slideDragStarted;
 
     public MainWindow() : this(null)
     {
@@ -157,27 +162,46 @@ public sealed partial class MainWindow : Window
 
     private void SlideItem_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is Button { DataContext: SlideItemViewModel slide }
-            && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-        {
-            var mode = e.KeyModifiers.HasFlag(KeyModifiers.Shift)
-                ? SlideSelectionMode.Range
-                : e.KeyModifiers.HasFlag(KeyModifiers.Control) || e.KeyModifiers.HasFlag(KeyModifiers.Meta)
-                    ? SlideSelectionMode.Toggle
-                    : SlideSelectionMode.Replace;
-            _viewModel.SelectSlide(slide.Id, mode);
-            e.Handled = true;
-        }
-    }
-
-    private async void SlideDragHandle_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (sender is not Control { DataContext: SlideItemViewModel slide }
-            || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        if (sender is not Control { DataContext: SlideItemViewModel slide } control
+            || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
         {
             return;
         }
 
+        control.Focus();
+        _pendingSlideDragId = slide.Id;
+        _slideDragStart = e.GetPosition(control);
+        _slideDragTrigger = e;
+        _slidePressModifiers = e.KeyModifiers;
+        _slideDragStarted = false;
+
+        var mode = SelectionModeFor(e.KeyModifiers);
+        if (mode != SlideSelectionMode.Replace || !_viewModel.SelectedSlideIds.Contains(slide.Id))
+        {
+            _viewModel.SelectSlide(slide.Id, mode);
+        }
+        e.Handled = true;
+    }
+
+    private async void SlideItem_PointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (sender is not Control { DataContext: SlideItemViewModel slide } control
+            || _pendingSlideDragId != slide.Id
+            || _slideDragStart is not Point start
+            || _slideDragStarted
+            || _slideDragTrigger is null
+            || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        var current = e.GetPosition(control);
+        if (Math.Abs(current.X - start.X) < 6 && Math.Abs(current.Y - start.Y) < 6)
+        {
+            return;
+        }
+
+        _slideDragStarted = true;
         if (!_viewModel.SelectedSlideIds.Contains(slide.Id))
         {
             _viewModel.SelectSlide(slide.Id);
@@ -185,24 +209,95 @@ public sealed partial class MainWindow : Window
 
         var data = new DataTransfer();
         data.Add(DataTransferItem.CreateText($"physica-slide:{slide.Id:D}"));
-        await DragDrop.DoDragDropAsync(e, data, DragDropEffects.Move);
+        try
+        {
+            await DragDrop.DoDragDropAsync(_slideDragTrigger, data, DragDropEffects.Move);
+        }
+        finally
+        {
+            ResetSlidePointerState();
+        }
+    }
+
+    private void SlideItem_PointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (sender is Control { DataContext: SlideItemViewModel slide }
+            && _pendingSlideDragId == slide.Id
+            && !_slideDragStarted
+            && SelectionModeFor(_slidePressModifiers) == SlideSelectionMode.Replace)
+        {
+            _viewModel.SelectSlide(slide.Id);
+        }
+        ResetSlidePointerState();
+        e.Handled = true;
     }
 
     private void SlideItem_DragOver(object? sender, DragEventArgs e)
     {
-        e.DragEffects = IsSlideDrag(e.DataTransfer) ? DragDropEffects.Move : DragDropEffects.None;
+        var isSlideDrag = IsSlideDrag(e.DataTransfer);
+        e.DragEffects = isSlideDrag ? DragDropEffects.Move : DragDropEffects.None;
+        if (sender is Control control)
+        {
+            SetDropIndicator(control, isSlideDrag, e.GetPosition(control).Y < control.Bounds.Height / 2);
+        }
+        e.Handled = true;
+    }
+
+    private void SlideItem_DragLeave(object? sender, DragEventArgs e)
+    {
+        if (sender is Control control)
+        {
+            SetDropIndicator(control, false, false);
+        }
     }
 
     private void SlideItem_Drop(object? sender, DragEventArgs e)
     {
-        if (sender is not Control { DataContext: SlideItemViewModel target } || !IsSlideDrag(e.DataTransfer))
+        if (sender is not Control { DataContext: SlideItemViewModel target } control || !IsSlideDrag(e.DataTransfer))
         {
             e.DragEffects = DragDropEffects.None;
+            if (sender is Control invalidTarget)
+            {
+                SetDropIndicator(invalidTarget, false, false);
+            }
             return;
         }
 
-        _viewModel.MoveSelectedSlides(target.Id, e.GetPosition((Control)sender).Y >= ((Control)sender).Bounds.Height / 2);
+        _viewModel.MoveSelectedSlides(target.Id, e.GetPosition(control).Y >= control.Bounds.Height / 2);
+        SetDropIndicator(control, false, false);
         e.DragEffects = DragDropEffects.Move;
+        e.Handled = true;
+    }
+
+    private static SlideSelectionMode SelectionModeFor(KeyModifiers modifiers) =>
+        modifiers.HasFlag(KeyModifiers.Shift)
+            ? SlideSelectionMode.Range
+            : modifiers.HasFlag(KeyModifiers.Control) || modifiers.HasFlag(KeyModifiers.Meta)
+                ? SlideSelectionMode.Toggle
+                : SlideSelectionMode.Replace;
+
+    private static void SetDropIndicator(Control control, bool isVisible, bool before)
+    {
+        var beforeIndicator = control.FindControl<Border>("DropBeforeIndicator");
+        var afterIndicator = control.FindControl<Border>("DropAfterIndicator");
+        if (beforeIndicator is not null)
+        {
+            beforeIndicator.IsVisible = isVisible && before;
+        }
+
+        if (afterIndicator is not null)
+        {
+            afterIndicator.IsVisible = isVisible && !before;
+        }
+    }
+
+    private void ResetSlidePointerState()
+    {
+        _pendingSlideDragId = null;
+        _slideDragStart = null;
+        _slideDragTrigger = null;
+        _slidePressModifiers = KeyModifiers.None;
+        _slideDragStarted = false;
     }
 
     private static bool IsSlideDrag(IDataTransfer dataTransfer) =>

@@ -210,7 +210,8 @@
           <ScrollViewer Grid.Row="1"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Hidden">
-            <ItemsControl ItemsSource="{Binding Slides}" Margin="8,4,8,8">
+            <ItemsControl ItemsSource="{Binding Slides}" Margin="8,4,8,8"
+                          HorizontalAlignment="Stretch">
               <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="vm:SlideItemViewModel">
                   <StackPanel>
@@ -226,13 +227,18 @@
                                    FontWeight="SemiBold" Foreground="#BBD9E0" />
                       </Grid>
                     </Border>
-                    <Grid DragDrop.AllowDrop="True"
-                          DragDrop.DragOver="SlideItem_DragOver"
-                          DragDrop.Drop="SlideItem_Drop">
-                      <Button Classes="slide-navigator-item"
-                              PointerPressed="SlideItem_PointerPressed"
-                              Opacity="{Binding Opacity}"
-                              AutomationProperties.Name="{Binding Name}">
+                    <Border Classes="slide-navigator-item"
+                            Focusable="True"
+                            PointerPressed="SlideItem_PointerPressed"
+                            PointerMoved="SlideItem_PointerMoved"
+                            PointerReleased="SlideItem_PointerReleased"
+                            DragDrop.AllowDrop="True"
+                            DragDrop.DragOver="SlideItem_DragOver"
+                            DragDrop.DragLeave="SlideItem_DragLeave"
+                            DragDrop.Drop="SlideItem_Drop"
+                            Opacity="{Binding Opacity}"
+                            AutomationProperties.Name="{Binding Name}">
+                      <Grid>
                         <Border Background="{Binding Background}"
                                 BorderBrush="{Binding BorderBrush}"
                                 BorderThickness="2"
@@ -240,11 +246,13 @@
                                 Padding="6">
                           <Grid ColumnDefinitions="20,*" RowDefinitions="Auto,Auto">
                             <TextBlock Text="{Binding Number}" FontSize="12" Foreground="{Binding NumberForeground}" />
-                            <Border Grid.Column="1" Width="{Binding PreviewWidth}" Height="{Binding PreviewHeight}"
-                                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                                    Background="#F8F9F7" CornerRadius="2" ClipToBounds="True">
-                              <controls:DocumentSceneSurface Snapshot="{Binding Scene}" />
-                            </Border>
+                            <controls:AspectRatioDecorator Grid.Column="1"
+                                                           AspectRatio="{Binding PreviewAspectRatio}"
+                                                           HorizontalAlignment="Stretch">
+                              <Border Background="#F8F9F7" CornerRadius="2" ClipToBounds="True">
+                                <controls:DocumentSceneSurface Snapshot="{Binding Scene}" IsHitTestVisible="False" />
+                              </Border>
+                            </controls:AspectRatioDecorator>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Text="{Binding Name}"
                                        FontSize="12.5"
@@ -254,17 +262,21 @@
                                        Margin="0,5,0,0" />
                           </Grid>
                         </Border>
-                      </Button>
                       <Border HorizontalAlignment="Right" VerticalAlignment="Top"
                               Width="24" Height="24" Margin="0,6,6,0"
                               Background="#D912202B" CornerRadius="3"
-                              Cursor="SizeAll"
-                              PointerPressed="SlideDragHandle_PointerPressed"
-                              AutomationProperties.Name="Drag to reorder slide">
+                              IsHitTestVisible="False">
                         <Path Data="M 7,7 L 17,7 M 7,12 L 17,12 M 7,17 L 17,17"
                               Stroke="#8FA0AD" StrokeThickness="1.4" />
                       </Border>
+                        <Border x:Name="DropBeforeIndicator" IsVisible="False"
+                                Height="3" Margin="2,0" VerticalAlignment="Top"
+                                Background="#25C9C3" CornerRadius="2" IsHitTestVisible="False" />
+                        <Border x:Name="DropAfterIndicator" IsVisible="False"
+                                Height="3" Margin="2,0" VerticalAlignment="Bottom"
+                                Background="#25C9C3" CornerRadius="2" IsHitTestVisible="False" />
                     </Grid>
+                    </Border>
                   </StackPanel>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>

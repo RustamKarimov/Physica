@@ -359,15 +359,12 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 ? _session.CurrentProject.Sections.FirstOrDefault(candidate => candidate.Id == sectionId)
                 : null;
             var scene = _sceneBuilder.Build(_session.CurrentProject, slide, _session.Revision);
-            var previewWidth = Math.Min(168, 94.5 * scene.LogicalSize.Width / scene.LogicalSize.Height);
-            var previewHeight = Math.Min(94.5, 168 * scene.LogicalSize.Height / scene.LogicalSize.Width);
             Slides.Add(new SlideItemViewModel(
                 slide.Id,
                 index + 1,
                 slide.Name,
                 scene,
-                previewWidth,
-                previewHeight,
+                scene.LogicalSize.Width / scene.LogicalSize.Height,
                 _session.SelectedSlideIds.Contains(slide.Id),
                 slide.IsHidden,
                 section?.Name,
@@ -632,8 +629,7 @@ public sealed record SlideItemViewModel(
     int Number,
     string Name,
     SceneSnapshot Scene,
-    double PreviewWidth,
-    double PreviewHeight,
+    double PreviewAspectRatio,
     bool IsSelected,
     bool IsHidden,
     string? SectionName = null,
