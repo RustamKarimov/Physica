@@ -36,6 +36,11 @@ The user then reported that the real navigator could not select even one slide, 
 
 Commit `5499ea5b59bfeae9387e41a8458889f5d0e421f8` removes native OLE drag/drop, implements synchronous internal pointer-capture reordering with insertion targeting and edge scrolling, keeps thumbnail instances stable during selection, removes duplicate scene rebuilds, and contains gesture exceptions. The solution builds with zero warnings/errors; three focused regressions and all 46 tests pass. Computer initialization still fails before application input, so the correction remains **UI wired**, not Interaction verified. Detailed evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`.
 
+Commit `d32e3c1d3d32e334f2a9ba84e9168741c23ff907` adds persisted automatic-versus-custom naming, position-based renumbering for slides and sections, backward-compatible project loading, and explicit rename workflows. Slides can be renamed from a visible navigator-toolbar pencil, by double-clicking the slide name, or with F2. Section headings expose their own pencil and double-click editor. Enter or focus loss commits; Escape cancels. Teacher names become custom and remain unchanged when items are inserted or moved. Only automatic names are recalculated from current visual order.
+
+The solution builds with zero warnings/errors and all 53 foundation tests pass, including six focused naming/compatibility scenarios and UI-structure coverage. `Launch Physica.bat` started the expected responsive binary. The Computer controller again failed during initialization before any app input, including retry and reset, so rename and renumber workflows remain **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/NAMING_RECOVERY_2026-09-08.md`.
+
+
 ## Binding visual authority
 
 The seven images in `docs/product/approved-concepts/` are the minimum visual-quality references for Physica Studio. They are not loose layout sketches. The recovered interface may improve their scientific details and usability, but it may not reduce their polish, density, legibility, icon quality, scientific artwork, or presentation quality.

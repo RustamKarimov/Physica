@@ -43,10 +43,10 @@ Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer
 | Automatic scrolling during drag | UI wired | Edge-scroll logic is connected; sustained real pointer behavior is Not run | Drag first/last slides beyond the visible viewport |
 | Contiguous and non-contiguous selected-slide movement | UI wired | Selected-block command and internal gesture are connected; visual drop, undo, and redo proof is Not run | Ordered-ID assertions, visual drop proof, undo, and redo |
 | Delete, duplicate, reorder, undo, and redo respect selection/focus context | UI wired | Window-level keyboard behavior is unverified | Navigator, text-editing, canvas, and no-selection scenarios |
-| Sections support create, rename, collapse, reorder, reassignment, and removal | Model only | Only basic creation/assignment is available | Full section workflow, round trip, undo, and redo |
+| Sections support create, rename, collapse, reorder, reassignment, and removal | Model only | Creation and direct rename are UI wired; collapse, section-level reorder, reassignment, removal, and Computer interaction proof remain missing | Full section workflow, round trip, undo, and redo |
 | Gate 2 user approval | Not run | Gate 1 and all preceding Gate 2 rows must pass | Review captures and user decision |
 
-Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md` and `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`. Latest tested correction commit: `5499ea5b59bfeae9387e41a8458889f5d0e421f8`.
+Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md`, `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`, and `docs/checkpoints/phase-02/gate-02-slide-navigator/NAMING_RECOVERY_2026-09-08.md`. Latest tested correction commit: `d32e3c1d3d32e334f2a9ba84e9168741c23ff907`.
 
 ## Gate 3 — Complete Phase 2
 
@@ -66,7 +66,7 @@ Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigato
 
 | Layer | Current evidence | May prove | Does not prove |
 | --- | --- | --- | --- |
-| Model/service and render contracts | 46 passed on 2026-09-08, including 3 focused navigator regressions | Validation, serialization, command results, history, selection stability, event classification, snapping calculations, scene mapping, aspect math, and invalidation | Real pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
+| Model/service and render contracts | 53 passed on 2026-09-08, including 3 navigator-crash regressions and 6 naming/compatibility scenarios | Validation, serialization, command results, history, selection stability, automatic/custom naming, event classification, snapping calculations, scene mapping, aspect math, and invalidation | Real pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
 | UI component | No accepted gate evidence | Real-control input and visual-state changes | Complete lifecycle or cross-platform behavior |
 | Rendered output | No accepted gate evidence | Aspect ratio, content equivalence, invalidation, visual regression | Usability or user approval |
 | End-to-end | Rebuilt launcher-started process responsive; Computer controller failed before input, so no accepted interaction evidence | Process startup only | Real controls, visual equivalence, or user approval |
