@@ -136,6 +136,26 @@ public sealed class ManifestTests
         Assert.Contains(".feature-list", css, StringComparison.Ordinal);
     }
 
+
+    [Fact]
+    public void SlideNavigatorExposesDiscoverableSlideAndSectionRenameControls()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
+
+        Assert.Contains("x:Name=\"SlideNameEditor\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("x:Name=\"SectionNameEditor\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerPressed=\"SlideName_PointerPressed\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerPressed=\"SectionName_PointerPressed\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.Name=\"Rename slide\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.Name=\"Rename section\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("e.Key == Key.F2", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.RenameSlide", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.RenameSection", code, StringComparison.Ordinal);
+    }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true

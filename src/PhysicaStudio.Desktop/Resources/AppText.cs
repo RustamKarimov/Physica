@@ -27,6 +27,8 @@ public static class AppText
     public static string SlideMoved => Get(nameof(SlideMoved));
     public static string SlideAlreadyAtEdge => Get(nameof(SlideAlreadyAtEdge));
     public static string SectionAdded => Get(nameof(SectionAdded));
+    public static string SlideRenamed => Get(nameof(SlideRenamed));
+    public static string SectionRenamed => Get(nameof(SectionRenamed));
     public static string UntitledLesson => Get(nameof(UntitledLesson));
     public static string OpenLessonTitle => Get(nameof(OpenLessonTitle));
     public static string SaveLessonTitle => Get(nameof(SaveLessonTitle));

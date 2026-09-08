@@ -11,6 +11,16 @@ public static class ProjectCommands
     });
 
     public static IProjectCommand AddSlide(string name, Guid? afterSlideId = null, Guid? sectionId = null) =>
+        AddSlideCore(name, DocumentNameKind.Custom, afterSlideId, sectionId);
+
+    public static IProjectCommand AddAutomaticSlide(Guid? afterSlideId = null, Guid? sectionId = null) =>
+        AddSlideCore("Slide", DocumentNameKind.Automatic, afterSlideId, sectionId);
+
+    private static IProjectCommand AddSlideCore(
+        string name,
+        DocumentNameKind nameKind,
+        Guid? afterSlideId,
+        Guid? sectionId) =>
         Command("Add slide", project =>
         {
             RequireName(name, "Slide name");
@@ -19,7 +29,7 @@ public static class ProjectCommands
                 throw new AuthoringCommandException("The requested section does not exist.");
             }
 
-            var slide = SlideDocument.Create(name) with { SectionId = sectionId };
+            var slide = SlideDocument.Create(name, nameKind) with { SectionId = sectionId };
             var slides = project.Slides.ToList();
             var insertionIndex = afterSlideId is null
                 ? slides.Count
@@ -42,7 +52,7 @@ public static class ProjectCommands
         var duplicate = source with
         {
             Id = Guid.NewGuid(),
-            Name = $"{source.Name} copy",
+            Name = source.NameKind == DocumentNameKind.Automatic ? source.Name : $"{source.Name} copy",
             Nodes = nodes,
         };
         slides.Insert(sourceIndex + 1, duplicate);
@@ -69,7 +79,11 @@ public static class ProjectCommands
     public static IProjectCommand RenameSlide(Guid slideId, string name) => Command("Rename slide", project =>
     {
         RequireName(name, "Slide name");
-        return ReplaceSlide(project, slideId, slide => slide with { Name = name });
+        return ReplaceSlide(project, slideId, slide => slide with
+        {
+            Name = name,
+            NameKind = DocumentNameKind.Custom,
+        });
     });
 
     public static IProjectCommand MoveSlide(Guid slideId, int destinationIndex) => Command("Move slide", project =>
@@ -118,7 +132,7 @@ public static class ProjectCommands
     {
         RequireName(name, "Section name");
         var sections = project.Sections
-            .Append(new SlideSection(Guid.NewGuid(), name, project.Sections.Count))
+            .Append(SlideSection.Create(name, project.Sections.Count))
             .ToArray();
         return project with { Sections = sections };
     });
@@ -127,6 +141,15 @@ public static class ProjectCommands
         AddSectionAndAssignSlides(name, [slideId]);
 
     public static IProjectCommand AddSectionAndAssignSlides(string name, IEnumerable<Guid> slideIds) =>
+        AddSectionAndAssignSlidesCore(name, DocumentNameKind.Custom, slideIds);
+
+    public static IProjectCommand AddAutomaticSectionAndAssignSlides(IEnumerable<Guid> slideIds) =>
+        AddSectionAndAssignSlidesCore("Section", DocumentNameKind.Automatic, slideIds);
+
+    private static IProjectCommand AddSectionAndAssignSlidesCore(
+        string name,
+        DocumentNameKind nameKind,
+        IEnumerable<Guid> slideIds) =>
         Command("Add section and assign slides", project =>
         {
             RequireName(name, "Section name");
@@ -136,7 +159,7 @@ public static class ProjectCommands
                 throw new AuthoringCommandException("A selected slide does not exist.");
             }
 
-            var section = new SlideSection(Guid.NewGuid(), name, project.Sections.Count);
+            var section = SlideSection.Create(name, project.Sections.Count, nameKind);
             var withSection = project with { Sections = project.Sections.Append(section).ToArray() };
             return withSection with
             {
@@ -158,7 +181,7 @@ public static class ProjectCommands
             }
 
             found = true;
-            return section with { Name = name };
+            return section with { Name = name, NameKind = DocumentNameKind.Custom };
         }).ToArray();
         if (!found)
         {

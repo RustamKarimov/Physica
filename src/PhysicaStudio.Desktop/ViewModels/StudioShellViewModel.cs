@@ -238,8 +238,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void AddSlide()
     {
-        var number = _session.CurrentProject.Slides.Count + 1;
-        _session.Execute(ProjectCommands.AddSlide($"Slide {number}", _session.ActiveSlideId, ActiveSlide.SectionId));
+        _session.Execute(ProjectCommands.AddAutomaticSlide(_session.ActiveSlideId, ActiveSlide.SectionId));
         var index = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
         _session.SelectSlide(_session.CurrentProject.Slides[index + 1].Id);
         StatusMessage = AppText.SlideAdded;
@@ -303,9 +302,20 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void AddSectionForActiveSlide()
     {
-        var name = AppText.SectionName(_session.CurrentProject.Sections.Count + 1);
-        _session.Execute(ProjectCommands.AddSectionAndAssignSlides(name, _session.SelectedSlideIds));
+        _session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides(_session.SelectedSlideIds));
         StatusMessage = AppText.SectionAdded;
+    }
+
+    public void RenameSlide(Guid slideId, string name)
+    {
+        _session.Execute(ProjectCommands.RenameSlide(slideId, name));
+        StatusMessage = AppText.SlideRenamed;
+    }
+
+    public void RenameSection(Guid sectionId, string name)
+    {
+        _session.Execute(ProjectCommands.RenameSection(sectionId, name));
+        StatusMessage = AppText.SectionRenamed;
     }
 
     public void Undo()
@@ -404,6 +414,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 scene.LogicalSize.Width / scene.LogicalSize.Height,
                 _session.SelectedSlideIds.Contains(slide.Id),
                 slide.IsHidden,
+                section?.Id,
                 section?.Name,
                 section is not null && section.Id != previousSectionId));
             previousSectionId = slide.SectionId;
@@ -673,6 +684,7 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
         double previewAspectRatio,
         bool isSelected,
         bool isHidden,
+        Guid? sectionId = null,
         string? sectionName = null,
         bool showSectionHeader = false)
     {
@@ -684,6 +696,7 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
         _isSelected = isSelected;
         IsHidden = isHidden;
         SectionName = sectionName;
+        SectionId = sectionId;
         ShowSectionHeader = showSectionHeader;
     }
 
@@ -698,6 +711,7 @@ public sealed class SlideItemViewModel : INotifyPropertyChanged
     public bool IsHidden { get; }
     public string? SectionName { get; }
     public bool ShowSectionHeader { get; }
+    public Guid? SectionId { get; }
     public string Background => IsSelected ? "#132433" : "#101D27";
     public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
     public string NumberForeground => IsSelected ? "#168CFF" : "#8EA0AC";

@@ -40,7 +40,7 @@ public sealed record LessonProject(
             ThemeDefinition.Default,
             CanvasDefinition.Widescreen,
             [],
-            [SlideDocument.Create("Slide 1")],
+            [SlideDocument.Create("Slide 1", DocumentNameKind.Automatic)],
             [],
             []);
     }
@@ -56,7 +56,22 @@ public sealed record ProjectMetadata(
     public static ProjectMetadata Empty { get; } = new(null, null, null, [], "en");
 }
 
-public sealed record SlideSection(Guid Id, string Name, int Order);
+public enum DocumentNameKind
+{
+    Custom = 0,
+    Automatic = 1,
+}
+
+public sealed record SlideSection(Guid Id, string Name, int Order)
+{
+    public DocumentNameKind NameKind { get; init; } = DocumentNameKind.Custom;
+
+    public static SlideSection Create(
+        string name,
+        int order,
+        DocumentNameKind nameKind = DocumentNameKind.Custom) =>
+        new(Guid.NewGuid(), name, order) { NameKind = nameKind };
+}
 
 public sealed record SlideDocument(
     Guid Id,
@@ -73,17 +88,22 @@ public sealed record SlideDocument(
     [JsonExtensionData]
     public Dictionary<string, JsonElement> Extensions { get; init; } = [];
 
-    public static SlideDocument Create(string name) => new(
-        Guid.NewGuid(),
-        name,
-        null,
-        null,
-        false,
-        SlideBackground.Default,
-        string.Empty,
-        [],
-        SnapSettings.Default,
-        []);
+    public DocumentNameKind NameKind { get; init; } = DocumentNameKind.Custom;
+
+    public static SlideDocument Create(
+        string name,
+        DocumentNameKind nameKind = DocumentNameKind.Custom) => new(
+            Guid.NewGuid(),
+            name,
+            null,
+            null,
+            false,
+            SlideBackground.Default,
+            string.Empty,
+            [],
+            SnapSettings.Default,
+            [])
+        { NameKind = nameKind };
 }
 
 public sealed record MasterSlide(

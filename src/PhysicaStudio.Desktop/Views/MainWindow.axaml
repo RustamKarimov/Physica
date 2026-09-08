@@ -221,10 +221,30 @@
                             Background="#142731"
                             BorderBrush="#285064"
                             BorderThickness="0,0,0,1">
-                      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="7">
+                      <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="7">
                         <Ellipse Width="6" Height="6" Fill="#25C9C3" VerticalAlignment="Center" />
-                        <TextBlock Grid.Column="1" Text="{Binding SectionName}" FontSize="11.5"
-                                   FontWeight="SemiBold" Foreground="#BBD9E0" />
+                        <Grid Grid.Column="1">
+                          <TextBlock x:Name="SectionNameLabel" Text="{Binding SectionName}" FontSize="11.5"
+                                     FontWeight="SemiBold" Foreground="#BBD9E0"
+                                     VerticalAlignment="Center"
+                                     PointerPressed="SectionName_PointerPressed"
+                                     ToolTip.Tip="Double-click to rename section" />
+                          <TextBox x:Name="SectionNameEditor" Text="{Binding SectionName, Mode=OneWay}"
+                                   IsVisible="False" FontSize="11.5" FontWeight="SemiBold"
+                                   MinHeight="25" Padding="5,1" Margin="-5,-2,0,-2"
+                                   Background="#0B1821" Foreground="#E8F2F6"
+                                   BorderBrush="#168CFF" BorderThickness="1"
+                                   PointerPressed="InlineNameEditor_PointerPressed"
+                                   KeyDown="SectionNameEditor_KeyDown"
+                                   LostFocus="SectionNameEditor_LostFocus"
+                                   AutomationProperties.Name="Rename section" />
+                        </Grid>
+                        <Button Grid.Column="2" Classes="title-tool" Width="24" Height="22" Padding="4"
+                                Click="RenameSection_Click" ToolTip.Tip="Rename section"
+                                AutomationProperties.Name="Rename section">
+                          <controls:PhysicaIcon IconKey="edit" Width="13" Height="13" Stroke="#8FB8C3"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Button>
                       </Grid>
                     </Border>
                     <Border Classes="slide-navigator-item"
@@ -250,13 +270,26 @@
                                 <controls:DocumentSceneSurface Snapshot="{Binding Scene}" IsHitTestVisible="False" />
                               </Border>
                             </controls:AspectRatioDecorator>
-                            <TextBlock Grid.Row="1" Grid.Column="1"
-                                       Text="{Binding Name}"
-                                       FontSize="12.5"
-                                       FontWeight="SemiBold"
-                                       Foreground="{Binding TextForeground}"
-                                       TextWrapping="Wrap"
-                                       Margin="0,5,0,0" />
+                            <Grid Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">
+                              <TextBlock x:Name="SlideNameLabel"
+                                         Text="{Binding Name}"
+                                         FontSize="12.5"
+                                         FontWeight="SemiBold"
+                                         Foreground="{Binding TextForeground}"
+                                         TextWrapping="Wrap"
+                                         VerticalAlignment="Center"
+                                         PointerPressed="SlideName_PointerPressed"
+                                         ToolTip.Tip="Double-click or press F2 to rename slide" />
+                              <TextBox x:Name="SlideNameEditor" Text="{Binding Name, Mode=OneWay}"
+                                       IsVisible="False" FontSize="12.5" FontWeight="SemiBold"
+                                       MinHeight="27" Padding="5,1" Margin="-5,-2,0,-2"
+                                       Background="#0B1821" Foreground="#EDF3F7"
+                                       BorderBrush="#168CFF" BorderThickness="1"
+                                       PointerPressed="InlineNameEditor_PointerPressed"
+                                       KeyDown="SlideNameEditor_KeyDown"
+                                       LostFocus="SlideNameEditor_LostFocus"
+                                       AutomationProperties.Name="Rename slide" />
+                            </Grid>
                           </Grid>
                         </Border>
                       <Border HorizontalAlignment="Right" VerticalAlignment="Top"
@@ -283,6 +316,10 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="7,0">
               <Button Classes="title-tool" Click="NewSlide_Click" ToolTip.Tip="New slide"><controls:PhysicaIcon IconKey="add" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
               <Button Classes="title-tool" Click="DuplicateSlide_Click" ToolTip.Tip="Duplicate selected slide"><controls:PhysicaIcon IconKey="duplicate" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
+              <Button Classes="title-tool" Click="RenameSlide_Click" ToolTip.Tip="Rename selected slide"
+                      AutomationProperties.Name="Rename selected slide">
+                <controls:PhysicaIcon IconKey="edit" Width="14" Height="14" Stroke="#8FA0AD" />
+              </Button>
               <Button Classes="title-tool" Click="DeleteSlide_Click" ToolTip.Tip="Delete selected slide"><controls:PhysicaIcon IconKey="delete" Width="14" Height="14" Stroke="#8FA0AD" /></Button>
               <Button Classes="title-tool" Click="MoveSlideUp_Click" ToolTip.Tip="Move selected slide up">
                 <Path Data="M 3,8 L 8,3 L 13,8" Stroke="#8FA0AD" StrokeThickness="1.4" />

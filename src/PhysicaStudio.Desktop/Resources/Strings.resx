@@ -28,6 +28,8 @@
   <data name="SlideAlreadyAtEdge" xml:space="preserve"><value>The selected slide is already at that edge</value></data>
   <data name="SectionAdded" xml:space="preserve"><value>Section added and assigned to the selected slide</value></data>
   <data name="SectionName" xml:space="preserve"><value>Section {0}</value></data>
+  <data name="SlideRenamed" xml:space="preserve"><value>Slide renamed</value></data>
+  <data name="SectionRenamed" xml:space="preserve"><value>Section renamed</value></data>
   <data name="UntitledLesson" xml:space="preserve"><value>Untitled lesson</value></data>
   <data name="OpenLessonTitle" xml:space="preserve"><value>Open Physica lesson</value></data>
   <data name="SaveLessonTitle" xml:space="preserve"><value>Save Physica lesson</value></data>

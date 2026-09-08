@@ -164,6 +164,11 @@ public sealed partial class MainWindow : Window
 
     private void SlideItem_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        if (e.Source is TextBox)
+        {
+            return;
+        }
+
         if (sender is not Control { DataContext: SlideItemViewModel slide } control
             || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
         {
@@ -389,8 +394,182 @@ public sealed partial class MainWindow : Window
         _slideDropTargetId = null;
         _slideDropAfter = false;
     }
+    private void SlideName_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock label && e.ClickCount == 2 && e.GetCurrentPoint(label).Properties.IsLeftButtonPressed)
+        {
+            BeginInlineRename(label);
+            e.Handled = true;
+        }
+    }
+
+    private void SectionName_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock label && e.ClickCount == 2 && e.GetCurrentPoint(label).Properties.IsLeftButtonPressed)
+        {
+            BeginInlineRename(label);
+            e.Handled = true;
+        }
+    }
+
+    private static void InlineNameEditor_PointerPressed(object? sender, PointerPressedEventArgs e) =>
+        e.Handled = true;
+
+    private void SlideNameEditor_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox editor)
+        {
+            return;
+        }
+
+        if (e.Key == Key.Enter)
+        {
+            CommitSlideRename(editor);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            CancelInlineRename(editor);
+            e.Handled = true;
+        }
+    }
+
+    private void SectionNameEditor_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox editor)
+        {
+            return;
+        }
+
+        if (e.Key == Key.Enter)
+        {
+            CommitSectionRename(editor);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            CancelInlineRename(editor);
+            e.Handled = true;
+        }
+    }
+
+    private void SlideNameEditor_LostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox { IsVisible: true } editor)
+        {
+            CommitSlideRename(editor);
+        }
+    }
+
+    private void SectionNameEditor_LostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox { IsVisible: true } editor)
+        {
+            CommitSectionRename(editor);
+        }
+    }
+
+    private static void BeginInlineRename(TextBlock label)
+    {
+        if (label.Parent is not Panel panel || panel.Children.OfType<TextBox>().FirstOrDefault() is not { } editor)
+        {
+            return;
+        }
+
+        editor.Text = label.Text;
+        label.IsVisible = false;
+        editor.IsVisible = true;
+        editor.Focus();
+        editor.SelectAll();
+    }
+
+    private void CommitSlideRename(TextBox editor)
+    {
+        var slide = editor.DataContext as SlideItemViewModel;
+        var value = editor.Text ?? string.Empty;
+        FinishInlineRename(editor);
+        if (slide is not null)
+        {
+            ExecuteNamingAction(() => _viewModel.RenameSlide(slide.Id, value));
+        }
+    }
+    private void ExecuteNamingAction(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (AuthoringCommandException exception)
+        {
+            _viewModel.SetStatus(exception.Message);
+        }
+    }
+
+    private static void CancelInlineRename(TextBox editor) => FinishInlineRename(editor);
+
+    private static void FinishInlineRename(TextBox editor)
+    {
+        if (!editor.IsVisible)
+        {
+            return;
+        }
+
+        if (editor.Parent is Panel panel && panel.Children.OfType<TextBlock>().FirstOrDefault() is { } label)
+        {
+            label.IsVisible = true;
+        }
+
+        editor.IsVisible = false;
+    }
+
+    private void BeginActiveSlideRename()
+    {
+        var slideControl = this.GetVisualDescendants()
+            .OfType<Border>()
+            .FirstOrDefault(control => control.Classes.Contains("slide-navigator-item")
+                && control.DataContext is SlideItemViewModel slide
+                && slide.Id == _viewModel.ActiveSlide.Id);
+        if (slideControl?.FindControl<TextBlock>("SlideNameLabel") is { } label)
+        {
+            BeginInlineRename(label);
+        }
+    }
+    private void BeginSectionRename(Guid sectionId)
+    {
+        var label = this.GetVisualDescendants()
+            .OfType<TextBlock>()
+            .FirstOrDefault(control => control.Name == "SectionNameLabel"
+                && control.DataContext is SlideItemViewModel slide
+                && slide.SectionId == sectionId
+                && slide.ShowSectionHeader);
+        if (label is not null)
+        {
+            BeginInlineRename(label);
+        }
+    }
+
+    private void CommitSectionRename(TextBox editor)
+    {
+        var slide = editor.DataContext as SlideItemViewModel;
+        var value = editor.Text ?? string.Empty;
+        FinishInlineRename(editor);
+        if (slide?.SectionId is Guid sectionId)
+        {
+            ExecuteNamingAction(() => _viewModel.RenameSection(sectionId, value));
+        }
+    }
 
     private void NewSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.AddSlide();
+    private void RenameSlide_Click(object? sender, RoutedEventArgs e) => BeginActiveSlideRename();
+
+    private void RenameSection_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: SlideItemViewModel { SectionId: Guid sectionId } })
+        {
+            BeginSectionRename(sectionId);
+        }
+    }
+
     private void DuplicateSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DuplicateActiveSlide();
     private void DeleteSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DeleteActiveSlide();
     private void MoveSlideUp_Click(object? sender, RoutedEventArgs e) => _viewModel.MoveActiveSlide(-1);
@@ -402,6 +581,13 @@ public sealed partial class MainWindow : Window
 
     private async void Window_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (e.Key == Key.F2 && e.Source is not TextBox && _viewModel.IsProjectOpen)
+        {
+            BeginActiveSlideRename();
+            e.Handled = true;
+            return;
+        }
+
         if (e.Key == Key.Delete && e.Source is not TextBox && _viewModel.IsProjectOpen)
         {
             _viewModel.DeleteSelectedSlides();

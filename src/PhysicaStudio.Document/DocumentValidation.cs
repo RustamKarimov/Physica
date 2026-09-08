@@ -36,6 +36,14 @@ public static class DocumentValidator
         ValidateUniqueIds(project.Assets.Select(asset => asset.Id), "asset", "$.assets", issues);
 
         var sectionIds = project.Sections.Select(section => section.Id).ToHashSet();
+        for (var sectionIndex = 0; sectionIndex < project.Sections.Count; sectionIndex++)
+        {
+            var section = project.Sections[sectionIndex];
+            var sectionPath = $"$.sections[{sectionIndex}]";
+            Require(!string.IsNullOrWhiteSpace(section.Name), "section.name.empty", "Section name cannot be empty.", $"{sectionPath}.name", issues);
+            Require(Enum.IsDefined(section.NameKind), "section.nameKind.invalid", "Section name kind is invalid.", $"{sectionPath}.nameKind", issues);
+        }
+
         var allNodeIds = new HashSet<Guid>();
         for (var slideIndex = 0; slideIndex < project.Slides.Count; slideIndex++)
         {
@@ -45,6 +53,7 @@ public static class DocumentValidator
             Require(!string.IsNullOrWhiteSpace(slide.Name), "slide.name.empty", "Slide name cannot be empty.", $"{slidePath}.name", issues);
             Require(slide.SectionId is null || sectionIds.Contains(slide.SectionId.Value), "slide.section.missing", "Slide references a section that does not exist.", $"{slidePath}.sectionId", issues);
             Require(IsFiniteInRange(slide.Background.Opacity, 0, 1), "slide.background.opacity", "Background opacity must be between 0 and 1.", $"{slidePath}.background.opacity", issues);
+            Require(Enum.IsDefined(slide.NameKind), "slide.nameKind.invalid", "Slide name kind is invalid.", $"{slidePath}.nameKind", issues);
             Require(IsFinitePositive(slide.SnapSettings.GridSpacing), "slide.snap.grid", "Grid spacing must be finite and positive.", $"{slidePath}.snapSettings.gridSpacing", issues);
             Require(IsFiniteNonNegative(slide.SnapSettings.Threshold), "slide.snap.threshold", "Snap threshold must be finite and non-negative.", $"{slidePath}.snapSettings.threshold", issues);
 
@@ -151,13 +160,36 @@ public static class DocumentNormalizer
 {
     public static LessonProject Normalize(LessonProject project)
     {
-        var sections = project.Sections
-            .Select((section, index) => section with { Name = section.Name.Trim(), Order = index })
+        var sectionById = project.Sections.ToDictionary(section => section.Id);
+        var usedSectionIds = new HashSet<Guid>();
+        var sectionIdsInVisualOrder = project.Slides
+            .Where(slide => slide.SectionId is Guid sectionId && sectionById.ContainsKey(sectionId))
+            .Select(slide => slide.SectionId!.Value)
+            .Where(usedSectionIds.Add)
+            .Concat(project.Sections
+                .OrderBy(section => section.Order)
+                .Select(section => section.Id)
+                .Where(usedSectionIds.Add))
+            .ToArray();
+        var sections = sectionIdsInVisualOrder
+            .Select((sectionId, index) =>
+            {
+                var section = sectionById[sectionId];
+                return section with
+                {
+                    Name = section.NameKind == DocumentNameKind.Automatic
+                        ? $"Section {index + 1}"
+                        : section.Name.Trim(),
+                    Order = index,
+                };
+            })
             .ToArray();
         var slides = project.Slides
-            .Select(slide => slide with
+            .Select((slide, index) => slide with
             {
-                Name = slide.Name.Trim(),
+                Name = slide.NameKind == DocumentNameKind.Automatic
+                    ? $"Slide {index + 1}"
+                    : slide.Name.Trim(),
                 Nodes = slide.Nodes
                     .Select((node, index) => node with { Name = node.Name.Trim(), Kind = node.Kind.Trim(), LayerIndex = index })
                     .ToArray(),

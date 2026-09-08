@@ -430,4 +430,129 @@ public sealed class Phase2FoundationTests
             directory.Delete(recursive: true);
         }
     }
+
+
+    [Fact]
+    public void AutomaticSlideNamesFollowVisualOrderWhileCustomNamesRemainStable()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var firstId = session.ActiveSlideId;
+        session.Execute(ProjectCommands.AddAutomaticSlide(firstId));
+        var secondId = session.CurrentProject.Slides[1].Id;
+        session.Execute(ProjectCommands.AddAutomaticSlide(secondId));
+        var thirdId = session.CurrentProject.Slides[2].Id;
+
+        session.Execute(ProjectCommands.RenameSlide(secondId, "Teacher explanation"));
+        session.Execute(ProjectCommands.MoveSlides([thirdId], firstId, placeAfterTarget: false));
+
+        Assert.Equal([thirdId, firstId, secondId], session.CurrentProject.Slides.Select(slide => slide.Id));
+        Assert.Equal(["Slide 1", "Slide 2", "Teacher explanation"], session.CurrentProject.Slides.Select(slide => slide.Name));
+        Assert.Equal(DocumentNameKind.Custom, session.CurrentProject.Slides[2].NameKind);
+
+        Assert.True(session.Undo());
+        Assert.Equal(["Slide 1", "Teacher explanation", "Slide 3"], session.CurrentProject.Slides.Select(slide => slide.Name));
+        Assert.True(session.Redo());
+        Assert.Equal(["Slide 1", "Slide 2", "Teacher explanation"], session.CurrentProject.Slides.Select(slide => slide.Name));
+    }
+
+    [Fact]
+    public void AddingAutomaticSlideNearTopRenumbersEarlierAndLaterAutomaticSlides()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var firstId = session.ActiveSlideId;
+        session.Execute(ProjectCommands.AddAutomaticSlide(firstId));
+        var bottomId = session.CurrentProject.Slides[1].Id;
+        session.Execute(ProjectCommands.AddAutomaticSlide(firstId));
+
+        Assert.Equal([firstId, session.CurrentProject.Slides[1].Id, bottomId], session.CurrentProject.Slides.Select(slide => slide.Id));
+        Assert.Equal(["Slide 1", "Slide 2", "Slide 3"], session.CurrentProject.Slides.Select(slide => slide.Name));
+        Assert.All(session.CurrentProject.Slides, slide => Assert.Equal(DocumentNameKind.Automatic, slide.NameKind));
+    }
+
+    [Fact]
+    public void AutomaticSectionNamesFollowFirstSlidePositionAndCustomNamesRemainStable()
+    {
+        var slides = Enumerable.Range(1, 4)
+            .Select(index => SlideDocument.Create($"Slide {index}", DocumentNameKind.Automatic))
+            .ToArray();
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = slides });
+
+        session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides([slides[3].Id]));
+        var bottomSectionId = session.CurrentProject.Slides[3].SectionId!.Value;
+        session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides([slides[0].Id]));
+        var topSectionId = session.CurrentProject.Slides[0].SectionId!.Value;
+
+        Assert.Equal([topSectionId, bottomSectionId], session.CurrentProject.Sections.Select(section => section.Id));
+        Assert.Equal(["Section 1", "Section 2"], session.CurrentProject.Sections.Select(section => section.Name));
+        Assert.Equal([0, 1], session.CurrentProject.Sections.Select(section => section.Order));
+
+        session.Execute(ProjectCommands.RenameSection(topSectionId, "Opening investigation"));
+        session.Execute(ProjectCommands.MoveSlides([slides[3].Id], slides[0].Id, placeAfterTarget: false));
+
+        Assert.Equal(bottomSectionId, session.CurrentProject.Sections[0].Id);
+        Assert.Equal("Section 1", session.CurrentProject.Sections[0].Name);
+        Assert.Equal("Opening investigation", session.CurrentProject.Sections[1].Name);
+        Assert.Equal(DocumentNameKind.Custom, session.CurrentProject.Sections[1].NameKind);
+    }
+
+    [Fact]
+    public async Task RenamedSlidesAndSectionsRoundTripWithNameKinds()
+    {
+        var directory = Directory.CreateTempSubdirectory("Physica-Names-");
+        try
+        {
+            var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+            session.Execute(ProjectCommands.AddAutomaticSlide(session.ActiveSlideId));
+            var secondId = session.CurrentProject.Slides[1].Id;
+            session.Execute(ProjectCommands.RenameSlide(secondId, "Worked example"));
+            session.Execute(ProjectCommands.AddAutomaticSectionAndAssignSlides([secondId]));
+            var sectionId = session.CurrentProject.Slides[1].SectionId!.Value;
+            session.Execute(ProjectCommands.RenameSection(sectionId, "Examples"));
+            var path = Path.Combine(directory.FullName, "names.physica");
+
+            await PhysicaProjectPackage.SaveAsync(session.CurrentProject, path);
+            var loaded = await PhysicaProjectPackage.LoadAsync(path);
+
+            Assert.Equal("Worked example", loaded.Slides[1].Name);
+            Assert.Equal(DocumentNameKind.Custom, loaded.Slides[1].NameKind);
+            Assert.Equal("Examples", loaded.Sections[0].Name);
+            Assert.Equal(DocumentNameKind.Custom, loaded.Sections[0].NameKind);
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    [Fact]
+    public void LegacyProjectWithoutNameKindPreservesExistingNamesAsCustom()
+    {
+        var root = JsonNode.Parse(ProjectJson.Serialize(LessonProject.Create("Legacy", FixedTime)))!.AsObject();
+        root["slides"]![0]!["name"] = "Original teacher title";
+        root["slides"]![0]!.AsObject().Remove("nameKind");
+
+        var loaded = ProjectJson.Deserialize(root.ToJsonString());
+
+        Assert.Equal("Original teacher title", loaded.Slides[0].Name);
+        Assert.Equal(DocumentNameKind.Custom, loaded.Slides[0].NameKind);
+    }
+
+    [Fact]
+    public void StudioViewModelRenamesSlideAndSectionThroughUndoableCommands()
+    {
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []));
+        var slideId = viewModel.ActiveSlide.Id;
+
+        viewModel.RenameSlide(slideId, "Introduction");
+        viewModel.AddSectionForActiveSlide();
+        var sectionId = viewModel.ActiveSlide.SectionId!.Value;
+        viewModel.RenameSection(sectionId, "Foundations");
+
+        Assert.Equal("Introduction", viewModel.ActiveSlide.Name);
+        Assert.Equal("Foundations", viewModel.Session.CurrentProject.Sections.Single().Name);
+        Assert.Equal(sectionId, viewModel.Slides.Single(slide => slide.Id == slideId).SectionId);
+        Assert.True(viewModel.CanUndo);
+    }
 }

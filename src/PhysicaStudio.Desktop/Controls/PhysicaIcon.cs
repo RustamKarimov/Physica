@@ -52,6 +52,11 @@ public sealed class PhysicaIcon : Control
                 context.DrawRectangle(null, pen, R(.28, .18, .52, .55), 2, 2);
                 context.DrawRectangle(null, pen, R(.16, .31, .52, .55), 2, 2);
                 break;
+            case "edit":
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .76} L {w * .27},{h * .53} L {w * .68},{h * .12} L {w * .86},{h * .3} L {w * .45},{h * .71} Z"));
+                context.DrawLine(pen, P(.27, .53), P(.45, .71));
+                context.DrawLine(pen, P(.18, .84), P(.52, .84));
+                break;
             case "duplicate":
                 context.DrawRectangle(null, pen, R(.23, .23, .5, .5), 2, 2);
                 context.DrawLine(pen, P(.73, .34), P(.86, .34));
@@ -60,12 +65,12 @@ public sealed class PhysicaIcon : Control
                 context.DrawLine(pen, P(.185, .595), P(.185, .725));
                 break;
             case "format":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.2},{h*.62} L {w*.62},{h*.2} L {w*.78},{h*.36} L {w*.36},{h*.78} Z"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .62} L {w * .62},{h * .2} L {w * .78},{h * .36} L {w * .36},{h * .78} Z"));
                 context.DrawLine(pen, P(.28, .7), P(.18, .82));
                 break;
             case "bold":
                 context.DrawLine(pen, P(.3, .15), P(.3, .85));
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.3},{h*.18} L {w*.53},{h*.18} C {w*.8},{h*.18} {w*.8},{h*.48} {w*.53},{h*.48} L {w*.3},{h*.48} M {w*.53},{h*.48} C {w*.84},{h*.48} {w*.84},{h*.82} {w*.53},{h*.82} L {w*.3},{h*.82}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .3},{h * .18} L {w * .53},{h * .18} C {w * .8},{h * .18} {w * .8},{h * .48} {w * .53},{h * .48} L {w * .3},{h * .48} M {w * .53},{h * .48} C {w * .84},{h * .48} {w * .84},{h * .82} {w * .53},{h * .82} L {w * .3},{h * .82}"));
                 break;
             case "italic":
                 context.DrawLine(pen, P(.47, .18), P(.72, .18));
@@ -73,7 +78,7 @@ public sealed class PhysicaIcon : Control
                 context.DrawLine(pen, P(.58, .18), P(.42, .82));
                 break;
             case "underline":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.28},{h*.18} L {w*.28},{h*.5} C {w*.28},{h*.76} {w*.72},{h*.76} {w*.72},{h*.5} L {w*.72},{h*.18}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .28},{h * .18} L {w * .28},{h * .5} C {w * .28},{h * .76} {w * .72},{h * .76} {w * .72},{h * .5} L {w * .72},{h * .18}"));
                 context.DrawLine(pen, P(.2, .86), P(.8, .86));
                 break;
             case "list":
@@ -95,7 +100,7 @@ public sealed class PhysicaIcon : Control
                 context.DrawLine(pen, P(.24, .84), P(.76, .84));
                 break;
             case "wave":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.1},{h*.52} C {w*.22},{h*.18} {w*.36},{h*.18} {w*.5},{h*.52} C {w*.64},{h*.86} {w*.78},{h*.86} {w*.9},{h*.52}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .1},{h * .52} C {w * .22},{h * .18} {w * .36},{h * .18} {w * .5},{h * .52} C {w * .64},{h * .86} {w * .78},{h * .86} {w * .9},{h * .52}"));
                 context.DrawLine(new Pen(brush, Math.Max(1, pen.Thickness * .55), new DashStyle([2, 2], 0)), P(.1, .52), P(.9, .52));
                 break;
             case "rod":
@@ -105,21 +110,21 @@ public sealed class PhysicaIcon : Control
                 break;
             case "block":
                 context.DrawRectangle(null, pen, R(.2, .26, .5, .5), 1, 1);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.2},{h*.26} L {w*.34},{h*.14} L {w*.84},{h*.14} L {w*.7},{h*.26} M {w*.7},{h*.26} L {w*.84},{h*.14} L {w*.84},{h*.63} L {w*.7},{h*.76}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .26} L {w * .34},{h * .14} L {w * .84},{h * .14} L {w * .7},{h * .26} M {w * .7},{h * .26} L {w * .84},{h * .14} L {w * .84},{h * .63} L {w * .7},{h * .76}"));
                 break;
             case "gravity":
                 context.DrawLine(pen, P(.5, .12), P(.5, .78));
                 context.DrawLine(pen, P(.5, .78), P(.34, .6));
                 context.DrawLine(pen, P(.5, .78), P(.66, .6));
-                context.DrawGeometry(null, new Pen(brush, pen.Thickness * .7), PathGeometry.Parse($"M {w*.18},{h*.22} C {w*.3},{h*.35} {w*.3},{h*.56} {w*.2},{h*.7} M {w*.82},{h*.22} C {w*.7},{h*.35} {w*.7},{h*.56} {w*.8},{h*.7}"));
+                context.DrawGeometry(null, new Pen(brush, pen.Thickness * .7), PathGeometry.Parse($"M {w * .18},{h * .22} C {w * .3},{h * .35} {w * .3},{h * .56} {w * .2},{h * .7} M {w * .82},{h * .22} C {w * .7},{h * .35} {w * .7},{h * .56} {w * .8},{h * .7}"));
                 break;
             case "air":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.12},{h*.3} C {w*.38},{h*.3} {w*.42},{h*.18} {w*.55},{h*.18} C {w*.72},{h*.18} {w*.72},{h*.38} {w*.55},{h*.38} M {w*.12},{h*.52} L {w*.78},{h*.52} M {w*.12},{h*.73} C {w*.4},{h*.73} {w*.47},{h*.84} {w*.62},{h*.84} C {w*.8},{h*.84} {w*.82},{h*.64} {w*.67},{h*.64}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .12},{h * .3} C {w * .38},{h * .3} {w * .42},{h * .18} {w * .55},{h * .18} C {w * .72},{h * .18} {w * .72},{h * .38} {w * .55},{h * .38} M {w * .12},{h * .52} L {w * .78},{h * .52} M {w * .12},{h * .73} C {w * .4},{h * .73} {w * .47},{h * .84} {w * .62},{h * .84} C {w * .8},{h * .84} {w * .82},{h * .64} {w * .67},{h * .64}"));
                 break;
             case "medium":
                 for (var row = 0; row < 3; row++)
-                for (var column = 0; column < 3; column++)
-                    context.DrawEllipse(column == 1 && row == 1 ? brush : null, pen, P(.27 + column * .23, .27 + row * .23), w * .055, h * .055);
+                    for (var column = 0; column < 3; column++)
+                        context.DrawEllipse(column == 1 && row == 1 ? brush : null, pen, P(.27 + column * .23, .27 + row * .23), w * .055, h * .055);
                 break;
             case "wall":
                 context.DrawRectangle(null, pen, R(.2, .12, .6, .76), 1, 1);
@@ -138,22 +143,22 @@ public sealed class PhysicaIcon : Control
                 }
                 break;
             case "protractor":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.14},{h*.72} A {w*.36},{h*.36} 0 0 1 {w*.86},{h*.72} L {w*.14},{h*.72}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .14},{h * .72} A {w * .36},{h * .36} 0 0 1 {w * .86},{h * .72} L {w * .14},{h * .72}"));
                 context.DrawLine(pen, P(.5, .72), P(.65, .38));
                 context.DrawEllipse(brush, null, P(.5, .72), w * .04, h * .04);
                 break;
             case "sensor":
                 context.DrawEllipse(brush, null, P(.5, .5), w * .07, h * .07);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.36},{h*.37} A {w*.2},{h*.2} 0 0 0 {w*.36},{h*.63} M {w*.64},{h*.37} A {w*.2},{h*.2} 0 0 1 {w*.64},{h*.63} M {w*.25},{h*.25} A {w*.35},{h*.35} 0 0 0 {w*.25},{h*.75} M {w*.75},{h*.25} A {w*.35},{h*.35} 0 0 1 {w*.75},{h*.75}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .36},{h * .37} A {w * .2},{h * .2} 0 0 0 {w * .36},{h * .63} M {w * .64},{h * .37} A {w * .2},{h * .2} 0 0 1 {w * .64},{h * .63} M {w * .25},{h * .25} A {w * .35},{h * .35} 0 0 0 {w * .25},{h * .75} M {w * .75},{h * .25} A {w * .35},{h * .35} 0 0 1 {w * .75},{h * .75}"));
                 break;
             case "trace":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.15},{h*.72} C {w*.34},{h*.16} {w*.62},{h*.84} {w*.85},{h*.28}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .15},{h * .72} C {w * .34},{h * .16} {w * .62},{h * .84} {w * .85},{h * .28}"));
                 context.DrawEllipse(brush, null, P(.15, .72), w * .05, h * .05);
                 context.DrawEllipse(brush, null, P(.5, .5), w * .04, h * .04);
                 context.DrawEllipse(brush, null, P(.85, .28), w * .05, h * .05);
                 break;
             case "path":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.15},{h*.75} C {w*.28},{h*.2} {w*.7},{h*.18} {w*.86},{h*.63}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .15},{h * .75} C {w * .28},{h * .2} {w * .7},{h * .18} {w * .86},{h * .63}"));
                 context.DrawRectangle(brush, null, R(.1, .7, .1, .1), 1, 1);
                 context.DrawRectangle(brush, null, R(.81, .58, .1, .1), 1, 1);
                 break;
@@ -194,11 +199,11 @@ public sealed class PhysicaIcon : Control
                 break;
             case "check":
                 context.DrawEllipse(null, pen, P(.5, .5), w * .34, h * .34);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.29},{h*.5} L {w*.44},{h*.66} L {w*.73},{h*.34}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .29},{h * .5} L {w * .44},{h * .66} L {w * .73},{h * .34}"));
                 break;
             case "diagnostics":
                 context.DrawRectangle(null, pen, R(.12, .2, .58, .56), 2, 2);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.2},{h*.56} L {w*.3},{h*.56} L {w*.38},{h*.36} L {w*.49},{h*.66} L {w*.58},{h*.46} L {w*.68},{h*.46}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .56} L {w * .3},{h * .56} L {w * .38},{h * .36} L {w * .49},{h * .66} L {w * .58},{h * .46} L {w * .68},{h * .46}"));
                 context.DrawEllipse(null, pen, P(.72, .7), w * .15, h * .15);
                 context.DrawLine(pen, P(.82, .81), P(.91, .9));
                 break;
@@ -208,12 +213,12 @@ public sealed class PhysicaIcon : Control
                 context.DrawRectangle(null, pen, R(.3, .55, .4, .25), 2, 2);
                 break;
             case "open":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.12},{h*.33} L {w*.43},{h*.33} L {w*.52},{h*.44} L {w*.88},{h*.44} L {w*.75},{h*.82} L {w*.15},{h*.82} Z"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .12},{h * .33} L {w * .43},{h * .33} L {w * .52},{h * .44} L {w * .88},{h * .44} L {w * .75},{h * .82} L {w * .15},{h * .82} Z"));
                 context.DrawLine(pen, P(.2, .34), P(.2, .2));
                 context.DrawLine(pen, P(.2, .2), P(.58, .2));
                 break;
             case "play":
-                context.DrawGeometry(brush, null, PathGeometry.Parse($"M {w*.3},{h*.18} L {w*.78},{h*.5} L {w*.3},{h*.82} Z"));
+                context.DrawGeometry(brush, null, PathGeometry.Parse($"M {w * .3},{h * .18} L {w * .78},{h * .5} L {w * .3},{h * .82} Z"));
                 break;
             case "pause":
                 context.DrawRectangle(brush, null, R(.25, .2, .16, .6), 1, 1);
@@ -222,7 +227,7 @@ public sealed class PhysicaIcon : Control
             case "graph":
                 context.DrawLine(pen, P(.16, .82), P(.16, .18));
                 context.DrawLine(pen, P(.16, .82), P(.86, .82));
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.22},{h*.7} C {w*.38},{h*.62} {w*.4},{h*.27} {w*.56},{h*.38} C {w*.68},{h*.47} {w*.72},{h*.22} {w*.86},{h*.2}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .22},{h * .7} C {w * .38},{h * .62} {w * .4},{h * .27} {w * .56},{h * .38} C {w * .68},{h * .47} {w * .72},{h * .22} {w * .86},{h * .2}"));
                 break;
             case "equation":
                 context.DrawLine(pen, P(.18, .32), P(.82, .32));
@@ -235,10 +240,10 @@ public sealed class PhysicaIcon : Control
                 break;
             case "camera":
                 context.DrawRectangle(null, pen, R(.14, .28, .58, .5), 3, 3);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.72},{h*.4} L {w*.9},{h*.3} L {w*.9},{h*.76} L {w*.72},{h*.66} Z"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .72},{h * .4} L {w * .9},{h * .3} L {w * .9},{h * .76} L {w * .72},{h * .66} Z"));
                 break;
             case "cube":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.5},{h*.1} L {w*.84},{h*.3} L {w*.84},{h*.68} L {w*.5},{h*.9} L {w*.16},{h*.68} L {w*.16},{h*.3} Z M {w*.16},{h*.3} L {w*.5},{h*.5} L {w*.84},{h*.3} M {w*.5},{h*.5} L {w*.5},{h*.9}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .5},{h * .1} L {w * .84},{h * .3} L {w * .84},{h * .68} L {w * .5},{h * .9} L {w * .16},{h * .68} L {w * .16},{h * .3} Z M {w * .16},{h * .3} L {w * .5},{h * .5} L {w * .84},{h * .3} M {w * .5},{h * .5} L {w * .5},{h * .9}"));
                 break;
             case "text":
                 context.DrawLine(pen, P(.2, .2), P(.8, .2));
@@ -248,7 +253,7 @@ public sealed class PhysicaIcon : Control
             case "image":
                 context.DrawRectangle(null, pen, R(.14, .18, .72, .64), 2, 2);
                 context.DrawEllipse(null, pen, P(.68, .36), w * .08, h * .08);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.2},{h*.72} L {w*.4},{h*.5} L {w*.53},{h*.63} L {w*.66},{h*.5} L {w*.82},{h*.72}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .72} L {w * .4},{h * .5} L {w * .53},{h * .63} L {w * .66},{h * .5} L {w * .82},{h * .72}"));
                 break;
             case "arrow":
                 context.DrawLine(pen, P(.14, .72), P(.76, .24));
@@ -271,7 +276,7 @@ public sealed class PhysicaIcon : Control
                 var reverse = IconKey == "redo";
                 var a = reverse ? .78 : .22;
                 var b = reverse ? .22 : .78;
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*a},{h*.28} C {w*b},{h*.2} {w*b},{h*.78} {w*(reverse ? .72 : .28)},{h*.72}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * a},{h * .28} C {w * b},{h * .2} {w * b},{h * .78} {w * (reverse ? .72 : .28)},{h * .72}"));
                 context.DrawLine(pen, P(a, .28), P(reverse ? .62 : .38, .15));
                 context.DrawLine(pen, P(a, .28), P(reverse ? .62 : .38, .41));
                 break;
@@ -290,10 +295,10 @@ public sealed class PhysicaIcon : Control
                 break;
             case "lock":
                 context.DrawRectangle(null, pen, R(.22, .43, .56, .4), 2, 2);
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.34},{h*.43} L {w*.34},{h*.32} C {w*.34},{h*.08} {w*.66},{h*.08} {w*.66},{h*.32} L {w*.66},{h*.43}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .34},{h * .43} L {w * .34},{h * .32} C {w * .34},{h * .08} {w * .66},{h * .08} {w * .66},{h * .32} L {w * .66},{h * .43}"));
                 break;
             case "link":
-                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w*.42},{h*.36} L {w*.31},{h*.47} C {w*.12},{h*.66} {w*.38},{h*.92} {w*.57},{h*.73} L {w*.67},{h*.63} M {w*.58},{h*.64} L {w*.69},{h*.53} C {w*.88},{h*.34} {w*.62},{h*.08} {w*.43},{h*.27} L {w*.33},{h*.37}"));
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .42},{h * .36} L {w * .31},{h * .47} C {w * .12},{h * .66} {w * .38},{h * .92} {w * .57},{h * .73} L {w * .67},{h * .63} M {w * .58},{h * .64} L {w * .69},{h * .53} C {w * .88},{h * .34} {w * .62},{h * .08} {w * .43},{h * .27} L {w * .33},{h * .37}"));
                 break;
             case "palette":
                 context.DrawEllipse(null, pen, P(.5, .5), w * .34, h * .3);
