@@ -31,6 +31,10 @@ Gate 1 is **not accepted**. The Computer controller failed before application in
 
 Gate 2 must not begin until Gate 1 has application-level evidence and explicit user approval.
 
+The user then reported that the real navigator could not select even one slide, could not start a drag, and kept fixed-size thumbnails when the left panel was resized. The failures were traced to button-owned pointer routing, handle-only drag initiation, and view-model-owned pixel dimensions. Commit `86fb9c819cb436942e447d7a28af275d4a57320d` replaces them with a focusable navigator surface, whole-tile threshold dragging, visible insertion indicators, preserved multi-selection drag intent, and layout-owned aspect-ratio sizing.
+
+The corrected solution builds with zero warnings/errors and reports 43 passing tests. Computer initialization still fails before application input, so the correction remains **UI wired**, not Interaction verified. Evidence and manual reproduction steps are in `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md`.
+
 ## Binding visual authority
 
 The seven images in `docs/product/approved-concepts/` are the minimum visual-quality references for Physica Studio. They are not loose layout sketches. The recovered interface may improve their scientific details and usability, but it may not reduce their polish, density, legibility, icon quality, scientific artwork, or presentation quality.
