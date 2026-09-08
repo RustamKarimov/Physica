@@ -4,6 +4,8 @@
 
 **Authority:** Status recorded here must agree with the project constitution, approved decisions, owning specifications, and checkpoint evidence. A visible shell is not treated as a completed functional capability.
 
+For a complete expandable feature list, open the repository-root `PROJECT_PROGRESS.html`. The Phase 2 critical assessment is `docs/checkpoints/phase-02/PHASE_02_CRITICAL_AUDIT.md`.
+
 | Phase | Scope | Status | Exit gate |
 | --- | --- | --- | --- |
 | 0 | Repository replacement, governance, architecture boundaries, launchers and CI foundation | Complete | Clean new foundation, documented governance and synchronized repository |

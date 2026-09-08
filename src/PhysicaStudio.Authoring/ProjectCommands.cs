@@ -49,20 +49,21 @@ public static class ProjectCommands
         return project with { Slides = slides };
     });
 
-    public static IProjectCommand DeleteSlide(Guid slideId) => Command("Delete slide", project =>
+    public static IProjectCommand DeleteSlide(Guid slideId) => DeleteSlides([slideId]);
+
+    public static IProjectCommand DeleteSlides(IEnumerable<Guid> slideIds) => Command("Delete slides", project =>
     {
-        if (project.Slides.Count == 1)
+        var ids = slideIds.Distinct().ToHashSet();
+        if (ids.Count == 0 || ids.Any(id => project.Slides.All(slide => slide.Id != id)))
+        {
+            throw new AuthoringCommandException("A selected slide does not exist.");
+        }
+        if (project.Slides.Count - ids.Count < 1)
         {
             throw new AuthoringCommandException("A lesson must contain at least one slide.");
         }
 
-        var slides = project.Slides.Where(slide => slide.Id != slideId).ToArray();
-        if (slides.Length == project.Slides.Count)
-        {
-            throw new AuthoringCommandException("The slide does not exist.");
-        }
-
-        return project with { Slides = slides };
+        return project with { Slides = project.Slides.Where(slide => !ids.Contains(slide.Id)).ToArray() };
     });
 
     public static IProjectCommand RenameSlide(Guid slideId, string name) => Command("Rename slide", project =>
@@ -86,6 +87,29 @@ public static class ProjectCommands
         return project with { Slides = slides };
     });
 
+    public static IProjectCommand MoveSlides(
+        IEnumerable<Guid> slideIds,
+        Guid targetSlideId,
+        bool placeAfterTarget) => Command("Move slides", project =>
+        {
+            var ids = slideIds.Distinct().ToHashSet();
+            if (ids.Count == 0 || ids.Any(id => project.Slides.All(slide => slide.Id != id)))
+            {
+                throw new AuthoringCommandException("A selected slide does not exist.");
+            }
+            if (ids.Contains(targetSlideId))
+            {
+                return project;
+            }
+
+            var moving = project.Slides.Where(slide => ids.Contains(slide.Id)).ToArray();
+            var remaining = project.Slides.Where(slide => !ids.Contains(slide.Id)).ToList();
+            var targetIndex = FindSlideIndex(remaining, targetSlideId);
+            var insertionIndex = targetIndex + (placeAfterTarget ? 1 : 0);
+            remaining.InsertRange(insertionIndex, moving);
+            return project with { Slides = remaining };
+        });
+
     public static IProjectCommand SetSlideHidden(Guid slideId, bool isHidden) =>
         Command(isHidden ? "Hide slide" : "Show slide", project =>
             ReplaceSlide(project, slideId, slide => slide with { IsHidden = isHidden }));
@@ -100,14 +124,26 @@ public static class ProjectCommands
     });
 
     public static IProjectCommand AddSectionAndAssignSlide(string name, Guid slideId) =>
-        Command("Add section and assign slide", project =>
+        AddSectionAndAssignSlides(name, [slideId]);
+
+    public static IProjectCommand AddSectionAndAssignSlides(string name, IEnumerable<Guid> slideIds) =>
+        Command("Add section and assign slides", project =>
         {
             RequireName(name, "Section name");
-            FindSlideIndex(project.Slides, slideId);
+            var ids = slideIds.Distinct().ToHashSet();
+            if (ids.Count == 0 || ids.Any(id => project.Slides.All(slide => slide.Id != id)))
+            {
+                throw new AuthoringCommandException("A selected slide does not exist.");
+            }
 
             var section = new SlideSection(Guid.NewGuid(), name, project.Sections.Count);
             var withSection = project with { Sections = project.Sections.Append(section).ToArray() };
-            return ReplaceSlide(withSection, slideId, slide => slide with { SectionId = section.Id });
+            return withSection with
+            {
+                Slides = withSection.Slides
+                    .Select(slide => ids.Contains(slide.Id) ? slide with { SectionId = section.Id } : slide)
+                    .ToArray(),
+            };
         });
 
     public static IProjectCommand RenameSection(Guid sectionId, string name) => Command("Rename section", project =>

@@ -7,6 +7,7 @@ namespace PhysicaStudio.Desktop.Controls;
 
 public enum SlideThumbnailVariant
 {
+    Blank,
     Introduction,
     Harmonics,
     StandingWave,
@@ -43,6 +44,8 @@ public sealed class SlideThumbnailSurface : Control
 
         switch (Variant)
         {
+            case SlideThumbnailVariant.Blank:
+                break;
             case SlideThumbnailVariant.Harmonics:
                 DrawHarmonics(context);
                 break;
@@ -55,7 +58,7 @@ public sealed class SlideThumbnailSurface : Control
             case SlideThumbnailVariant.Applications:
                 DrawApplications(context);
                 break;
-            default:
+            case SlideThumbnailVariant.Introduction:
                 DrawIntroduction(context);
                 break;
         }

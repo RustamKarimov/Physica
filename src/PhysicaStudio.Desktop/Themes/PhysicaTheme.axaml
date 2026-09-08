@@ -270,6 +270,35 @@
     <Setter Property="BorderBrush" Value="Transparent" />
   </Style>
 
+  <Style Selector="Button.dialog-action">
+    <Setter Property="MinHeight" Value="38" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="Background" Value="#18364A" />
+    <Setter Property="BorderBrush" Value="#2F6683" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.dialog-action:pointerover">
+    <Setter Property="Background" Value="#214B64" />
+    <Setter Property="BorderBrush" Value="#46A7D5" />
+  </Style>
+  <Style Selector="Button.recent-project">
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="MinHeight" Value="52" />
+    <Setter Property="Margin" Value="0,0,0,6" />
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="Background" Value="#0C1820" />
+    <Setter Property="BorderBrush" Value="#263744" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.recent-project:pointerover">
+    <Setter Property="Background" Value="#162A36" />
+    <Setter Property="BorderBrush" Value="#3B647C" />
+  </Style>
+
   <Style Selector="Border.inspector-section-header">
     <Setter Property="Height" Value="32" />
     <Setter Property="Padding" Value="11,0" />

@@ -96,7 +96,7 @@ public sealed class ManifestTests
         Assert.Contains("x:Name=\"InspectorScrollViewer\"", xaml, StringComparison.Ordinal);
         Assert.Matches("InspectorScrollViewer[\\s\\S]*?VerticalScrollBarVisibility=\\\"Hidden\\\"", xaml);
         Assert.Contains("VerticalAlignment=\"Center\" Margin=\"2,1,0,0\"", xaml, StringComparison.Ordinal);
-        Assert.Equal(3, xaml.Split("<Grid ColumnDefinitions=\"Auto,*\" VerticalAlignment=\"Center\">", StringSplitOptions.None).Length - 1);
+        Assert.Equal(4, xaml.Split("<Grid ColumnDefinitions=\"Auto,*\" VerticalAlignment=\"Center\">", StringSplitOptions.None).Length - 1);
         Assert.Contains("<Setter Property=\"Margin\" Value=\"8,12,8,4\" />", theme, StringComparison.Ordinal);
         Assert.Contains("<Setter Property=\"CornerRadius\" Value=\"3\" />", theme, StringComparison.Ordinal);
     }
@@ -113,6 +113,27 @@ public sealed class ManifestTests
         Assert.Equal(commands.Take(2), group.FeaturedCommands);
         Assert.Equal(commands, group.Commands);
         Assert.Equal("Show all Test group commands", group.GalleryTooltip);
+    }
+
+    [Fact]
+    public void ProjectProgressDashboard_CoversEveryPhaseAndCurrentPhase2Gaps()
+    {
+        var root = FindRepositoryRoot();
+        var html = File.ReadAllText(Path.Combine(root, "PROJECT_PROGRESS.html"));
+        var css = File.ReadAllText(Path.Combine(root, "project-progress.css"));
+
+        for (var phase = 0; phase <= 20; phase++)
+        {
+            Assert.Contains($"Phase {phase}", html, StringComparison.Ordinal);
+        }
+
+        Assert.Contains("RC 1.0", html, StringComparison.Ordinal);
+        Assert.Contains("Document-rendered thumbnails", html, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Zoom and pan", html, StringComparison.Ordinal);
+        Assert.Contains("Guides, grid, and snapping", html, StringComparison.Ordinal);
+        Assert.Contains("Phase 2 is not complete", html, StringComparison.Ordinal);
+        Assert.DoesNotContain("https://", html, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(".feature-list", css, StringComparison.Ordinal);
     }
 
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)

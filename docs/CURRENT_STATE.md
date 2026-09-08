@@ -7,6 +7,7 @@
 **Current activity:** Phase 2 project/slide workflow active; canvas editing, advanced section management, design, and viewport activation remain
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
+The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
 
 ## Binding visual authority
 
@@ -80,17 +81,23 @@ Completed across the first two functional slices:
 - Active New, Open, Save, Save As, Save Copy, Recover, Close, New Slide, Duplicate Slide, Delete Slide, Section, Undo, and Redo commands.
 - Slide selection and deterministic up/down ordering, plus atomic section creation and assignment: one section action is one history entry and one undo removes both the assignment and section.
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
+- Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and native drag-and-drop ordering for selected slide blocks.
+- Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
+- Visible section headings and multi-slide atomic section assignment.
+- Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
 - Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
 - Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
 
-Verification: the full solution builds with zero warnings and errors, and all 25 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, atomic section assignment, slide ordering, locked-node, identity, snapping, and session-backed Desktop-state coverage.
+Verification: the full solution builds with zero warnings and errors, and all 31 tests pass. The project workflow has package, corruption, future-version, unknown-field, recovery, undo/redo, multi-selection, atomic section assignment, multi-slide ordering/deletion, blank-thumbnail state, project-close state, recent projects, locked-node, identity, snapping, session-backed Desktop state, and complete-roadmap coverage.
+
+The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_AUDIT.md`. Its verdict is binding: Phase 2 is incomplete, and backend-only contracts are not teacher-accessible features.
 
 Still required for the Phase 2 gate:
 
-- Section rename/delete/reassignment UX, section-aware navigator grouping, and drag reorder; basic section creation/assignment and ordered move controls are active.
+- Section rename/delete/reassignment/collapse UX and drag-between-section behavior; visible grouping, multi-slide assignment, and drag ordering are active.
 - Pointer selection, drag, resize, rotation, multi-selection, grouping, and layer panel activation.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
-- Automated recovery scheduling and recovery chooser UX.
+- Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
 - Representative Phase 2 lesson project and user functional-canvas approval.
 

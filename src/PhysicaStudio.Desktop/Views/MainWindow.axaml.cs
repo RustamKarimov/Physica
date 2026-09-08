@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using PhysicaStudio.Authoring;
 using PhysicaStudio.Desktop.Resources;
+using PhysicaStudio.Desktop.Services;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
 
@@ -14,6 +15,7 @@ public sealed partial class MainWindow : Window
 {
     private readonly StudioShellViewModel _viewModel = new();
     private readonly ProjectRecoveryStore _recoveryStore;
+    private readonly RecentProjectStore _recentProjectStore;
     private bool _closeAuthorized;
     private bool _closeInProgress;
 
@@ -25,10 +27,12 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = _viewModel;
-        _recoveryStore = new ProjectRecoveryStore(Path.Combine(
+        var applicationData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "PhysicaStudio",
-            "Recovery"));
+            "PhysicaStudio");
+        _recoveryStore = new ProjectRecoveryStore(Path.Combine(applicationData, "Recovery"));
+        _recentProjectStore = new RecentProjectStore(Path.Combine(applicationData, "recent-projects.json"));
+        RefreshRecentProjects();
 
         _viewModel.SelectWorkspace(previewMode switch
         {
@@ -107,6 +111,9 @@ public sealed partial class MainWindow : Window
                 case "Open":
                     await OpenProjectAsync();
                     break;
+                case "Recent":
+                    await CloseProjectAsync();
+                    break;
                 case "Save":
                     await SaveProjectAsync(forcePicker: false, saveCopy: false);
                     break;
@@ -120,7 +127,7 @@ public sealed partial class MainWindow : Window
                     await RecoverLatestAsync();
                     break;
                 case "Close":
-                    await CloseWithRecoveryAsync();
+                    await CloseProjectAsync();
                     break;
                 case "New Slide":
                     _viewModel.AddSlide();
@@ -148,13 +155,58 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void SlideItem_Click(object? sender, RoutedEventArgs e)
+    private void SlideItem_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is Button { DataContext: SlideItemViewModel slide })
+        if (sender is Button { DataContext: SlideItemViewModel slide }
+            && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            var mode = e.KeyModifiers.HasFlag(KeyModifiers.Shift)
+                ? SlideSelectionMode.Range
+                : e.KeyModifiers.HasFlag(KeyModifiers.Control) || e.KeyModifiers.HasFlag(KeyModifiers.Meta)
+                    ? SlideSelectionMode.Toggle
+                    : SlideSelectionMode.Replace;
+            _viewModel.SelectSlide(slide.Id, mode);
+            e.Handled = true;
+        }
+    }
+
+    private async void SlideDragHandle_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is not Control { DataContext: SlideItemViewModel slide }
+            || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        if (!_viewModel.SelectedSlideIds.Contains(slide.Id))
         {
             _viewModel.SelectSlide(slide.Id);
         }
+
+        var data = new DataTransfer();
+        data.Add(DataTransferItem.CreateText($"physica-slide:{slide.Id:D}"));
+        await DragDrop.DoDragDropAsync(e, data, DragDropEffects.Move);
     }
+
+    private void SlideItem_DragOver(object? sender, DragEventArgs e)
+    {
+        e.DragEffects = IsSlideDrag(e.DataTransfer) ? DragDropEffects.Move : DragDropEffects.None;
+    }
+
+    private void SlideItem_Drop(object? sender, DragEventArgs e)
+    {
+        if (sender is not Control { DataContext: SlideItemViewModel target } || !IsSlideDrag(e.DataTransfer))
+        {
+            e.DragEffects = DragDropEffects.None;
+            return;
+        }
+
+        _viewModel.MoveSelectedSlides(target.Id, e.GetPosition((Control)sender).Y >= ((Control)sender).Bounds.Height / 2);
+        e.DragEffects = DragDropEffects.Move;
+    }
+
+    private static bool IsSlideDrag(IDataTransfer dataTransfer) =>
+        dataTransfer.TryGetText()?.StartsWith("physica-slide:", StringComparison.Ordinal) == true;
 
     private void NewSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.AddSlide();
     private void DuplicateSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DuplicateActiveSlide();
@@ -168,6 +220,13 @@ public sealed partial class MainWindow : Window
 
     private async void Window_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (e.Key == Key.Delete && e.Source is not TextBox && _viewModel.IsProjectOpen)
+        {
+            _viewModel.DeleteSelectedSlides();
+            e.Handled = true;
+            return;
+        }
+
         var hasPlatformCommandModifier = e.KeyModifiers.HasFlag(KeyModifiers.Control)
             || e.KeyModifiers.HasFlag(KeyModifiers.Meta);
         if (!hasPlatformCommandModifier)
@@ -231,6 +290,7 @@ public sealed partial class MainWindow : Window
         await SaveRecoveryIfNeededAsync();
         var project = await PhysicaProjectPackage.LoadAsync(path);
         _viewModel.LoadProject(project, path);
+        RecordRecentProject(path);
     }
 
     private async Task SaveProjectAsync(bool forcePicker, bool saveCopy)
@@ -259,12 +319,47 @@ public sealed partial class MainWindow : Window
         if (saveCopy)
         {
             _viewModel.SetStatus(AppText.ProjectCopySaved);
+            RecordRecentProject(path);
             return;
         }
 
         _viewModel.MarkSaved(path);
+        RecordRecentProject(path);
         _recoveryStore.Delete(_viewModel.Session.CurrentProject.Id);
     }
+
+    private async Task OpenRecentProjectAsync(string path)
+    {
+        await SaveRecoveryIfNeededAsync();
+        var project = await PhysicaProjectPackage.LoadAsync(path);
+        _viewModel.LoadProject(project, path);
+        RecordRecentProject(path);
+    }
+
+    private async void OpenRecentProject_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: RecentProjectItemViewModel recent })
+        {
+            await OpenRecentProjectAsync(recent.Path);
+        }
+    }
+
+    private void NewFromStartCenter_Click(object? sender, RoutedEventArgs e) => _viewModel.NewProject();
+    private async void OpenFromStartCenter_Click(object? sender, RoutedEventArgs e) => await OpenProjectAsync();
+
+    private async Task CloseProjectAsync()
+    {
+        await SaveRecoveryIfNeededAsync();
+        _viewModel.CloseProject();
+    }
+
+    private void RecordRecentProject(string path)
+    {
+        _recentProjectStore.Record(path, _viewModel.Session.CurrentProject.Title);
+        RefreshRecentProjects();
+    }
+
+    private void RefreshRecentProjects() => _viewModel.SetRecentProjects(_recentProjectStore.Load());
 
     private async Task RecoverLatestAsync()
     {

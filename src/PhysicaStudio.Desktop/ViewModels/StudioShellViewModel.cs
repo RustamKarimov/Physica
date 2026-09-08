@@ -14,7 +14,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 {
     private static readonly HashSet<string> ImplementedPhase2Commands = new(StringComparer.Ordinal)
     {
-        "New", "Open", "Save", "Save As", "Save Copy", "Recover", "Close",
+        "New", "Open", "Recent", "Save", "Save As", "Save Copy", "Recover", "Close",
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
     };
 
@@ -23,6 +23,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private StudioWorkspace _studioWorkspace = StudioWorkspace.Authoring;
     private AuthoringSession _session;
     private string _statusMessage = AppText.ProjectFoundationReady;
+    private bool _isProjectOpen = true;
 
     public StudioShellViewModel()
         : this(ManifestLoader.LoadRibbon(), ManifestLoader.LoadFeatures())
@@ -51,30 +52,49 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 tab.Id == "physics")));
 
         ContextualTabs = ribbon.ContextualTabs;
-        _selectedRibbonTab = RibbonTabs.First(tab => tab.IsSelected);
+        _selectedRibbonTab = RibbonTabs.FirstOrDefault(tab => tab.IsSelected) ?? RibbonTabs.First();
+        _selectedRibbonTab.IsSelected = true;
         Features = featureManifest.Surfaces;
         Slides = new ObservableCollection<SlideItemViewModel>();
+        RecentProjects = new ObservableCollection<RecentProjectItemViewModel>();
         RefreshFromSession();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public string ApplicationTitle => AppText.ApplicationTitle;
-    public string DocumentTitle => $"{_session.CurrentProject.Title}{ProjectFormat.FileExtension}{(HasUnsavedChanges ? "*" : string.Empty)}";
+    public string DocumentTitle => IsProjectOpen
+        ? $"{_session.CurrentProject.Title}{ProjectFormat.FileExtension}{(HasUnsavedChanges ? "*" : string.Empty)}"
+        : ApplicationTitle;
     public string DevelopmentBuild => AppText.DevelopmentBuild;
     public string FeatureMapLabel => AppText.FeatureMap;
     public string PresentPreviewLabel => AppText.PresentPreview;
+    public string NoLessonOpenLabel => AppText.NoLessonOpen;
+    public string StartCenterDescriptionLabel => AppText.StartCenterDescription;
+    public string CreateNewLessonLabel => AppText.CreateNewLesson;
+    public string OpenExistingLessonLabel => AppText.OpenExistingLesson;
+    public string RecentLessonsLabel => AppText.RecentLessons;
+    public string NoRecentLessonsLabel => AppText.NoRecentLessons;
     public ObservableCollection<RibbonTabViewModel> RibbonTabs { get; }
     public IReadOnlyList<string> ContextualTabs { get; }
     public IReadOnlyList<FeatureDefinition> Features { get; }
     public ObservableCollection<SlideItemViewModel> Slides { get; }
+    public ObservableCollection<RecentProjectItemViewModel> RecentProjects { get; }
     public AuthoringSession Session => _session;
     public bool CanUndo => _session.CanUndo;
     public bool CanRedo => _session.CanRedo;
     public bool CanSave => _session.HasUnsavedChanges || _session.CurrentPath is null;
     public bool HasUnsavedChanges => _session.HasUnsavedChanges;
     public bool ShowStandingWaveReference => ActiveSlide.Name.Contains("Standing", StringComparison.OrdinalIgnoreCase);
+    public bool ShowEmptySlideContext => !ShowStandingWaveReference;
     public string SlideSurfaceColor => ActiveSlide.Background.Color;
+    public string InspectorTitle => ShowStandingWaveReference ? "Standing Wave" : "Slide";
+    public string TimelineSummary => ShowStandingWaveReference ? "7 tracks · 23 keyframes" : "0 tracks · 0 keyframes";
+    public bool IsProjectOpen => _isProjectOpen;
+    public bool IsStartCenterVisible => !_isProjectOpen;
+    public bool HasRecentProjects => RecentProjects.Count > 0;
+    public bool HasNoRecentProjects => !HasRecentProjects;
+    public IReadOnlySet<Guid> SelectedSlideIds => _session.SelectedSlideIds;
 
     public string StatusMessage
     {
@@ -188,10 +208,28 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SetStatus(string status) => StatusMessage = status;
 
-    public void SelectSlide(Guid slideId)
+    public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace)
     {
-        _session.SelectSlide(slideId);
+        _session.SelectSlide(slideId, mode);
         RefreshFromSession();
+    }
+
+    public void CloseProject()
+    {
+        _isProjectOpen = false;
+        StatusMessage = AppText.ProjectClosed;
+        RefreshFromSession();
+    }
+
+    public void SetRecentProjects(IEnumerable<RecentProjectEntry> entries)
+    {
+        RecentProjects.Clear();
+        foreach (var entry in entries)
+        {
+            RecentProjects.Add(new RecentProjectItemViewModel(entry.Path, entry.DisplayName, entry.LastOpenedUtc));
+        }
+        OnPropertyChanged(nameof(HasRecentProjects));
+        OnPropertyChanged(nameof(HasNoRecentProjects));
     }
 
     public void AddSlide()
@@ -213,30 +251,53 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         RefreshFromSession();
     }
 
-    public void DeleteActiveSlide()
+    public void DeleteActiveSlide() => DeleteSelectedSlides();
+
+    public void DeleteSelectedSlides()
     {
-        if (_session.CurrentProject.Slides.Count == 1)
+        if (_session.CurrentProject.Slides.Count - _session.SelectedSlideIds.Count < 1)
         {
             StatusMessage = AppText.LastSlideRequired;
             return;
         }
 
-        _session.Execute(ProjectCommands.DeleteSlide(_session.ActiveSlideId));
+        _session.Execute(ProjectCommands.DeleteSlides(_session.SelectedSlideIds));
         StatusMessage = AppText.SlideDeleted;
         RefreshFromSession();
     }
 
     public void MoveActiveSlide(int offset)
     {
-        var currentIndex = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
-        var destination = currentIndex + offset;
-        if (destination < 0 || destination >= _session.CurrentProject.Slides.Count)
+        var slides = _session.CurrentProject.Slides;
+        var selectedIndexes = slides
+            .Select((slide, index) => (slide, index))
+            .Where(item => _session.SelectedSlideIds.Contains(item.slide.Id))
+            .Select(item => item.index)
+            .ToArray();
+        var edgeIndex = offset < 0 ? selectedIndexes.Min() : selectedIndexes.Max();
+        var targetIndex = edgeIndex + offset;
+        if (targetIndex < 0 || targetIndex >= slides.Count)
         {
             StatusMessage = AppText.SlideAlreadyAtEdge;
             return;
         }
 
-        _session.Execute(ProjectCommands.MoveSlide(_session.ActiveSlideId, destination));
+        _session.Execute(ProjectCommands.MoveSlides(
+            _session.SelectedSlideIds,
+            slides[targetIndex].Id,
+            placeAfterTarget: offset > 0));
+        StatusMessage = AppText.SlideMoved;
+        RefreshFromSession();
+    }
+
+    public void MoveSelectedSlides(Guid targetSlideId, bool placeAfterTarget)
+    {
+        if (_session.SelectedSlideIds.Contains(targetSlideId))
+        {
+            return;
+        }
+
+        _session.Execute(ProjectCommands.MoveSlides(_session.SelectedSlideIds, targetSlideId, placeAfterTarget));
         StatusMessage = AppText.SlideMoved;
         RefreshFromSession();
     }
@@ -244,7 +305,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public void AddSectionForActiveSlide()
     {
         var name = AppText.SectionName(_session.CurrentProject.Sections.Count + 1);
-        _session.Execute(ProjectCommands.AddSectionAndAssignSlide(name, _session.ActiveSlideId));
+        _session.Execute(ProjectCommands.AddSectionAndAssignSlides(name, _session.SelectedSlideIds));
         StatusMessage = AppText.SectionAdded;
         RefreshFromSession();
     }
@@ -278,6 +339,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         _session.StateChanged -= Session_StateChanged;
         _session = session;
         _session.StateChanged += Session_StateChanged;
+        _isProjectOpen = true;
         StatusMessage = status;
         RefreshFromSession();
     }
@@ -287,16 +349,23 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private void RefreshFromSession()
     {
         Slides.Clear();
+        Guid? previousSectionId = null;
         for (var index = 0; index < _session.CurrentProject.Slides.Count; index++)
         {
             var slide = _session.CurrentProject.Slides[index];
+            var section = slide.SectionId is Guid sectionId
+                ? _session.CurrentProject.Sections.FirstOrDefault(candidate => candidate.Id == sectionId)
+                : null;
             Slides.Add(new SlideItemViewModel(
                 slide.Id,
                 index + 1,
                 slide.Name,
                 VariantFor(slide.Name, index),
-                slide.Id == _session.ActiveSlideId,
-                slide.IsHidden));
+                _session.SelectedSlideIds.Contains(slide.Id),
+                slide.IsHidden,
+                section?.Name,
+                section is not null && section.Id != previousSectionId));
+            previousSectionId = slide.SectionId;
         }
 
         RefreshCommandAvailability();
@@ -306,8 +375,14 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(CanSave));
         OnPropertyChanged(nameof(HasUnsavedChanges));
         OnPropertyChanged(nameof(ActiveSlide));
+        OnPropertyChanged(nameof(SelectedSlideIds));
         OnPropertyChanged(nameof(ShowStandingWaveReference));
+        OnPropertyChanged(nameof(ShowEmptySlideContext));
         OnPropertyChanged(nameof(SlideSurfaceColor));
+        OnPropertyChanged(nameof(InspectorTitle));
+        OnPropertyChanged(nameof(TimelineSummary));
+        OnPropertyChanged(nameof(IsProjectOpen));
+        OnPropertyChanged(nameof(IsStartCenterVisible));
     }
 
     private void RefreshCommandAvailability()
@@ -322,6 +397,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
             var enabled = command.Label switch
             {
+                "New" or "Open" or "Recent" or "Recover" => true,
+                _ when !IsProjectOpen => false,
                 "Undo" => CanUndo,
                 "Redo" => CanRedo,
                 "Save" => CanSave,
@@ -334,11 +411,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     private static SlideThumbnailVariant VariantFor(string name, int index)
     {
-        if (name.Contains("Harmonic", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Harmonics;
         if (name.Contains("Standing", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.StandingWave;
-        if (name.Contains("Energy", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Energy;
-        if (name.Contains("Application", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.Applications;
-        return index == 0 ? SlideThumbnailVariant.Introduction : SlideThumbnailVariant.Introduction;
+        return SlideThumbnailVariant.Blank;
     }
 
     private static int PhaseFor(string tabId) => tabId switch
@@ -553,7 +627,9 @@ public sealed record SlideItemViewModel(
     string Name,
     SlideThumbnailVariant Variant,
     bool IsSelected,
-    bool IsHidden)
+    bool IsHidden,
+    string? SectionName = null,
+    bool ShowSectionHeader = false)
 {
     public string Background => IsSelected ? "#132433" : "#101D27";
     public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
@@ -563,6 +639,11 @@ public sealed record SlideItemViewModel(
 }
 
 public sealed record ObjectCardViewModel(string Name, string Category, string PreviewKind, string Status);
+
+public sealed record RecentProjectItemViewModel(string Path, string DisplayName, DateTimeOffset LastOpenedUtc)
+{
+    public string Location => System.IO.Path.GetDirectoryName(Path) ?? Path;
+}
 
 public enum StudioWorkspace
 {

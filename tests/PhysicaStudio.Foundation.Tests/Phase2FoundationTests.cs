@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Text.Json.Nodes;
 using PhysicaStudio.Authoring;
 using PhysicaStudio.Desktop.Models;
+using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Services;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
@@ -323,5 +324,106 @@ public sealed class Phase2FoundationTests
         viewModel.Undo();
         Assert.Null(viewModel.ActiveSlide.SectionId);
         Assert.Empty(viewModel.Session.CurrentProject.Sections);
+    }
+
+    [Fact]
+    public void AuthoringSession_SupportsRangeAndToggleSlideSelection()
+    {
+        var slides = Enumerable.Range(1, 4).Select(index => SlideDocument.Create($"Slide {index}")).ToArray();
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = slides });
+
+        session.SelectSlide(slides[2].Id, SlideSelectionMode.Range);
+        Assert.Equal(3, session.SelectedSlideIds.Count);
+        Assert.Contains(slides[0].Id, session.SelectedSlideIds);
+        Assert.Contains(slides[2].Id, session.SelectedSlideIds);
+
+        session.SelectSlide(slides[1].Id, SlideSelectionMode.Toggle);
+        Assert.DoesNotContain(slides[1].Id, session.SelectedSlideIds);
+        Assert.Contains(session.ActiveSlideId, session.SelectedSlideIds);
+    }
+
+    [Fact]
+    public void MultiSlideDeleteAndReorder_AreSingleUndoableCommands()
+    {
+        var slides = Enumerable.Range(1, 5).Select(index => SlideDocument.Create($"Slide {index}")).ToArray();
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = slides });
+
+        session.Execute(ProjectCommands.MoveSlides([slides[1].Id, slides[2].Id], slides[4].Id, placeAfterTarget: true));
+        Assert.Equal([slides[0].Id, slides[3].Id, slides[4].Id, slides[1].Id, slides[2].Id],
+            session.CurrentProject.Slides.Select(slide => slide.Id));
+        Assert.True(session.Undo());
+        Assert.Equal(slides.Select(slide => slide.Id), session.CurrentProject.Slides.Select(slide => slide.Id));
+
+        session.Execute(ProjectCommands.DeleteSlides([slides[1].Id, slides[2].Id]));
+        Assert.Equal(3, session.CurrentProject.Slides.Count);
+        Assert.True(session.Undo());
+        Assert.Equal(5, session.CurrentProject.Slides.Count);
+    }
+
+    [Fact]
+    public void StudioViewModel_BlankSlidesHaveBlankThumbnailsAndNoReferenceContext()
+    {
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []));
+
+        viewModel.AddSlide();
+        Assert.Equal(SlideThumbnailVariant.Blank, viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id).Variant);
+        Assert.True(viewModel.ShowEmptySlideContext);
+        Assert.Equal("0 tracks · 0 keyframes", viewModel.TimelineSummary);
+
+        viewModel.DuplicateActiveSlide();
+        Assert.Equal(SlideThumbnailVariant.Blank, viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id).Variant);
+    }
+
+    [Fact]
+    public void StudioViewModel_SectionAssignmentIsVisibleAndProjectCloseKeepsApplicationState()
+    {
+        var slides = Enumerable.Range(1, 3).Select(index => SlideDocument.Create($"Slide {index}")).ToArray();
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = slides });
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [new RibbonGroupDefinition("Slides", ["Section"])])], []),
+            new FeatureManifest([], 2, []),
+            session);
+
+        viewModel.SelectSlide(slides[1].Id, SlideSelectionMode.Range);
+        viewModel.AddSectionForActiveSlide();
+
+        Assert.Equal(2, viewModel.ActiveSlide.SectionId is Guid sectionId
+            ? viewModel.Session.CurrentProject.Slides.Count(slide => slide.SectionId == sectionId)
+            : 0);
+        Assert.Single(viewModel.Slides, slide => slide.ShowSectionHeader);
+
+        viewModel.CloseProject();
+        Assert.False(viewModel.IsProjectOpen);
+        Assert.True(viewModel.IsStartCenterVisible);
+        Assert.Equal(viewModel.ApplicationTitle, viewModel.DocumentTitle);
+    }
+
+    [Fact]
+    public void RecentProjectStore_DeduplicatesAndOrdersExistingProjects()
+    {
+        var directory = Directory.CreateTempSubdirectory("Physica-Recent-");
+        try
+        {
+            var first = Path.Combine(directory.FullName, "first.physica");
+            var second = Path.Combine(directory.FullName, "second.physica");
+            File.WriteAllText(first, "first");
+            File.WriteAllText(second, "second");
+            var store = new RecentProjectStore(Path.Combine(directory.FullName, "recent.json"));
+
+            store.Record(first, "First", FixedTime);
+            store.Record(second, "Second", FixedTime.AddMinutes(1));
+            store.Record(first, "First revised", FixedTime.AddMinutes(2));
+
+            var entries = store.Load();
+            Assert.Equal(2, entries.Count);
+            Assert.Equal("First revised", entries[0].DisplayName);
+            Assert.Equal(Path.GetFullPath(first), entries[0].Path);
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
     }
 }

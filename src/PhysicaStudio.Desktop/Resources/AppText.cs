@@ -36,6 +36,13 @@ public static class AppText
     public static string SaveCancelled => Get(nameof(SaveCancelled));
     public static string ProjectCopySaved => Get(nameof(ProjectCopySaved));
     public static string NoRecoveryAvailable => Get(nameof(NoRecoveryAvailable));
+    public static string ProjectClosed => Get(nameof(ProjectClosed));
+    public static string NoLessonOpen => Get(nameof(NoLessonOpen));
+    public static string StartCenterDescription => Get(nameof(StartCenterDescription));
+    public static string CreateNewLesson => Get(nameof(CreateNewLesson));
+    public static string OpenExistingLesson => Get(nameof(OpenExistingLesson));
+    public static string RecentLessons => Get(nameof(RecentLessons));
+    public static string NoRecentLessons => Get(nameof(NoRecentLessons));
 
     public static string SectionName(int number) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);

@@ -24,6 +24,13 @@ public sealed record AuthoringStateChangedEventArgs(
     bool HasUnsavedChanges,
     string Description);
 
+public enum SlideSelectionMode
+{
+    Replace,
+    Toggle,
+    Range,
+}
+
 public sealed class AuthoringSession
 {
     private readonly Func<DateTimeOffset> _clock;
@@ -50,6 +57,8 @@ public sealed class AuthoringSession
         CurrentProject = ValidateAndNormalize(project);
         CurrentPath = currentPath;
         ActiveSlideId = CurrentProject.Slides[0].Id;
+        SelectedSlideIds = new HashSet<Guid> { ActiveSlideId };
+        SelectionAnchorSlideId = ActiveSlideId;
         _savedStateId = isNew ? Guid.Empty : _currentStateId;
     }
 
@@ -58,6 +67,8 @@ public sealed class AuthoringSession
     public LessonProject CurrentProject { get; private set; }
     public string? CurrentPath { get; private set; }
     public Guid ActiveSlideId { get; private set; }
+    public IReadOnlySet<Guid> SelectedSlideIds { get; private set; }
+    public Guid SelectionAnchorSlideId { get; private set; }
     public IReadOnlySet<Guid> SelectedNodeIds { get; private set; } = new HashSet<Guid>();
     public long Revision { get; private set; }
     public bool CanUndo => _undo.Count > 0;
@@ -137,14 +148,53 @@ public sealed class AuthoringSession
         RaiseStateChanged("Project saved");
     }
 
-    public void SelectSlide(Guid slideId)
+    public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace)
     {
-        if (CurrentProject.Slides.All(slide => slide.Id != slideId))
+        var targetIndex = CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == slideId);
+        if (targetIndex < 0)
         {
             throw new AuthoringCommandException("The selected slide does not exist.");
         }
 
-        ActiveSlideId = slideId;
+        var selected = SelectedSlideIds.ToHashSet();
+        switch (mode)
+        {
+            case SlideSelectionMode.Replace:
+                selected = [slideId];
+                SelectionAnchorSlideId = slideId;
+                break;
+            case SlideSelectionMode.Toggle:
+                if (!selected.Remove(slideId))
+                {
+                    selected.Add(slideId);
+                }
+                if (selected.Count == 0)
+                {
+                    selected.Add(slideId);
+                }
+                SelectionAnchorSlideId = slideId;
+                break;
+            case SlideSelectionMode.Range:
+                var anchorIndex = CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == SelectionAnchorSlideId);
+                if (anchorIndex < 0)
+                {
+                    anchorIndex = targetIndex;
+                    SelectionAnchorSlideId = slideId;
+                }
+                selected = CurrentProject.Slides
+                    .Skip(Math.Min(anchorIndex, targetIndex))
+                    .Take(Math.Abs(targetIndex - anchorIndex) + 1)
+                    .Select(slide => slide.Id)
+                    .ToHashSet();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(mode));
+        }
+
+        SelectedSlideIds = selected;
+        ActiveSlideId = selected.Contains(slideId)
+            ? slideId
+            : CurrentProject.Slides.Last(slide => selected.Contains(slide.Id)).Id;
         SelectedNodeIds = new HashSet<Guid>();
         RaiseStateChanged("Slide selected");
     }
@@ -183,6 +233,17 @@ public sealed class AuthoringSession
         if (CurrentProject.Slides.All(slide => slide.Id != ActiveSlideId))
         {
             ActiveSlideId = CurrentProject.Slides[0].Id;
+        }
+
+        var validSlideIds = CurrentProject.Slides.Select(slide => slide.Id).ToHashSet();
+        SelectedSlideIds = SelectedSlideIds.Where(validSlideIds.Contains).ToHashSet();
+        if (SelectedSlideIds.Count == 0)
+        {
+            SelectedSlideIds = new HashSet<Guid> { ActiveSlideId };
+        }
+        if (!validSlideIds.Contains(SelectionAnchorSlideId))
+        {
+            SelectionAnchorSlideId = ActiveSlideId;
         }
 
         var activeNodeIds = CurrentProject.Slides

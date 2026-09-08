@@ -38,4 +38,11 @@
   <data name="ProjectCopySaved" xml:space="preserve"><value>Project copy saved</value></data>
   <data name="NoRecoveryAvailable" xml:space="preserve"><value>No recovery snapshots are available</value></data>
   <data name="RecoveryPreserveFailed" xml:space="preserve"><value>Could not preserve recovery: {0}</value></data>
+  <data name="ProjectClosed" xml:space="preserve"><value>Project closed — choose a recent lesson or create a new one</value></data>
+  <data name="NoLessonOpen" xml:space="preserve"><value>No lesson is open</value></data>
+  <data name="StartCenterDescription" xml:space="preserve"><value>Create a lesson, open an existing project, or continue from a recent file.</value></data>
+  <data name="CreateNewLesson" xml:space="preserve"><value>Create new lesson</value></data>
+  <data name="OpenExistingLesson" xml:space="preserve"><value>Open existing lesson</value></data>
+  <data name="RecentLessons" xml:space="preserve"><value>Recent lessons</value></data>
+  <data name="NoRecentLessons" xml:space="preserve"><value>No recent saved lessons yet.</value></data>
 </root>
