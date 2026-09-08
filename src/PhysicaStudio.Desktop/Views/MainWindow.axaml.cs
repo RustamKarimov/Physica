@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.VisualTree;
 using PhysicaStudio.Authoring;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.Services;
@@ -20,9 +21,10 @@ public sealed partial class MainWindow : Window
     private bool _closeInProgress;
     private Guid? _pendingSlideDragId;
     private Point? _slideDragStart;
-    private PointerPressedEventArgs? _slideDragTrigger;
     private KeyModifiers _slidePressModifiers;
     private bool _slideDragStarted;
+    private Guid? _slideDropTargetId;
+    private bool _slideDropAfter;
 
     public MainWindow() : this(null)
     {
@@ -170,8 +172,8 @@ public sealed partial class MainWindow : Window
 
         control.Focus();
         _pendingSlideDragId = slide.Id;
-        _slideDragStart = e.GetPosition(control);
-        _slideDragTrigger = e;
+        _slideDragStart = e.GetPosition(this);
+        e.Pointer.Capture(control);
         _slidePressModifiers = e.KeyModifiers;
         _slideDragStarted = false;
 
@@ -183,44 +185,54 @@ public sealed partial class MainWindow : Window
         e.Handled = true;
     }
 
-    private async void SlideItem_PointerMoved(object? sender, PointerEventArgs e)
+    private void SlideItem_PointerMoved(object? sender, PointerEventArgs e)
     {
         if (sender is not Control { DataContext: SlideItemViewModel slide } control
             || _pendingSlideDragId != slide.Id
             || _slideDragStart is not Point start
-            || _slideDragStarted
-            || _slideDragTrigger is null
             || !e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
         {
             return;
         }
 
-        var current = e.GetPosition(control);
-        if (Math.Abs(current.X - start.X) < 6 && Math.Abs(current.Y - start.Y) < 6)
+        var current = e.GetPosition(this);
+        if (!_slideDragStarted
+            && Math.Abs(current.X - start.X) < 6
+            && Math.Abs(current.Y - start.Y) < 6)
         {
             return;
         }
 
-        _slideDragStarted = true;
-        if (!_viewModel.SelectedSlideIds.Contains(slide.Id))
+        if (!_slideDragStarted)
         {
-            _viewModel.SelectSlide(slide.Id);
+            _slideDragStarted = true;
+            if (!_viewModel.SelectedSlideIds.Contains(slide.Id))
+            {
+                _viewModel.SelectSlide(slide.Id);
+            }
         }
 
-        var data = new DataTransfer();
-        data.Add(DataTransferItem.CreateText($"physica-slide:{slide.Id:D}"));
         try
         {
-            await DragDrop.DoDragDropAsync(_slideDragTrigger, data, DragDropEffects.Move);
+            AutoScrollSlideNavigator(e.GetPosition(SlideNavigatorScrollViewer));
+            UpdateSlideDropTarget(current);
+            e.Handled = true;
         }
-        finally
+        catch (Exception exception)
         {
+            ClearSlideDropIndicators();
             ResetSlidePointerState();
+            e.Pointer.Capture(null);
+            _viewModel.SetStatus(exception.Message);
+            e.Handled = true;
         }
     }
 
     private void SlideItem_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
+        var targetSlideId = _slideDropTargetId;
+        var placeAfterTarget = _slideDropAfter;
+        var shouldMove = _slideDragStarted && targetSlideId.HasValue;
         if (sender is Control { DataContext: SlideItemViewModel slide }
             && _pendingSlideDragId == slide.Id
             && !_slideDragStarted
@@ -228,45 +240,122 @@ public sealed partial class MainWindow : Window
         {
             _viewModel.SelectSlide(slide.Id);
         }
+
+        ClearSlideDropIndicators();
         ResetSlidePointerState();
-        e.Handled = true;
-    }
+        e.Pointer.Capture(null);
 
-    private void SlideItem_DragOver(object? sender, DragEventArgs e)
-    {
-        var isSlideDrag = IsSlideDrag(e.DataTransfer);
-        e.DragEffects = isSlideDrag ? DragDropEffects.Move : DragDropEffects.None;
-        if (sender is Control control)
+        if (shouldMove)
         {
-            SetDropIndicator(control, isSlideDrag, e.GetPosition(control).Y < control.Bounds.Height / 2);
-        }
-        e.Handled = true;
-    }
-
-    private void SlideItem_DragLeave(object? sender, DragEventArgs e)
-    {
-        if (sender is Control control)
-        {
-            SetDropIndicator(control, false, false);
-        }
-    }
-
-    private void SlideItem_Drop(object? sender, DragEventArgs e)
-    {
-        if (sender is not Control { DataContext: SlideItemViewModel target } control || !IsSlideDrag(e.DataTransfer))
-        {
-            e.DragEffects = DragDropEffects.None;
-            if (sender is Control invalidTarget)
+            try
             {
-                SetDropIndicator(invalidTarget, false, false);
+                _viewModel.MoveSelectedSlides(targetSlideId!.Value, placeAfterTarget);
             }
+            catch (AuthoringCommandException exception)
+            {
+                _viewModel.SetStatus(exception.Message);
+            }
+        }
+
+        e.Handled = true;
+    }
+
+    private void SlideItem_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
+    {
+        ClearSlideDropIndicators();
+        ResetSlidePointerState();
+    }
+
+    private void AutoScrollSlideNavigator(Point pointerPosition)
+    {
+        const double edge = 32;
+        const double step = 18;
+        var offset = SlideNavigatorScrollViewer.Offset;
+        var nextY = offset.Y;
+        if (pointerPosition.Y < edge)
+        {
+            nextY -= step;
+        }
+        else if (pointerPosition.Y > SlideNavigatorScrollViewer.Bounds.Height - edge)
+        {
+            nextY += step;
+        }
+
+        var maximum = Math.Max(0, SlideNavigatorScrollViewer.Extent.Height - SlideNavigatorScrollViewer.Viewport.Height);
+        nextY = Math.Clamp(nextY, 0, maximum);
+        if (!nextY.Equals(offset.Y))
+        {
+            SlideNavigatorScrollViewer.Offset = new Vector(offset.X, nextY);
+        }
+    }
+
+    private void UpdateSlideDropTarget(Point pointerPosition)
+    {
+        ClearSlideDropIndicators();
+        _slideDropTargetId = null;
+
+        Border? closestControl = null;
+        SlideItemViewModel? closestSlide = null;
+        var closestDistance = double.MaxValue;
+        var placeAfter = false;
+
+        foreach (var candidate in this.GetVisualDescendants()
+                     .OfType<Border>()
+                     .Where(control => control.Classes.Contains("slide-navigator-item"))
+                     .Where(control => control.DataContext is SlideItemViewModel))
+        {
+            var slide = (SlideItemViewModel)candidate.DataContext!;
+            var origin = candidate.TranslatePoint(default, this);
+            if (origin is not Point topLeft)
+            {
+                continue;
+            }
+
+            var top = topLeft.Y;
+            var bottom = top + candidate.Bounds.Height;
+            if (_viewModel.SelectedSlideIds.Contains(slide.Id))
+            {
+                if (pointerPosition.Y >= top && pointerPosition.Y <= bottom)
+                {
+                    return;
+                }
+                continue;
+            }
+
+            var distance = pointerPosition.Y < top
+                ? top - pointerPosition.Y
+                : pointerPosition.Y > bottom
+                    ? pointerPosition.Y - bottom
+                    : 0;
+            if (distance >= closestDistance)
+            {
+                continue;
+            }
+
+            closestDistance = distance;
+            closestControl = candidate;
+            closestSlide = slide;
+            placeAfter = pointerPosition.Y >= top + candidate.Bounds.Height / 2;
+        }
+
+        if (closestControl is null || closestSlide is null)
+        {
             return;
         }
 
-        _viewModel.MoveSelectedSlides(target.Id, e.GetPosition(control).Y >= control.Bounds.Height / 2);
-        SetDropIndicator(control, false, false);
-        e.DragEffects = DragDropEffects.Move;
-        e.Handled = true;
+        _slideDropTargetId = closestSlide.Id;
+        _slideDropAfter = placeAfter;
+        SetDropIndicator(closestControl, true, !placeAfter);
+    }
+
+    private void ClearSlideDropIndicators()
+    {
+        foreach (var candidate in this.GetVisualDescendants()
+                     .OfType<Border>()
+                     .Where(control => control.Classes.Contains("slide-navigator-item")))
+        {
+            SetDropIndicator(candidate, false, false);
+        }
     }
 
     private static SlideSelectionMode SelectionModeFor(KeyModifiers modifiers) =>
@@ -295,13 +384,11 @@ public sealed partial class MainWindow : Window
     {
         _pendingSlideDragId = null;
         _slideDragStart = null;
-        _slideDragTrigger = null;
         _slidePressModifiers = KeyModifiers.None;
         _slideDragStarted = false;
+        _slideDropTargetId = null;
+        _slideDropAfter = false;
     }
-
-    private static bool IsSlideDrag(IDataTransfer dataTransfer) =>
-        dataTransfer.TryGetText()?.StartsWith("physica-slide:", StringComparison.Ordinal) == true;
 
     private void NewSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.AddSlide();
     private void DuplicateSlide_Click(object? sender, RoutedEventArgs e) => _viewModel.DuplicateActiveSlide();

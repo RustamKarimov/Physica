@@ -207,7 +207,7 @@
               <Path Data="M 9,3 L 4,8 L 9,13" Stroke="#8193A0" StrokeThickness="1.4" />
             </Button>
           </Grid>
-          <ScrollViewer Grid.Row="1"
+          <ScrollViewer x:Name="SlideNavigatorScrollViewer" Grid.Row="1"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Hidden">
             <ItemsControl ItemsSource="{Binding Slides}" Margin="8,4,8,8"
@@ -232,10 +232,7 @@
                             PointerPressed="SlideItem_PointerPressed"
                             PointerMoved="SlideItem_PointerMoved"
                             PointerReleased="SlideItem_PointerReleased"
-                            DragDrop.AllowDrop="True"
-                            DragDrop.DragOver="SlideItem_DragOver"
-                            DragDrop.DragLeave="SlideItem_DragLeave"
-                            DragDrop.Drop="SlideItem_Drop"
+                            PointerCaptureLost="SlideItem_PointerCaptureLost"
                             Opacity="{Binding Opacity}"
                             AutomationProperties.Name="{Binding Name}">
                       <Grid>

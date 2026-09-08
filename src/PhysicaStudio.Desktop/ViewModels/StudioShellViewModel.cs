@@ -91,7 +91,9 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public string SlideSurfaceColor => ActiveSlide.Background.Color;
     public string InspectorTitle => ShowStandingWaveReference ? "Standing Wave" : "Slide";
     public string TimelineSummary => ShowStandingWaveReference ? "7 tracks · 23 keyframes" : "0 tracks · 0 keyframes";
-    public SceneSnapshot ActiveScene => _sceneBuilder.Build(_session.CurrentProject, ActiveSlide, _session.Revision);
+    public SceneSnapshot ActiveScene =>
+        Slides.FirstOrDefault(slide => slide.Id == _session.ActiveSlideId)?.Scene
+        ?? _sceneBuilder.Build(_session.CurrentProject, ActiveSlide, _session.Revision);
     public double SlideLogicalWidth => ActiveScene.LogicalSize.Width;
     public double SlideLogicalHeight => ActiveScene.LogicalSize.Height;
     public double ThumbnailWidth => Math.Min(168, 94.5 * ActiveScene.LogicalSize.Width / ActiveScene.LogicalSize.Height);
@@ -209,16 +211,12 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     {
         _session.MarkSaved(path);
         StatusMessage = AppText.ProjectSaved;
-        RefreshFromSession();
     }
 
     public void SetStatus(string status) => StatusMessage = status;
 
-    public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace)
-    {
+    public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace) =>
         _session.SelectSlide(slideId, mode);
-        RefreshFromSession();
-    }
 
     public void CloseProject()
     {
@@ -245,7 +243,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         var index = _session.CurrentProject.Slides.ToList().FindIndex(slide => slide.Id == _session.ActiveSlideId);
         _session.SelectSlide(_session.CurrentProject.Slides[index + 1].Id);
         StatusMessage = AppText.SlideAdded;
-        RefreshFromSession();
     }
 
     public void DuplicateActiveSlide()
@@ -254,7 +251,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         _session.Execute(ProjectCommands.DuplicateSlide(_session.ActiveSlideId));
         _session.SelectSlide(_session.CurrentProject.Slides[sourceIndex + 1].Id);
         StatusMessage = AppText.SlideDuplicated;
-        RefreshFromSession();
     }
 
     public void DeleteActiveSlide() => DeleteSelectedSlides();
@@ -269,7 +265,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
         _session.Execute(ProjectCommands.DeleteSlides(_session.SelectedSlideIds));
         StatusMessage = AppText.SlideDeleted;
-        RefreshFromSession();
     }
 
     public void MoveActiveSlide(int offset)
@@ -293,7 +288,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             slides[targetIndex].Id,
             placeAfterTarget: offset > 0));
         StatusMessage = AppText.SlideMoved;
-        RefreshFromSession();
     }
 
     public void MoveSelectedSlides(Guid targetSlideId, bool placeAfterTarget)
@@ -305,7 +299,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
         _session.Execute(ProjectCommands.MoveSlides(_session.SelectedSlideIds, targetSlideId, placeAfterTarget));
         StatusMessage = AppText.SlideMoved;
-        RefreshFromSession();
     }
 
     public void AddSectionForActiveSlide()
@@ -313,19 +306,16 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         var name = AppText.SectionName(_session.CurrentProject.Sections.Count + 1);
         _session.Execute(ProjectCommands.AddSectionAndAssignSlides(name, _session.SelectedSlideIds));
         StatusMessage = AppText.SectionAdded;
-        RefreshFromSession();
     }
 
     public void Undo()
     {
         if (_session.Undo()) StatusMessage = AppText.UndoCompleted;
-        RefreshFromSession();
     }
 
     public void Redo()
     {
         if (_session.Redo()) StatusMessage = AppText.RedoCompleted;
-        RefreshFromSession();
     }
 
     private static AuthoringSession CreateReferenceSession()
@@ -346,7 +336,54 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         RefreshFromSession();
     }
 
-    private void Session_StateChanged(object? sender, AuthoringStateChangedEventArgs e) => RefreshFromSession();
+    private void Session_StateChanged(object? sender, AuthoringStateChangedEventArgs e)
+    {
+        if (e.Kind == AuthoringStateChangeKind.Selection)
+        {
+            RefreshSelectionFromSession();
+            return;
+        }
+
+        if (e.Kind == AuthoringStateChangeKind.Persistence)
+        {
+            RefreshPersistenceFromSession();
+            return;
+        }
+
+        RefreshFromSession();
+    }
+
+    private void RefreshSelectionFromSession()
+    {
+        foreach (var slide in Slides)
+        {
+            slide.SetSelected(_session.SelectedSlideIds.Contains(slide.Id));
+        }
+
+        RefreshCommandAvailability();
+        OnPropertyChanged(nameof(SelectedSlideIds));
+        OnPropertyChanged(nameof(ActiveSlide));
+        OnPropertyChanged(nameof(ShowStandingWaveReference));
+        OnPropertyChanged(nameof(ShowEmptySlideContext));
+        OnPropertyChanged(nameof(SlideSurfaceColor));
+        OnPropertyChanged(nameof(ActiveScene));
+        OnPropertyChanged(nameof(SlideLogicalWidth));
+        OnPropertyChanged(nameof(SlideLogicalHeight));
+        OnPropertyChanged(nameof(ThumbnailWidth));
+        OnPropertyChanged(nameof(ThumbnailHeight));
+        OnPropertyChanged(nameof(InspectorTitle));
+        OnPropertyChanged(nameof(TimelineSummary));
+    }
+
+    private void RefreshPersistenceFromSession()
+    {
+        RefreshCommandAvailability();
+        OnPropertyChanged(nameof(DocumentTitle));
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
+        OnPropertyChanged(nameof(CanSave));
+        OnPropertyChanged(nameof(HasUnsavedChanges));
+    }
 
     private void RefreshFromSession()
     {
@@ -624,22 +661,63 @@ public sealed class RibbonCommandViewModel : INotifyPropertyChanged
     private static string SlugForTest(string value) => value.ToLowerInvariant().Replace(' ', '-');
 }
 
-public sealed record SlideItemViewModel(
-    Guid Id,
-    int Number,
-    string Name,
-    SceneSnapshot Scene,
-    double PreviewAspectRatio,
-    bool IsSelected,
-    bool IsHidden,
-    string? SectionName = null,
-    bool ShowSectionHeader = false)
+public sealed class SlideItemViewModel : INotifyPropertyChanged
 {
+    private bool _isSelected;
+
+    public SlideItemViewModel(
+        Guid id,
+        int number,
+        string name,
+        SceneSnapshot scene,
+        double previewAspectRatio,
+        bool isSelected,
+        bool isHidden,
+        string? sectionName = null,
+        bool showSectionHeader = false)
+    {
+        Id = id;
+        Number = number;
+        Name = name;
+        Scene = scene;
+        PreviewAspectRatio = previewAspectRatio;
+        _isSelected = isSelected;
+        IsHidden = isHidden;
+        SectionName = sectionName;
+        ShowSectionHeader = showSectionHeader;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public Guid Id { get; }
+    public int Number { get; }
+    public string Name { get; }
+    public SceneSnapshot Scene { get; }
+    public double PreviewAspectRatio { get; }
+    public bool IsSelected => _isSelected;
+    public bool IsHidden { get; }
+    public string? SectionName { get; }
+    public bool ShowSectionHeader { get; }
     public string Background => IsSelected ? "#132433" : "#101D27";
     public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
     public string NumberForeground => IsSelected ? "#168CFF" : "#8EA0AC";
     public string TextForeground => IsSelected ? "#EDF3F7" : "#C8D2D9";
     public double Opacity => IsHidden ? 0.55 : 1;
+
+    public void SetSelected(bool isSelected)
+    {
+        if (_isSelected == isSelected)
+        {
+            return;
+        }
+
+        _isSelected = isSelected;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Background)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BorderBrush)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NumberForeground)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextForeground)));
+    }
 }
 
 public sealed record ObjectCardViewModel(string Name, string Category, string PreviewKind, string Status);

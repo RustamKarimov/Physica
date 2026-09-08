@@ -22,7 +22,15 @@ public sealed record AuthoringStateChangedEventArgs(
     bool CanUndo,
     bool CanRedo,
     bool HasUnsavedChanges,
-    string Description);
+    string Description,
+    AuthoringStateChangeKind Kind);
+
+public enum AuthoringStateChangeKind
+{
+    Document,
+    Selection,
+    Persistence,
+}
 
 public enum SlideSelectionMode
 {
@@ -145,7 +153,7 @@ public sealed class AuthoringSession
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
         CurrentPath = Path.GetFullPath(path);
         _savedStateId = _currentStateId;
-        RaiseStateChanged("Project saved");
+        RaiseStateChanged("Project saved", AuthoringStateChangeKind.Persistence);
     }
 
     public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace)
@@ -196,7 +204,7 @@ public sealed class AuthoringSession
             ? slideId
             : CurrentProject.Slides.Last(slide => selected.Contains(slide.Id)).Id;
         SelectedNodeIds = new HashSet<Guid>();
-        RaiseStateChanged("Slide selected");
+        RaiseStateChanged("Slide selected", AuthoringStateChangeKind.Selection);
     }
 
     public void SelectNodes(IEnumerable<Guid> nodeIds)
@@ -213,7 +221,7 @@ public sealed class AuthoringSession
         }
 
         SelectedNodeIds = selection;
-        RaiseStateChanged("Selection changed");
+        RaiseStateChanged("Selection changed", AuthoringStateChangeKind.Selection);
     }
 
     private static LessonProject ValidateAndNormalize(LessonProject project)
@@ -254,14 +262,17 @@ public sealed class AuthoringSession
         SelectedNodeIds = SelectedNodeIds.Where(activeNodeIds.Contains).ToHashSet();
     }
 
-    private void RaiseStateChanged(string description) =>
+    private void RaiseStateChanged(
+        string description,
+        AuthoringStateChangeKind kind = AuthoringStateChangeKind.Document) =>
         StateChanged?.Invoke(this, new AuthoringStateChangedEventArgs(
             CurrentProject,
             Revision,
             CanUndo,
             CanRedo,
             HasUnsavedChanges,
-            description));
+            description,
+            kind));
 
     private sealed record HistoryEntry(
         LessonProject Before,
