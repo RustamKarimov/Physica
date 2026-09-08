@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-08  
 **Result:** Implementation and contract tests pass; acceptance remains open  
-**Tested working tree base:** `140b2983369fbbbaf7f8018390ada1e45892aba1`  
+**Tested implementation commit:** `66f777fbdc3e52d1900261fcfd07d90ff82f18b6`
 **Platform:** Windows 11 Pro 64-bit, build 10.0.26200, .NET SDK 10.0.400  
 **Launcher:** `Launch Physica.bat`
 
