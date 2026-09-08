@@ -40,6 +40,8 @@ Commit `d32e3c1d3d32e334f2a9ba84e9168741c23ff907` adds persisted automatic-versu
 
 The solution builds with zero warnings/errors and all 53 foundation tests pass, including six focused naming/compatibility scenarios and UI-structure coverage. `Launch Physica.bat` started the expected responsive binary. The Computer controller again failed during initialization before any app input, including retry and reset, so rename and renumber workflows remain **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/NAMING_RECOVERY_2026-09-08.md`.
 
+Commit `efc82d4` completes the section-management command and UI wiring. Sections now collapse without altering the lesson, accept the current multi-slide selection, move as contiguous blocks, and can be removed without deleting slides. A slide dragged across a section boundary changes its section membership in the same atomic reorder command. Every saved mutation remains undoable/redoable, automatic section names follow visual order, and abandoned empty sections are removed deterministically. The suite reports 57 passing tests and the solution builds with zero warnings/errors. `Launch Physica.bat` started responsive process 34932. Computer initialization failed before app input after retry, reset, and final retry, so this work remains **UI wired**. Evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/SECTION_MANAGEMENT_2026-09-09.md`.
+
 
 ## Binding visual authority
 
@@ -115,7 +117,7 @@ Completed across the first two functional slices:
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
 - Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and internal pointer-capture ordering for selected slide blocks; real pointer acceptance remains pending.
 - Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
-- Visible section headings and multi-slide atomic section assignment.
+- Visible collapsible section headings, multi-slide assignment, block reordering, safe section removal, and cross-boundary drag semantics.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
 - Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
 - Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
@@ -126,7 +128,7 @@ The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_
 
 Still required for the Phase 2 gate:
 
-- Section rename/delete/reassignment/collapse UX and drag-between-section behavior; visible grouping, multi-slide assignment, and drag ordering are active.
+- Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
 - Pointer selection, drag, resize, rotation, multi-selection, grouping, and layer panel activation.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.

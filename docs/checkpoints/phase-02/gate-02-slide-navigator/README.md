@@ -53,3 +53,7 @@ No application interaction result is inferred from this infrastructure failure.
 5. Widen and narrow the left panel; every thumbnail must resize continuously while retaining the lesson canvas ratio.
 
 Gate 2 remains **UI wired**, not Interaction verified, until those actions are captured successfully. Gate 1 and Gate 2 user approval remain open.
+
+## 2026-09-09 section-management extension
+
+Implementation commit `efc82d4` adds the remaining section command and UI paths: collapse/expand, multi-slide reassignment, whole-section movement, safe removal, cross-boundary drag membership, and undo/redo. All 57 foundation tests pass and the application launches responsively. The Windows Computer controller again failed before application input, so the detailed report in `SECTION_MANAGEMENT_2026-09-09.md` remains UI-wired evidence only.
