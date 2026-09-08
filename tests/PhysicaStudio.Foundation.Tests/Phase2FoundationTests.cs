@@ -361,19 +361,23 @@ public sealed class Phase2FoundationTests
     }
 
     [Fact]
-    public void StudioViewModel_BlankSlidesHaveBlankThumbnailsAndNoReferenceContext()
+    public void StudioViewModel_BlankSlidesHaveEmptyDocumentScenesAndNoReferenceContext()
     {
         var viewModel = new StudioShellViewModel(
             new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
             new FeatureManifest([], 2, []));
 
         viewModel.AddSlide();
-        Assert.Equal(SlideThumbnailVariant.Blank, viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id).Variant);
+        var added = viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id);
+        Assert.Empty(added.Scene.Layers);
+        Assert.Equal(viewModel.ActiveScene, added.Scene);
         Assert.True(viewModel.ShowEmptySlideContext);
         Assert.Equal("0 tracks · 0 keyframes", viewModel.TimelineSummary);
 
         viewModel.DuplicateActiveSlide();
-        Assert.Equal(SlideThumbnailVariant.Blank, viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id).Variant);
+        var duplicate = viewModel.Slides.Single(slide => slide.Id == viewModel.ActiveSlide.Id);
+        Assert.Empty(duplicate.Scene.Layers);
+        Assert.Equal(viewModel.ActiveScene, duplicate.Scene);
     }
 
     [Fact]

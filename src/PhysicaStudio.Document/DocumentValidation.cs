@@ -76,6 +76,11 @@ public static class DocumentValidator
             Require(IsFiniteNonNegative(node.Geometry.Width) && IsFiniteNonNegative(node.Geometry.Height) && IsFinite(node.Geometry.X) && IsFinite(node.Geometry.Y), "node.geometry.invalid", "Node geometry must contain finite coordinates and non-negative dimensions.", $"{nodePath}.geometry", issues);
             Require(IsValid(node.ModelTransform), "node.modelTransform.invalid", "Model transform contains an invalid value.", $"{nodePath}.modelTransform", issues);
             Require(IsValid(node.PresentationTransform), "node.presentationTransform.invalid", "Presentation transform contains an invalid value.", $"{nodePath}.presentationTransform", issues);
+            Require(IsFiniteNonNegative(node.Appearance.StrokeWidth) && IsFiniteNonNegative(node.Appearance.CornerRadius), "node.appearance.geometry", "Stroke width and corner radius must be finite and non-negative.", $"{nodePath}.appearance", issues);
+            Require(IsFiniteInRange(node.Appearance.Opacity, 0, 1), "node.appearance.opacity", "Appearance opacity must be between 0 and 1.", $"{nodePath}.appearance.opacity", issues);
+            Require(IsFinitePositive(node.Appearance.FontSize), "node.appearance.fontSize", "Font size must be finite and positive.", $"{nodePath}.appearance.fontSize", issues);
+            Require(node.Appearance.DashPattern.All(IsFiniteNonNegative), "node.appearance.dash", "Dash values must be finite and non-negative.", $"{nodePath}.appearance.dashPattern", issues);
+            Require(node.Content.Points.All(point => IsFinite(point.X) && IsFinite(point.Y)), "node.content.points", "Path points must contain finite coordinates.", $"{nodePath}.content.points", issues);
         }
 
         foreach (var node in slide.Nodes)

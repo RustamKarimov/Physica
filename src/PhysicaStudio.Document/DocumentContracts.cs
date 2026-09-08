@@ -181,7 +181,7 @@ public sealed record SnapSettings(
     public static SnapSettings Default { get; } = new(true, true, true, true, true, 20, 8);
 }
 
-public sealed record SceneNode(
+public sealed partial record SceneNode(
     Guid Id,
     string Name,
     string Kind,

@@ -11,9 +11,9 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
           <controls:PhysicaIcon IconKey="play" Width="17" Height="17" Stroke="#5ADACC" />
           <TextBlock Text="PRESENTATION QUALIFICATION" Classes="eyebrow" Foreground="#DCE8F1" VerticalAlignment="Center" />
-          <Border Background="#3A3228" CornerRadius="4" Padding="6,2"><TextBlock Text="SHELL PREVIEW" FontSize="8.5" Foreground="#E9BD73" FontWeight="Bold" /></Border>
+          <Border Background="#3A3228" CornerRadius="4" Padding="6,2"><TextBlock x:Name="PreviewBadgeText" Text="SHELL PREVIEW" FontSize="8.5" Foreground="#E9BD73" FontWeight="Bold" /></Border>
         </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+        <StackPanel x:Name="QualificationModeButtons" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
           <Button x:Name="DarkModeButton" Classes="physica-primary" Click="ShowDark_Click" Content="Dark explanation" />
           <Button x:Name="InteractiveModeButton" Click="ShowInteractive_Click" Content="Light investigation" />
         </StackPanel>
@@ -22,6 +22,15 @@
     </Border>
 
     <Grid Grid.Row="1" Background="#050B11">
+      <Grid x:Name="CurrentSlidePresentation" IsVisible="False">
+        <Viewbox Margin="28" Stretch="Uniform">
+          <Border x:Name="CurrentSlideFrame" Width="1920" Height="1080"
+                  BorderBrush="#334451" BorderThickness="1" BoxShadow="0 16 44 0 #99000000">
+            <controls:DocumentSceneSurface x:Name="CurrentSlideSurface" />
+          </Border>
+        </Viewbox>
+      </Grid>
+
       <Grid x:Name="DarkPresentation">
         <Viewbox Margin="28" Stretch="Uniform">
           <Border Width="1000" Height="562.5" Background="#07121B" BoxShadow="0 16 44 0 #99000000">
@@ -50,7 +59,7 @@
       </Grid>
     </Grid>
 
-    <Border Grid.Row="2" Background="#0D1822" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+    <Border x:Name="QualificationFooter" Grid.Row="2" Background="#0D1822" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
       <Grid ColumnDefinitions="*,Auto,*" Margin="16,0">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="5">
           <Button Classes="quiet tool" ToolTip.Tip="Pen · Planned Phase 5"><controls:PhysicaIcon IconKey="arrow" Width="15" Height="15" Stroke="#9BB0C0" /></Button>
@@ -66,6 +75,17 @@
           <TextBlock x:Name="CheckpointText" Text="Checkpoint 2 of 5 · Reveal nodes" Foreground="#A9BBC8" FontSize="11" VerticalAlignment="Center" />
           <Border Background="#1B353A" BorderBrush="#2C6260" BorderThickness="1" CornerRadius="4" Padding="7,3"><TextBlock Text="DETERMINISTIC PREVIEW" Foreground="#68DDD0" FontSize="8.5" FontWeight="Bold" /></Border>
         </StackPanel>
+      </Grid>
+    </Border>
+
+    <Border x:Name="CurrentSlideFooter" Grid.Row="2" IsVisible="False"
+            Background="#0D1822" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+      <Grid ColumnDefinitions="*,Auto" Margin="18,0">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
+          <Ellipse Width="7" Height="7" Fill="#5ADACC" />
+          <TextBlock Text="DOCUMENT-DRIVEN CURRENT SLIDE · presenter controls activate in Phase 5" Foreground="#A9BBC8" FontSize="11" VerticalAlignment="Center" />
+        </StackPanel>
+        <Button Grid.Column="1" VerticalAlignment="Center" Click="Close_Click" Padding="16,6" Content="Close preview" />
       </Grid>
     </Border>
   </Grid>

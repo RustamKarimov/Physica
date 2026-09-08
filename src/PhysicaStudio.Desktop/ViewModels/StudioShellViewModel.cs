@@ -2,11 +2,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using PhysicaStudio.Authoring;
-using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Models;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.Services;
 using PhysicaStudio.Document;
+using PhysicaStudio.Rendering2D;
 
 namespace PhysicaStudio.Desktop.ViewModels;
 
@@ -24,6 +24,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private AuthoringSession _session;
     private string _statusMessage = AppText.ProjectFoundationReady;
     private bool _isProjectOpen = true;
+    private readonly ISlideSceneSnapshotBuilder _sceneBuilder = new SlideSceneSnapshotBuilder();
 
     public StudioShellViewModel()
         : this(ManifestLoader.LoadRibbon(), ManifestLoader.LoadFeatures())
@@ -85,11 +86,16 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public bool CanRedo => _session.CanRedo;
     public bool CanSave => _session.HasUnsavedChanges || _session.CurrentPath is null;
     public bool HasUnsavedChanges => _session.HasUnsavedChanges;
-    public bool ShowStandingWaveReference => ActiveSlide.Name.Contains("Standing", StringComparison.OrdinalIgnoreCase);
+    public bool ShowStandingWaveReference => ActiveSlide.Nodes.Any(node => node.Kind == "physics.standing-wave");
     public bool ShowEmptySlideContext => !ShowStandingWaveReference;
     public string SlideSurfaceColor => ActiveSlide.Background.Color;
     public string InspectorTitle => ShowStandingWaveReference ? "Standing Wave" : "Slide";
     public string TimelineSummary => ShowStandingWaveReference ? "7 tracks · 23 keyframes" : "0 tracks · 0 keyframes";
+    public SceneSnapshot ActiveScene => _sceneBuilder.Build(_session.CurrentProject, ActiveSlide, _session.Revision);
+    public double SlideLogicalWidth => ActiveScene.LogicalSize.Width;
+    public double SlideLogicalHeight => ActiveScene.LogicalSize.Height;
+    public double ThumbnailWidth => Math.Min(168, 94.5 * ActiveScene.LogicalSize.Width / ActiveScene.LogicalSize.Height);
+    public double ThumbnailHeight => Math.Min(94.5, 168 * ActiveScene.LogicalSize.Height / ActiveScene.LogicalSize.Width);
     public bool IsProjectOpen => _isProjectOpen;
     public bool IsStartCenterVisible => !_isProjectOpen;
     public bool HasRecentProjects => RecentProjects.Count > 0;
@@ -324,11 +330,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     private static AuthoringSession CreateReferenceSession()
     {
-        var names = new[] { "Introduction", "Harmonics", "Standing Waves", "Energy in a standing wave", "Applications" };
-        var project = LessonProject.Create("Standing Waves Lesson") with
-        {
-            Slides = names.Select(SlideDocument.Create).ToArray(),
-        };
+        var project = ReferenceLessonFactory.Create();
         var session = new AuthoringSession(project, isNew: true);
         session.SelectSlide(project.Slides[2].Id);
         return session;
@@ -356,11 +358,16 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             var section = slide.SectionId is Guid sectionId
                 ? _session.CurrentProject.Sections.FirstOrDefault(candidate => candidate.Id == sectionId)
                 : null;
+            var scene = _sceneBuilder.Build(_session.CurrentProject, slide, _session.Revision);
+            var previewWidth = Math.Min(168, 94.5 * scene.LogicalSize.Width / scene.LogicalSize.Height);
+            var previewHeight = Math.Min(94.5, 168 * scene.LogicalSize.Height / scene.LogicalSize.Width);
             Slides.Add(new SlideItemViewModel(
                 slide.Id,
                 index + 1,
                 slide.Name,
-                VariantFor(slide.Name, index),
+                scene,
+                previewWidth,
+                previewHeight,
                 _session.SelectedSlideIds.Contains(slide.Id),
                 slide.IsHidden,
                 section?.Name,
@@ -379,6 +386,11 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowStandingWaveReference));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
         OnPropertyChanged(nameof(SlideSurfaceColor));
+        OnPropertyChanged(nameof(ActiveScene));
+        OnPropertyChanged(nameof(SlideLogicalWidth));
+        OnPropertyChanged(nameof(SlideLogicalHeight));
+        OnPropertyChanged(nameof(ThumbnailWidth));
+        OnPropertyChanged(nameof(ThumbnailHeight));
         OnPropertyChanged(nameof(InspectorTitle));
         OnPropertyChanged(nameof(TimelineSummary));
         OnPropertyChanged(nameof(IsProjectOpen));
@@ -407,12 +419,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             };
             command.SetActive(enabled);
         }
-    }
-
-    private static SlideThumbnailVariant VariantFor(string name, int index)
-    {
-        if (name.Contains("Standing", StringComparison.OrdinalIgnoreCase)) return SlideThumbnailVariant.StandingWave;
-        return SlideThumbnailVariant.Blank;
     }
 
     private static int PhaseFor(string tabId) => tabId switch
@@ -625,7 +631,9 @@ public sealed record SlideItemViewModel(
     Guid Id,
     int Number,
     string Name,
-    SlideThumbnailVariant Variant,
+    SceneSnapshot Scene,
+    double PreviewWidth,
+    double PreviewHeight,
     bool IsSelected,
     bool IsHidden,
     string? SectionName = null,

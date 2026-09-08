@@ -22,13 +22,15 @@ No row advances from a test count alone. Every Interaction verified row requires
 
 | Requirement | Current state | Blocking finding | Required evidence |
 | --- | --- | --- | --- |
-| One document-driven scene output feeds editor, thumbnail, presenter preview, and export boundary | Not implemented | Editor and thumbnail still have separate/static paths | Architecture test and side-by-side captures from one document |
-| Blank slide thumbnail is truly blank | UI wired | Blank variant exists but is not document-rendering proof | Launcher capture and rendered-image assertion |
-| Edited slide thumbnail exactly reflects slide content | Not implemented | Thumbnail renderer does not consume arbitrary scene nodes | Text, shape, image, and background comparison |
-| Duplicate is visually identical with independent IDs | Model only | Document duplication is tested; rendered equivalence is not | ID assertion and pixel comparison before/after editing the copy |
-| Thumbnail preserves slide aspect ratio and consistent dimensions | Failing | Navigator layout does not reliably enforce slide ratio | 16:9 and alternate-size checks at 100%, 125%, 150%, and 200% scaling |
-| Thumbnail invalidates after every visible mutation | Not implemented | No authoritative render-cache invalidation path | Edit, undo, redo, background, reorder, and reopen scenarios |
+| One document-driven scene output feeds editor, thumbnail, presenter preview, and export boundary | UI wired | Architecture assertions pass; Computer side-by-side capture is Not run | Architecture test and side-by-side captures from one document |
+| Blank slide thumbnail is truly blank | UI wired | Empty documents build zero layers; launcher capture is Not run | Launcher capture and rendered-image assertion |
+| Edited slide thumbnail exactly reflects slide content | UI wired | Text/shape/background mappings pass contract tests; application comparison is Not run | Text, shape, image, and background comparison |
+| Duplicate is visually identical with independent IDs | UI wired | Primitive equivalence and independent IDs pass; pixel comparison is Not run | ID assertion and pixel comparison before/after editing the copy |
+| Thumbnail preserves slide aspect ratio and consistent dimensions | UI wired | 16:9 and 4:3 contract checks pass; display-scale runs are Not run | 16:9 and alternate-size checks at 100%, 125%, 150%, and 200% scaling |
+| Thumbnail invalidates after every visible mutation | UI wired | Edit/background/undo/redo revision tests pass; real-control and reopen evidence is Not run | Edit, undo, redo, background, reorder, and reopen scenarios |
 | Gate 1 user approval | Not run | All preceding rows must pass | Review captures and user decision |
+
+Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer/README.md`. The Computer controller failed before any input with a Windows sandbox-helper error, so no row is promoted to Interaction verified.
 
 ## Gate 2 — Slide navigator
 
@@ -62,10 +64,10 @@ No row advances from a test count alone. Every Interaction verified row requires
 
 | Layer | Current evidence | May prove | Does not prove |
 | --- | --- | --- | --- |
-| Model/service | Existing suite contributes to the previously reported 31 tests; refresh exact counts at the next successful run | Validation, serialization, command results, history, snapping calculations | Pointer, keyboard, focus, layout, rendering, drag/drop, or usability |
+| Model/service and render contracts | 39 passed on 2026-09-08 | Validation, serialization, command results, history, snapping calculations, scene mapping, aspect math, and invalidation | Pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
 | UI component | No accepted gate evidence | Real-control input and visual-state changes | Complete lifecycle or cross-platform behavior |
 | Rendered output | No accepted gate evidence | Aspect ratio, content equivalence, invalidation, visual regression | Usability or user approval |
-| End-to-end | No accepted gate evidence | Real launcher workflow across components | User approval by itself |
+| End-to-end | Launcher-started process responsive; no accepted interaction evidence | Process startup only | Real controls, visual equivalence, or user approval |
 
 ## Required gate record
 

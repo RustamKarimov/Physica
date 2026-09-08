@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 acceptance recovery; production feature work is frozen at Gate 1 until the shared-renderer, slide-navigator, and complete-Phase-2 gates pass
+**Current activity:** Phase 2 acceptance recovery; Gate 1 shared-renderer implementation is UI wired, but production feature work remains frozen until Computer interaction evidence and user approval pass
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -20,6 +20,16 @@ The user rejected test-count-based completion claims on 2026-09-08. All user-vis
 - A failed blocking matrix row prevents later-phase work.
 - Phase 2 has three mandatory user checkpoints: shared renderer, slide navigator, and complete Phase 2.
 - Chat reports must separate model/service, UI component, rendered-output, and end-to-end results rather than reporting only a total test count.
+
+## Phase 2 Gate 1 implementation status
+
+The shared-renderer implementation now converts the authoritative `SlideDocument` into one immutable `SceneSnapshot`. The editor, navigator thumbnails, and current-slide presenter preview consume that same snapshot type through one renderer. The five standing-wave reference slides are document scene nodes; the former hard-coded editor and thumbnail controls have been removed. Blank slides render without invented content, duplicated slides preserve visual primitives with independent IDs, canvas aspect ratio drives preview dimensions, and authoring revisions invalidate the editor and thumbnail snapshots.
+
+The full solution currently reports 39 passing tests and zero failures. This proves model/service and render-contract behavior only. It includes document visual validation and round trips, shared snapshot mapping, blank/duplicate/aspect cases, image asset-reference propagation, and invalidation across edits, undo, and redo.
+
+Gate 1 is **not accepted**. The Computer controller failed before application input on its initial attempt, retry, reset, and final retry with `windows sandbox failed: helper_unknown_error: setup refresh had errors`. The real launcher started a responsive process, but pointer, focus, screenshot, DPI, and presenter workflow evidence remain Not run. See `docs/checkpoints/phase-02/gate-01-shared-renderer/README.md`.
+
+Gate 2 must not begin until Gate 1 has application-level evidence and explicit user approval.
 
 ## Binding visual authority
 

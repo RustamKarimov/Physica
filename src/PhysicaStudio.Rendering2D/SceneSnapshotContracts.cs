@@ -18,7 +18,7 @@ public enum RenderPrimitiveKind
     Field
 }
 
-public sealed record RenderPrimitiveSnapshot(
+public sealed partial record RenderPrimitiveSnapshot(
     Guid Id,
     RenderPrimitiveKind Kind,
     RenderBounds Bounds,
@@ -35,7 +35,7 @@ public sealed record RenderLayerSnapshot(
     bool IsStatic,
     IReadOnlyList<RenderPrimitiveSnapshot> Primitives);
 
-public sealed record SceneSnapshot(
+public sealed partial record SceneSnapshot(
     long Version,
     RenderSize LogicalSize,
     string BackgroundStyleId,

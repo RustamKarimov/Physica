@@ -467,7 +467,7 @@ public sealed partial class MainWindow : Window
 
     private void ShowPresenter_Click(object? sender, RoutedEventArgs e)
     {
-        var window = new PresenterPreviewWindow();
+        var window = new PresenterPreviewWindow(_viewModel.ActiveScene);
         window.Show(this);
     }
 }

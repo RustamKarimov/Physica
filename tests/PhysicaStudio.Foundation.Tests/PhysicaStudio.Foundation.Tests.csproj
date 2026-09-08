@@ -16,5 +16,6 @@
     <ProjectReference Include="../../src/PhysicaStudio.Authoring/PhysicaStudio.Authoring.csproj" />
     <ProjectReference Include="../../src/PhysicaStudio.Desktop/PhysicaStudio.Desktop.csproj" />
     <ProjectReference Include="../../src/PhysicaStudio.Document/PhysicaStudio.Document.csproj" />
+    <ProjectReference Include="../../src/PhysicaStudio.Rendering2D/PhysicaStudio.Rendering2D.csproj" />
   </ItemGroup>
 </Project>

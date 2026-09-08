@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using PhysicaStudio.Rendering2D;
 
 namespace PhysicaStudio.Desktop.Views;
 
@@ -18,6 +19,12 @@ public sealed partial class PresenterPreviewWindow : Window
         SetMode(mode);
     }
 
+    public PresenterPreviewWindow(SceneSnapshot snapshot)
+    {
+        InitializeComponent();
+        SetCurrentSlide(snapshot);
+    }
+
     private void Close_Click(object? sender, RoutedEventArgs e) => Close();
 
     private void ShowDark_Click(object? sender, RoutedEventArgs e)
@@ -29,10 +36,30 @@ public sealed partial class PresenterPreviewWindow : Window
     private void SetMode(PresenterPreviewMode mode)
     {
         var isDark = mode == PresenterPreviewMode.Dark;
+        CurrentSlidePresentation.IsVisible = false;
         DarkPresentation.IsVisible = isDark;
         InteractivePresentation.IsVisible = !isDark;
+        QualificationModeButtons.IsVisible = true;
+        QualificationFooter.IsVisible = true;
+        CurrentSlideFooter.IsVisible = false;
+        PreviewBadgeText.Text = "SHELL PREVIEW";
         DarkModeButton.Classes.Set("physica-primary", isDark);
         InteractiveModeButton.Classes.Set("physica-primary", !isDark);
+    }
+
+    private void SetCurrentSlide(SceneSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        CurrentSlideSurface.Snapshot = snapshot;
+        CurrentSlideFrame.Width = snapshot.LogicalSize.Width;
+        CurrentSlideFrame.Height = snapshot.LogicalSize.Height;
+        CurrentSlidePresentation.IsVisible = true;
+        DarkPresentation.IsVisible = false;
+        InteractivePresentation.IsVisible = false;
+        QualificationModeButtons.IsVisible = false;
+        QualificationFooter.IsVisible = false;
+        CurrentSlideFooter.IsVisible = true;
+        PreviewBadgeText.Text = "CURRENT SLIDE";
     }
 
     private void SpeedSlider_ValueChanged(object? sender, RangeBaseValueChangedEventArgs e) =>
