@@ -221,6 +221,8 @@ public sealed class ManifestTests
         Assert.Contains("MoveSelectedNodesRelative", code, StringComparison.Ordinal);
         Assert.Contains("e.ClickCount == 2", code, StringComparison.Ordinal);
         Assert.Contains("var shouldReorder", code, StringComparison.Ordinal);
+        Assert.Contains("if (!IsLayerRenameActive(control))", code, StringComparison.Ordinal);
+        Assert.Contains("editor.Name == \"LayerNameEditor\" && editor.IsVisible", code, StringComparison.Ordinal);
         Assert.Contains("RenameNode", code, StringComparison.Ordinal);
     }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)

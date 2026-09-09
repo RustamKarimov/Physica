@@ -128,7 +128,10 @@ public sealed partial class MainWindow
         if (sender is Control control)
         {
             e.Pointer.Capture(null);
-            control.Focus();
+            if (!IsLayerRenameActive(control))
+            {
+                control.Focus();
+            }
         }
 
         if (shouldReorder && targetId is Guid destinationId)
@@ -139,6 +142,11 @@ public sealed partial class MainWindow
 
         e.Handled = true;
     }
+
+    private static bool IsLayerRenameActive(Control control) =>
+        control.GetVisualDescendants()
+            .OfType<TextBox>()
+            .Any(editor => editor.Name == "LayerNameEditor" && editor.IsVisible);
 
     private void LayerItem_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) => ResetLayerDrag();
 
