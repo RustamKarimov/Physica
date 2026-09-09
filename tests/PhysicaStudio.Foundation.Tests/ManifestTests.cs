@@ -219,6 +219,8 @@ public sealed class ManifestTests
         Assert.Contains("x:Name=\"LayerNameEditor\"", xaml, StringComparison.Ordinal);
         Assert.Contains("NodeSelectionMode.Range", code, StringComparison.Ordinal);
         Assert.Contains("MoveSelectedNodesRelative", code, StringComparison.Ordinal);
+        Assert.Contains("e.ClickCount == 2", code, StringComparison.Ordinal);
+        Assert.Contains("var shouldReorder", code, StringComparison.Ordinal);
         Assert.Contains("RenameNode", code, StringComparison.Ordinal);
     }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)

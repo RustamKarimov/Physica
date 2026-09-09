@@ -47,6 +47,18 @@ public sealed partial class MainWindow
 
         row.Focus();
         _viewModel.SelectNode(layer.Id, LayerSelectionModeFor(e.KeyModifiers));
+        if (e.ClickCount == 2)
+        {
+            var nameLabel = row.GetVisualDescendants().OfType<TextBlock>()
+                .FirstOrDefault(text => text.Name == "LayerNameLabel");
+            if (nameLabel is not null)
+            {
+                BeginLayerRename(nameLabel);
+            }
+            e.Handled = true;
+            return;
+        }
+
         _pendingLayerDragId = layer.Id;
         _layerDragStart = e.GetPosition(this);
         _layerDragStarted = false;
@@ -80,30 +92,51 @@ public sealed partial class MainWindow
             || _viewModel.SelectedNodeIds.Contains(targetLayer.Id))
         {
             _layerDropTargetId = null;
+            ClearLayerDropIndicators();
             return;
         }
 
         var targetOrigin = target.TranslatePoint(new Point(0, 0), this)!.Value;
         _layerDropTargetId = targetLayer.Id;
         _layerDropAfter = point.Y >= targetOrigin.Y + target.Bounds.Height / 2;
+        ClearLayerDropIndicators();
+        target.Classes.Add(_layerDropAfter ? "drop-after" : "drop-before");
+
+        var scrollPoint = e.GetPosition(LayerScrollViewer);
+        var scrollDelta = scrollPoint.Y switch
+        {
+            < 28 => -18,
+            var y when y > LayerScrollViewer.Bounds.Height - 28 => 18,
+            _ => 0,
+        };
+        if (scrollDelta != 0)
+        {
+            LayerScrollViewer.Offset = new Vector(
+                LayerScrollViewer.Offset.X,
+                Math.Max(0, LayerScrollViewer.Offset.Y + scrollDelta));
+        }
         e.Handled = true;
     }
 
     private void LayerItem_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
+        var shouldReorder = _layerDragStarted && _layerDropTargetId is Guid;
+        var targetId = _layerDropTargetId;
+        var placeAboveTarget = !_layerDropAfter;
+        ResetLayerDrag();
+
         if (sender is Control control)
         {
             e.Pointer.Capture(null);
             control.Focus();
         }
 
-        if (_layerDragStarted && _layerDropTargetId is Guid targetId)
+        if (shouldReorder && targetId is Guid destinationId)
         {
             ExecuteLayerAction(() =>
-                _viewModel.MoveSelectedNodesRelative(targetId, placeAboveTarget: !_layerDropAfter));
+                _viewModel.MoveSelectedNodesRelative(destinationId, placeAboveTarget));
         }
 
-        ResetLayerDrag();
         e.Handled = true;
     }
 
@@ -111,6 +144,7 @@ public sealed partial class MainWindow
 
     private void ResetLayerDrag()
     {
+        ClearLayerDropIndicators();
         _pendingLayerDragId = null;
         _layerDragStart = null;
         _layerDragStarted = false;
@@ -120,7 +154,16 @@ public sealed partial class MainWindow
     private IEnumerable<Border> LayerRows() => LayerItemsControl
         .GetVisualDescendants()
         .OfType<Border>()
-        .Where(border => border.DataContext is LayerItemViewModel);
+        .Where(border => border.Classes.Contains("layer-row") && border.DataContext is LayerItemViewModel);
+
+    private void ClearLayerDropIndicators()
+    {
+        foreach (var row in LayerRows())
+        {
+            row.Classes.Remove("drop-before");
+            row.Classes.Remove("drop-after");
+        }
+    }
 
     private static bool IsLayerInteractiveChild(object? source)
     {
@@ -153,15 +196,6 @@ public sealed partial class MainWindow
         if (sender is Button { DataContext: LayerItemViewModel layer })
         {
             ExecuteLayerAction(() => _viewModel.SetNodeLocked(layer.Id, !layer.IsLocked));
-        }
-    }
-
-    private void LayerName_DoubleTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is TextBlock label)
-        {
-            BeginLayerRename(label);
-            e.Handled = true;
         }
     }
 

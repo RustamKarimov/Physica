@@ -359,8 +359,28 @@
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
   </Style>
+  <Style Selector="Button.right-panel-tab">
+    <Setter Property="Height" Value="35" />
+    <Setter Property="MinHeight" Value="35" />
+    <Setter Property="Padding" Value="10,0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+  <Style Selector="Button.right-panel-tab:pointerover">
+    <Setter Property="Background" Value="#142733" />
+  </Style>
   <Style Selector="Border.layer-row:pointerover">
     <Setter Property="Background" Value="#142733" />
+  </Style>
+  <Style Selector="Border.layer-row.drop-before">
+    <Setter Property="BorderBrush" Value="#26A2FF" />
+    <Setter Property="BorderThickness" Value="1,2,1,1" />
+  </Style>
+  <Style Selector="Border.layer-row.drop-after">
+    <Setter Property="BorderBrush" Value="#26A2FF" />
+    <Setter Property="BorderThickness" Value="1,1,1,2" />
   </Style>
   <Style Selector="Button.layer-toggle">
     <Setter Property="Width" Value="26" />

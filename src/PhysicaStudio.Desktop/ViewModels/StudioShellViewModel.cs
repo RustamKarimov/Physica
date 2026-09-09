@@ -133,8 +133,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public string NoLayerObjectsLabel => AppText.NoLayerObjects;
     public string LayerSummary => AppText.LayerObjectCount(Layers.Count);
     public bool HasNoLayers => Layers.Count == 0;
-    public string InspectorTabBackground => ShowInspectorPanel ? "#193247" : "Transparent";
-    public string LayersTabBackground => ShowLayersPanel ? "#193247" : "Transparent";
 
     public string StatusMessage
     {
@@ -243,8 +241,6 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowStandingWaveInspector));
         OnPropertyChanged(nameof(ShowGenericObjectInspector));
         OnPropertyChanged(nameof(ShowEmptySlideInspector));
-        OnPropertyChanged(nameof(InspectorTabBackground));
-        OnPropertyChanged(nameof(LayersTabBackground));
     }
 
     public void NewProject(string? title = null) =>
@@ -368,16 +364,19 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             return;
         }
 
-        var selectedLayers = ordered.Where(node => selected.Contains(node.Id)).ToArray();
-        var edgeLayer = towardFront
-            ? selectedLayers.Max(node => node.LayerIndex)
-            : selectedLayers.Min(node => node.LayerIndex);
-        var target = towardFront
-            ? ordered.FirstOrDefault(node => node.LayerIndex > edgeLayer && !selected.Contains(node.Id))
-            : ordered.LastOrDefault(node => node.LayerIndex < edgeLayer && !selected.Contains(node.Id));
-        if (target is not null)
+        var canMove = towardFront
+            ? ordered.Select((node, index) => (node, index)).Any(item =>
+                selected.Contains(item.node.Id)
+                && item.index < ordered.Length - 1
+                && !selected.Contains(ordered[item.index + 1].Id))
+            : ordered.Select((node, index) => (node, index)).Any(item =>
+                selected.Contains(item.node.Id)
+                && item.index > 0
+                && !selected.Contains(ordered[item.index - 1].Id));
+        if (canMove)
         {
-            MoveSelectedNodesRelative(target.Id, placeAboveTarget: towardFront);
+            _session.Execute(ProjectCommands.MoveNodesOneLayer(ActiveSlide.Id, selected, towardFront));
+            StatusMessage = AppText.ObjectsReordered;
         }
     }
 

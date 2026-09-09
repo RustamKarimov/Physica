@@ -335,6 +335,32 @@ public sealed class Phase2FoundationTests
     }
 
     [Fact]
+    public void OneLayerForwardAndBackwardAreExactInversesForASelectedBlock()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var slideId = session.ActiveSlideId;
+        var nodes = Enumerable.Range(1, 4)
+            .Select(index => SceneNode.Create($"Object {index}", "shape.rectangle",
+                new NodeGeometry(index * 20, index * 20, 100, 60)))
+            .ToArray();
+        foreach (var node in nodes)
+        {
+            session.Execute(ProjectCommands.AddNode(slideId, node));
+        }
+
+        session.Execute(ProjectCommands.MoveNodesOneLayer(
+            slideId, [nodes[1].Id, nodes[2].Id], towardFront: true));
+        Assert.Equal(
+            [nodes[0].Id, nodes[3].Id, nodes[1].Id, nodes[2].Id],
+            session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+
+        session.Execute(ProjectCommands.MoveNodesOneLayer(
+            slideId, [nodes[1].Id, nodes[2].Id], towardFront: false));
+        Assert.Equal(nodes.Select(node => node.Id),
+            session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+    }
+
+    [Fact]
     public void DuplicateSlide_RekeysNodesAndPreservesParentRelationships()
     {
         var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);

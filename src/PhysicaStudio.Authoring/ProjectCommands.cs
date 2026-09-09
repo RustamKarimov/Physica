@@ -500,6 +500,46 @@ public static class ProjectCommands
                 };
             }));
 
+    public static IProjectCommand MoveNodesOneLayer(
+        Guid slideId,
+        IEnumerable<Guid> nodeIds,
+        bool towardFront) => Command(towardFront ? "Bring objects forward" : "Send objects backward", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, nodeIds);
+                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                {
+                    throw new AuthoringCommandException("Unlock every selected object before reordering them.");
+                }
+
+                var nodes = slide.Nodes.OrderBy(node => node.LayerIndex).ToList();
+                if (towardFront)
+                {
+                    for (var index = nodes.Count - 2; index >= 0; index--)
+                    {
+                        if (ids.Contains(nodes[index].Id) && !ids.Contains(nodes[index + 1].Id))
+                        {
+                            (nodes[index], nodes[index + 1]) = (nodes[index + 1], nodes[index]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (var index = 1; index < nodes.Count; index++)
+                    {
+                        if (ids.Contains(nodes[index].Id) && !ids.Contains(nodes[index - 1].Id))
+                        {
+                            (nodes[index], nodes[index - 1]) = (nodes[index - 1], nodes[index]);
+                        }
+                    }
+                }
+
+                return slide with
+                {
+                    Nodes = nodes.Select((node, index) => node with { LayerIndex = index }).ToArray(),
+                };
+            }));
+
     public static IProjectCommand MoveNodeToLayer(Guid slideId, Guid nodeId, int destinationIndex) => Command("Reorder object", project =>
         ReplaceSlide(project, slideId, slide =>
         {

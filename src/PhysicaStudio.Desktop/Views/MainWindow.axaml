@@ -439,20 +439,31 @@
       <!-- Inspector -->
       <Border x:Name="RightPanel" Grid.Column="4" Background="{StaticResource ChromeBaseBrush}"
               BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1,0,0,0">
-        <Grid RowDefinitions="40,*">
-          <Grid Margin="6,4,5,4" ColumnDefinitions="*,*,Auto">
-            <Button Grid.Column="0" Background="{Binding InspectorTabBackground}" BorderThickness="0" CornerRadius="4"
+        <Grid RowDefinitions="36,*">
+          <Border Background="#0C1922" BorderBrush="#203440" BorderThickness="0,0,0,1"
+                  Padding="7,0,5,0">
+          <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+            <Button Grid.Column="0" Classes="right-panel-tab"
                     Click="ShowInspectorPanel_Click" ToolTip.Tip="Show contextual inspector">
-              <TextBlock Text="{Binding InspectorPanelLabel}" FontSize="12.5" FontWeight="SemiBold" />
+              <Grid RowDefinitions="*,2">
+                <TextBlock Text="{Binding InspectorPanelLabel}" FontSize="12" FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+                <Border Grid.Row="1" Height="2" Background="#168CFF" IsVisible="{Binding ShowInspectorPanel}" />
+              </Grid>
             </Button>
-            <Button Grid.Column="1" Background="{Binding LayersTabBackground}" BorderThickness="0" CornerRadius="4"
+            <Button Grid.Column="1" Classes="right-panel-tab"
                     Click="ShowLayersPanel_Click" ToolTip.Tip="Show layer order and selection">
-              <TextBlock Text="{Binding LayersPanelLabel}" FontSize="12.5" FontWeight="SemiBold" />
+              <Grid RowDefinitions="*,2">
+                <TextBlock Text="{Binding LayersPanelLabel}" FontSize="12" FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+                <Border Grid.Row="1" Height="2" Background="#168CFF" IsVisible="{Binding ShowLayersPanel}" />
+              </Grid>
             </Button>
-            <Button Grid.Column="2" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse right panel">
+            <Button Grid.Column="3" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse right panel">
               <Path Data="M 4,3 L 9,8 L 4,13" Stroke="#8193A0" StrokeThickness="1.4" />
             </Button>
           </Grid>
+          </Border>
           <ScrollViewer x:Name="InspectorScrollViewer"
                         Grid.Row="1"
                         IsVisible="{Binding ShowInspectorPanel}"
@@ -617,7 +628,7 @@
                           <Grid Grid.Column="2" Margin="5,0,6,0">
                             <StackPanel x:Name="LayerNameDisplay" VerticalAlignment="Center" Spacing="1">
                               <TextBlock x:Name="LayerNameLabel" Text="{Binding Name}" FontSize="12.5"
-                                         TextTrimming="CharacterEllipsis" DoubleTapped="LayerName_DoubleTapped" />
+                                         TextTrimming="CharacterEllipsis" />
                               <TextBlock Text="{Binding KindLabel}" FontSize="10.5" Foreground="#718493"
                                          TextTrimming="CharacterEllipsis" />
                             </StackPanel>
@@ -646,10 +657,10 @@
                   <TextBlock Text="Forward" FontSize="11" />
                 </Button>
                 <Button Classes="layer-tool" Click="SendBackward_Click" ToolTip.Tip="Send backward one layer">
-                  <TextBlock Text="Back" FontSize="11" />
+                  <TextBlock Text="Backward" FontSize="11" />
                 </Button>
                 <Button Classes="layer-tool" Click="SendToBack_Click" ToolTip.Tip="Send to back">
-                  <TextBlock Text="Bottom" FontSize="11" />
+                  <TextBlock Text="Back" FontSize="11" />
                 </Button>
               </StackPanel>
             </Border>
