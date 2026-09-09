@@ -35,6 +35,12 @@ public static class AppText
     public static string SectionMoved => Get(nameof(SectionMoved));
     public static string SectionAlreadyAtEdge => Get(nameof(SectionAlreadyAtEdge));
     public static string SectionRemoved => Get(nameof(SectionRemoved));
+    public static string ObjectSelectionChanged => Get(nameof(ObjectSelectionChanged));
+    public static string ObjectsTransformed => Get(nameof(ObjectsTransformed));
+    public static string ObjectsDeleted => Get(nameof(ObjectsDeleted));
+    public static string SelectCanvasObject => Get(nameof(SelectCanvasObject));
+    public static string CanvasSelection => Get(nameof(CanvasSelection));
+    public static string CanvasTransformHint => Get(nameof(CanvasTransformHint));
     public static string MoveSelectedSlidesHere => Get(nameof(MoveSelectedSlidesHere));
     public static string MoveSectionUp => Get(nameof(MoveSectionUp));
     public static string MoveSectionDown => Get(nameof(MoveSectionDown));
@@ -58,6 +64,9 @@ public static class AppText
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);
+
+    public static string SelectedObjectCount(int count) =>
+        string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SelectedObjectCountSingular" : "SelectedObjectCountPlural"), count);
 
     public static string SectionName(int number) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);

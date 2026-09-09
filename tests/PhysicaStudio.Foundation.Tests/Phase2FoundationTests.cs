@@ -645,4 +645,82 @@ public sealed class Phase2FoundationTests
         Assert.All(viewModel.Slides, slide => Assert.True(slide.ShowSlideCard));
         Assert.Equal(revision, viewModel.Session.Revision);
     }
+
+    [Fact]
+    public void AuthoringSessionSupportsReplaceToggleAndAddObjectSelectionWithoutChangingDocumentRevision()
+    {
+        var nodes = Enumerable.Range(1, 3)
+            .Select(index => SceneNode.Create($"Object {index}", "shape.rectangle", new NodeGeometry(index * 10, 20, 100, 80)))
+            .ToArray();
+        var project = LessonProject.Create("Lesson", FixedTime) with
+        {
+            Slides = [SlideDocument.Create("Canvas") with { Nodes = nodes }],
+        };
+        var session = new AuthoringSession(project);
+        var revision = session.Revision;
+
+        session.SelectNode(nodes[0].Id);
+        session.SelectNode(nodes[1].Id, NodeSelectionMode.Add);
+        session.SelectNode(nodes[0].Id, NodeSelectionMode.Toggle);
+
+        Assert.Equal([nodes[1].Id], session.SelectedNodeIds);
+        Assert.Equal(revision, session.Revision);
+
+        session.ClearNodeSelection();
+        Assert.Empty(session.SelectedNodeIds);
+        Assert.Equal(revision, session.Revision);
+    }
+
+    [Fact]
+    public void MultiObjectPresentationTransformCommitsAsOneUndoStepAndPreservesModelAuthority()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(100, 100, 200, 100)) with
+        {
+            ModelTransform = new SpatialTransform2D(3, 4, 1, 1, 5),
+        };
+        var second = SceneNode.Create("Second", "shape.ellipse", new NodeGeometry(400, 300, 120, 120));
+        var project = LessonProject.Create("Lesson", FixedTime) with
+        {
+            Slides = [SlideDocument.Create("Canvas") with { Nodes = [first, second] }],
+        };
+        var session = new AuthoringSession(project);
+        var transforms = new Dictionary<Guid, PresentationTransform2D>
+        {
+            [first.Id] = new(20, 30, 1.5, .75, 25, 1),
+            [second.Id] = new(-15, 8, .8, 1.2, -10, .9),
+        };
+
+        session.Execute(ProjectCommands.SetNodesPresentationTransforms(project.Slides[0].Id, transforms));
+
+        Assert.Equal(transforms[first.Id], session.CurrentProject.Slides[0].Nodes[0].PresentationTransform);
+        Assert.Equal(transforms[second.Id], session.CurrentProject.Slides[0].Nodes[1].PresentationTransform);
+        Assert.Equal(first.ModelTransform, session.CurrentProject.Slides[0].Nodes[0].ModelTransform);
+
+        Assert.True(session.Undo());
+        Assert.Equal(PresentationTransform2D.Identity, session.CurrentProject.Slides[0].Nodes[0].PresentationTransform);
+        Assert.Equal(PresentationTransform2D.Identity, session.CurrentProject.Slides[0].Nodes[1].PresentationTransform);
+        Assert.False(session.CanUndo);
+    }
+
+    [Fact]
+    public void MultiObjectDeleteIsAtomicAndRejectsLockedSelections()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(100, 100, 200, 100));
+        var second = SceneNode.Create("Second", "shape.ellipse", new NodeGeometry(400, 300, 120, 120)) with { IsLocked = true };
+        var third = SceneNode.Create("Third", "shape.text", new NodeGeometry(600, 300, 200, 60));
+        var project = LessonProject.Create("Lesson", FixedTime) with
+        {
+            Slides = [SlideDocument.Create("Canvas") with { Nodes = [first, second, third] }],
+        };
+        var session = new AuthoringSession(project);
+
+        Assert.Throws<AuthoringCommandException>(() =>
+            session.Execute(ProjectCommands.DeleteNodes(project.Slides[0].Id, [first.Id, second.Id])));
+        Assert.Equal(3, session.CurrentProject.Slides[0].Nodes.Count);
+
+        session.Execute(ProjectCommands.DeleteNodes(project.Slides[0].Id, [first.Id, third.Id]));
+        Assert.Equal([second.Id], session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+        Assert.True(session.Undo());
+        Assert.Equal([first.Id, second.Id, third.Id], session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+    }
 }

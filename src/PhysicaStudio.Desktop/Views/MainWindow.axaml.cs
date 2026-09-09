@@ -5,10 +5,12 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using PhysicaStudio.Authoring;
+using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.Services;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
+using PhysicaStudio.Rendering2D;
 
 namespace PhysicaStudio.Desktop.Views;
 
@@ -26,6 +28,7 @@ public sealed partial class MainWindow : Window
     private Guid? _slideDropTargetId;
     private bool _slideDropAfter;
     private Guid? _sectionActionTargetId;
+    private CanvasGestureState? _canvasGesture;
 
     public MainWindow() : this(null)
     {
@@ -646,6 +649,317 @@ public sealed partial class MainWindow : Window
     private async void SaveProject_Click(object? sender, RoutedEventArgs e) =>
         await SaveProjectAsync(forcePicker: false, saveCopy: false);
 
+    private void AuthoringCanvas_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is not DocumentSceneSurface surface
+            || !e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        surface.Focus();
+        var surfacePoint = e.GetPosition(surface);
+        var handle = surface.HitTestSelectionHandle(surfacePoint);
+        var hitNodeId = handle is CanvasSelectionHandle.ResizeNorthWest
+            or CanvasSelectionHandle.ResizeNorthEast
+            or CanvasSelectionHandle.ResizeSouthEast
+            or CanvasSelectionHandle.ResizeSouthWest
+            or CanvasSelectionHandle.Rotate
+                ? null
+                : surface.HitTestNode(surfacePoint);
+        try
+        {
+            if (handle is CanvasSelectionHandle.None or CanvasSelectionHandle.Body
+                && hitNodeId is Guid nodeId)
+            {
+                var selectionMode = NodeSelectionModeFor(e.KeyModifiers);
+                if (selectionMode != NodeSelectionMode.Replace || !_viewModel.SelectedNodeIds.Contains(nodeId))
+                {
+                    _viewModel.SelectNode(nodeId, selectionMode);
+                }
+                if (_viewModel.SelectedNodeIds.Contains(nodeId))
+                {
+                    handle = CanvasSelectionHandle.Body;
+                }
+                else
+                {
+                    handle = CanvasSelectionHandle.None;
+                }
+            }
+            else if (handle == CanvasSelectionHandle.None)
+            {
+                if (e.KeyModifiers == KeyModifiers.None)
+                {
+                    _viewModel.ClearNodeSelection();
+                }
+                e.Handled = true;
+                return;
+            }
+
+            if (handle == CanvasSelectionHandle.None)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            _canvasGesture = CreateCanvasGesture(
+                surface,
+                handle,
+                hitNodeId,
+                e.KeyModifiers,
+                surfacePoint);
+            if (_canvasGesture is not null)
+            {
+                e.Pointer.Capture(surface);
+            }
+        }
+        catch (AuthoringCommandException exception)
+        {
+            _viewModel.SetStatus(exception.Message);
+            _canvasGesture = null;
+        }
+        e.Handled = true;
+    }
+
+    private void AuthoringCanvas_PointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (sender is not DocumentSceneSurface surface
+            || _canvasGesture is not { } gesture
+            || !e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        var surfacePoint = e.GetPosition(surface);
+        if (!gesture.HasMoved && Distance(surfacePoint, gesture.StartSurfacePoint) < 4)
+        {
+            return;
+        }
+
+        gesture.HasMoved = true;
+        UpdateCanvasGesture(surface, gesture, surface.ToLogical(surfacePoint));
+        e.Handled = true;
+    }
+
+    private void AuthoringCanvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (sender is not DocumentSceneSurface surface)
+        {
+            return;
+        }
+
+        var gesture = _canvasGesture;
+        _canvasGesture = null;
+        surface.SetInteractionPreview(null);
+        e.Pointer.Capture(null);
+
+        try
+        {
+            if (gesture is { HasMoved: true } && gesture.CurrentTransforms.Count > 0)
+            {
+                _viewModel.CommitNodeTransforms(gesture.CurrentTransforms);
+            }
+            else if (gesture is { PressedNodeId: Guid nodeId, PressModifiers: KeyModifiers.None }
+                     && _viewModel.SelectedNodeIds.Count > 1)
+            {
+                _viewModel.SelectNode(nodeId);
+            }
+        }
+        catch (AuthoringCommandException exception)
+        {
+            _viewModel.SetStatus(exception.Message);
+        }
+        e.Handled = true;
+    }
+
+    private void AuthoringCanvas_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
+    {
+        _canvasGesture = null;
+        if (sender is DocumentSceneSurface surface)
+        {
+            surface.SetInteractionPreview(null);
+        }
+    }
+
+    private CanvasGestureState? CreateCanvasGesture(
+        DocumentSceneSurface surface,
+        CanvasSelectionHandle handle,
+        Guid? pressedNodeId,
+        KeyModifiers modifiers,
+        Point startSurfacePoint)
+    {
+        var selectedIds = _viewModel.SelectedNodeIds.ToHashSet();
+        var selectedNodes = _viewModel.ActiveSlide.Nodes
+            .Where(node => selectedIds.Contains(node.Id))
+            .ToArray();
+        var bounds = selectedNodes
+            .Select(node => (node.Id, Bounds: surface.GetNodeLogicalBounds(node.Id)))
+            .Where(item => item.Bounds.HasValue)
+            .ToDictionary(item => item.Id, item => item.Bounds!.Value);
+        if (bounds.Count == 0)
+        {
+            return null;
+        }
+
+        return new CanvasGestureState(
+            handle,
+            pressedNodeId,
+            modifiers,
+            startSurfacePoint,
+            surface.ToLogical(startSurfacePoint),
+            Union(bounds.Values),
+            bounds,
+            selectedNodes.ToDictionary(node => node.Id, node => node.PresentationTransform),
+            selectedNodes.ToDictionary(
+                node => node.Id,
+                node => node.ModelTransform.RotationDegrees + node.PresentationTransform.RotationDegrees));
+    }
+
+    private static void UpdateCanvasGesture(
+        DocumentSceneSurface surface,
+        CanvasGestureState gesture,
+        Point currentLogicalPoint)
+    {
+        var preview = new Dictionary<Guid, CanvasNodePreview>();
+        var transforms = new Dictionary<Guid, PresentationTransform2D>();
+        var deltaX = currentLogicalPoint.X - gesture.StartLogicalPoint.X;
+        var deltaY = currentLogicalPoint.Y - gesture.StartLogicalPoint.Y;
+
+        if (gesture.Handle == CanvasSelectionHandle.Body)
+        {
+            foreach (var (id, bounds) in gesture.OriginalBounds)
+            {
+                var target = bounds with { X = bounds.X + deltaX, Y = bounds.Y + deltaY };
+                var original = gesture.OriginalTransforms[id];
+                preview[id] = new CanvasNodePreview(target, gesture.OriginalRotations[id]);
+                transforms[id] = original with
+                {
+                    OffsetX = original.OffsetX + deltaX,
+                    OffsetY = original.OffsetY + deltaY,
+                };
+            }
+        }
+        else if (gesture.Handle == CanvasSelectionHandle.Rotate)
+        {
+            var center = new Point(gesture.GroupBounds.X + gesture.GroupBounds.Width / 2,
+                gesture.GroupBounds.Y + gesture.GroupBounds.Height / 2);
+            var startAngle = Math.Atan2(gesture.StartLogicalPoint.Y - center.Y, gesture.StartLogicalPoint.X - center.X);
+            var currentAngle = Math.Atan2(currentLogicalPoint.Y - center.Y, currentLogicalPoint.X - center.X);
+            var angleDelta = (currentAngle - startAngle) * 180 / Math.PI;
+            foreach (var (id, bounds) in gesture.OriginalBounds)
+            {
+                var nodeCenter = new Point(bounds.X + bounds.Width / 2, bounds.Y + bounds.Height / 2);
+                var rotatedCenter = Rotate(nodeCenter, center, angleDelta);
+                var target = bounds with
+                {
+                    X = rotatedCenter.X - bounds.Width / 2,
+                    Y = rotatedCenter.Y - bounds.Height / 2,
+                };
+                var original = gesture.OriginalTransforms[id];
+                preview[id] = new CanvasNodePreview(target, gesture.OriginalRotations[id] + angleDelta);
+                transforms[id] = original with
+                {
+                    OffsetX = original.OffsetX + target.X - bounds.X,
+                    OffsetY = original.OffsetY + target.Y - bounds.Y,
+                    RotationDegrees = original.RotationDegrees + angleDelta,
+                };
+            }
+        }
+        else
+        {
+            var targetGroup = ResizeBounds(gesture.GroupBounds, gesture.Handle, currentLogicalPoint);
+            var scaleX = targetGroup.Width / gesture.GroupBounds.Width;
+            var scaleY = targetGroup.Height / gesture.GroupBounds.Height;
+            foreach (var (id, bounds) in gesture.OriginalBounds)
+            {
+                var target = new RenderBounds(
+                    targetGroup.X + (bounds.X - gesture.GroupBounds.X) * scaleX,
+                    targetGroup.Y + (bounds.Y - gesture.GroupBounds.Y) * scaleY,
+                    bounds.Width * scaleX,
+                    bounds.Height * scaleY);
+                var original = gesture.OriginalTransforms[id];
+                preview[id] = new CanvasNodePreview(target, gesture.OriginalRotations[id]);
+                transforms[id] = original with
+                {
+                    OffsetX = original.OffsetX + target.X - bounds.X,
+                    OffsetY = original.OffsetY + target.Y - bounds.Y,
+                    ScaleX = original.ScaleX * scaleX,
+                    ScaleY = original.ScaleY * scaleY,
+                };
+            }
+        }
+
+        gesture.CurrentTransforms = transforms;
+        surface.SetInteractionPreview(preview);
+    }
+
+    private static RenderBounds ResizeBounds(
+        RenderBounds original,
+        CanvasSelectionHandle handle,
+        Point current)
+    {
+        const double minimum = 20;
+        var left = original.X;
+        var top = original.Y;
+        var right = original.X + original.Width;
+        var bottom = original.Y + original.Height;
+
+        if (handle is CanvasSelectionHandle.ResizeNorthWest or CanvasSelectionHandle.ResizeSouthWest)
+        {
+            left = Math.Min(current.X, right - minimum);
+        }
+        if (handle is CanvasSelectionHandle.ResizeNorthEast or CanvasSelectionHandle.ResizeSouthEast)
+        {
+            right = Math.Max(current.X, left + minimum);
+        }
+        if (handle is CanvasSelectionHandle.ResizeNorthWest or CanvasSelectionHandle.ResizeNorthEast)
+        {
+            top = Math.Min(current.Y, bottom - minimum);
+        }
+        if (handle is CanvasSelectionHandle.ResizeSouthWest or CanvasSelectionHandle.ResizeSouthEast)
+        {
+            bottom = Math.Max(current.Y, top + minimum);
+        }
+
+        return new RenderBounds(left, top, right - left, bottom - top);
+    }
+
+    private static RenderBounds Union(IEnumerable<RenderBounds> bounds)
+    {
+        var values = bounds.ToArray();
+        var left = values.Min(value => value.X);
+        var top = values.Min(value => value.Y);
+        var right = values.Max(value => value.X + value.Width);
+        var bottom = values.Max(value => value.Y + value.Height);
+        return new RenderBounds(left, top, right - left, bottom - top);
+    }
+
+    private static Point Rotate(Point point, Point center, double degrees)
+    {
+        var radians = degrees * Math.PI / 180;
+        var cosine = Math.Cos(radians);
+        var sine = Math.Sin(radians);
+        var x = point.X - center.X;
+        var y = point.Y - center.Y;
+        return new Point(
+            center.X + x * cosine - y * sine,
+            center.Y + x * sine + y * cosine);
+    }
+
+    private static NodeSelectionMode NodeSelectionModeFor(KeyModifiers modifiers) =>
+        modifiers.HasFlag(KeyModifiers.Control) || modifiers.HasFlag(KeyModifiers.Meta)
+            ? NodeSelectionMode.Toggle
+            : modifiers.HasFlag(KeyModifiers.Shift)
+                ? NodeSelectionMode.Add
+                : NodeSelectionMode.Replace;
+
+    private static double Distance(Point first, Point second)
+    {
+        var x = first.X - second.X;
+        var y = first.Y - second.Y;
+        return Math.Sqrt(x * x + y * y);
+    }
+
     private async void Window_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.F2 && e.Source is not TextBox && _viewModel.IsProjectOpen)
@@ -657,7 +971,54 @@ public sealed partial class MainWindow : Window
 
         if (e.Key == Key.Delete && e.Source is not TextBox && _viewModel.IsProjectOpen)
         {
-            _viewModel.DeleteSelectedSlides();
+            try
+            {
+                if (AuthoringCanvasSurface.IsKeyboardFocusWithin && _viewModel.SelectedNodeIds.Count > 0)
+                {
+                    _viewModel.DeleteSelectedNodes();
+                }
+                else
+                {
+                    _viewModel.DeleteSelectedSlides();
+                }
+            }
+            catch (AuthoringCommandException exception)
+            {
+                _viewModel.SetStatus(exception.Message);
+            }
+            e.Handled = true;
+            return;
+        }
+
+        if (e.Key == Key.Escape && AuthoringCanvasSurface.IsKeyboardFocusWithin)
+        {
+            _viewModel.ClearNodeSelection();
+            e.Handled = true;
+            return;
+        }
+
+        if (AuthoringCanvasSurface.IsKeyboardFocusWithin
+            && !e.KeyModifiers.HasFlag(KeyModifiers.Control)
+            && !e.KeyModifiers.HasFlag(KeyModifiers.Meta)
+            && !e.KeyModifiers.HasFlag(KeyModifiers.Alt)
+            && e.Key is Key.Left or Key.Right or Key.Up or Key.Down)
+        {
+            var distance = e.KeyModifiers.HasFlag(KeyModifiers.Shift) ? 10d : 1d;
+            var (x, y) = e.Key switch
+            {
+                Key.Left => (-distance, 0d),
+                Key.Right => (distance, 0d),
+                Key.Up => (0d, -distance),
+                _ => (0d, distance),
+            };
+            try
+            {
+                _viewModel.NudgeSelectedNodes(x, y);
+            }
+            catch (AuthoringCommandException exception)
+            {
+                _viewModel.SetStatus(exception.Message);
+            }
             e.Handled = true;
             return;
         }
@@ -671,6 +1032,10 @@ public sealed partial class MainWindow : Window
 
         switch (e.Key)
         {
+            case Key.A when AuthoringCanvasSurface.IsKeyboardFocusWithin:
+                _viewModel.SelectAllVisibleNodes();
+                e.Handled = true;
+                break;
             case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
                 await SaveProjectAsync(forcePicker: true, saveCopy: false);
                 e.Handled = true;
@@ -904,5 +1269,43 @@ public sealed partial class MainWindow : Window
     {
         var window = new PresenterPreviewWindow(_viewModel.ActiveScene);
         window.Show(this);
+    }
+
+    private sealed class CanvasGestureState
+    {
+        public CanvasGestureState(
+            CanvasSelectionHandle handle,
+            Guid? pressedNodeId,
+            KeyModifiers pressModifiers,
+            Point startSurfacePoint,
+            Point startLogicalPoint,
+            RenderBounds groupBounds,
+            IReadOnlyDictionary<Guid, RenderBounds> originalBounds,
+            IReadOnlyDictionary<Guid, PresentationTransform2D> originalTransforms,
+            IReadOnlyDictionary<Guid, double> originalRotations)
+        {
+            Handle = handle;
+            PressedNodeId = pressedNodeId;
+            PressModifiers = pressModifiers;
+            StartSurfacePoint = startSurfacePoint;
+            StartLogicalPoint = startLogicalPoint;
+            GroupBounds = groupBounds;
+            OriginalBounds = originalBounds;
+            OriginalTransforms = originalTransforms;
+            OriginalRotations = originalRotations;
+        }
+
+        public CanvasSelectionHandle Handle { get; }
+        public Guid? PressedNodeId { get; }
+        public KeyModifiers PressModifiers { get; }
+        public Point StartSurfacePoint { get; }
+        public Point StartLogicalPoint { get; }
+        public RenderBounds GroupBounds { get; }
+        public IReadOnlyDictionary<Guid, RenderBounds> OriginalBounds { get; }
+        public IReadOnlyDictionary<Guid, PresentationTransform2D> OriginalTransforms { get; }
+        public IReadOnlyDictionary<Guid, double> OriginalRotations { get; }
+        public bool HasMoved { get; set; }
+        public IReadOnlyDictionary<Guid, PresentationTransform2D> CurrentTransforms { get; set; } =
+            new Dictionary<Guid, PresentationTransform2D>();
     }
 }

@@ -39,6 +39,13 @@ public enum SlideSelectionMode
     Range,
 }
 
+public enum NodeSelectionMode
+{
+    Replace,
+    Toggle,
+    Add,
+}
+
 public sealed class AuthoringSession
 {
     private readonly Func<DateTimeOffset> _clock;
@@ -222,6 +229,52 @@ public sealed class AuthoringSession
 
         SelectedNodeIds = selection;
         RaiseStateChanged("Selection changed", AuthoringStateChangeKind.Selection);
+    }
+
+    public void SelectNode(Guid nodeId, NodeSelectionMode mode = NodeSelectionMode.Replace)
+    {
+        var activeNodeIds = CurrentProject.Slides
+            .Single(slide => slide.Id == ActiveSlideId)
+            .Nodes
+            .Select(node => node.Id)
+            .ToHashSet();
+        if (!activeNodeIds.Contains(nodeId))
+        {
+            throw new AuthoringCommandException("The selected object is not on the active slide.");
+        }
+
+        var selected = SelectedNodeIds.ToHashSet();
+        switch (mode)
+        {
+            case NodeSelectionMode.Replace:
+                selected = [nodeId];
+                break;
+            case NodeSelectionMode.Toggle:
+                if (!selected.Remove(nodeId))
+                {
+                    selected.Add(nodeId);
+                }
+                break;
+            case NodeSelectionMode.Add:
+                selected.Add(nodeId);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(mode));
+        }
+
+        SelectedNodeIds = selected;
+        RaiseStateChanged("Object selection changed", AuthoringStateChangeKind.Selection);
+    }
+
+    public void ClearNodeSelection()
+    {
+        if (SelectedNodeIds.Count == 0)
+        {
+            return;
+        }
+
+        SelectedNodeIds = new HashSet<Guid>();
+        RaiseStateChanged("Object selection cleared", AuthoringStateChangeKind.Selection);
     }
 
     private static LessonProject ValidateAndNormalize(LessonProject project)

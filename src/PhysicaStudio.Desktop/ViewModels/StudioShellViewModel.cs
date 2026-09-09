@@ -88,9 +88,22 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public bool CanSave => _session.HasUnsavedChanges || _session.CurrentPath is null;
     public bool HasUnsavedChanges => _session.HasUnsavedChanges;
     public bool ShowStandingWaveReference => ActiveSlide.Nodes.Any(node => node.Kind == "physics.standing-wave");
-    public bool ShowEmptySlideContext => !ShowStandingWaveReference;
+    public bool ShowGenericObjectContext => ActiveSlide.Nodes.Count > 0 && !ShowStandingWaveReference;
+    public bool ShowEmptySlideContext => ActiveSlide.Nodes.Count == 0;
     public string SlideSurfaceColor => ActiveSlide.Background.Color;
-    public string InspectorTitle => ShowStandingWaveReference ? "Standing Wave" : "Slide";
+    public string InspectorTitle => ShowStandingWaveReference
+        ? "Standing Wave"
+        : _session.SelectedNodeIds.Count switch
+        {
+            1 => ActiveSlide.Nodes.First(node => _session.SelectedNodeIds.Contains(node.Id)).Name,
+            > 1 => SelectedObjectSummary,
+            _ => "Slide",
+        };
+    public string CanvasInspectorMessage => _session.SelectedNodeIds.Count == 0
+        ? AppText.SelectCanvasObject
+        : SelectedObjectSummary;
+    public string CanvasSelectionLabel => AppText.CanvasSelection;
+    public string CanvasTransformHint => AppText.CanvasTransformHint;
     public string TimelineSummary => ShowStandingWaveReference ? "7 tracks · 23 keyframes" : "0 tracks · 0 keyframes";
     public SceneSnapshot ActiveScene =>
         Slides.FirstOrDefault(slide => slide.Id == _session.ActiveSlideId)?.Scene
@@ -104,6 +117,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public bool HasRecentProjects => RecentProjects.Count > 0;
     public bool HasNoRecentProjects => !HasRecentProjects;
     public IReadOnlySet<Guid> SelectedSlideIds => _session.SelectedSlideIds;
+    public IReadOnlySet<Guid> SelectedNodeIds => _session.SelectedNodeIds;
+    public string SelectedObjectSummary => AppText.SelectedObjectCount(_session.SelectedNodeIds.Count);
 
     public string StatusMessage
     {
@@ -218,6 +233,53 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectSlide(Guid slideId, SlideSelectionMode mode = SlideSelectionMode.Replace) =>
         _session.SelectSlide(slideId, mode);
+
+    public void SelectNode(Guid nodeId, NodeSelectionMode mode = NodeSelectionMode.Replace)
+    {
+        _session.SelectNode(nodeId, mode);
+        StatusMessage = AppText.ObjectSelectionChanged;
+    }
+
+    public void ClearNodeSelection() => _session.ClearNodeSelection();
+
+    public void SelectAllVisibleNodes() => _session.SelectNodes(
+        ActiveSlide.Nodes.Where(node => node.IsVisible).Select(node => node.Id));
+
+    public void CommitNodeTransforms(IReadOnlyDictionary<Guid, PresentationTransform2D> transforms)
+    {
+        _session.Execute(ProjectCommands.SetNodesPresentationTransforms(ActiveSlide.Id, transforms));
+        StatusMessage = AppText.ObjectsTransformed;
+    }
+
+    public void NudgeSelectedNodes(double offsetX, double offsetY)
+    {
+        if (_session.SelectedNodeIds.Count == 0)
+        {
+            return;
+        }
+
+        var transforms = ActiveSlide.Nodes
+            .Where(node => _session.SelectedNodeIds.Contains(node.Id))
+            .ToDictionary(
+                node => node.Id,
+                node => node.PresentationTransform with
+                {
+                    OffsetX = node.PresentationTransform.OffsetX + offsetX,
+                    OffsetY = node.PresentationTransform.OffsetY + offsetY,
+                });
+        CommitNodeTransforms(transforms);
+    }
+
+    public void DeleteSelectedNodes()
+    {
+        if (_session.SelectedNodeIds.Count == 0)
+        {
+            return;
+        }
+
+        _session.Execute(ProjectCommands.DeleteNodes(ActiveSlide.Id, _session.SelectedNodeIds));
+        StatusMessage = AppText.ObjectsDeleted;
+    }
 
     public void CloseProject()
     {
@@ -423,9 +485,13 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
         RefreshCommandAvailability();
         OnPropertyChanged(nameof(SelectedSlideIds));
+        OnPropertyChanged(nameof(SelectedNodeIds));
+        OnPropertyChanged(nameof(SelectedObjectSummary));
         OnPropertyChanged(nameof(ActiveSlide));
         OnPropertyChanged(nameof(ShowStandingWaveReference));
+        OnPropertyChanged(nameof(ShowGenericObjectContext));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
+        OnPropertyChanged(nameof(CanvasInspectorMessage));
         OnPropertyChanged(nameof(SlideSurfaceColor));
         OnPropertyChanged(nameof(ActiveScene));
         OnPropertyChanged(nameof(SlideLogicalWidth));
@@ -485,8 +551,12 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(HasUnsavedChanges));
         OnPropertyChanged(nameof(ActiveSlide));
         OnPropertyChanged(nameof(SelectedSlideIds));
+        OnPropertyChanged(nameof(SelectedNodeIds));
+        OnPropertyChanged(nameof(SelectedObjectSummary));
         OnPropertyChanged(nameof(ShowStandingWaveReference));
+        OnPropertyChanged(nameof(ShowGenericObjectContext));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
+        OnPropertyChanged(nameof(CanvasInspectorMessage));
         OnPropertyChanged(nameof(SlideSurfaceColor));
         OnPropertyChanged(nameof(ActiveScene));
         OnPropertyChanged(nameof(SlideLogicalWidth));

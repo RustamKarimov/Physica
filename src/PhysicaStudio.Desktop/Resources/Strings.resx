@@ -36,6 +36,12 @@
   <data name="SectionMoved" xml:space="preserve"><value>Section order updated</value></data>
   <data name="SectionAlreadyAtEdge" xml:space="preserve"><value>The section is already at that edge</value></data>
   <data name="SectionRemoved" xml:space="preserve"><value>Section removed; its slides were kept</value></data>
+  <data name="ObjectSelectionChanged" xml:space="preserve"><value>Canvas object selection updated</value></data>
+  <data name="ObjectsTransformed" xml:space="preserve"><value>Canvas objects transformed</value></data>
+  <data name="ObjectsDeleted" xml:space="preserve"><value>Canvas objects deleted</value></data>
+  <data name="SelectCanvasObject" xml:space="preserve"><value>Select an object on the slide to edit it</value></data>
+  <data name="CanvasSelection" xml:space="preserve"><value>Selection</value></data>
+  <data name="CanvasTransformHint" xml:space="preserve"><value>Drag inside the selection to move it. Use a corner handle to resize and the round handle to rotate.</value></data>
   <data name="MoveSelectedSlidesHere" xml:space="preserve"><value>Move selected slides here</value></data>
   <data name="MoveSectionUp" xml:space="preserve"><value>Move section up</value></data>
   <data name="MoveSectionDown" xml:space="preserve"><value>Move section down</value></data>
@@ -59,4 +65,6 @@
   <data name="NoRecentLessons" xml:space="preserve"><value>No recent saved lessons yet.</value></data>
   <data name="SectionSlideCountSingular" xml:space="preserve"><value>{0} slide</value></data>
   <data name="SectionSlideCountPlural" xml:space="preserve"><value>{0} slides</value></data>
+  <data name="SelectedObjectCountSingular" xml:space="preserve"><value>{0} object selected</value></data>
+  <data name="SelectedObjectCountPlural" xml:space="preserve"><value>{0} objects selected</value></data>
 </root>

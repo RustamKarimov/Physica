@@ -338,6 +338,29 @@ public static class ProjectCommands
             return slide with { Nodes = nodes };
         }));
 
+    public static IProjectCommand DeleteNodes(Guid slideId, IEnumerable<Guid> nodeIds) => Command("Delete objects", project =>
+        ReplaceSlide(project, slideId, slide =>
+        {
+            var ids = nodeIds.Distinct().ToHashSet();
+            if (ids.Count == 0 || ids.Any(id => slide.Nodes.All(node => node.Id != id)))
+            {
+                throw new AuthoringCommandException("A selected object does not exist.");
+            }
+            if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+            {
+                throw new AuthoringCommandException("Unlock every selected object before deleting them.");
+            }
+
+            var nodes = slide.Nodes
+                .Where(node => !ids.Contains(node.Id))
+                .Select(node => node.ParentId is Guid parentId && ids.Contains(parentId)
+                    ? node with { ParentId = null }
+                    : node)
+                .Select((node, index) => node with { LayerIndex = index })
+                .ToArray();
+            return slide with { Nodes = nodes };
+        }));
+
     public static IProjectCommand SetNodePresentationTransform(
         Guid slideId,
         Guid nodeId,
@@ -346,6 +369,31 @@ public static class ProjectCommands
             {
                 RequireUnlocked(node);
                 return node with { PresentationTransform = transform };
+            }));
+
+    public static IProjectCommand SetNodesPresentationTransforms(
+        Guid slideId,
+        IReadOnlyDictionary<Guid, PresentationTransform2D> transforms) => Command("Transform objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                if (transforms.Count == 0
+                    || transforms.Keys.Any(id => slide.Nodes.All(node => node.Id != id)))
+                {
+                    throw new AuthoringCommandException("A selected object does not exist.");
+                }
+                if (slide.Nodes.Any(node => transforms.ContainsKey(node.Id) && node.IsLocked))
+                {
+                    throw new AuthoringCommandException("Unlock every selected object before transforming them.");
+                }
+
+                return slide with
+                {
+                    Nodes = slide.Nodes
+                        .Select(node => transforms.TryGetValue(node.Id, out var transform)
+                            ? node with { PresentationTransform = transform }
+                            : node)
+                        .ToArray(),
+                };
             }));
 
     public static IProjectCommand SetNodeGeometry(Guid slideId, Guid nodeId, NodeGeometry geometry) =>

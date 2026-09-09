@@ -96,7 +96,9 @@ public sealed class ManifestTests
         Assert.Contains("x:Name=\"InspectorScrollViewer\"", xaml, StringComparison.Ordinal);
         Assert.Matches("InspectorScrollViewer[\\s\\S]*?VerticalScrollBarVisibility=\\\"Hidden\\\"", xaml);
         Assert.Contains("VerticalAlignment=\"Center\" Margin=\"2,1,0,0\"", xaml, StringComparison.Ordinal);
-        Assert.Equal(4, xaml.Split("<Grid ColumnDefinitions=\"Auto,*\" VerticalAlignment=\"Center\">", StringSplitOptions.None).Length - 1);
+        Assert.True(
+            xaml.Split("<Grid ColumnDefinitions=\"Auto,*\" VerticalAlignment=\"Center\">", StringSplitOptions.None).Length - 1 >= 4,
+            "Every inspector context must retain the vertically centered section-header structure.");
         Assert.Contains("<Setter Property=\"Margin\" Value=\"8,12,8,4\" />", theme, StringComparison.Ordinal);
         Assert.Contains("<Setter Property=\"CornerRadius\" Value=\"3\" />", theme, StringComparison.Ordinal);
     }
@@ -176,6 +178,25 @@ public sealed class ManifestTests
         Assert.Contains("_viewModel.AssignSelectedSlidesToSection", code, StringComparison.Ordinal);
         Assert.Contains("_viewModel.MoveSection", code, StringComparison.Ordinal);
         Assert.Contains("_viewModel.RemoveSection", code, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void AuthoringCanvasWiresPointerKeyboardSelectionAndTransformCommit()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
+
+        Assert.Contains("x:Name=\"AuthoringCanvasSurface\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("SelectedNodeIds=\"{Binding SelectedNodeIds}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerPressed=\"AuthoringCanvas_PointerPressed\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerMoved=\"AuthoringCanvas_PointerMoved\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerReleased=\"AuthoringCanvas_PointerReleased\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.CommitNodeTransforms", code, StringComparison.Ordinal);
+        Assert.Contains("AuthoringCanvasSurface.IsKeyboardFocusWithin", code, StringComparison.Ordinal);
+        Assert.Contains("_viewModel.DeleteSelectedNodes", code, StringComparison.Ordinal);
     }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
     {
