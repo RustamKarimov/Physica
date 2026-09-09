@@ -242,7 +242,24 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void ClearNodeSelection() => _session.ClearNodeSelection();
 
-    public void SelectAllVisibleNodes() => _session.SelectNodes(
+    public void SelectNodes(IEnumerable<Guid> nodeIds, NodeSelectionMode mode = NodeSelectionMode.Replace)
+    {
+        var requested = nodeIds.Distinct().ToHashSet();
+        var selection = mode switch
+        {
+            NodeSelectionMode.Replace => requested,
+            NodeSelectionMode.Add => _session.SelectedNodeIds.Concat(requested).ToHashSet(),
+            NodeSelectionMode.Toggle => _session.SelectedNodeIds
+                .Where(id => !requested.Contains(id))
+                .Concat(requested.Where(id => !_session.SelectedNodeIds.Contains(id)))
+                .ToHashSet(),
+            _ => throw new ArgumentOutOfRangeException(nameof(mode)),
+        };
+        _session.SelectNodes(selection);
+        StatusMessage = AppText.ObjectSelectionChanged;
+    }
+
+    public void SelectAllVisibleNodes() => SelectNodes(
         ActiveSlide.Nodes.Where(node => node.IsVisible).Select(node => node.Id));
 
     public void CommitNodeTransforms(IReadOnlyDictionary<Guid, PresentationTransform2D> transforms)

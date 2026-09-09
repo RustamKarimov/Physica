@@ -688,10 +688,8 @@ public sealed partial class MainWindow : Window
             }
             else if (handle == CanvasSelectionHandle.None)
             {
-                if (e.KeyModifiers == KeyModifiers.None)
-                {
-                    _viewModel.ClearNodeSelection();
-                }
+                _canvasGesture = CanvasGestureState.CreateMarquee(e.KeyModifiers, surfacePoint);
+                e.Pointer.Capture(surface);
                 e.Handled = true;
                 return;
             }
@@ -737,6 +735,14 @@ public sealed partial class MainWindow : Window
         }
 
         gesture.HasMoved = true;
+        if (gesture.IsMarquee)
+        {
+            gesture.CurrentMarquee = CanvasTransformGeometry.Normalize(gesture.StartSurfacePoint, surfacePoint);
+            surface.SetSelectionMarquee(gesture.CurrentMarquee);
+            e.Handled = true;
+            return;
+        }
+
         UpdateCanvasGesture(surface, gesture, surface.ToLogical(surfacePoint));
         e.Handled = true;
     }
@@ -751,11 +757,23 @@ public sealed partial class MainWindow : Window
         var gesture = _canvasGesture;
         _canvasGesture = null;
         surface.SetInteractionPreview(null);
+        surface.SetSelectionMarquee(null);
         e.Pointer.Capture(null);
 
         try
         {
-            if (gesture is { HasMoved: true } && gesture.CurrentTransforms.Count > 0)
+            if (gesture is { IsMarquee: true, HasMoved: true, CurrentMarquee: Rect marquee })
+            {
+                _viewModel.SelectNodes(
+                    surface.GetNodeIdsInsideMarquee(marquee),
+                    NodeSelectionModeFor(gesture.PressModifiers));
+            }
+            else if (gesture is { IsMarquee: true, HasMoved: false }
+                     && gesture.PressModifiers == KeyModifiers.None)
+            {
+                _viewModel.ClearNodeSelection();
+            }
+            else if (gesture is { HasMoved: true } && gesture.CurrentTransforms.Count > 0)
             {
                 _viewModel.CommitNodeTransforms(gesture.CurrentTransforms);
             }
@@ -778,6 +796,7 @@ public sealed partial class MainWindow : Window
         if (sender is DocumentSceneSurface surface)
         {
             surface.SetInteractionPreview(null);
+            surface.SetSelectionMarquee(null);
         }
     }
 
@@ -807,7 +826,7 @@ public sealed partial class MainWindow : Window
             modifiers,
             startSurfacePoint,
             surface.ToLogical(startSurfacePoint),
-            Union(bounds.Values),
+            CanvasTransformGeometry.Union(bounds.Values),
             bounds,
             selectedNodes.ToDictionary(node => node.Id, node => node.PresentationTransform),
             selectedNodes.ToDictionary(
@@ -849,7 +868,7 @@ public sealed partial class MainWindow : Window
             foreach (var (id, bounds) in gesture.OriginalBounds)
             {
                 var nodeCenter = new Point(bounds.X + bounds.Width / 2, bounds.Y + bounds.Height / 2);
-                var rotatedCenter = Rotate(nodeCenter, center, angleDelta);
+                var rotatedCenter = CanvasTransformGeometry.Rotate(nodeCenter, center, angleDelta);
                 var target = bounds with
                 {
                     X = rotatedCenter.X - bounds.Width / 2,
@@ -867,9 +886,19 @@ public sealed partial class MainWindow : Window
         }
         else
         {
-            var targetGroup = ResizeBounds(gesture.GroupBounds, gesture.Handle, currentLogicalPoint);
-            var scaleX = targetGroup.Width / gesture.GroupBounds.Width;
-            var scaleY = targetGroup.Height / gesture.GroupBounds.Height;
+            var targetGroup = CanvasTransformGeometry.ResizeBounds(
+                gesture.GroupBounds,
+                gesture.Handle,
+                currentLogicalPoint,
+                gesture.PressModifiers.HasFlag(KeyModifiers.Shift),
+                gesture.PressModifiers.HasFlag(KeyModifiers.Control)
+                    || gesture.PressModifiers.HasFlag(KeyModifiers.Meta));
+            var scaleX = Math.Abs(gesture.GroupBounds.Width) < .001
+                ? 1
+                : targetGroup.Width / gesture.GroupBounds.Width;
+            var scaleY = Math.Abs(gesture.GroupBounds.Height) < .001
+                ? 1
+                : targetGroup.Height / gesture.GroupBounds.Height;
             foreach (var (id, bounds) in gesture.OriginalBounds)
             {
                 var target = new RenderBounds(
@@ -891,59 +920,6 @@ public sealed partial class MainWindow : Window
 
         gesture.CurrentTransforms = transforms;
         surface.SetInteractionPreview(preview);
-    }
-
-    private static RenderBounds ResizeBounds(
-        RenderBounds original,
-        CanvasSelectionHandle handle,
-        Point current)
-    {
-        const double minimum = 20;
-        var left = original.X;
-        var top = original.Y;
-        var right = original.X + original.Width;
-        var bottom = original.Y + original.Height;
-
-        if (handle is CanvasSelectionHandle.ResizeNorthWest or CanvasSelectionHandle.ResizeSouthWest)
-        {
-            left = Math.Min(current.X, right - minimum);
-        }
-        if (handle is CanvasSelectionHandle.ResizeNorthEast or CanvasSelectionHandle.ResizeSouthEast)
-        {
-            right = Math.Max(current.X, left + minimum);
-        }
-        if (handle is CanvasSelectionHandle.ResizeNorthWest or CanvasSelectionHandle.ResizeNorthEast)
-        {
-            top = Math.Min(current.Y, bottom - minimum);
-        }
-        if (handle is CanvasSelectionHandle.ResizeSouthWest or CanvasSelectionHandle.ResizeSouthEast)
-        {
-            bottom = Math.Max(current.Y, top + minimum);
-        }
-
-        return new RenderBounds(left, top, right - left, bottom - top);
-    }
-
-    private static RenderBounds Union(IEnumerable<RenderBounds> bounds)
-    {
-        var values = bounds.ToArray();
-        var left = values.Min(value => value.X);
-        var top = values.Min(value => value.Y);
-        var right = values.Max(value => value.X + value.Width);
-        var bottom = values.Max(value => value.Y + value.Height);
-        return new RenderBounds(left, top, right - left, bottom - top);
-    }
-
-    private static Point Rotate(Point point, Point center, double degrees)
-    {
-        var radians = degrees * Math.PI / 180;
-        var cosine = Math.Cos(radians);
-        var sine = Math.Sin(radians);
-        var x = point.X - center.X;
-        var y = point.Y - center.Y;
-        return new Point(
-            center.X + x * cosine - y * sine,
-            center.Y + x * sine + y * cosine);
     }
 
     private static NodeSelectionMode NodeSelectionModeFor(KeyModifiers modifiers) =>
@@ -1304,8 +1280,25 @@ public sealed partial class MainWindow : Window
         public IReadOnlyDictionary<Guid, RenderBounds> OriginalBounds { get; }
         public IReadOnlyDictionary<Guid, PresentationTransform2D> OriginalTransforms { get; }
         public IReadOnlyDictionary<Guid, double> OriginalRotations { get; }
+        public bool IsMarquee { get; private init; }
         public bool HasMoved { get; set; }
+        public Rect? CurrentMarquee { get; set; }
         public IReadOnlyDictionary<Guid, PresentationTransform2D> CurrentTransforms { get; set; } =
             new Dictionary<Guid, PresentationTransform2D>();
+
+        public static CanvasGestureState CreateMarquee(KeyModifiers modifiers, Point startSurfacePoint) =>
+            new(
+                CanvasSelectionHandle.None,
+                null,
+                modifiers,
+                startSurfacePoint,
+                default,
+                default,
+                new Dictionary<Guid, RenderBounds>(),
+                new Dictionary<Guid, PresentationTransform2D>(),
+                new Dictionary<Guid, double>())
+            {
+                IsMarquee = true,
+            };
     }
 }

@@ -33,6 +33,7 @@ public sealed class DocumentSceneSurface : Control
 
     private IReadOnlyDictionary<Guid, CanvasNodePreview> _interactionPreview =
         new Dictionary<Guid, CanvasNodePreview>();
+    private Rect? _selectionMarquee;
 
     static DocumentSceneSurface() => AffectsRender<DocumentSceneSurface>(
         SnapshotProperty,
@@ -61,6 +62,38 @@ public sealed class DocumentSceneSurface : Control
     {
         _interactionPreview = preview ?? new Dictionary<Guid, CanvasNodePreview>();
         InvalidateVisual();
+    }
+
+    public void SetSelectionMarquee(Rect? marquee)
+    {
+        _selectionMarquee = marquee;
+        InvalidateVisual();
+    }
+
+    public IReadOnlySet<Guid> GetNodeIdsInsideMarquee(Rect marquee)
+    {
+        var snapshot = Snapshot;
+        if (snapshot is null)
+        {
+            return new HashSet<Guid>();
+        }
+
+        var normalized = CanvasTransformGeometry.Normalize(marquee.TopLeft, marquee.BottomRight);
+        return snapshot.Layers
+            .Where(layer => layer.IsVisible)
+            .SelectMany(layer => layer.Primitives)
+            .Where(primitive => primitive.Opacity > 0)
+            .Where(primitive =>
+            {
+                var logicalBounds = _interactionPreview.TryGetValue(primitive.Id, out var preview)
+                    ? preview.Bounds
+                    : primitive.Bounds;
+                var surfaceBounds = Scale(snapshot.LogicalSize, logicalBounds);
+                return normalized.Contains(surfaceBounds.TopLeft)
+                    && normalized.Contains(surfaceBounds.BottomRight);
+            })
+            .Select(primitive => primitive.Id)
+            .ToHashSet();
     }
 
     public Point ToLogical(Point surfacePoint)
@@ -231,6 +264,7 @@ public sealed class DocumentSceneSurface : Control
         if (IsAuthoringSurface)
         {
             DrawSelection(context);
+            DrawSelectionMarquee(context);
         }
     }
 
@@ -391,6 +425,19 @@ public sealed class DocumentSceneSurface : Control
         {
             context.DrawRectangle(Brushes.White, selectionPen, new Rect(point.X - 4, point.Y - 4, 8, 8), 1, 1);
         }
+    }
+
+    private void DrawSelectionMarquee(DrawingContext context)
+    {
+        if (_selectionMarquee is not Rect marquee)
+        {
+            return;
+        }
+
+        var normalized = CanvasTransformGeometry.Normalize(marquee.TopLeft, marquee.BottomRight);
+        var fill = Brush.Parse("#24168CFF");
+        var pen = new Pen(Brush.Parse("#168CFF"), 1, new DashStyle([5, 3], 0));
+        context.DrawRectangle(fill, pen, normalized);
     }
 
     private Rect? GetSelectionSurfaceBounds()

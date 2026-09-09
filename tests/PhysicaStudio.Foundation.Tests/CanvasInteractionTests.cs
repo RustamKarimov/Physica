@@ -78,6 +78,47 @@ public sealed class CanvasInteractionTests
             surface.HitTestSelectionHandle(new Point(650, 300)));
     }
 
+    [Fact]
+    public void MarqueeSelectionIncludesOnlyFullyEnclosedVisibleObjects()
+    {
+        var enclosedId = Guid.NewGuid();
+        var partialId = Guid.NewGuid();
+        var surface = CreateSurface(
+            Primitive(enclosedId, new RenderBounds(100, 100, 100, 100)),
+            Primitive(partialId, new RenderBounds(250, 100, 100, 100)));
+
+        var selected = surface.GetNodeIdsInsideMarquee(new Rect(80, 80, 220, 160));
+
+        Assert.Contains(enclosedId, selected);
+        Assert.DoesNotContain(partialId, selected);
+    }
+
+    [Theory]
+    [InlineData(false, false, 100, 100, 200, 200)]
+    [InlineData(true, false, 100, 100, 240, 120)]
+    [InlineData(false, true, 100, 0, 200, 300)]
+    [InlineData(true, true, 60, 80, 280, 140)]
+    public void CornerResizeHonorsAspectAndCenterModifiers(
+        bool preserveAspect,
+        bool fromCenter,
+        double expectedX,
+        double expectedY,
+        double expectedWidth,
+        double expectedHeight)
+    {
+        var resized = CanvasTransformGeometry.ResizeBounds(
+            new RenderBounds(100, 100, 200, 100),
+            CanvasSelectionHandle.ResizeSouthEast,
+            new Point(300, 300),
+            preserveAspect,
+            fromCenter);
+
+        Assert.Equal(expectedX, resized.X, 6);
+        Assert.Equal(expectedY, resized.Y, 6);
+        Assert.Equal(expectedWidth, resized.Width, 6);
+        Assert.Equal(expectedHeight, resized.Height, 6);
+    }
+
     private static DocumentSceneSurface CreateSurface(params RenderPrimitiveSnapshot[] primitives)
     {
         var layers = primitives.Select((primitive, index) =>

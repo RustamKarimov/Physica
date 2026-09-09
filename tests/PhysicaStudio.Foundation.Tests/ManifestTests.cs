@@ -34,7 +34,7 @@ public sealed class ManifestTests
         Assert.Equal(2, manifest.ActivePhase);
         Assert.DoesNotContain(manifest.Surfaces, feature => feature.Status == "Validated");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.project" && feature.Status == "Active");
-        Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.canvas" && feature.Status == "Shell ready");
+        Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.canvas" && feature.Status == "Preview");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "physics.kernel" && feature.Status == "Planned");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "studio.presenter-preview" && feature.Status == "Shell ready");
     }

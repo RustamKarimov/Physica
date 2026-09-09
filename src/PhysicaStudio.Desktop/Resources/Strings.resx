@@ -41,7 +41,7 @@
   <data name="ObjectsDeleted" xml:space="preserve"><value>Canvas objects deleted</value></data>
   <data name="SelectCanvasObject" xml:space="preserve"><value>Select an object on the slide to edit it</value></data>
   <data name="CanvasSelection" xml:space="preserve"><value>Selection</value></data>
-  <data name="CanvasTransformHint" xml:space="preserve"><value>Drag inside the selection to move it. Use a corner handle to resize and the round handle to rotate.</value></data>
+  <data name="CanvasTransformHint" xml:space="preserve"><value>Drag inside to move. Drag empty space to select several objects. Shift+corner keeps proportions; Ctrl+corner resizes from the centre. Arrow keys nudge precisely.</value></data>
   <data name="MoveSelectedSlidesHere" xml:space="preserve"><value>Move selected slides here</value></data>
   <data name="MoveSectionUp" xml:space="preserve"><value>Move section up</value></data>
   <data name="MoveSectionDown" xml:space="preserve"><value>Move section down</value></data>
