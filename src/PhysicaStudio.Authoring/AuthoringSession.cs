@@ -44,6 +44,7 @@ public enum NodeSelectionMode
     Replace,
     Toggle,
     Add,
+    Range,
 }
 
 public sealed class AuthoringSession
@@ -85,6 +86,7 @@ public sealed class AuthoringSession
     public IReadOnlySet<Guid> SelectedSlideIds { get; private set; }
     public Guid SelectionAnchorSlideId { get; private set; }
     public IReadOnlySet<Guid> SelectedNodeIds { get; private set; } = new HashSet<Guid>();
+    public Guid? SelectionAnchorNodeId { get; private set; }
     public long Revision { get; private set; }
     public bool CanUndo => _undo.Count > 0;
     public bool CanRedo => _redo.Count > 0;
@@ -211,6 +213,7 @@ public sealed class AuthoringSession
             ? slideId
             : CurrentProject.Slides.Last(slide => selected.Contains(slide.Id)).Id;
         SelectedNodeIds = new HashSet<Guid>();
+        SelectionAnchorNodeId = null;
         RaiseStateChanged("Slide selected", AuthoringStateChangeKind.Selection);
     }
 
@@ -228,6 +231,7 @@ public sealed class AuthoringSession
         }
 
         SelectedNodeIds = selection;
+        SelectionAnchorNodeId = selection.Count == 1 ? selection.Single() : SelectionAnchorNodeId;
         RaiseStateChanged("Selection changed", AuthoringStateChangeKind.Selection);
     }
 
@@ -248,15 +252,39 @@ public sealed class AuthoringSession
         {
             case NodeSelectionMode.Replace:
                 selected = [nodeId];
+                SelectionAnchorNodeId = nodeId;
                 break;
             case NodeSelectionMode.Toggle:
                 if (!selected.Remove(nodeId))
                 {
                     selected.Add(nodeId);
                 }
+                SelectionAnchorNodeId = nodeId;
                 break;
             case NodeSelectionMode.Add:
                 selected.Add(nodeId);
+                SelectionAnchorNodeId = nodeId;
+                break;
+            case NodeSelectionMode.Range:
+                var nodes = CurrentProject.Slides
+                    .Single(slide => slide.Id == ActiveSlideId)
+                    .Nodes
+                    .OrderBy(node => node.LayerIndex)
+                    .ToArray();
+                var targetIndex = Array.FindIndex(nodes, node => node.Id == nodeId);
+                var anchorIndex = SelectionAnchorNodeId is Guid anchorId
+                    ? Array.FindIndex(nodes, node => node.Id == anchorId)
+                    : -1;
+                if (anchorIndex < 0)
+                {
+                    anchorIndex = targetIndex;
+                    SelectionAnchorNodeId = nodeId;
+                }
+                selected = nodes
+                    .Skip(Math.Min(anchorIndex, targetIndex))
+                    .Take(Math.Abs(targetIndex - anchorIndex) + 1)
+                    .Select(node => node.Id)
+                    .ToHashSet();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(mode));
@@ -274,6 +302,7 @@ public sealed class AuthoringSession
         }
 
         SelectedNodeIds = new HashSet<Guid>();
+        SelectionAnchorNodeId = null;
         RaiseStateChanged("Object selection cleared", AuthoringStateChangeKind.Selection);
     }
 
@@ -313,6 +342,10 @@ public sealed class AuthoringSession
             .Select(node => node.Id)
             .ToHashSet();
         SelectedNodeIds = SelectedNodeIds.Where(activeNodeIds.Contains).ToHashSet();
+        if (SelectionAnchorNodeId is Guid anchorNodeId && !activeNodeIds.Contains(anchorNodeId))
+        {
+            SelectionAnchorNodeId = SelectedNodeIds.Count == 1 ? SelectedNodeIds.Single() : null;
+        }
     }
 
     private void RaiseStateChanged(

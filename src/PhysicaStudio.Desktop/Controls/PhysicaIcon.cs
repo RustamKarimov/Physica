@@ -297,6 +297,18 @@ public sealed class PhysicaIcon : Control
                 context.DrawRectangle(null, pen, R(.22, .43, .56, .4), 2, 2);
                 context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .34},{h * .43} L {w * .34},{h * .32} C {w * .34},{h * .08} {w * .66},{h * .08} {w * .66},{h * .32} L {w * .66},{h * .43}"));
                 break;
+            case "unlock":
+                context.DrawRectangle(null, pen, R(.22, .43, .56, .4), 2, 2);
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .42},{h * .43} L {w * .42},{h * .32} C {w * .42},{h * .08} {w * .74},{h * .08} {w * .74},{h * .32}"));
+                break;
+            case "eye":
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .1},{h * .5} C {w * .28},{h * .2} {w * .72},{h * .2} {w * .9},{h * .5} C {w * .72},{h * .8} {w * .28},{h * .8} {w * .1},{h * .5} Z"));
+                context.DrawEllipse(null, pen, P(.5, .5), w * .11, h * .11);
+                break;
+            case "eye-off":
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .14},{h * .44} C {w * .32},{h * .2} {w * .7},{h * .22} {w * .88},{h * .5} C {w * .8},{h * .63} {w * .68},{h * .72} {w * .54},{h * .75}"));
+                context.DrawLine(pen, P(.16, .16), P(.84, .84));
+                break;
             case "link":
                 context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .42},{h * .36} L {w * .31},{h * .47} C {w * .12},{h * .66} {w * .38},{h * .92} {w * .57},{h * .73} L {w * .67},{h * .63} M {w * .58},{h * .64} L {w * .69},{h * .53} C {w * .88},{h * .34} {w * .62},{h * .08} {w * .43},{h * .27} L {w * .33},{h * .37}"));
                 break;

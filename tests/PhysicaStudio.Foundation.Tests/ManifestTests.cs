@@ -35,6 +35,7 @@ public sealed class ManifestTests
         Assert.DoesNotContain(manifest.Surfaces, feature => feature.Status == "Validated");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.project" && feature.Status == "Active");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.canvas" && feature.Status == "Preview");
+        Assert.Contains(manifest.Surfaces, feature => feature.Id == "authoring.layers" && feature.Status == "Preview");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "physics.kernel" && feature.Status == "Planned");
         Assert.Contains(manifest.Surfaces, feature => feature.Id == "studio.presenter-preview" && feature.Status == "Shell ready");
     }
@@ -197,6 +198,28 @@ public sealed class ManifestTests
         Assert.Contains("_viewModel.CommitNodeTransforms", code, StringComparison.Ordinal);
         Assert.Contains("AuthoringCanvasSurface.IsKeyboardFocusWithin", code, StringComparison.Ordinal);
         Assert.Contains("_viewModel.DeleteSelectedNodes", code, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void LayersWorkspaceWiresSelectionVisibilityLockRenameAndDirectReordering()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Layers.cs"));
+
+        Assert.Contains("x:Name=\"LayerItemsControl\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("ItemsSource=\"{Binding Layers}\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerPressed=\"LayerItem_PointerPressed\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerMoved=\"LayerItem_PointerMoved\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("PointerReleased=\"LayerItem_PointerReleased\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"LayerVisibility_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("Click=\"LayerLock_Click\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("x:Name=\"LayerNameEditor\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("NodeSelectionMode.Range", code, StringComparison.Ordinal);
+        Assert.Contains("MoveSelectedNodesRelative", code, StringComparison.Ordinal);
+        Assert.Contains("RenameNode", code, StringComparison.Ordinal);
     }
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
     {

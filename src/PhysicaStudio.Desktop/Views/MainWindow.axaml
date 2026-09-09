@@ -439,17 +439,23 @@
       <!-- Inspector -->
       <Border x:Name="RightPanel" Grid.Column="4" Background="{StaticResource ChromeBaseBrush}"
               BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1,0,0,0">
-        <Grid RowDefinitions="32,*">
-          <Grid Margin="6,0,5,0" ColumnDefinitions="Auto,*,Auto">
-            <Path Data="M 3,5 L 8,10 L 13,5" Stroke="#8193A0" StrokeThickness="1.3" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="{Binding InspectorTitle}" FontSize="13" FontWeight="SemiBold"
-                       VerticalAlignment="Center" Margin="5,0" />
-            <Button Grid.Column="2" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse inspector">
+        <Grid RowDefinitions="40,*">
+          <Grid Margin="6,4,5,4" ColumnDefinitions="*,*,Auto">
+            <Button Grid.Column="0" Background="{Binding InspectorTabBackground}" BorderThickness="0" CornerRadius="4"
+                    Click="ShowInspectorPanel_Click" ToolTip.Tip="Show contextual inspector">
+              <TextBlock Text="{Binding InspectorPanelLabel}" FontSize="12.5" FontWeight="SemiBold" />
+            </Button>
+            <Button Grid.Column="1" Background="{Binding LayersTabBackground}" BorderThickness="0" CornerRadius="4"
+                    Click="ShowLayersPanel_Click" ToolTip.Tip="Show layer order and selection">
+              <TextBlock Text="{Binding LayersPanelLabel}" FontSize="12.5" FontWeight="SemiBold" />
+            </Button>
+            <Button Grid.Column="2" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse right panel">
               <Path Data="M 4,3 L 9,8 L 4,13" Stroke="#8193A0" StrokeThickness="1.4" />
             </Button>
           </Grid>
           <ScrollViewer x:Name="InspectorScrollViewer"
                         Grid.Row="1"
+                        IsVisible="{Binding ShowInspectorPanel}"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Hidden">
             <StackPanel IsVisible="{Binding ShowStandingWaveReference}">
@@ -552,7 +558,7 @@
             </StackPanel>
           </ScrollViewer>
           <StackPanel Grid.Row="1"
-                      IsVisible="{Binding ShowGenericObjectContext}"
+                      IsVisible="{Binding ShowGenericObjectInspector}"
                       Margin="16,18"
                       Spacing="10">
             <Border Classes="inspector-section-header" Margin="0">
@@ -566,7 +572,7 @@
                        FontSize="11.5" Foreground="#718493" TextWrapping="Wrap" LineHeight="17" Margin="4,0" />
           </StackPanel>
           <StackPanel Grid.Row="1"
-                      IsVisible="{Binding ShowEmptySlideContext}"
+                      IsVisible="{Binding ShowEmptySlideInspector}"
                       Margin="16,18"
                       Spacing="10">
             <Border Classes="inspector-section-header" Margin="0">
@@ -579,6 +585,75 @@
             <TextBlock Text="Canvas object insertion and editing will become available through the Phase 2 canvas checkpoint."
                        FontSize="11.5" Foreground="#718493" TextWrapping="Wrap" LineHeight="17" Margin="4,0" />
           </StackPanel>
+          <Grid Grid.Row="1" IsVisible="{Binding ShowLayersPanel}" RowDefinitions="34,*,40">
+            <Border BorderBrush="#203440" BorderThickness="0,0,0,1" Padding="12,0">
+              <TextBlock Text="{Binding LayerSummary}" FontSize="11.5" Foreground="#8295A3"
+                         VerticalAlignment="Center" />
+            </Border>
+            <ScrollViewer x:Name="LayerScrollViewer" Grid.Row="1"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+              <Grid>
+                <TextBlock Text="{Binding NoLayerObjectsLabel}" Margin="16,18" FontSize="12.5"
+                           Foreground="#718493" IsVisible="{Binding HasNoLayers}" />
+                <ItemsControl x:Name="LayerItemsControl" ItemsSource="{Binding Layers}" Margin="7,7,7,12">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:LayerItemViewModel">
+                      <Border Classes="layer-row" Background="{Binding Background}" BorderBrush="{Binding BorderBrush}"
+                              Opacity="{Binding Opacity}" Margin="0,0,0,3" Padding="4,3"
+                              Focusable="True"
+                              PointerPressed="LayerItem_PointerPressed"
+                              PointerMoved="LayerItem_PointerMoved"
+                              PointerReleased="LayerItem_PointerReleased"
+                              PointerCaptureLost="LayerItem_PointerCaptureLost">
+                        <Grid ColumnDefinitions="28,28,*,Auto" MinHeight="42">
+                          <Button Grid.Column="0" Classes="layer-toggle" Click="LayerVisibility_Click"
+                                  ToolTip.Tip="Show or hide this object">
+                            <controls:PhysicaIcon IconKey="{Binding VisibilityIcon}" Width="15" Height="15" Stroke="#9AADB9" />
+                          </Button>
+                          <Button Grid.Column="1" Classes="layer-toggle" Click="LayerLock_Click"
+                                  ToolTip.Tip="Lock or unlock this object">
+                            <controls:PhysicaIcon IconKey="{Binding LockIcon}" Width="14" Height="14" Stroke="#9AADB9" />
+                          </Button>
+                          <Grid Grid.Column="2" Margin="5,0,6,0">
+                            <StackPanel x:Name="LayerNameDisplay" VerticalAlignment="Center" Spacing="1">
+                              <TextBlock x:Name="LayerNameLabel" Text="{Binding Name}" FontSize="12.5"
+                                         TextTrimming="CharacterEllipsis" DoubleTapped="LayerName_DoubleTapped" />
+                              <TextBlock Text="{Binding KindLabel}" FontSize="10.5" Foreground="#718493"
+                                         TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <TextBox x:Name="LayerNameEditor" Text="{Binding Name}" IsVisible="False"
+                                     FontSize="12.5" Padding="5,2" VerticalAlignment="Center"
+                                     KeyDown="LayerNameEditor_KeyDown" LostFocus="LayerNameEditor_LostFocus" />
+                          </Grid>
+                          <TextBlock Grid.Column="3" Text="{Binding LayerIndex}" FontSize="10.5"
+                                     Foreground="#607787" VerticalAlignment="Center" Margin="4,0" />
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Grid>
+            </ScrollViewer>
+            <Border Grid.Row="2" BorderBrush="#203440" BorderThickness="0,1,0,0" Padding="7,5">
+              <StackPanel Orientation="Horizontal" Spacing="3">
+                <Button Classes="layer-tool" Click="RenameLayer_Click" ToolTip.Tip="Rename selected object (F2)">
+                  <controls:PhysicaIcon IconKey="edit" Width="15" Height="15" Stroke="#A9BAC5" />
+                </Button>
+                <Button Classes="layer-tool" Click="BringToFront_Click" ToolTip.Tip="Bring to front">
+                  <TextBlock Text="Front" FontSize="11" />
+                </Button>
+                <Button Classes="layer-tool" Click="BringForward_Click" ToolTip.Tip="Bring forward one layer">
+                  <TextBlock Text="Forward" FontSize="11" />
+                </Button>
+                <Button Classes="layer-tool" Click="SendBackward_Click" ToolTip.Tip="Send backward one layer">
+                  <TextBlock Text="Back" FontSize="11" />
+                </Button>
+                <Button Classes="layer-tool" Click="SendToBack_Click" ToolTip.Tip="Send to back">
+                  <TextBlock Text="Bottom" FontSize="11" />
+                </Button>
+              </StackPanel>
+            </Border>
+          </Grid>
         </Grid>
       </Border>
     </Grid>

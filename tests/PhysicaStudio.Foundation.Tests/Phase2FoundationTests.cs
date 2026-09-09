@@ -227,6 +227,114 @@ public sealed class Phase2FoundationTests
     }
 
     [Fact]
+    public void LayerRangeSelectionUsesStableDocumentOrder()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var slideId = session.ActiveSlideId;
+        var nodes = Enumerable.Range(1, 4)
+            .Select(index => SceneNode.Create($"Object {index}", "shape.rectangle",
+                new NodeGeometry(index * 20, index * 20, 100, 60)))
+            .ToArray();
+        foreach (var node in nodes)
+        {
+            session.Execute(ProjectCommands.AddNode(slideId, node));
+        }
+
+        session.SelectNode(nodes[1].Id);
+        session.SelectNode(nodes[3].Id, NodeSelectionMode.Range);
+
+        Assert.Equal(
+            nodes.Skip(1).Select(node => node.Id).Order(),
+            session.SelectedNodeIds.Order());
+        Assert.Equal(nodes[1].Id, session.SelectionAnchorNodeId);
+    }
+
+    [Fact]
+    public void MultiLayerReorderPreservesRelativeOrderAndUndoesAtomically()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var slideId = session.ActiveSlideId;
+        var nodes = Enumerable.Range(1, 4)
+            .Select(index => SceneNode.Create($"Object {index}", "shape.rectangle",
+                new NodeGeometry(index * 20, index * 20, 100, 60)))
+            .ToArray();
+        foreach (var node in nodes)
+        {
+            session.Execute(ProjectCommands.AddNode(slideId, node));
+        }
+        var before = session.CurrentProject;
+
+        session.Execute(ProjectCommands.MoveNodesRelative(
+            slideId,
+            [nodes[1].Id, nodes[3].Id],
+            nodes[0].Id,
+            placeAboveTarget: true));
+
+        Assert.Equal(
+            [nodes[0].Id, nodes[1].Id, nodes[3].Id, nodes[2].Id],
+            session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+        Assert.True(session.Undo());
+        Assert.Same(before, session.CurrentProject);
+    }
+
+    [Fact]
+    public void MultiLayerLockVisibilityBoundaryAndRenameCommandsRemainValidated()
+    {
+        var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);
+        var slideId = session.ActiveSlideId;
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(20, 20, 100, 60));
+        var second = SceneNode.Create("Second", "shape.rectangle", new NodeGeometry(160, 20, 100, 60));
+        session.Execute(ProjectCommands.AddNode(slideId, first));
+        session.Execute(ProjectCommands.AddNode(slideId, second));
+
+        session.Execute(ProjectCommands.SetNodesVisible(slideId, [first.Id, second.Id], false));
+        session.Execute(ProjectCommands.SetNodesLocked(slideId, [first.Id, second.Id], true));
+        Assert.All(session.CurrentProject.Slides[0].Nodes, node =>
+        {
+            Assert.False(node.IsVisible);
+            Assert.True(node.IsLocked);
+        });
+        Assert.Throws<AuthoringCommandException>(() =>
+            session.Execute(ProjectCommands.RenameNode(slideId, first.Id, "Renamed")));
+
+        session.Execute(ProjectCommands.SetNodesLocked(slideId, [first.Id, second.Id], false));
+        session.Execute(ProjectCommands.RenameNode(slideId, first.Id, "Renamed"));
+        session.Execute(ProjectCommands.MoveNodesToBoundary(slideId, [first.Id], toFront: true));
+
+        Assert.Equal("Renamed", session.CurrentProject.Slides[0].Nodes[^1].Name);
+        Assert.Equal(first.Id, session.CurrentProject.Slides[0].Nodes[^1].Id);
+    }
+
+    [Fact]
+    public void StudioLayersRemainFrontToBackAndSynchronizeWithCanvasSelectionAndCommands()
+    {
+        var back = SceneNode.Create("Back", "shape.rectangle", new NodeGeometry(20, 20, 100, 60));
+        var front = SceneNode.Create("Front", "shape.text", new NodeGeometry(40, 40, 100, 60)) with { LayerIndex = 1 };
+        var slide = SlideDocument.Create("Layers") with { Nodes = [back, front] };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []),
+            session);
+
+        Assert.Equal([front.Id, back.Id], viewModel.Layers.Select(layer => layer.Id));
+        viewModel.SelectNode(back.Id);
+        Assert.True(viewModel.Layers.Single(layer => layer.Id == back.Id).IsSelected);
+
+        viewModel.SetNodeVisible(back.Id, false);
+        viewModel.SetNodeLocked(front.Id, true);
+        Assert.False(viewModel.Layers.Single(layer => layer.Id == back.Id).IsVisible);
+        Assert.True(viewModel.Layers.Single(layer => layer.Id == front.Id).IsLocked);
+
+        viewModel.SetNodeLocked(front.Id, false);
+        viewModel.SelectNode(back.Id);
+        viewModel.MoveSelectedNodesToBoundary(toFront: true);
+        Assert.Equal(back.Id, viewModel.Layers[0].Id);
+        viewModel.RenameNode(back.Id, "Foreground card");
+        Assert.Equal("Foreground card", viewModel.Layers[0].Name);
+    }
+
+    [Fact]
     public void DuplicateSlide_RekeysNodesAndPreservesParentRelationships()
     {
         var session = AuthoringSession.CreateNew("Lesson", () => FixedTime);

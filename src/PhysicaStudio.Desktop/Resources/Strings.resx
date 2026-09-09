@@ -42,6 +42,15 @@
   <data name="SelectCanvasObject" xml:space="preserve"><value>Select an object on the slide to edit it</value></data>
   <data name="CanvasSelection" xml:space="preserve"><value>Selection</value></data>
   <data name="CanvasTransformHint" xml:space="preserve"><value>Drag inside to move. Drag empty space to select several objects. Shift+corner keeps proportions; Ctrl+corner resizes from the centre. Arrow keys nudge precisely.</value></data>
+  <data name="InspectorPanel" xml:space="preserve"><value>Inspector</value></data>
+  <data name="LayersPanel" xml:space="preserve"><value>Layers</value></data>
+  <data name="NoLayerObjects" xml:space="preserve"><value>No objects on this slide</value></data>
+  <data name="ObjectRenamed" xml:space="preserve"><value>Object renamed</value></data>
+  <data name="ObjectsReordered" xml:space="preserve"><value>Layer order updated</value></data>
+  <data name="ObjectHidden" xml:space="preserve"><value>Object hidden</value></data>
+  <data name="ObjectShown" xml:space="preserve"><value>Object shown</value></data>
+  <data name="ObjectLocked" xml:space="preserve"><value>Object locked</value></data>
+  <data name="ObjectUnlocked" xml:space="preserve"><value>Object unlocked</value></data>
   <data name="MoveSelectedSlidesHere" xml:space="preserve"><value>Move selected slides here</value></data>
   <data name="MoveSectionUp" xml:space="preserve"><value>Move section up</value></data>
   <data name="MoveSectionDown" xml:space="preserve"><value>Move section down</value></data>
@@ -67,4 +76,6 @@
   <data name="SectionSlideCountPlural" xml:space="preserve"><value>{0} slides</value></data>
   <data name="SelectedObjectCountSingular" xml:space="preserve"><value>{0} object selected</value></data>
   <data name="SelectedObjectCountPlural" xml:space="preserve"><value>{0} objects selected</value></data>
+  <data name="LayerObjectCountSingular" xml:space="preserve"><value>{0} object · front to back</value></data>
+  <data name="LayerObjectCountPlural" xml:space="preserve"><value>{0} objects · front to back</value></data>
 </root>

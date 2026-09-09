@@ -10,6 +10,7 @@
     { "id": "studio.presenter-preview", "name": "Learner presentation preview", "phase": 1, "status": "Shell ready" },
     { "id": "authoring.project", "name": "Project save and recovery", "phase": 2, "status": "Active" },
     { "id": "authoring.canvas", "name": "Canvas selection and transforms", "phase": 2, "status": "Preview" },
+    { "id": "authoring.layers", "name": "Layers, ordering, locking and visibility", "phase": 2, "status": "Preview" },
     { "id": "design.content", "name": "Text, equations, shapes, paths and media", "phase": 3, "status": "Planned" },
     { "id": "design.masters", "name": "Templates and master slides", "phase": 3, "status": "Planned" },
     { "id": "animation.timeline", "name": "Timeline editing and keyframes", "phase": 4, "status": "Planned" },

@@ -338,6 +338,16 @@ public static class ProjectCommands
             return slide with { Nodes = nodes };
         }));
 
+    public static IProjectCommand RenameNode(Guid slideId, Guid nodeId, string name) => Command("Rename object", project =>
+    {
+        RequireName(name, "Object name");
+        return ReplaceNode(project, slideId, nodeId, node =>
+        {
+            RequireUnlocked(node);
+            return node with { Name = name.Trim() };
+        });
+    });
+
     public static IProjectCommand DeleteNodes(Guid slideId, IEnumerable<Guid> nodeIds) => Command("Delete objects", project =>
         ReplaceSlide(project, slideId, slide =>
         {
@@ -407,9 +417,88 @@ public static class ProjectCommands
         Command(isLocked ? "Lock object" : "Unlock object", project =>
             ReplaceNode(project, slideId, nodeId, node => node with { IsLocked = isLocked }));
 
+    public static IProjectCommand SetNodesLocked(Guid slideId, IEnumerable<Guid> nodeIds, bool isLocked) =>
+        Command(isLocked ? "Lock objects" : "Unlock objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, nodeIds);
+                return slide with
+                {
+                    Nodes = slide.Nodes
+                        .Select(node => ids.Contains(node.Id) ? node with { IsLocked = isLocked } : node)
+                        .ToArray(),
+                };
+            }));
+
     public static IProjectCommand SetNodeVisible(Guid slideId, Guid nodeId, bool isVisible) =>
         Command(isVisible ? "Show object" : "Hide object", project =>
             ReplaceNode(project, slideId, nodeId, node => node with { IsVisible = isVisible }));
+
+    public static IProjectCommand SetNodesVisible(Guid slideId, IEnumerable<Guid> nodeIds, bool isVisible) =>
+        Command(isVisible ? "Show objects" : "Hide objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, nodeIds);
+                return slide with
+                {
+                    Nodes = slide.Nodes
+                        .Select(node => ids.Contains(node.Id) ? node with { IsVisible = isVisible } : node)
+                        .ToArray(),
+                };
+            }));
+
+    public static IProjectCommand MoveNodesRelative(
+        Guid slideId,
+        IEnumerable<Guid> nodeIds,
+        Guid targetNodeId,
+        bool placeAboveTarget) => Command("Reorder objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, nodeIds);
+                if (ids.Contains(targetNodeId))
+                {
+                    return slide;
+                }
+                if (slide.Nodes.All(node => node.Id != targetNodeId))
+                {
+                    throw new AuthoringCommandException("The target layer does not exist.");
+                }
+                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                {
+                    throw new AuthoringCommandException("Unlock every selected object before reordering them.");
+                }
+
+                var moving = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
+                var remaining = slide.Nodes.Where(node => !ids.Contains(node.Id)).ToList();
+                var targetIndex = remaining.FindIndex(node => node.Id == targetNodeId);
+                var insertionIndex = targetIndex + (placeAboveTarget ? 1 : 0);
+                remaining.InsertRange(insertionIndex, moving);
+                return slide with
+                {
+                    Nodes = remaining.Select((node, index) => node with { LayerIndex = index }).ToArray(),
+                };
+            }));
+
+    public static IProjectCommand MoveNodesToBoundary(
+        Guid slideId,
+        IEnumerable<Guid> nodeIds,
+        bool toFront) => Command(toFront ? "Bring objects to front" : "Send objects to back", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, nodeIds);
+                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                {
+                    throw new AuthoringCommandException("Unlock every selected object before reordering them.");
+                }
+
+                var moving = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
+                var remaining = slide.Nodes.Where(node => !ids.Contains(node.Id)).ToList();
+                remaining.InsertRange(toFront ? remaining.Count : 0, moving);
+                return slide with
+                {
+                    Nodes = remaining.Select((node, index) => node with { LayerIndex = index }).ToArray(),
+                };
+            }));
 
     public static IProjectCommand MoveNodeToLayer(Guid slideId, Guid nodeId, int destinationIndex) => Command("Reorder object", project =>
         ReplaceSlide(project, slideId, slide =>
@@ -454,6 +543,16 @@ public static class ProjectCommands
 
     private static IProjectCommand Command(string description, Func<LessonProject, LessonProject> apply) =>
         new ProjectCommand(Guid.NewGuid(), description, apply);
+
+    private static HashSet<Guid> RequireNodeSelection(SlideDocument slide, IEnumerable<Guid> nodeIds)
+    {
+        var ids = nodeIds.Distinct().ToHashSet();
+        if (ids.Count == 0 || ids.Any(id => slide.Nodes.All(node => node.Id != id)))
+        {
+            throw new AuthoringCommandException("A selected object does not exist.");
+        }
+        return ids;
+    }
 
     private static LessonProject ReplaceSlide(
         LessonProject project,

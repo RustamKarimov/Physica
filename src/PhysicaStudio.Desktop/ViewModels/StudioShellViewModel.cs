@@ -16,6 +16,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     {
         "New", "Open", "Recent", "Save", "Save As", "Save Copy", "Recover", "Close",
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
+        "Selection Pane", "Layers",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -24,6 +25,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private AuthoringSession _session;
     private string _statusMessage = AppText.ProjectFoundationReady;
     private bool _isProjectOpen = true;
+    private RightPanelWorkspace _rightPanelWorkspace = RightPanelWorkspace.Inspector;
     private readonly ISlideSceneSnapshotBuilder _sceneBuilder = new SlideSceneSnapshotBuilder();
     private readonly HashSet<Guid> _collapsedSectionIds = [];
 
@@ -58,6 +60,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         _selectedRibbonTab.IsSelected = true;
         Features = featureManifest.Surfaces;
         Slides = new ObservableCollection<SlideItemViewModel>();
+        Layers = new ObservableCollection<LayerItemViewModel>();
         RecentProjects = new ObservableCollection<RecentProjectItemViewModel>();
         RefreshFromSession();
     }
@@ -81,6 +84,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public IReadOnlyList<string> ContextualTabs { get; }
     public IReadOnlyList<FeatureDefinition> Features { get; }
     public ObservableCollection<SlideItemViewModel> Slides { get; }
+    public ObservableCollection<LayerItemViewModel> Layers { get; }
     public ObservableCollection<RecentProjectItemViewModel> RecentProjects { get; }
     public AuthoringSession Session => _session;
     public bool CanUndo => _session.CanUndo;
@@ -119,6 +123,18 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public IReadOnlySet<Guid> SelectedSlideIds => _session.SelectedSlideIds;
     public IReadOnlySet<Guid> SelectedNodeIds => _session.SelectedNodeIds;
     public string SelectedObjectSummary => AppText.SelectedObjectCount(_session.SelectedNodeIds.Count);
+    public bool ShowInspectorPanel => _rightPanelWorkspace == RightPanelWorkspace.Inspector;
+    public bool ShowLayersPanel => _rightPanelWorkspace == RightPanelWorkspace.Layers;
+    public bool ShowStandingWaveInspector => ShowInspectorPanel && ShowStandingWaveReference;
+    public bool ShowGenericObjectInspector => ShowInspectorPanel && ShowGenericObjectContext;
+    public bool ShowEmptySlideInspector => ShowInspectorPanel && ShowEmptySlideContext;
+    public string InspectorPanelLabel => AppText.InspectorPanel;
+    public string LayersPanelLabel => AppText.LayersPanel;
+    public string NoLayerObjectsLabel => AppText.NoLayerObjects;
+    public string LayerSummary => AppText.LayerObjectCount(Layers.Count);
+    public bool HasNoLayers => Layers.Count == 0;
+    public string InspectorTabBackground => ShowInspectorPanel ? "#193247" : "Transparent";
+    public string LayersTabBackground => ShowLayersPanel ? "#193247" : "Transparent";
 
     public string StatusMessage
     {
@@ -214,6 +230,23 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectWorkspace(StudioWorkspace workspace) => StudioWorkspace = workspace;
 
+    public void SelectRightPanelWorkspace(RightPanelWorkspace workspace)
+    {
+        if (_rightPanelWorkspace == workspace)
+        {
+            return;
+        }
+
+        _rightPanelWorkspace = workspace;
+        OnPropertyChanged(nameof(ShowInspectorPanel));
+        OnPropertyChanged(nameof(ShowLayersPanel));
+        OnPropertyChanged(nameof(ShowStandingWaveInspector));
+        OnPropertyChanged(nameof(ShowGenericObjectInspector));
+        OnPropertyChanged(nameof(ShowEmptySlideInspector));
+        OnPropertyChanged(nameof(InspectorTabBackground));
+        OnPropertyChanged(nameof(LayersTabBackground));
+    }
+
     public void NewProject(string? title = null) =>
         ReplaceSession(AuthoringSession.CreateNew(title ?? AppText.UntitledLesson), AppText.NewProjectCreated);
 
@@ -296,6 +329,67 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
         _session.Execute(ProjectCommands.DeleteNodes(ActiveSlide.Id, _session.SelectedNodeIds));
         StatusMessage = AppText.ObjectsDeleted;
+    }
+
+    public void RenameNode(Guid nodeId, string name)
+    {
+        _session.Execute(ProjectCommands.RenameNode(ActiveSlide.Id, nodeId, name));
+        StatusMessage = AppText.ObjectRenamed;
+    }
+
+    public void SetNodeVisible(Guid nodeId, bool isVisible)
+    {
+        _session.Execute(ProjectCommands.SetNodeVisible(ActiveSlide.Id, nodeId, isVisible));
+        StatusMessage = isVisible ? AppText.ObjectShown : AppText.ObjectHidden;
+    }
+
+    public void SetNodeLocked(Guid nodeId, bool isLocked)
+    {
+        _session.Execute(ProjectCommands.SetNodeLocked(ActiveSlide.Id, nodeId, isLocked));
+        StatusMessage = isLocked ? AppText.ObjectLocked : AppText.ObjectUnlocked;
+    }
+
+    public void MoveSelectedNodesRelative(Guid targetNodeId, bool placeAboveTarget)
+    {
+        _session.Execute(ProjectCommands.MoveNodesRelative(
+            ActiveSlide.Id,
+            _session.SelectedNodeIds,
+            targetNodeId,
+            placeAboveTarget));
+        StatusMessage = AppText.ObjectsReordered;
+    }
+
+    public void MoveSelectedNodesOneLayer(bool towardFront)
+    {
+        var ordered = ActiveSlide.Nodes.OrderBy(node => node.LayerIndex).ToArray();
+        var selected = _session.SelectedNodeIds;
+        if (selected.Count == 0)
+        {
+            return;
+        }
+
+        var selectedLayers = ordered.Where(node => selected.Contains(node.Id)).ToArray();
+        var edgeLayer = towardFront
+            ? selectedLayers.Max(node => node.LayerIndex)
+            : selectedLayers.Min(node => node.LayerIndex);
+        var target = towardFront
+            ? ordered.FirstOrDefault(node => node.LayerIndex > edgeLayer && !selected.Contains(node.Id))
+            : ordered.LastOrDefault(node => node.LayerIndex < edgeLayer && !selected.Contains(node.Id));
+        if (target is not null)
+        {
+            MoveSelectedNodesRelative(target.Id, placeAboveTarget: towardFront);
+        }
+    }
+
+    public void MoveSelectedNodesToBoundary(bool toFront)
+    {
+        if (_session.SelectedNodeIds.Count == 0)
+        {
+            return;
+        }
+
+        _session.Execute(ProjectCommands.MoveNodesToBoundary(ActiveSlide.Id, _session.SelectedNodeIds, toFront));
+        StatusMessage = AppText.ObjectsReordered;
     }
 
     public void CloseProject()
@@ -500,6 +594,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             slide.SetSelected(_session.SelectedSlideIds.Contains(slide.Id));
         }
 
+        RefreshLayerSelectionOrActiveSlide();
+
         RefreshCommandAvailability();
         OnPropertyChanged(nameof(SelectedSlideIds));
         OnPropertyChanged(nameof(SelectedNodeIds));
@@ -508,6 +604,9 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowStandingWaveReference));
         OnPropertyChanged(nameof(ShowGenericObjectContext));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
+        OnPropertyChanged(nameof(ShowStandingWaveInspector));
+        OnPropertyChanged(nameof(ShowGenericObjectInspector));
+        OnPropertyChanged(nameof(ShowEmptySlideInspector));
         OnPropertyChanged(nameof(CanvasInspectorMessage));
         OnPropertyChanged(nameof(SlideSurfaceColor));
         OnPropertyChanged(nameof(ActiveScene));
@@ -560,6 +659,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             previousSectionId = slide.SectionId;
         }
 
+        RebuildLayers();
+
         RefreshCommandAvailability();
         OnPropertyChanged(nameof(DocumentTitle));
         OnPropertyChanged(nameof(CanUndo));
@@ -573,6 +674,9 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowStandingWaveReference));
         OnPropertyChanged(nameof(ShowGenericObjectContext));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
+        OnPropertyChanged(nameof(ShowStandingWaveInspector));
+        OnPropertyChanged(nameof(ShowGenericObjectInspector));
+        OnPropertyChanged(nameof(ShowEmptySlideInspector));
         OnPropertyChanged(nameof(CanvasInspectorMessage));
         OnPropertyChanged(nameof(SlideSurfaceColor));
         OnPropertyChanged(nameof(ActiveScene));
@@ -584,6 +688,33 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(TimelineSummary));
         OnPropertyChanged(nameof(IsProjectOpen));
         OnPropertyChanged(nameof(IsStartCenterVisible));
+    }
+
+    private void RefreshLayerSelectionOrActiveSlide()
+    {
+        var activeIds = ActiveSlide.Nodes.Select(node => node.Id).ToHashSet();
+        if (Layers.Count != activeIds.Count || Layers.Any(layer => !activeIds.Contains(layer.Id)))
+        {
+            RebuildLayers();
+            return;
+        }
+
+        foreach (var layer in Layers)
+        {
+            layer.SetSelected(_session.SelectedNodeIds.Contains(layer.Id));
+        }
+    }
+
+    private void RebuildLayers()
+    {
+        Layers.Clear();
+        foreach (var node in ActiveSlide.Nodes.OrderByDescending(node => node.LayerIndex))
+        {
+            Layers.Add(new LayerItemViewModel(node, _session.SelectedNodeIds.Contains(node.Id)));
+        }
+
+        OnPropertyChanged(nameof(LayerSummary));
+        OnPropertyChanged(nameof(HasNoLayers));
     }
 
     private void RefreshCommandAvailability()
@@ -906,6 +1037,57 @@ public sealed record ObjectCardViewModel(string Name, string Category, string Pr
 public sealed record RecentProjectItemViewModel(string Path, string DisplayName, DateTimeOffset LastOpenedUtc)
 {
     public string Location => System.IO.Path.GetDirectoryName(Path) ?? Path;
+}
+
+public sealed class LayerItemViewModel : INotifyPropertyChanged
+{
+    private bool _isSelected;
+
+    public LayerItemViewModel(SceneNode node, bool isSelected)
+    {
+        Id = node.Id;
+        Name = node.Name;
+        Kind = node.Kind;
+        LayerIndex = node.LayerIndex;
+        IsVisible = node.IsVisible;
+        IsLocked = node.IsLocked;
+        _isSelected = isSelected;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public Guid Id { get; }
+    public string Name { get; }
+    public string Kind { get; }
+    public int LayerIndex { get; }
+    public bool IsVisible { get; }
+    public bool IsLocked { get; }
+    public bool IsSelected => _isSelected;
+    public string KindLabel => Kind.Split('.').Last().Replace('-', ' ');
+    public string VisibilityIcon => IsVisible ? "eye" : "eye-off";
+    public string LockIcon => IsLocked ? "lock" : "unlock";
+    public string Background => IsSelected ? "#17334A" : "Transparent";
+    public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
+    public double Opacity => IsVisible ? 1 : .55;
+
+    public void SetSelected(bool isSelected)
+    {
+        if (_isSelected == isSelected)
+        {
+            return;
+        }
+
+        _isSelected = isSelected;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Background)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BorderBrush)));
+    }
+}
+
+public enum RightPanelWorkspace
+{
+    Inspector,
+    Layers,
 }
 
 public enum StudioWorkspace

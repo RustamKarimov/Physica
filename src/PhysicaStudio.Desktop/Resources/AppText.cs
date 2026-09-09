@@ -41,6 +41,15 @@ public static class AppText
     public static string SelectCanvasObject => Get(nameof(SelectCanvasObject));
     public static string CanvasSelection => Get(nameof(CanvasSelection));
     public static string CanvasTransformHint => Get(nameof(CanvasTransformHint));
+    public static string InspectorPanel => Get(nameof(InspectorPanel));
+    public static string LayersPanel => Get(nameof(LayersPanel));
+    public static string NoLayerObjects => Get(nameof(NoLayerObjects));
+    public static string ObjectRenamed => Get(nameof(ObjectRenamed));
+    public static string ObjectsReordered => Get(nameof(ObjectsReordered));
+    public static string ObjectHidden => Get(nameof(ObjectHidden));
+    public static string ObjectShown => Get(nameof(ObjectShown));
+    public static string ObjectLocked => Get(nameof(ObjectLocked));
+    public static string ObjectUnlocked => Get(nameof(ObjectUnlocked));
     public static string MoveSelectedSlidesHere => Get(nameof(MoveSelectedSlidesHere));
     public static string MoveSectionUp => Get(nameof(MoveSectionUp));
     public static string MoveSectionDown => Get(nameof(MoveSectionDown));
@@ -67,6 +76,9 @@ public static class AppText
 
     public static string SelectedObjectCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SelectedObjectCountSingular" : "SelectedObjectCountPlural"), count);
+
+    public static string LayerObjectCount(int count) =>
+        string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "LayerObjectCountSingular" : "LayerObjectCountPlural"), count);
 
     public static string SectionName(int number) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);

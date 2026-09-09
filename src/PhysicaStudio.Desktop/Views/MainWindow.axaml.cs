@@ -152,6 +152,14 @@ public sealed partial class MainWindow : Window
                 case "Section":
                     _viewModel.AddSectionForActiveSlide();
                     break;
+                case "Selection Pane":
+                    EnsureRightPanelVisible();
+                    _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Inspector);
+                    break;
+                case "Layers":
+                    EnsureRightPanelVisible();
+                    _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Layers);
+                    break;
                 case "Undo":
                     _viewModel.Undo();
                     break;
@@ -811,6 +819,10 @@ public sealed partial class MainWindow : Window
         var selectedNodes = _viewModel.ActiveSlide.Nodes
             .Where(node => selectedIds.Contains(node.Id))
             .ToArray();
+        if (selectedNodes.Any(node => node.IsLocked))
+        {
+            throw new AuthoringCommandException("Unlock every selected object before transforming it.");
+        }
         var bounds = selectedNodes
             .Select(node => (node.Id, Bounds: surface.GetNodeLogicalBounds(node.Id)))
             .Where(item => item.Bounds.HasValue)
@@ -940,7 +952,14 @@ public sealed partial class MainWindow : Window
     {
         if (e.Key == Key.F2 && e.Source is not TextBox && _viewModel.IsProjectOpen)
         {
-            BeginActiveSlideRename();
+            if (_viewModel.ShowLayersPanel && LayerItemsControl.IsKeyboardFocusWithin)
+            {
+                BeginSelectedLayerRename();
+            }
+            else
+            {
+                BeginActiveSlideRename();
+            }
             e.Handled = true;
             return;
         }
@@ -949,7 +968,8 @@ public sealed partial class MainWindow : Window
         {
             try
             {
-                if (AuthoringCanvasSurface.IsKeyboardFocusWithin && _viewModel.SelectedNodeIds.Count > 0)
+                if ((AuthoringCanvasSurface.IsKeyboardFocusWithin || LayerItemsControl.IsKeyboardFocusWithin)
+                    && _viewModel.SelectedNodeIds.Count > 0)
                 {
                     _viewModel.DeleteSelectedNodes();
                 }
