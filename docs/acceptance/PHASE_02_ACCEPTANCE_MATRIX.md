@@ -1,7 +1,7 @@
 # Phase 2 Acceptance Matrix
 
 **Phase status:** In progress — acceptance recovery
-**Current gate:** Gate 1 — Shared renderer
+**Current gate:** Gate 3 — Complete Phase 2 (retained-canvas slice)
 **Later-phase work:** Blocked until all three gates are user accepted
 **Binding procedure:** `skills/physica-acceptance-audit/SKILL.md`
 
@@ -30,7 +30,7 @@ No row advances from a test count alone. Every Interaction verified row requires
 | Thumbnail invalidates after every visible mutation | UI wired | Edit/background/undo/redo revision tests pass; real-control and reopen evidence is Not run | Edit, undo, redo, background, reorder, and reopen scenarios |
 | Gate 1 user approval | Not run | All preceding rows must pass | Review captures and user decision |
 
-Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer/README.md`. The Computer controller failed before any input with a Windows sandbox-helper error, so no row is promoted to Interaction verified.
+Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer/README.md`. The Computer controller failed before any input with a Windows sandbox-helper error, so no row is promoted to Interaction verified. On 2026-09-09 the user manually reviewed the repaired thumbnails and navigator and explicitly authorized progression to the next part. That authorization opens Gate 3 implementation, but it does not erase the missing controlled captures, DPI run, or macOS evidence.
 
 ## Gate 2 — Slide navigator
 
@@ -48,11 +48,13 @@ Gate 1 working-tree evidence: `docs/checkpoints/phase-02/gate-01-shared-renderer
 
 Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigator/README.md`, `docs/checkpoints/phase-02/gate-02-slide-navigator/CRASH_RECOVERY_2026-09-08.md`, `docs/checkpoints/phase-02/gate-02-slide-navigator/NAMING_RECOVERY_2026-09-08.md`, and `docs/checkpoints/phase-02/gate-02-slide-navigator/SECTION_MANAGEMENT_2026-09-09.md`. Latest tested correction commit: `efc82d4`.
 
+The user manually reviewed the corrected Windows navigator on 2026-09-09 and authorized progression. Exact launcher-driven scenario captures remain acceptance debt because the Computer controller could not initialize.
+
 ## Gate 3 — Complete Phase 2
 
 | Requirement | Current state | Blocking finding | Required evidence |
 | --- | --- | --- | --- |
-| Canvas selection, multi-selection, transforms, layers, grouping, lock, and hide | Model only | Backend commands lack an accepted authoring canvas | Real pointer/keyboard workflow with one undo entry per gesture |
+| Canvas selection, multi-selection, transforms, layers, grouping, lock, and hide | UI wired | Selection plus move/resize/rotate are wired at `7791ec7`; layers, grouping, lock/hide UI and real pointer evidence remain incomplete | Real pointer/keyboard workflow with one undo entry per gesture |
 | Pan, zoom, fit, viewport persistence, and focus | Not implemented | Fixed reference surface is not a functional viewport | Mouse, touchpad, keyboard, fit, and boundary scenarios |
 | Guides, grid, margins, safe areas, and snapping | Model only | Logical snapping is not exposed or DPI-tested | Visible controls and drag/resize assertions across zoom levels |
 | Save, close without exiting, reopen, and exact round trip | UI wired | Complete lifecycle and edited-scene proof are missing | Launcher workflow and document/render comparison |
@@ -66,10 +68,10 @@ Navigator correction evidence: `docs/checkpoints/phase-02/gate-02-slide-navigato
 
 | Layer | Current evidence | May prove | Does not prove |
 | --- | --- | --- | --- |
-| Model/service and render contracts | 57 passed on 2026-09-09, including navigator-crash, naming, cross-section movement, section lifecycle, collapse, and UI-wiring scenarios | Validation, serialization, command results, history, selection stability, automatic/custom naming, section semantics, snapping calculations, scene mapping, aspect math, and invalidation | Real pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
-| UI component | Section action routing structure passes; interaction evidence is Not run | Static reachability of real controls | Actual popup input, complete lifecycle, or cross-platform behavior |
+| Model/service and render contracts | 64 passed on 2026-09-09. The new canvas slice includes 3 model/command scenarios: selection without document mutation, atomic multi-object transform/undo, and atomic delete/locked-object rejection | Validation, serialization, command results, history, selection stability, transform authority, automatic/custom naming, section semantics, snapping calculations, scene mapping, aspect math, and invalidation | Real pointer, keyboard, focus, pixel equivalence, drag/drop, or usability |
+| UI component | 3 canvas-render-control scenarios pass for topmost hit testing, visible-stroke path targeting, selection handles, and transient preview; 1 desktop structural scenario verifies event wiring | Geometry-aware surface behavior and static reachability of real controls | Actual pointer capture, modifier input, complete lifecycle, or cross-platform behavior |
 | Rendered output | No accepted gate evidence | Aspect ratio, content equivalence, invalidation, visual regression | Usability or user approval |
-| End-to-end | Rebuilt launcher-started process responsive; Computer controller failed before input, so no accepted interaction evidence | Process startup only | Real controls, visual equivalence, or user approval |
+| End-to-end | Commit `7791ec7` built and launcher-started process 22700 was responsive. Computer initialization failed twice with `trusted Node process exited unexpectedly`, so no controlled canvas input was captured | Process startup only | Real controls, visual equivalence, or user approval |
 
 ## Required gate record
 

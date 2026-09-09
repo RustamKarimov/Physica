@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 acceptance recovery; Gate 1 shared-renderer implementation is UI wired, but production feature work remains frozen until Computer interaction evidence and user approval pass
+**Current activity:** Phase 2 Gate 3; retained-canvas selection and one-gesture move/resize/rotate are UI wired and awaiting real teacher interaction, followed by layers/grouping and viewport controls
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -28,9 +28,7 @@ The shared-renderer implementation now converts the authoritative `SlideDocument
 
 The full solution currently reports 39 passing tests and zero failures. This proves model/service and render-contract behavior only. It includes document visual validation and round trips, shared snapshot mapping, blank/duplicate/aspect cases, image asset-reference propagation, and invalidation across edits, undo, and redo.
 
-Gate 1 is **not accepted**. The Computer controller failed before application input on its initial attempt, retry, reset, and final retry with `windows sandbox failed: helper_unknown_error: setup refresh had errors`. The real launcher started a responsive process, but pointer, focus, screenshot, DPI, and presenter workflow evidence remain Not run. See `docs/checkpoints/phase-02/gate-01-shared-renderer/README.md`.
-
-Gate 2 must not begin until Gate 1 has application-level evidence and explicit user approval.
+Gate 1 still lacks controlled Computer captures, DPI coverage, and macOS evidence. On 2026-09-09 the user manually reviewed the corrected Windows thumbnails and navigator and explicitly authorized progression. This opens Gate 3 work without falsely promoting the missing technical evidence.
 
 The user then reported that the real navigator could not select even one slide, could not start a drag, and kept fixed-size thumbnails when the left panel was resized. A first correction addressed those visible symptoms but retained an invalid interaction architecture. The subsequent real-app failure was captured as an unhandled Windows COM exception from Avalonia native drag/drop after selection rebuilt the pointer's source visual.
 
@@ -41,6 +39,8 @@ Commit `d32e3c1d3d32e334f2a9ba84e9168741c23ff907` adds persisted automatic-versu
 The solution builds with zero warnings/errors and all 53 foundation tests pass, including six focused naming/compatibility scenarios and UI-structure coverage. `Launch Physica.bat` started the expected responsive binary. The Computer controller again failed during initialization before any app input, including retry and reset, so rename and renumber workflows remain **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/NAMING_RECOVERY_2026-09-08.md`.
 
 Commit `efc82d4` completes the section-management command and UI wiring. Sections now collapse without altering the lesson, accept the current multi-slide selection, move as contiguous blocks, and can be removed without deleting slides. A slide dragged across a section boundary changes its section membership in the same atomic reorder command. Every saved mutation remains undoable/redoable, automatic section names follow visual order, and abandoned empty sections are removed deterministically. The suite reports 57 passing tests and the solution builds with zero warnings/errors. `Launch Physica.bat` started responsive process 34932. Computer initialization failed before app input after retry, reset, and final retry, so this work remains **UI wired**. Evidence is in `docs/checkpoints/phase-02/gate-02-slide-navigator/SECTION_MANAGEMENT_2026-09-09.md`.
+
+The user manually reviewed the repaired Windows navigator on 2026-09-09 and authorized the next part. Commit `7791ec7` starts Gate 3 with document-backed canvas selection, Ctrl/Command toggle and Shift additive selection, exact visible-stroke targeting for paths, transient pointer previews, atomic multi-object move/resize/rotate commits, contextual Delete, arrow-key nudging, and Ctrl/Command+A. Model transforms remain untouched; authored changes use only presentation transforms. The final build passed all 64 repository checks and `Launch Physica.bat` started responsive process 22700. Computer initialization failed twice before input with `trusted Node process exited unexpectedly`, so canvas interaction remains **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/CANVAS_TRANSFORMS_2026-09-09.md`.
 
 
 ## Binding visual authority
@@ -120,7 +120,7 @@ Completed across the first two functional slices:
 - Visible collapsible section headings, multi-slide assignment, block reordering, safe section removal, and cross-boundary drag semantics.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
 - Session-backed slide navigator, document title/dirty marker, localized command readiness, and recovery-safe close behavior.
-- Honest Feature Map state: project save/recovery is Active; canvas selection/transforms remain Shell ready until pointer editing is connected.
+- Honest Feature Map state: project save/recovery is Active; canvas selection and transforms are UI wired but not Interaction verified.
 
 Prior automated result: the full solution built with zero warnings and errors and the then-current suite reported 31 passing tests. That result covers model, service, direct session/view-model, and structural checks only. It is not evidence that the real pointer, keyboard, focus, layout, thumbnail, drag/drop, canvas, project-lifecycle, or cross-platform workflows pass. No UI feature may be promoted from this aggregate count.
 
@@ -129,7 +129,7 @@ The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_
 Still required for the Phase 2 gate:
 
 - Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
-- Pointer selection, drag, resize, rotation, multi-selection, grouping, and layer panel activation.
+- Real-app verification of pointer selection, drag, resize, rotation, and multi-selection; grouping and layer panel activation remain unimplemented.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
