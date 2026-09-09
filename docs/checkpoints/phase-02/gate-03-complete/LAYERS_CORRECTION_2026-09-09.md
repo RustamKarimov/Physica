@@ -42,3 +42,20 @@ The corrected Layers workflow remains **UI wired**. It must not advance to Inter
 4. Forward followed by Backward returning the exact prior order.
 
 Grouping has not started and remains blocked by this correction review.
+
+## User retest and focus correction — 2026-09-10
+
+The user accepted the new header, direct layer dragging, and the corrected one-step ordering. Double-click rename opened the editor, but the editor immediately lost focus.
+
+The cause was in the shared layer-row pointer-release handler: after the double press activated and focused the inline editor, pointer release unconditionally focused the row. That raised `LostFocus`, committed the unchanged name, and closed the editor.
+
+Commit `2ee41db` now focuses the row after ordinary click and drag gestures only when the row does not contain the visible rename editor. This preserves the established selection and drag behavior without using a timer or delaying the rename.
+
+Evidence:
+
+- Focused structural regression: 1 passed, 0 failed.
+- Full repository suite: 75 passed, 0 failed.
+- Launcher: corrected application started and exposed a responsive Physica Studio window.
+- Computer-driven focus test: not run because the Windows controller failed during initialization before application input after retry and reset.
+
+The remaining user retest is: double-click a layer name, type a replacement, and press Enter. The editor must retain focus until Enter, Escape, or a deliberate click elsewhere.
