@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 Gate 3; retained-canvas selection and one-gesture move/resize/rotate are UI wired and awaiting real teacher interaction, followed by layers/grouping and viewport controls
+**Current activity:** Phase 2 Gate 3; the user accepted the corrected canvas gestures, and the new Layers/Selection workspace is UI wired for teacher review before grouping and viewport controls
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -42,7 +42,9 @@ Commit `efc82d4` completes the section-management command and UI wiring. Section
 
 The user manually reviewed the repaired Windows navigator on 2026-09-09 and authorized the next part. Commit `7791ec7` starts Gate 3 with document-backed canvas selection, Ctrl/Command toggle and Shift additive selection, exact visible-stroke targeting for paths, transient pointer previews, atomic multi-object move/resize/rotate commits, contextual Delete, arrow-key nudging, and Ctrl/Command+A. Model transforms remain untouched; authored changes use only presentation transforms. The final build passed all 64 repository checks and `Launch Physica.bat` started responsive process 22700. Computer initialization failed twice before input with `trusted Node process exited unexpectedly`, so canvas interaction remains **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/CANVAS_TRANSFORMS_2026-09-09.md`.
 
-The user's first real canvas review confirmed those listed interactions but found that empty-space drag-selection and PowerPoint-style corner modifiers were missing. Correction commit `4b7a976` adds a visible full-enclosure marquee, Shift additive and Ctrl toggle marquee selection, Shift proportional resize, Ctrl centre-based resize, and Ctrl+Shift combined resize. Arrow-key nudging is now explained in the inspector. All 69 repository checks pass and launcher process 30388 is responsive. Computer input remains unavailable due to the Windows sandbox-helper initialization failure, so the correction awaits the user's real-app confirmation and remains **Preview / UI wired**.
+The user's first real canvas review confirmed those listed interactions but found that empty-space drag-selection and PowerPoint-style corner modifiers were missing. Correction commit `4b7a976` adds a visible full-enclosure marquee, Shift additive and Ctrl toggle marquee selection, Shift proportional resize, Ctrl centre-based resize, and Ctrl+Shift combined resize. Arrow-key nudging is now explained in the inspector. All 69 repository checks passed and launcher process 30388 was responsive. The user then manually confirmed the corrected canvas behavior on 2026-09-09. Controlled Computer evidence is still unavailable, so the matrix retains the automation debt while recording the teacher acceptance.
+
+Commit `f1d377b` adds a dedicated Inspector/Layers workspace driven by the same active `SlideDocument` as the canvas. The Layers view is front-to-back, stays synchronized with canvas selection, supports Ctrl/Command toggle and Shift range selection, direct multi-object pointer reordering, inline rename, visibility, locking, bring/send boundary commands, one-layer forward/backward commands, contextual F2/Delete, and undo/redo through atomic document commands. Locked objects are rejected before a canvas preview begins. Grouping is deliberately not claimed yet. The full suite passes 74 checks, the solution builds with zero warnings/errors, and `Launch Physica.bat` opened responsive process 26892. Computer initialization failed twice before application input (`setup refresh had errors`, then `apply deny-read ACLs`), so Layers remains **Preview / UI wired** pending the user's real-app review.
 
 
 ## Binding visual authority
@@ -118,6 +120,7 @@ Completed across the first two functional slices:
 - Slide selection and deterministic up/down ordering, plus atomic section creation and assignment: one section action is one history entry and one undo removes both the assignment and section.
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
 - Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and internal pointer-capture ordering for selected slide blocks; real pointer acceptance remains pending.
+- Front-to-back Layers workspace with canvas/list selection synchronization, range selection, inline naming, visibility, locking, direct multi-object reordering, z-order commands, and contextual keyboard behavior; grouping remains next.
 - Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
 - Visible collapsible section headings, multi-slide assignment, block reordering, safe section removal, and cross-boundary drag semantics.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
@@ -131,7 +134,7 @@ The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_
 Still required for the Phase 2 gate:
 
 - Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
-- Real-app verification of pointer selection, drag, resize, rotation, and multi-selection; grouping and layer panel activation remain unimplemented.
+- Controlled cross-platform evidence for canvas gestures and the new Layers workspace; grouping remains unimplemented.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
