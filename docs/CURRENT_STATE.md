@@ -42,6 +42,8 @@ Commit `efc82d4` completes the section-management command and UI wiring. Section
 
 The user manually reviewed the repaired Windows navigator on 2026-09-09 and authorized the next part. Commit `7791ec7` starts Gate 3 with document-backed canvas selection, Ctrl/Command toggle and Shift additive selection, exact visible-stroke targeting for paths, transient pointer previews, atomic multi-object move/resize/rotate commits, contextual Delete, arrow-key nudging, and Ctrl/Command+A. Model transforms remain untouched; authored changes use only presentation transforms. The final build passed all 64 repository checks and `Launch Physica.bat` started responsive process 22700. Computer initialization failed twice before input with `trusted Node process exited unexpectedly`, so canvas interaction remains **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/CANVAS_TRANSFORMS_2026-09-09.md`.
 
+The user's first real canvas review confirmed those listed interactions but found that empty-space drag-selection and PowerPoint-style corner modifiers were missing. Correction commit `4b7a976` adds a visible full-enclosure marquee, Shift additive and Ctrl toggle marquee selection, Shift proportional resize, Ctrl centre-based resize, and Ctrl+Shift combined resize. Arrow-key nudging is now explained in the inspector. All 69 repository checks pass and launcher process 30388 is responsive. Computer input remains unavailable due to the Windows sandbox-helper initialization failure, so the correction awaits the user's real-app confirmation and remains **Preview / UI wired**.
+
 
 ## Binding visual authority
 

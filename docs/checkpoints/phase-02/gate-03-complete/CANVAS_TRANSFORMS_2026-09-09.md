@@ -47,3 +47,23 @@ Automated results do not prove pointer capture, modifier keys, drag feel, visual
 - Pan, zoom, fit, guides, grid, margins, safe areas, and snapping are later Gate 3 slices.
 - No controlled Windows DPI captures or macOS interaction evidence exist yet.
 - The Computer controller failure is tooling evidence, not a claim that the application interaction passed.
+
+## Interaction correction — 2026-09-09
+
+**Correction commit:** `4b7a976`
+
+The user verified individual selection, modifier selection, movement, resize, rotation, keyboard nudging, select-all, Delete, Undo, and Redo, then identified three missing PowerPoint-class behaviors:
+
+- Empty-space drag did not create a selection marquee.
+- Shift+corner did not preserve the selection's proportions.
+- Ctrl+corner did not resize around the selection's fixed centre.
+
+The correction adds a visible marquee that selects fully enclosed visible objects. Shift adds enclosed objects; Ctrl toggles them. Corner resize now supports free resize, Shift proportional resize, Ctrl centre-based resize, and Ctrl+Shift proportional centre-based resize. The inspector hint explains that arrow keys nudge a selected object by one canvas unit and Shift+arrow by ten.
+
+Evidence added:
+
+- 1 render-control scenario for full-enclosure marquee selection.
+- 4 independent resize-geometry scenarios for the modifier combinations.
+- Full repository result: 69 passed, 0 failed.
+- `Launch Physica.bat` started the final corrected build as responsive process 30388.
+- Computer initialization failed before input after the required reset and retry with `windows sandbox failed: helper_unknown_error: setup refresh had errors`; the corrected interactions remain UI wired pending the user's real-app check.
