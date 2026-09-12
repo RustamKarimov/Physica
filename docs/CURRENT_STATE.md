@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 Gate 3; the user accepted the corrected canvas and Layers interactions, and grouping/nested layers are now UI wired for teacher review before viewport controls
+**Current activity:** Phase 2 Gate 3; grouping/nested layers and the new transient pan/zoom/fit viewport are UI wired for teacher review before guides and snapping
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -51,6 +51,8 @@ The user's 2026-09-09 review rejected the rectangular Inspector/Layers header an
 On 2026-09-10 the user accepted the corrected header, direct layer dragging, and one-step ordering, but found that double-click rename opened and immediately lost focus. The initiating double press was correct; the shared pointer-release handler then unconditionally focused the layer row, causing `LostFocus` to commit and close the editor. Commit `2ee41db` preserves editor focus whenever that row contains the visible rename editor while retaining ordinary row focus after non-edit gestures. The focused structural regression and the full 75-check suite pass. Computer verification failed during controller initialization before application input after retry and reset, so this final focus correction remains **UI wired** pending the user's real-app retest.
 
 The user subsequently confirmed that the corrected double-click rename workflow works. Commit `cecb3e4` adds real document-backed groups and nested groups. Groups have stable IDs and parent relationships, remain contiguous in layer order, collapse and expand in the Layers pane, select as one object from the canvas, and transform, hide, lock, reorder, delete, serialize, undo, redo, and ungroup atomically. A group renders no invented rectangle; its selection bounds come from the same descendant scene snapshots used by the editor. Ungrouping preserves the rendered positions and selects the released children. The full suite passes 80 checks, and `Launch Physica.bat` opened exactly one responsive process. Computer initialization failed before application input after reset and retry, so grouping remains **UI wired** pending the user's real-app review. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/GROUPING_AND_NESTED_LAYERS_2026-09-12.md`.
+
+Commit `8025ca2` replaces the fixed canvas Viewbox with a real transient editor viewport. It provides cursor-anchored Ctrl/Command-wheel zoom, ordinary and horizontal wheel pan, middle-drag and Space+left-drag pan, Fit Slide, Fit Width, 100%, 25–800% presets, compact status controls, active View-ribbon Zoom/Fit commands, and Ctrl/Command+0 / Ctrl/Command+1 shortcuts. Each slide restores its own viewport during the editor session; viewport changes do not mutate, dirty, or serialize the lesson. Fit modes recalculate when panels or the workspace size change. Selection handles, borders, and hit tolerances remain constant in screen pixels at every zoom. The full suite passes 91 checks. The committed app opened as one responsive Windows process, and a repeated launcher invocation correctly reused the existing-instance boundary. Computer initialization failed before application observation after reset and retry, so this slice remains **UI wired** pending teacher review. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/CANVAS_VIEWPORT_2026-09-13.md`.
 
 
 ## Binding visual authority
@@ -127,6 +129,7 @@ Completed across the first two functional slices:
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
 - Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and internal pointer-capture ordering for selected slide blocks; real pointer acceptance remains pending.
 - Front-to-back Layers workspace with canvas/list selection synchronization, range selection, inline naming, visibility, locking, direct multi-object reordering, z-order commands, contextual keyboard behavior, and document-backed nested grouping/ungrouping.
+- Transient per-slide authoring viewports with pan, pointer-anchored zoom, Fit Slide, Fit Width, actual size, bounded recovery, and screen-invariant editing handles; no viewport state enters the lesson document.
 - Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
 - Visible collapsible section headings, multi-slide assignment, block reordering, safe section removal, and cross-boundary drag semantics.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
@@ -141,7 +144,7 @@ Still required for the Phase 2 gate:
 
 - Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
 - Controlled cross-platform evidence for canvas gestures, Layers, and grouping; grouping is UI wired but awaits real-app and user acceptance.
-- Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
+- Theme/background, slide size, orientation, guide, margin, safe-area, and snapping UI activation; pan/zoom/fit are UI wired and await interaction acceptance.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
 - Representative Phase 2 lesson project and user functional-canvas approval.
