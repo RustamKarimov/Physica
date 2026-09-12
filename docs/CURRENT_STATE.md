@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 Gate 3; the user accepted the corrected canvas gestures, and the new Layers/Selection workspace is UI wired for teacher review before grouping and viewport controls
+**Current activity:** Phase 2 Gate 3; the user accepted the corrected canvas and Layers interactions, and grouping/nested layers are now UI wired for teacher review before viewport controls
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -49,6 +49,8 @@ Commit `f1d377b` adds a dedicated Inspector/Layers workspace driven by the same 
 The user's 2026-09-09 review rejected the rectangular Inspector/Layers header and found three interaction defects: double-click rename did not start, direct layer dragging did nothing, and the one-step Backward action did not move as expected. Switching views, canvas/list selection, F2 rename, Front/Back boundary movement, Forward, undo/redo, and deletion passed the user's manual check. Correction commit `f14c411` replaces the stretched button blocks with a compact transparent underline tab strip; recognizes a double press in the authoritative row pointer handler; preserves drag state before releasing pointer capture; limits hit testing to actual layer rows; adds before/after drop feedback and edge scrolling; and replaces indirect backward targeting with an atomic one-layer swap whose forward/backward inverse is regression-tested. The full suite passes 75 checks. The corrected workflow remains **UI wired** until the user retests it.
 
 On 2026-09-10 the user accepted the corrected header, direct layer dragging, and one-step ordering, but found that double-click rename opened and immediately lost focus. The initiating double press was correct; the shared pointer-release handler then unconditionally focused the layer row, causing `LostFocus` to commit and close the editor. Commit `2ee41db` preserves editor focus whenever that row contains the visible rename editor while retaining ordinary row focus after non-edit gestures. The focused structural regression and the full 75-check suite pass. Computer verification failed during controller initialization before application input after retry and reset, so this final focus correction remains **UI wired** pending the user's real-app retest.
+
+The user subsequently confirmed that the corrected double-click rename workflow works. Commit `cecb3e4` adds real document-backed groups and nested groups. Groups have stable IDs and parent relationships, remain contiguous in layer order, collapse and expand in the Layers pane, select as one object from the canvas, and transform, hide, lock, reorder, delete, serialize, undo, redo, and ungroup atomically. A group renders no invented rectangle; its selection bounds come from the same descendant scene snapshots used by the editor. Ungrouping preserves the rendered positions and selects the released children. The full suite passes 80 checks, and `Launch Physica.bat` opened exactly one responsive process. Computer initialization failed before application input after reset and retry, so grouping remains **UI wired** pending the user's real-app review. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/GROUPING_AND_NESTED_LAYERS_2026-09-12.md`.
 
 
 ## Binding visual authority
@@ -124,7 +126,7 @@ Completed across the first two functional slices:
 - Slide selection and deterministic up/down ordering, plus atomic section creation and assignment: one section action is one history entry and one undo removes both the assignment and section.
 - Keyboard workflows for new, open, save, save as, undo, redo, and slide reordering.
 - Ctrl/Command toggle selection, Shift range selection, Delete-key removal, and internal pointer-capture ordering for selected slide blocks; real pointer acceptance remains pending.
-- Front-to-back Layers workspace with canvas/list selection synchronization, range selection, inline naming, visibility, locking, direct multi-object reordering, z-order commands, and contextual keyboard behavior; grouping remains next.
+- Front-to-back Layers workspace with canvas/list selection synchronization, range selection, inline naming, visibility, locking, direct multi-object reordering, z-order commands, contextual keyboard behavior, and document-backed nested grouping/ungrouping.
 - Honest blank thumbnails and blank-slide context: empty slides no longer show arbitrary wave previews, standing-wave inspector values, or fake timeline tracks.
 - Visible collapsible section headings, multi-slide assignment, block reordering, safe section removal, and cross-boundary drag semantics.
 - Project Close now returns to a New/Open/Recent start center; only the title-bar Exit control ends the application. Recent saved lessons persist outside project documents.
@@ -138,7 +140,7 @@ The critical review is recorded in `docs/checkpoints/phase-02/PHASE_02_CRITICAL_
 Still required for the Phase 2 gate:
 
 - Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
-- Controlled cross-platform evidence for canvas gestures and the new Layers workspace; grouping remains unimplemented.
+- Controlled cross-platform evidence for canvas gestures, Layers, and grouping; grouping is UI wired but awaits real-app and user acceptance.
 - Theme/background, slide size, orientation, guide, margin, safe-area, zoom, pan, and snapping UI activation.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
