@@ -52,6 +52,18 @@ public sealed class PhysicaIcon : Control
                 context.DrawRectangle(null, pen, R(.28, .18, .52, .55), 2, 2);
                 context.DrawRectangle(null, pen, R(.16, .31, .52, .55), 2, 2);
                 break;
+            case "group":
+                context.DrawRectangle(null, pen, R(.12, .16, .32, .32), 2, 2);
+                context.DrawRectangle(null, pen, R(.56, .52, .32, .32), 2, 2);
+                context.DrawRectangle(null, new Pen(brush, pen.Thickness * .75, new DashStyle([2, 2], 0)),
+                    R(.2, .24, .6, .52), 3, 3);
+                break;
+            case "ungroup":
+                context.DrawRectangle(null, pen, R(.1, .14, .32, .32), 2, 2);
+                context.DrawRectangle(null, pen, R(.58, .54, .32, .32), 2, 2);
+                context.DrawLine(pen, P(.44, .46), P(.3, .6));
+                context.DrawLine(pen, P(.56, .54), P(.7, .4));
+                break;
             case "edit":
                 context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .2},{h * .76} L {w * .27},{h * .53} L {w * .68},{h * .12} L {w * .86},{h * .3} L {w * .45},{h * .71} Z"));
                 context.DrawLine(pen, P(.27, .53), P(.45, .71));

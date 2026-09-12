@@ -160,6 +160,12 @@ public sealed partial class MainWindow : Window
                     EnsureRightPanelVisible();
                     _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Layers);
                     break;
+                case "Group":
+                    _viewModel.GroupSelectedNodes();
+                    break;
+                case "Ungroup":
+                    _viewModel.UngroupSelectedNodes();
+                    break;
                 case "Undo":
                     _viewModel.Undo();
                     break;
@@ -843,7 +849,7 @@ public sealed partial class MainWindow : Window
             selectedNodes.ToDictionary(node => node.Id, node => node.PresentationTransform),
             selectedNodes.ToDictionary(
                 node => node.Id,
-                node => node.ModelTransform.RotationDegrees + node.PresentationTransform.RotationDegrees));
+                node => surface.GetNodeLogicalRotation(node.Id)));
     }
 
     private static void UpdateCanvasGesture(
@@ -1028,6 +1034,15 @@ public sealed partial class MainWindow : Window
 
         switch (e.Key)
         {
+            case Key.G when e.KeyModifiers.HasFlag(KeyModifiers.Shift)
+                && (AuthoringCanvasSurface.IsKeyboardFocusWithin || LayerItemsControl.IsKeyboardFocusWithin):
+                _viewModel.UngroupSelectedNodes();
+                e.Handled = true;
+                break;
+            case Key.G when AuthoringCanvasSurface.IsKeyboardFocusWithin || LayerItemsControl.IsKeyboardFocusWithin:
+                _viewModel.GroupSelectedNodes();
+                e.Handled = true;
+                break;
             case Key.A when AuthoringCanvasSurface.IsKeyboardFocusWithin:
                 _viewModel.SelectAllVisibleNodes();
                 e.Handled = true;

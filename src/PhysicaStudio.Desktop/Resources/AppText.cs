@@ -50,6 +50,10 @@ public static class AppText
     public static string ObjectShown => Get(nameof(ObjectShown));
     public static string ObjectLocked => Get(nameof(ObjectLocked));
     public static string ObjectUnlocked => Get(nameof(ObjectUnlocked));
+    public static string ObjectsGrouped => Get(nameof(ObjectsGrouped));
+    public static string GroupsUngrouped => Get(nameof(GroupsUngrouped));
+    public static string GroupObjects => Get(nameof(GroupObjects));
+    public static string UngroupObjects => Get(nameof(UngroupObjects));
     public static string MoveSelectedSlidesHere => Get(nameof(MoveSelectedSlidesHere));
     public static string MoveSectionUp => Get(nameof(MoveSectionUp));
     public static string MoveSectionDown => Get(nameof(MoveSectionDown));
@@ -82,6 +86,14 @@ public static class AppText
 
     public static string SectionName(int number) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(SectionName)), number);
+
+    public static string GroupName(int number) =>
+        string.Format(CultureInfo.CurrentCulture, Get(nameof(GroupName)), number);
+
+    public static string GroupItemCount(int count) =>
+        string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "GroupItemCountSingular" : "GroupItemCountPlural"), count);
+
+    public static string ExpandOrCollapseGroup => Get(nameof(ExpandOrCollapseGroup));
 
     public static string RecoveryPreserveFailed(string message) =>
         string.Format(CultureInfo.CurrentCulture, Get(nameof(RecoveryPreserveFailed)), message);

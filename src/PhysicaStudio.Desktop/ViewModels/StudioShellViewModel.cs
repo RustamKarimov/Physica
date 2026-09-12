@@ -16,7 +16,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     {
         "New", "Open", "Recent", "Save", "Save As", "Save Copy", "Recover", "Close",
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
-        "Selection Pane", "Layers",
+        "Selection Pane", "Layers", "Group", "Ungroup",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -28,6 +28,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private RightPanelWorkspace _rightPanelWorkspace = RightPanelWorkspace.Inspector;
     private readonly ISlideSceneSnapshotBuilder _sceneBuilder = new SlideSceneSnapshotBuilder();
     private readonly HashSet<Guid> _collapsedSectionIds = [];
+    private readonly HashSet<Guid> _collapsedLayerGroupIds = [];
+    private Guid? _layerSlideId;
 
     public StudioShellViewModel()
         : this(ManifestLoader.LoadRibbon(), ManifestLoader.LoadFeatures())
@@ -131,8 +133,56 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public string InspectorPanelLabel => AppText.InspectorPanel;
     public string LayersPanelLabel => AppText.LayersPanel;
     public string NoLayerObjectsLabel => AppText.NoLayerObjects;
-    public string LayerSummary => AppText.LayerObjectCount(Layers.Count);
-    public bool HasNoLayers => Layers.Count == 0;
+    public string LayerSummary => AppText.LayerObjectCount(ActiveSlide.Nodes.Count);
+    public bool HasNoLayers => ActiveSlide.Nodes.Count == 0;
+    public bool CanGroup
+    {
+        get
+        {
+            if (_session.SelectedNodeIds.Count < 2)
+            {
+                return false;
+            }
+            var selected = ActiveSlide.Nodes.Where(node => _session.SelectedNodeIds.Contains(node.Id)).ToArray();
+            return selected.Length == _session.SelectedNodeIds.Count
+                && selected.All(node => node.ParentId == selected[0].ParentId);
+        }
+    }
+    public bool CanUngroup
+    {
+        get
+        {
+            if (_session.SelectedNodeIds.Count == 0)
+            {
+                return false;
+            }
+
+            var selectedIds = _session.SelectedNodeIds;
+            var selected = ActiveSlide.Nodes.Where(node => selectedIds.Contains(node.Id)).ToArray();
+            if (selected.Length != selectedIds.Count || !selected.All(SceneNodeHierarchy.IsGroup))
+            {
+                return false;
+            }
+
+            var nodesById = ActiveSlide.Nodes.ToDictionary(node => node.Id);
+            foreach (var node in selected)
+            {
+                var parentId = node.ParentId;
+                while (parentId is Guid id && nodesById.TryGetValue(id, out var parent))
+                {
+                    if (selectedIds.Contains(id))
+                    {
+                        return false;
+                    }
+                    parentId = parent.ParentId;
+                }
+            }
+
+            return true;
+        }
+    }
+    public string GroupObjectsTooltip => AppText.GroupObjects;
+    public string UngroupObjectsTooltip => AppText.UngroupObjects;
 
     public string StatusMessage
     {
@@ -289,7 +339,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     }
 
     public void SelectAllVisibleNodes() => SelectNodes(
-        ActiveSlide.Nodes.Where(node => node.IsVisible).Select(node => node.Id));
+        ActiveSlide.Nodes.Where(node => node.ParentId is null && node.IsVisible).Select(node => node.Id));
 
     public void CommitNodeTransforms(IReadOnlyDictionary<Guid, PresentationTransform2D> transforms)
     {
@@ -333,6 +383,56 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         StatusMessage = AppText.ObjectRenamed;
     }
 
+    public void GroupSelectedNodes()
+    {
+        if (!CanGroup)
+        {
+            return;
+        }
+
+        var groupId = Guid.NewGuid();
+        var groupNumber = 1;
+        var existingNames = ActiveSlide.Nodes.Select(node => node.Name).ToHashSet(StringComparer.CurrentCultureIgnoreCase);
+        while (existingNames.Contains(AppText.GroupName(groupNumber)))
+        {
+            groupNumber++;
+        }
+        _session.Execute(ProjectCommands.GroupNodes(
+            ActiveSlide.Id,
+            _session.SelectedNodeIds,
+            groupId,
+            AppText.GroupName(groupNumber)));
+        _session.SelectNodes([groupId]);
+        StatusMessage = AppText.ObjectsGrouped;
+    }
+
+    public void UngroupSelectedNodes()
+    {
+        if (!CanUngroup)
+        {
+            return;
+        }
+
+        var groupIds = _session.SelectedNodeIds.ToHashSet();
+        var childIds = ActiveSlide.Nodes
+            .Where(node => node.ParentId is Guid parentId && groupIds.Contains(parentId))
+            .Select(node => node.Id)
+            .ToArray();
+        _session.Execute(ProjectCommands.UngroupNodes(ActiveSlide.Id, groupIds));
+        _session.SelectNodes(childIds);
+        _collapsedLayerGroupIds.ExceptWith(groupIds);
+        StatusMessage = AppText.GroupsUngrouped;
+    }
+
+    public void ToggleLayerGroup(Guid groupId)
+    {
+        if (!_collapsedLayerGroupIds.Remove(groupId))
+        {
+            _collapsedLayerGroupIds.Add(groupId);
+        }
+        RebuildLayers();
+    }
+
     public void SetNodeVisible(Guid nodeId, bool isVisible)
     {
         _session.Execute(ProjectCommands.SetNodeVisible(ActiveSlide.Id, nodeId, isVisible));
@@ -357,12 +457,22 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void MoveSelectedNodesOneLayer(bool towardFront)
     {
-        var ordered = ActiveSlide.Nodes.OrderBy(node => node.LayerIndex).ToArray();
         var selected = _session.SelectedNodeIds;
         if (selected.Count == 0)
         {
             return;
         }
+        var selectedNodes = ActiveSlide.Nodes.Where(node => selected.Contains(node.Id)).ToArray();
+        if (selectedNodes.Length != selected.Count
+            || selectedNodes.Any(node => node.ParentId != selectedNodes[0].ParentId))
+        {
+            return;
+        }
+        var parentId = selectedNodes[0].ParentId;
+        var ordered = ActiveSlide.Nodes
+            .Where(node => node.ParentId == parentId)
+            .OrderBy(node => node.LayerIndex)
+            .ToArray();
 
         var canMove = towardFront
             ? ordered.Select((node, index) => (node, index)).Any(item =>
@@ -599,6 +709,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SelectedSlideIds));
         OnPropertyChanged(nameof(SelectedNodeIds));
         OnPropertyChanged(nameof(SelectedObjectSummary));
+        OnPropertyChanged(nameof(CanGroup));
+        OnPropertyChanged(nameof(CanUngroup));
         OnPropertyChanged(nameof(ActiveSlide));
         OnPropertyChanged(nameof(ShowStandingWaveReference));
         OnPropertyChanged(nameof(ShowGenericObjectContext));
@@ -670,6 +782,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SelectedSlideIds));
         OnPropertyChanged(nameof(SelectedNodeIds));
         OnPropertyChanged(nameof(SelectedObjectSummary));
+        OnPropertyChanged(nameof(CanGroup));
+        OnPropertyChanged(nameof(CanUngroup));
         OnPropertyChanged(nameof(ShowStandingWaveReference));
         OnPropertyChanged(nameof(ShowGenericObjectContext));
         OnPropertyChanged(nameof(ShowEmptySlideContext));
@@ -691,8 +805,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     private void RefreshLayerSelectionOrActiveSlide()
     {
-        var activeIds = ActiveSlide.Nodes.Select(node => node.Id).ToHashSet();
-        if (Layers.Count != activeIds.Count || Layers.Any(layer => !activeIds.Contains(layer.Id)))
+        if (_layerSlideId != ActiveSlide.Id)
         {
             RebuildLayers();
             return;
@@ -706,14 +819,47 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     private void RebuildLayers()
     {
+        _layerSlideId = ActiveSlide.Id;
+        var activeIds = ActiveSlide.Nodes.Select(node => node.Id).ToHashSet();
+        _collapsedLayerGroupIds.RemoveWhere(id => !activeIds.Contains(id));
         Layers.Clear();
-        foreach (var node in ActiveSlide.Nodes.OrderByDescending(node => node.LayerIndex))
+        var nodesById = ActiveSlide.Nodes.ToDictionary(node => node.Id);
+        var children = ActiveSlide.Nodes.ToLookup(node => node.ParentId);
+
+        void AddNode(SceneNode node, int depth, bool ancestorsVisible, bool ancestorsLocked)
         {
-            Layers.Add(new LayerItemViewModel(node, _session.SelectedNodeIds.Contains(node.Id)));
+            var isGroup = SceneNodeHierarchy.IsGroup(node);
+            var isExpanded = !_collapsedLayerGroupIds.Contains(node.Id);
+            var directChildren = children[node.Id].OrderByDescending(child => child.LayerIndex).ToArray();
+            var effectiveVisible = ancestorsVisible && node.IsVisible;
+            var effectiveLocked = ancestorsLocked || node.IsLocked;
+            Layers.Add(new LayerItemViewModel(
+                node,
+                _session.SelectedNodeIds.Contains(node.Id),
+                depth,
+                directChildren.Length,
+                isExpanded,
+                effectiveVisible,
+                effectiveLocked,
+                isGroup ? AppText.GroupItemCount(directChildren.Length) : null));
+            if (isGroup && isExpanded)
+            {
+                foreach (var child in directChildren)
+                {
+                    AddNode(child, depth + 1, effectiveVisible, effectiveLocked);
+                }
+            }
+        }
+
+        foreach (var root in children[null].OrderByDescending(node => node.LayerIndex))
+        {
+            AddNode(root, 0, true, false);
         }
 
         OnPropertyChanged(nameof(LayerSummary));
         OnPropertyChanged(nameof(HasNoLayers));
+        OnPropertyChanged(nameof(CanGroup));
+        OnPropertyChanged(nameof(CanUngroup));
     }
 
     private void RefreshCommandAvailability()
@@ -734,6 +880,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 "Redo" => CanRedo,
                 "Save" => CanSave,
                 "Delete Slide" => _session.CurrentProject.Slides.Count > 1,
+                "Group" => CanGroup,
+                "Ungroup" => CanUngroup,
                 _ => true,
             };
             command.SetActive(enabled);
@@ -792,6 +940,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         if (normalized.Contains("cut")) return "cut";
         if (normalized.Contains("copy")) return "copy";
         if (normalized.Contains("duplicate")) return "duplicate";
+        if (normalized == "group") return "group";
+        if (normalized == "ungroup") return "ungroup";
         if (normalized.Contains("format painter") || normalized.Contains("clear formatting")) return "format";
         if (normalized.Contains("bold")) return "bold";
         if (normalized.Contains("italic")) return "italic";
@@ -1042,14 +1192,30 @@ public sealed class LayerItemViewModel : INotifyPropertyChanged
 {
     private bool _isSelected;
 
-    public LayerItemViewModel(SceneNode node, bool isSelected)
+    public LayerItemViewModel(
+        SceneNode node,
+        bool isSelected,
+        int depth = 0,
+        int childCount = 0,
+        bool isExpanded = true,
+        bool effectiveVisible = true,
+        bool effectiveLocked = false,
+        string? groupKindLabel = null)
     {
         Id = node.Id;
         Name = node.Name;
         Kind = node.Kind;
         LayerIndex = node.LayerIndex;
-        IsVisible = node.IsVisible;
-        IsLocked = node.IsLocked;
+        OwnIsVisible = node.IsVisible;
+        OwnIsLocked = node.IsLocked;
+        IsVisible = effectiveVisible;
+        IsLocked = effectiveLocked;
+        ParentId = node.ParentId;
+        Depth = depth;
+        ChildCount = childCount;
+        IsGroup = SceneNodeHierarchy.IsGroup(node);
+        IsExpanded = isExpanded;
+        GroupKindLabel = groupKindLabel;
         _isSelected = isSelected;
     }
 
@@ -1059,12 +1225,23 @@ public sealed class LayerItemViewModel : INotifyPropertyChanged
     public string Name { get; }
     public string Kind { get; }
     public int LayerIndex { get; }
+    public Guid? ParentId { get; }
+    public int Depth { get; }
+    public int ChildCount { get; }
+    public bool IsGroup { get; }
+    public bool IsExpanded { get; }
+    public bool OwnIsVisible { get; }
+    public bool OwnIsLocked { get; }
     public bool IsVisible { get; }
     public bool IsLocked { get; }
     public bool IsSelected => _isSelected;
-    public string KindLabel => Kind.Split('.').Last().Replace('-', ' ');
+    public string KindLabel => GroupKindLabel ?? Kind.Split('.').Last().Replace('-', ' ');
+    public string? GroupKindLabel { get; }
+    public double IndentWidth => Depth * 15;
+    public double GroupChevronAngle => IsExpanded ? 0 : -90;
     public string VisibilityIcon => IsVisible ? "eye" : "eye-off";
     public string LockIcon => IsLocked ? "lock" : "unlock";
+    public string GroupToggleTooltip => AppText.ExpandOrCollapseGroup;
     public string Background => IsSelected ? "#17334A" : "Transparent";
     public string BorderBrush => IsSelected ? "#168CFF" : "Transparent";
     public double Opacity => IsVisible ? 1 : .55;

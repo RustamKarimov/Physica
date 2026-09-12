@@ -321,30 +321,24 @@ public static class ProjectCommands
             return slide with { Nodes = slide.Nodes.Append(copy).ToArray() };
         }));
 
-    public static IProjectCommand DeleteNode(Guid slideId, Guid nodeId) => Command("Delete object", project =>
-        ReplaceSlide(project, slideId, slide =>
-        {
-            var node = FindNode(slide, nodeId);
-            if (node.IsLocked)
-            {
-                throw new AuthoringCommandException("Unlock the object before deleting it.");
-            }
-
-            var nodes = slide.Nodes
-                .Where(candidate => candidate.Id != nodeId)
-                .Select(candidate => candidate.ParentId == nodeId ? candidate with { ParentId = null } : candidate)
-                .Select((candidate, index) => candidate with { LayerIndex = index })
-                .ToArray();
-            return slide with { Nodes = nodes };
-        }));
+    public static IProjectCommand DeleteNode(Guid slideId, Guid nodeId) =>
+        DeleteNodes(slideId, [nodeId]);
 
     public static IProjectCommand RenameNode(Guid slideId, Guid nodeId, string name) => Command("Rename object", project =>
     {
         RequireName(name, "Object name");
-        return ReplaceNode(project, slideId, nodeId, node =>
+        return ReplaceSlide(project, slideId, slide =>
         {
-            RequireUnlocked(node);
-            return node with { Name = name.Trim() };
+            var node = FindNode(slide, nodeId);
+            if (IsEffectivelyLocked(slide.Nodes, nodeId))
+            {
+                throw new AuthoringCommandException("Unlock the object before changing it.");
+            }
+            return slide with
+            {
+                Nodes = slide.Nodes.Select(candidate =>
+                    candidate.Id == nodeId ? candidate with { Name = name.Trim() } : candidate).ToArray(),
+            };
         });
     });
 
@@ -356,29 +350,132 @@ public static class ProjectCommands
             {
                 throw new AuthoringCommandException("A selected object does not exist.");
             }
-            if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+            if (slide.Nodes.Any(node => ids.Contains(node.Id) && IsEffectivelyLocked(slide.Nodes, node.Id)))
             {
                 throw new AuthoringCommandException("Unlock every selected object before deleting them.");
             }
 
+            var deletionIds = ids
+                .SelectMany(id => SceneNodeHierarchy.SubtreeIds(slide.Nodes, id))
+                .ToHashSet();
             var nodes = slide.Nodes
-                .Where(node => !ids.Contains(node.Id))
-                .Select(node => node.ParentId is Guid parentId && ids.Contains(parentId)
-                    ? node with { ParentId = null }
-                    : node)
+                .Where(node => !deletionIds.Contains(node.Id))
                 .Select((node, index) => node with { LayerIndex = index })
                 .ToArray();
             return slide with { Nodes = nodes };
         }));
 
+    public static IProjectCommand GroupNodes(
+        Guid slideId,
+        IEnumerable<Guid> nodeIds,
+        Guid groupId,
+        string groupName) => Command("Group objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                RequireName(groupName, "Group name");
+                if (groupId == Guid.Empty
+                    || project.Slides.SelectMany(candidate => candidate.Nodes).Any(node => node.Id == groupId))
+                {
+                    throw new AuthoringCommandException("The group ID already exists or is invalid.");
+                }
+
+                var ids = RequireNodeSelection(slide, nodeIds);
+                if (ids.Count < 2)
+                {
+                    throw new AuthoringCommandException("Select at least two sibling objects to group.");
+                }
+
+                var selected = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
+                var parentId = selected[0].ParentId;
+                if (selected.Any(node => node.ParentId != parentId))
+                {
+                    throw new AuthoringCommandException("Only objects at the same group level can be grouped.");
+                }
+                if (selected.SelectMany(node => SceneNodeHierarchy.SubtreeIds(slide.Nodes, node.Id))
+                    .Select(id => FindNode(slide, id))
+                    .Any(node => IsEffectivelyLocked(slide.Nodes, node.Id)))
+                {
+                    throw new AuthoringCommandException("Unlock every selected object before grouping them.");
+                }
+
+                var bounds = selected.Select(NodeVisualBounds).ToArray();
+                var left = bounds.Min(bound => bound.X);
+                var top = bounds.Min(bound => bound.Y);
+                var right = bounds.Max(bound => bound.X + bound.Width);
+                var bottom = bounds.Max(bound => bound.Y + bound.Height);
+                var group = SceneNode.Create(
+                    groupName.Trim(),
+                    SceneNodeHierarchy.GroupKind,
+                    new NodeGeometry(left, top, right - left, bottom - top)) with
+                {
+                    Id = groupId,
+                    ParentId = parentId,
+                    LayerIndex = selected.Max(node => node.LayerIndex),
+                };
+
+                var grouped = slide.Nodes
+                    .Select(node => ids.Contains(node.Id) ? node with { ParentId = groupId } : node)
+                    .Append(group)
+                    .ToArray();
+                return slide with
+                {
+                    Nodes = SceneNodeHierarchy.FlattenByLayer(grouped)
+                        .Select((node, index) => node with { LayerIndex = index })
+                        .ToArray(),
+                };
+            }));
+
+    public static IProjectCommand UngroupNodes(Guid slideId, IEnumerable<Guid> groupIds) =>
+        Command("Ungroup objects", project =>
+            ReplaceSlide(project, slideId, slide =>
+            {
+                var ids = RequireNodeSelection(slide, groupIds);
+                var groups = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
+                if (groups.Any(node => !SceneNodeHierarchy.IsGroup(node)))
+                {
+                    throw new AuthoringCommandException("Only group layers can be ungrouped.");
+                }
+                if (groups.Any(group => IsEffectivelyLocked(slide.Nodes, group.Id)))
+                {
+                    throw new AuthoringCommandException("Unlock every selected group before ungrouping it.");
+                }
+                if (groups.Any(group => HasSelectedAncestor(slide.Nodes, group, ids)))
+                {
+                    throw new AuthoringCommandException("Select either a group or its nested group, not both.");
+                }
+
+                var groupById = groups.ToDictionary(group => group.Id);
+                var nodes = slide.Nodes
+                    .Where(node => !ids.Contains(node.Id))
+                    .Select(node => node.ParentId is Guid parentId && groupById.TryGetValue(parentId, out var group)
+                        ? BakeGroupTransformIntoChild(group, node) with { ParentId = group.ParentId }
+                        : node)
+                    .ToArray();
+                return slide with
+                {
+                    Nodes = SceneNodeHierarchy.FlattenByLayer(nodes)
+                        .Select((node, index) => node with { LayerIndex = index })
+                        .ToArray(),
+                };
+            }));
+
     public static IProjectCommand SetNodePresentationTransform(
         Guid slideId,
         Guid nodeId,
         PresentationTransform2D transform) => Command("Transform object", project =>
-            ReplaceNode(project, slideId, nodeId, node =>
+            ReplaceSlide(project, slideId, slide =>
             {
-                RequireUnlocked(node);
-                return node with { PresentationTransform = transform };
+                if (IsEffectivelyLocked(slide.Nodes, nodeId))
+                {
+                    throw new AuthoringCommandException("Unlock the object before changing it.");
+                }
+                _ = FindNode(slide, nodeId);
+                return slide with
+                {
+                    Nodes = slide.Nodes.Select(node => node.Id == nodeId
+                        ? node with { PresentationTransform = transform }
+                        : node).ToArray(),
+                };
             }));
 
     public static IProjectCommand SetNodesPresentationTransforms(
@@ -391,7 +488,9 @@ public static class ProjectCommands
                 {
                     throw new AuthoringCommandException("A selected object does not exist.");
                 }
-                if (slide.Nodes.Any(node => transforms.ContainsKey(node.Id) && node.IsLocked))
+                if (transforms.Keys.Any(id =>
+                    SceneNodeHierarchy.SubtreeIds(slide.Nodes, id)
+                        .Any(descendantId => IsEffectivelyLocked(slide.Nodes, descendantId))))
                 {
                     throw new AuthoringCommandException("Unlock every selected object before transforming them.");
                 }
@@ -407,10 +506,19 @@ public static class ProjectCommands
             }));
 
     public static IProjectCommand SetNodeGeometry(Guid slideId, Guid nodeId, NodeGeometry geometry) =>
-        Command("Resize object", project => ReplaceNode(project, slideId, nodeId, node =>
+        Command("Resize object", project => ReplaceSlide(project, slideId, slide =>
         {
-            RequireUnlocked(node);
-            return node with { Geometry = geometry };
+            if (IsEffectivelyLocked(slide.Nodes, nodeId))
+            {
+                throw new AuthoringCommandException("Unlock the object before changing it.");
+            }
+            _ = FindNode(slide, nodeId);
+            return slide with
+            {
+                Nodes = slide.Nodes.Select(node => node.Id == nodeId
+                    ? node with { Geometry = geometry }
+                    : node).ToArray(),
+            };
         }));
 
     public static IProjectCommand SetNodeLocked(Guid slideId, Guid nodeId, bool isLocked) =>
@@ -459,11 +567,13 @@ public static class ProjectCommands
                 {
                     return slide;
                 }
-                if (slide.Nodes.All(node => node.Id != targetNodeId))
+                var selected = RequireSiblingSelection(slide, ids);
+                var target = FindNode(slide, targetNodeId);
+                if (target.ParentId != selected[0].ParentId)
                 {
-                    throw new AuthoringCommandException("The target layer does not exist.");
+                    throw new AuthoringCommandException("Move grouped objects only among layers at the same level.");
                 }
-                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                if (selected.Any(node => IsEffectivelyLocked(slide.Nodes, node.Id)))
                 {
                     throw new AuthoringCommandException("Unlock every selected object before reordering them.");
                 }
@@ -486,17 +596,33 @@ public static class ProjectCommands
             ReplaceSlide(project, slideId, slide =>
             {
                 var ids = RequireNodeSelection(slide, nodeIds);
-                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                var selected = RequireSiblingSelection(slide, ids);
+                if (selected.Any(node => IsEffectivelyLocked(slide.Nodes, node.Id)))
                 {
                     throw new AuthoringCommandException("Unlock every selected object before reordering them.");
                 }
 
-                var moving = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
-                var remaining = slide.Nodes.Where(node => !ids.Contains(node.Id)).ToList();
-                remaining.InsertRange(toFront ? remaining.Count : 0, moving);
+                var parentId = selected[0].ParentId;
+                var siblings = slide.Nodes
+                    .Where(node => node.ParentId == parentId)
+                    .OrderBy(node => node.LayerIndex)
+                    .ToList();
+                var moving = siblings.Where(node => ids.Contains(node.Id)).ToArray();
+                siblings.RemoveAll(node => ids.Contains(node.Id));
+                siblings.InsertRange(toFront ? siblings.Count : 0, moving);
+                var slots = slide.Nodes.Where(node => node.ParentId == parentId)
+                    .Select(node => node.LayerIndex).Order().ToArray();
+                var order = siblings.Select((node, index) => (node.Id, Layer: slots[index]))
+                    .ToDictionary(item => item.Id, item => item.Layer);
                 return slide with
                 {
-                    Nodes = remaining.Select((node, index) => node with { LayerIndex = index }).ToArray(),
+                    Nodes = SceneNodeHierarchy.FlattenByLayer(slide.Nodes
+                            .Select(node => order.TryGetValue(node.Id, out var layer)
+                                ? node with { LayerIndex = layer }
+                                : node)
+                            .ToArray())
+                        .Select((node, index) => node with { LayerIndex = index })
+                        .ToArray(),
                 };
             }));
 
@@ -507,12 +633,17 @@ public static class ProjectCommands
             ReplaceSlide(project, slideId, slide =>
             {
                 var ids = RequireNodeSelection(slide, nodeIds);
-                if (slide.Nodes.Any(node => ids.Contains(node.Id) && node.IsLocked))
+                var selected = RequireSiblingSelection(slide, ids);
+                if (selected.Any(node => IsEffectivelyLocked(slide.Nodes, node.Id)))
                 {
                     throw new AuthoringCommandException("Unlock every selected object before reordering them.");
                 }
 
-                var nodes = slide.Nodes.OrderBy(node => node.LayerIndex).ToList();
+                var parentId = selected[0].ParentId;
+                var nodes = slide.Nodes
+                    .Where(node => node.ParentId == parentId)
+                    .OrderBy(node => node.LayerIndex)
+                    .ToList();
                 if (towardFront)
                 {
                     for (var index = nodes.Count - 2; index >= 0; index--)
@@ -534,9 +665,19 @@ public static class ProjectCommands
                     }
                 }
 
+                var slots = slide.Nodes.Where(node => node.ParentId == parentId)
+                    .Select(node => node.LayerIndex).Order().ToArray();
+                var order = nodes.Select((node, index) => (node.Id, Layer: slots[index]))
+                    .ToDictionary(item => item.Id, item => item.Layer);
                 return slide with
                 {
-                    Nodes = nodes.Select((node, index) => node with { LayerIndex = index }).ToArray(),
+                    Nodes = SceneNodeHierarchy.FlattenByLayer(slide.Nodes
+                            .Select(node => order.TryGetValue(node.Id, out var layer)
+                                ? node with { LayerIndex = layer }
+                                : node)
+                            .ToArray())
+                        .Select((node, index) => node with { LayerIndex = index })
+                        .ToArray(),
                 };
             }));
 
@@ -592,6 +733,110 @@ public static class ProjectCommands
             throw new AuthoringCommandException("A selected object does not exist.");
         }
         return ids;
+    }
+
+    private static SceneNode[] RequireSiblingSelection(SlideDocument slide, IReadOnlySet<Guid> ids)
+    {
+        var selected = slide.Nodes.Where(node => ids.Contains(node.Id)).ToArray();
+        if (selected.Any(node => node.ParentId != selected[0].ParentId))
+        {
+            throw new AuthoringCommandException("Selected layers must be at the same group level.");
+        }
+        return selected;
+    }
+
+    private static bool HasSelectedAncestor(
+        IReadOnlyList<SceneNode> nodes,
+        SceneNode node,
+        IReadOnlySet<Guid> selectedIds)
+    {
+        var byId = nodes.ToDictionary(candidate => candidate.Id);
+        var current = node;
+        while (current.ParentId is Guid parentId && byId.TryGetValue(parentId, out current!))
+        {
+            if (selectedIds.Contains(parentId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static bool IsEffectivelyLocked(IReadOnlyList<SceneNode> nodes, Guid nodeId)
+    {
+        var byId = nodes.ToDictionary(node => node.Id);
+        if (!byId.TryGetValue(nodeId, out var current))
+        {
+            return false;
+        }
+
+        var visited = new HashSet<Guid>();
+        while (visited.Add(current.Id))
+        {
+            if (current.IsLocked)
+            {
+                return true;
+            }
+            if (current.ParentId is not Guid parentId || !byId.TryGetValue(parentId, out current!))
+            {
+                break;
+            }
+        }
+        return false;
+    }
+
+    private static NodeGeometry NodeVisualBounds(SceneNode node)
+    {
+        var scaleX = node.ModelTransform.ScaleX * node.PresentationTransform.ScaleX;
+        var scaleY = node.ModelTransform.ScaleY * node.PresentationTransform.ScaleY;
+        return new NodeGeometry(
+            node.Geometry.X + node.ModelTransform.X + node.PresentationTransform.OffsetX,
+            node.Geometry.Y + node.ModelTransform.Y + node.PresentationTransform.OffsetY,
+            node.Geometry.Width * scaleX,
+            node.Geometry.Height * scaleY);
+    }
+
+    private static SceneNode BakeGroupTransformIntoChild(SceneNode group, SceneNode child)
+    {
+        var bounds = NodeVisualBounds(child);
+        var groupScaleX = group.ModelTransform.ScaleX * group.PresentationTransform.ScaleX;
+        var groupScaleY = group.ModelTransform.ScaleY * group.PresentationTransform.ScaleY;
+        var groupOffsetX = group.ModelTransform.X + group.PresentationTransform.OffsetX;
+        var groupOffsetY = group.ModelTransform.Y + group.PresentationTransform.OffsetY;
+        var rotation = group.ModelTransform.RotationDegrees + group.PresentationTransform.RotationDegrees;
+        var sourceCenterX = bounds.X + bounds.Width / 2;
+        var sourceCenterY = bounds.Y + bounds.Height / 2;
+        var targetGroupCenterX = group.Geometry.X + groupOffsetX + group.Geometry.Width * groupScaleX / 2;
+        var targetGroupCenterY = group.Geometry.Y + groupOffsetY + group.Geometry.Height * groupScaleY / 2;
+        var scaledCenterX = group.Geometry.X + groupOffsetX
+            + (sourceCenterX - group.Geometry.X) * groupScaleX;
+        var scaledCenterY = group.Geometry.Y + groupOffsetY
+            + (sourceCenterY - group.Geometry.Y) * groupScaleY;
+        var radians = rotation * Math.PI / 180;
+        var cosine = Math.Cos(radians);
+        var sine = Math.Sin(radians);
+        var deltaX = scaledCenterX - targetGroupCenterX;
+        var deltaY = scaledCenterY - targetGroupCenterY;
+        var targetCenterX = targetGroupCenterX + deltaX * cosine - deltaY * sine;
+        var targetCenterY = targetGroupCenterY + deltaX * sine + deltaY * cosine;
+        var presentation = child.PresentationTransform;
+        var targetScaleX = presentation.ScaleX * groupScaleX;
+        var targetScaleY = presentation.ScaleY * groupScaleY;
+        var targetWidth = child.Geometry.Width * child.ModelTransform.ScaleX * targetScaleX;
+        var targetHeight = child.Geometry.Height * child.ModelTransform.ScaleY * targetScaleY;
+        return child with
+        {
+            IsVisible = child.IsVisible && group.IsVisible,
+            PresentationTransform = presentation with
+            {
+                OffsetX = targetCenterX - targetWidth / 2 - child.Geometry.X - child.ModelTransform.X,
+                OffsetY = targetCenterY - targetHeight / 2 - child.Geometry.Y - child.ModelTransform.Y,
+                ScaleX = targetScaleX,
+                ScaleY = targetScaleY,
+                RotationDegrees = presentation.RotationDegrees + rotation,
+                Opacity = presentation.Opacity * group.PresentationTransform.Opacity,
+            },
+        };
     }
 
     private static LessonProject ReplaceSlide(

@@ -51,6 +51,14 @@
   <data name="ObjectShown" xml:space="preserve"><value>Object shown</value></data>
   <data name="ObjectLocked" xml:space="preserve"><value>Object locked</value></data>
   <data name="ObjectUnlocked" xml:space="preserve"><value>Object unlocked</value></data>
+  <data name="ObjectsGrouped" xml:space="preserve"><value>Objects grouped</value></data>
+  <data name="GroupsUngrouped" xml:space="preserve"><value>Group removed; its objects remain selected</value></data>
+  <data name="GroupObjects" xml:space="preserve"><value>Group selected objects</value></data>
+  <data name="UngroupObjects" xml:space="preserve"><value>Ungroup selected group</value></data>
+  <data name="ExpandOrCollapseGroup" xml:space="preserve"><value>Expand or collapse this group</value></data>
+  <data name="GroupName" xml:space="preserve"><value>Group {0}</value></data>
+  <data name="GroupItemCountSingular" xml:space="preserve"><value>Group · {0} item</value></data>
+  <data name="GroupItemCountPlural" xml:space="preserve"><value>Group · {0} items</value></data>
   <data name="MoveSelectedSlidesHere" xml:space="preserve"><value>Move selected slides here</value></data>
   <data name="MoveSectionUp" xml:space="preserve"><value>Move section up</value></data>
   <data name="MoveSectionDown" xml:space="preserve"><value>Move section down</value></data>

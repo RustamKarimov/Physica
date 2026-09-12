@@ -80,19 +80,11 @@ public sealed class DocumentSceneSurface : Control
 
         var normalized = CanvasTransformGeometry.Normalize(marquee.TopLeft, marquee.BottomRight);
         return snapshot.Layers
-            .Where(layer => layer.IsVisible)
-            .SelectMany(layer => layer.Primitives)
-            .Where(primitive => primitive.Opacity > 0)
-            .Where(primitive =>
-            {
-                var logicalBounds = _interactionPreview.TryGetValue(primitive.Id, out var preview)
-                    ? preview.Bounds
-                    : primitive.Bounds;
-                var surfaceBounds = Scale(snapshot.LogicalSize, logicalBounds);
-                return normalized.Contains(surfaceBounds.TopLeft)
-                    && normalized.Contains(surfaceBounds.BottomRight);
-            })
-            .Select(primitive => primitive.Id)
+            .Where(layer => layer.ParentId is null && layer.IsVisible)
+            .Where(layer => LayerLogicalBounds(layer) is RenderBounds logicalBounds
+                && normalized.Contains(Scale(snapshot.LogicalSize, logicalBounds).TopLeft)
+                && normalized.Contains(Scale(snapshot.LogicalSize, logicalBounds).BottomRight))
+            .Select(layer => layer.Id)
             .ToHashSet();
     }
 
@@ -118,10 +110,10 @@ public sealed class DocumentSceneSurface : Control
         {
             foreach (var primitive in layer.Primitives.Reverse())
             {
-                _interactionPreview.TryGetValue(primitive.Id, out var preview);
+                var preview = ResolveInteractionPreview(snapshot, layer, primitive);
                 if (primitive.Opacity > 0 && HitTestPrimitive(snapshot.LogicalSize, primitive, preview, surfacePoint))
                 {
-                    return primitive.Id;
+                    return TopLevelLayerId(snapshot, layer.Id);
                 }
             }
         }
@@ -163,13 +155,15 @@ public sealed class DocumentSceneSurface : Control
         var selectedIds = SelectedNodeIds;
         if (snapshot is not null && selectedIds is not null)
         {
-            foreach (var primitive in snapshot.Layers.SelectMany(layer => layer.Primitives)
-                         .Where(primitive => selectedIds.Contains(primitive.Id)))
+            foreach (var layer in snapshot.Layers.Where(layer => LayerBelongsToSelection(snapshot, layer, selectedIds)))
             {
-                _interactionPreview.TryGetValue(primitive.Id, out var preview);
-                if (primitive.Opacity > 0 && HitTestPrimitive(snapshot.LogicalSize, primitive, preview, surfacePoint))
+                foreach (var primitive in layer.Primitives)
                 {
-                    return CanvasSelectionHandle.Body;
+                    var preview = ResolveInteractionPreview(snapshot, layer, primitive);
+                    if (primitive.Opacity > 0 && HitTestPrimitive(snapshot.LogicalSize, primitive, preview, surfacePoint))
+                    {
+                        return CanvasSelectionHandle.Body;
+                    }
                 }
             }
         }
@@ -184,10 +178,18 @@ public sealed class DocumentSceneSurface : Control
             return preview.Bounds;
         }
 
-        return Snapshot?.Layers
-            .SelectMany(layer => layer.Primitives)
-            .FirstOrDefault(primitive => primitive.Id == nodeId)
-            ?.Bounds;
+        var layer = Snapshot?.Layers.FirstOrDefault(candidate => candidate.Id == nodeId);
+        return layer is null ? null : LayerLogicalBounds(layer);
+    }
+
+    public double GetNodeLogicalRotation(Guid nodeId)
+    {
+        if (_interactionPreview.TryGetValue(nodeId, out var preview))
+        {
+            return preview.RotationDegrees;
+        }
+
+        return Snapshot?.Layers.FirstOrDefault(candidate => candidate.Id == nodeId)?.RotationDegrees ?? 0;
     }
 
     private bool HitTestPrimitive(
@@ -256,7 +258,7 @@ public sealed class DocumentSceneSurface : Control
         {
             foreach (var primitive in layer.Primitives)
             {
-                _interactionPreview.TryGetValue(primitive.Id, out var preview);
+                var preview = ResolveInteractionPreview(snapshot, layer, primitive);
                 DrawPrimitive(context, snapshot.LogicalSize, primitive, preview);
             }
         }
@@ -450,16 +452,147 @@ public sealed class DocumentSceneSurface : Control
         }
 
         Rect? union = null;
-        foreach (var primitive in snapshot.Layers.SelectMany(layer => layer.Primitives)
-                     .Where(primitive => selectedIds.Contains(primitive.Id)))
+        foreach (var layer in snapshot.Layers.Where(layer => selectedIds.Contains(layer.Id)))
         {
-            var logicalBounds = _interactionPreview.TryGetValue(primitive.Id, out var preview)
-                ? preview.Bounds
-                : primitive.Bounds;
-            var surfaceBounds = Scale(snapshot.LogicalSize, logicalBounds);
+            var logicalBounds = LayerLogicalBounds(layer);
+            if (logicalBounds is null)
+            {
+                continue;
+            }
+            var surfaceBounds = Scale(snapshot.LogicalSize, logicalBounds.Value);
             union = union is Rect accumulated ? accumulated.Union(surfaceBounds) : surfaceBounds;
         }
         return union;
+    }
+
+    private RenderBounds? LayerLogicalBounds(RenderLayerSnapshot layer)
+    {
+        if (_interactionPreview.TryGetValue(layer.Id, out var preview))
+        {
+            return preview.Bounds;
+        }
+        if (layer.SelectionBounds is RenderBounds selectionBounds)
+        {
+            return selectionBounds;
+        }
+
+        RenderBounds? result = null;
+        foreach (var primitive in layer.Primitives)
+        {
+            result = result is RenderBounds accumulated
+                ? Union(accumulated, primitive.Bounds)
+                : primitive.Bounds;
+        }
+        return result;
+    }
+
+    private CanvasNodePreview? ResolveInteractionPreview(
+        SceneSnapshot snapshot,
+        RenderLayerSnapshot layer,
+        RenderPrimitiveSnapshot primitive)
+    {
+        if (_interactionPreview.TryGetValue(primitive.Id, out var direct))
+        {
+            return direct;
+        }
+
+        var layersById = snapshot.Layers.ToDictionary(candidate => candidate.Id);
+        var current = layer;
+        var visited = new HashSet<Guid> { current.Id };
+        while (current.ParentId is Guid parentId
+               && layersById.TryGetValue(parentId, out var parent)
+               && visited.Add(parentId))
+        {
+            if (_interactionPreview.TryGetValue(parentId, out var groupPreview)
+                && parent.SelectionBounds is RenderBounds groupBounds)
+            {
+                return TransformThroughGroupPreview(
+                    primitive.Bounds,
+                    primitive.RotationDegrees,
+                    groupBounds,
+                    parent.RotationDegrees,
+                    groupPreview);
+            }
+            current = parent;
+        }
+        return null;
+    }
+
+    private static CanvasNodePreview TransformThroughGroupPreview(
+        RenderBounds childBounds,
+        double childRotation,
+        RenderBounds groupBounds,
+        double groupRotation,
+        CanvasNodePreview preview)
+    {
+        var scaleX = Math.Abs(groupBounds.Width) < .001 ? 1 : preview.Bounds.Width / groupBounds.Width;
+        var scaleY = Math.Abs(groupBounds.Height) < .001 ? 1 : preview.Bounds.Height / groupBounds.Height;
+        var childCenter = new Point(
+            preview.Bounds.X + (childBounds.X + childBounds.Width / 2 - groupBounds.X) * scaleX,
+            preview.Bounds.Y + (childBounds.Y + childBounds.Height / 2 - groupBounds.Y) * scaleY);
+        var rotationDelta = preview.RotationDegrees - groupRotation;
+        var rotatedCenter = Math.Abs(rotationDelta) < .001
+            ? childCenter
+            : Rotate(childCenter, new Point(
+                preview.Bounds.X + preview.Bounds.Width / 2,
+                preview.Bounds.Y + preview.Bounds.Height / 2), rotationDelta);
+        var width = childBounds.Width * scaleX;
+        var height = childBounds.Height * scaleY;
+        return new CanvasNodePreview(
+            new RenderBounds(rotatedCenter.X - width / 2, rotatedCenter.Y - height / 2, width, height),
+            childRotation + rotationDelta);
+    }
+
+    private static bool LayerBelongsToSelection(
+        SceneSnapshot snapshot,
+        RenderLayerSnapshot layer,
+        IReadOnlySet<Guid> selectedIds)
+    {
+        if (selectedIds.Contains(layer.Id))
+        {
+            return true;
+        }
+
+        var layersById = snapshot.Layers.ToDictionary(candidate => candidate.Id);
+        var current = layer;
+        var visited = new HashSet<Guid> { current.Id };
+        while (current.ParentId is Guid parentId
+               && layersById.TryGetValue(parentId, out current!)
+               && visited.Add(parentId))
+        {
+            if (selectedIds.Contains(parentId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Guid TopLevelLayerId(SceneSnapshot snapshot, Guid layerId)
+    {
+        var layersById = snapshot.Layers.ToDictionary(candidate => candidate.Id);
+        if (!layersById.TryGetValue(layerId, out var current))
+        {
+            return layerId;
+        }
+
+        var visited = new HashSet<Guid> { current.Id };
+        while (current.ParentId is Guid parentId
+               && layersById.TryGetValue(parentId, out var parent)
+               && visited.Add(parentId))
+        {
+            current = parent;
+        }
+        return current.Id;
+    }
+
+    private static RenderBounds Union(RenderBounds first, RenderBounds second)
+    {
+        var left = Math.Min(first.X, second.X);
+        var top = Math.Min(first.Y, second.Y);
+        var right = Math.Max(first.X + first.Width, second.X + second.Width);
+        var bottom = Math.Max(first.Y + first.Height, second.Y + second.Height);
+        return new RenderBounds(left, top, right - left, bottom - top);
     }
 
     private static RenderPoint PreviewPoint(

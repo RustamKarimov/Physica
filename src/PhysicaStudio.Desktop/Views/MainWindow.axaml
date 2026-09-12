@@ -616,16 +616,27 @@
                               PointerMoved="LayerItem_PointerMoved"
                               PointerReleased="LayerItem_PointerReleased"
                               PointerCaptureLost="LayerItem_PointerCaptureLost">
-                        <Grid ColumnDefinitions="28,28,*,Auto" MinHeight="42">
-                          <Button Grid.Column="0" Classes="layer-toggle" Click="LayerVisibility_Click"
+                        <Grid ColumnDefinitions="Auto,22,26,26,*,Auto" MinHeight="42">
+                          <Border Grid.Column="0" Width="{Binding IndentWidth}" />
+                          <Button Grid.Column="1" Classes="layer-toggle" Click="LayerGroupToggle_Click"
+                                  IsVisible="{Binding IsGroup}" ToolTip.Tip="{Binding GroupToggleTooltip}"
+                                  AutomationProperties.Name="{Binding GroupToggleTooltip}">
+                            <Path Data="M 3,5 L 7,9 L 11,5" Stroke="#93A8B5" StrokeThickness="1.4"
+                                  RenderTransformOrigin="50%,50%">
+                              <Path.RenderTransform>
+                                <RotateTransform Angle="{Binding GroupChevronAngle}" />
+                              </Path.RenderTransform>
+                            </Path>
+                          </Button>
+                          <Button Grid.Column="2" Classes="layer-toggle" Click="LayerVisibility_Click"
                                   ToolTip.Tip="Show or hide this object">
                             <controls:PhysicaIcon IconKey="{Binding VisibilityIcon}" Width="15" Height="15" Stroke="#9AADB9" />
                           </Button>
-                          <Button Grid.Column="1" Classes="layer-toggle" Click="LayerLock_Click"
+                          <Button Grid.Column="3" Classes="layer-toggle" Click="LayerLock_Click"
                                   ToolTip.Tip="Lock or unlock this object">
                             <controls:PhysicaIcon IconKey="{Binding LockIcon}" Width="14" Height="14" Stroke="#9AADB9" />
                           </Button>
-                          <Grid Grid.Column="2" Margin="5,0,6,0">
+                          <Grid Grid.Column="4" Margin="5,0,6,0">
                             <StackPanel x:Name="LayerNameDisplay" VerticalAlignment="Center" Spacing="1">
                               <TextBlock x:Name="LayerNameLabel" Text="{Binding Name}" FontSize="12.5"
                                          TextTrimming="CharacterEllipsis" />
@@ -636,7 +647,7 @@
                                      FontSize="12.5" Padding="5,2" VerticalAlignment="Center"
                                      KeyDown="LayerNameEditor_KeyDown" LostFocus="LayerNameEditor_LostFocus" />
                           </Grid>
-                          <TextBlock Grid.Column="3" Text="{Binding LayerIndex}" FontSize="10.5"
+                          <TextBlock Grid.Column="5" Text="{Binding LayerIndex}" FontSize="10.5"
                                      Foreground="#607787" VerticalAlignment="Center" Margin="4,0" />
                         </Grid>
                       </Border>
@@ -649,6 +660,16 @@
               <StackPanel Orientation="Horizontal" Spacing="3">
                 <Button Classes="layer-tool" Click="RenameLayer_Click" ToolTip.Tip="Rename selected object (F2)">
                   <controls:PhysicaIcon IconKey="edit" Width="15" Height="15" Stroke="#A9BAC5" />
+                </Button>
+                <Button Classes="layer-tool" Click="GroupLayers_Click" IsEnabled="{Binding CanGroup}"
+                        ToolTip.Tip="{Binding GroupObjectsTooltip}"
+                        AutomationProperties.Name="{Binding GroupObjectsTooltip}">
+                  <controls:PhysicaIcon IconKey="group" Width="15" Height="15" Stroke="#A9BAC5" />
+                </Button>
+                <Button Classes="layer-tool" Click="UngroupLayers_Click" IsEnabled="{Binding CanUngroup}"
+                        ToolTip.Tip="{Binding UngroupObjectsTooltip}"
+                        AutomationProperties.Name="{Binding UngroupObjectsTooltip}">
+                  <controls:PhysicaIcon IconKey="ungroup" Width="15" Height="15" Stroke="#A9BAC5" />
                 </Button>
                 <Button Classes="layer-tool" Click="BringToFront_Click" ToolTip.Tip="Bring to front">
                   <TextBlock Text="Front" FontSize="11" />

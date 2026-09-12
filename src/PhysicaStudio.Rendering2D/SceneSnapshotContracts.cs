@@ -33,7 +33,15 @@ public sealed record RenderLayerSnapshot(
     int ZIndex,
     bool IsVisible,
     bool IsStatic,
-    IReadOnlyList<RenderPrimitiveSnapshot> Primitives);
+    IReadOnlyList<RenderPrimitiveSnapshot> Primitives)
+{
+    public Guid? ParentId { get; init; }
+    public bool IsGroup { get; init; }
+    public bool IsLocked { get; init; }
+    public int Depth { get; init; }
+    public RenderBounds? SelectionBounds { get; init; }
+    public double RotationDegrees { get; init; }
+}
 
 public sealed partial record SceneSnapshot(
     long Version,

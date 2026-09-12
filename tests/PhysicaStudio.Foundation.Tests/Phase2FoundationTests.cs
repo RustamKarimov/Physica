@@ -6,6 +6,7 @@ using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Services;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
+using PhysicaStudio.Rendering2D;
 
 namespace PhysicaStudio.Foundation.Tests;
 
@@ -358,6 +359,221 @@ public sealed class Phase2FoundationTests
             slideId, [nodes[1].Id, nodes[2].Id], towardFront: false));
         Assert.Equal(nodes.Select(node => node.Id),
             session.CurrentProject.Slides[0].Nodes.Select(node => node.Id));
+    }
+
+    [Fact]
+    public void GroupAndUngroupAreAtomicPreserveChildrenAndRestoreSelection()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(20, 30, 100, 60));
+        var second = SceneNode.Create("Second", "shape.ellipse", new NodeGeometry(180, 80, 90, 90)) with { LayerIndex = 1 };
+        var third = SceneNode.Create("Third", "shape.text", new NodeGeometry(320, 40, 120, 50)) with { LayerIndex = 2 };
+        var slide = SlideDocument.Create("Grouping") with { Nodes = [first, second, third] };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []),
+            session);
+        viewModel.SelectNodes([first.Id, second.Id]);
+        var before = session.CurrentProject;
+        var revision = session.Revision;
+
+        viewModel.GroupSelectedNodes();
+
+        Assert.Equal(revision + 1, session.Revision);
+        var groupedSlide = session.CurrentProject.Slides[0];
+        var group = Assert.Single(groupedSlide.Nodes, SceneNodeHierarchy.IsGroup);
+        Assert.Equal([group.Id], session.SelectedNodeIds);
+        Assert.Equal(group.Id, groupedSlide.Nodes.Single(node => node.Id == first.Id).ParentId);
+        Assert.Equal(group.Id, groupedSlide.Nodes.Single(node => node.Id == second.Id).ParentId);
+        Assert.Null(groupedSlide.Nodes.Single(node => node.Id == third.Id).ParentId);
+        Assert.True(session.Undo());
+        Assert.Same(before, session.CurrentProject);
+        Assert.True(session.Redo());
+        viewModel.SelectNodes([group.Id]);
+
+        viewModel.UngroupSelectedNodes();
+
+        var ungrouped = session.CurrentProject.Slides[0];
+        Assert.DoesNotContain(ungrouped.Nodes, SceneNodeHierarchy.IsGroup);
+        Assert.Null(ungrouped.Nodes.Single(node => node.Id == first.Id).ParentId);
+        Assert.Null(ungrouped.Nodes.Single(node => node.Id == second.Id).ParentId);
+        Assert.Equal([first.Id, second.Id], session.SelectedNodeIds.Order());
+    }
+
+    [Fact]
+    public void NestedGroupsFlattenIntoCollapsibleLayerHierarchy()
+    {
+        var nodes = Enumerable.Range(1, 3)
+            .Select(index => SceneNode.Create($"Object {index}", "shape.rectangle",
+                new NodeGeometry(index * 100, 40, 70, 50)) with { LayerIndex = index - 1 })
+            .ToArray();
+        var slide = SlideDocument.Create("Nested groups") with { Nodes = nodes };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var viewModel = new StudioShellViewModel(
+            new RibbonManifest([new RibbonTabDefinition("home", "Home", [])], []),
+            new FeatureManifest([], 2, []),
+            session);
+
+        viewModel.SelectNodes([nodes[0].Id, nodes[1].Id]);
+        viewModel.GroupSelectedNodes();
+        var innerGroupId = session.SelectedNodeIds.Single();
+        viewModel.SelectNodes([innerGroupId, nodes[2].Id]);
+        viewModel.GroupSelectedNodes();
+        var outerGroupId = session.SelectedNodeIds.Single();
+
+        Assert.Equal(5, viewModel.Layers.Count);
+        Assert.Equal(0, viewModel.Layers.Single(layer => layer.Id == outerGroupId).Depth);
+        Assert.Equal(1, viewModel.Layers.Single(layer => layer.Id == innerGroupId).Depth);
+        Assert.Equal(2, viewModel.Layers.Single(layer => layer.Id == nodes[0].Id).Depth);
+        viewModel.SelectNodes([outerGroupId, innerGroupId]);
+        Assert.False(viewModel.CanUngroup);
+        viewModel.ToggleLayerGroup(outerGroupId);
+        Assert.Single(viewModel.Layers);
+        Assert.Equal(outerGroupId, viewModel.Layers[0].Id);
+        viewModel.ToggleLayerGroup(outerGroupId);
+        Assert.Equal(5, viewModel.Layers.Count);
+
+        viewModel.SelectNodes([innerGroupId]);
+        viewModel.UngroupSelectedNodes();
+        viewModel.GroupSelectedNodes();
+        var recreatedInnerGroup = session.CurrentProject.Slides[0].Nodes.Single(
+            node => SceneNodeHierarchy.IsGroup(node) && node.Id != outerGroupId);
+        Assert.Equal("Group 1", recreatedInnerGroup.Name);
+        Assert.Equal(2, session.CurrentProject.Slides[0].Nodes
+            .Where(SceneNodeHierarchy.IsGroup)
+            .Select(node => node.Name)
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .Count());
+    }
+
+    [Fact]
+    public void GroupTransformVisibilityLockAndDeleteApplyToTheWholeSubtree()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(20, 30, 100, 60));
+        var second = SceneNode.Create("Second", "shape.rectangle", new NodeGeometry(180, 30, 100, 60)) with { LayerIndex = 1 };
+        var slide = SlideDocument.Create("Group behavior") with { Nodes = [first, second] };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var groupId = Guid.NewGuid();
+        session.Execute(ProjectCommands.GroupNodes(slide.Id, [first.Id, second.Id], groupId, "Group 1"));
+        session.Execute(ProjectCommands.SetNodesPresentationTransforms(
+            slide.Id,
+            new Dictionary<Guid, PresentationTransform2D>
+            {
+                [groupId] = PresentationTransform2D.Identity with { OffsetX = 100, ScaleX = 2, ScaleY = 2 },
+            }));
+
+        var transformedSlide = session.CurrentProject.Slides[0];
+        var snapshot = new SlideSceneSnapshotBuilder().Build(session.CurrentProject, transformedSlide, session.Revision);
+        var firstPrimitive = Assert.Single(snapshot.Layers.Single(layer => layer.Id == first.Id).Primitives);
+        var groupLayer = snapshot.Layers.Single(layer => layer.Id == groupId);
+        Assert.Empty(groupLayer.Primitives);
+        Assert.Equal(120, firstPrimitive.Bounds.X, 8);
+        Assert.Equal(30, firstPrimitive.Bounds.Y, 8);
+        Assert.Equal(200, firstPrimitive.Bounds.Width, 8);
+
+        session.Execute(ProjectCommands.SetNodeVisible(slide.Id, groupId, false));
+        snapshot = new SlideSceneSnapshotBuilder().Build(session.CurrentProject, session.CurrentProject.Slides[0], session.Revision);
+        Assert.False(snapshot.Layers.Single(layer => layer.Id == first.Id).IsVisible);
+        session.Execute(ProjectCommands.SetNodeVisible(slide.Id, groupId, true));
+        session.Execute(ProjectCommands.SetNodeLocked(slide.Id, groupId, true));
+        Assert.Throws<AuthoringCommandException>(() => session.Execute(
+            ProjectCommands.SetNodePresentationTransform(
+                slide.Id,
+                first.Id,
+                PresentationTransform2D.Identity with { OffsetX = 10 })));
+
+        session.Execute(ProjectCommands.SetNodeLocked(slide.Id, groupId, false));
+        session.Execute(ProjectCommands.DeleteNodes(slide.Id, [groupId]));
+        Assert.Empty(session.CurrentProject.Slides[0].Nodes);
+    }
+
+    [Fact]
+    public void GroupReorderingMovesAContiguousSubtreeAndRejectsCrossLevelDrops()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(20, 30, 100, 60));
+        var second = SceneNode.Create("Second", "shape.rectangle", new NodeGeometry(160, 30, 100, 60)) with { LayerIndex = 1 };
+        var third = SceneNode.Create("Third", "shape.rectangle", new NodeGeometry(300, 30, 100, 60)) with { LayerIndex = 2 };
+        var slide = SlideDocument.Create("Ordering") with { Nodes = [first, second, third] };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var groupId = Guid.NewGuid();
+        session.Execute(ProjectCommands.GroupNodes(slide.Id, [first.Id, second.Id], groupId, "Group 1"));
+
+        session.Execute(ProjectCommands.MoveNodesToBoundary(slide.Id, [groupId], toFront: true));
+
+        var ordered = session.CurrentProject.Slides[0].Nodes;
+        Assert.Equal([third.Id, groupId], ordered.Where(node => node.ParentId is null).Select(node => node.Id));
+        Assert.Equal([first.Id, second.Id],
+            ordered.Where(node => node.ParentId == groupId).Select(node => node.Id));
+        Assert.Throws<AuthoringCommandException>(() => session.Execute(
+            ProjectCommands.MoveNodesRelative(slide.Id, [first.Id], third.Id, placeAboveTarget: true)));
+    }
+
+    [Fact]
+    public async Task GroupHierarchyRoundTripsAndUngroupPreservesRenderedBounds()
+    {
+        var first = SceneNode.Create("First", "shape.rectangle", new NodeGeometry(20, 30, 100, 60));
+        var second = SceneNode.Create("Second", "shape.ellipse", new NodeGeometry(180, 70, 100, 80)) with { LayerIndex = 1 };
+        var slide = SlideDocument.Create("Round trip") with { Nodes = [first, second] };
+        var session = new AuthoringSession(LessonProject.Create("Lesson", FixedTime) with { Slides = [slide] });
+        var groupId = Guid.NewGuid();
+        session.Execute(ProjectCommands.GroupNodes(slide.Id, [first.Id, second.Id], groupId, "Group 1"));
+        session.Execute(ProjectCommands.SetNodesPresentationTransforms(
+            slide.Id,
+            new Dictionary<Guid, PresentationTransform2D>
+            {
+                [groupId] = PresentationTransform2D.Identity with
+                {
+                    OffsetX = 45,
+                    OffsetY = 20,
+                    ScaleX = 1.5,
+                    ScaleY = 1.25,
+                    RotationDegrees = 12,
+                },
+            }));
+        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.physica");
+        try
+        {
+            await PhysicaProjectPackage.SaveAsync(session.CurrentProject, path);
+            var loaded = await PhysicaProjectPackage.LoadAsync(path);
+            var loadedGroup = Assert.Single(loaded.Slides[0].Nodes, SceneNodeHierarchy.IsGroup);
+            Assert.Equal(groupId, loadedGroup.Id);
+            Assert.All(loaded.Slides[0].Nodes.Where(node => !SceneNodeHierarchy.IsGroup(node)),
+                node => Assert.Equal(groupId, node.ParentId));
+
+            var builder = new SlideSceneSnapshotBuilder();
+            var beforeUngroup = builder.Build(session.CurrentProject, session.CurrentProject.Slides[0], session.Revision)
+                .Layers.Where(layer => !layer.IsGroup)
+                .SelectMany(layer => layer.Primitives)
+                .ToDictionary(primitive => primitive.Id);
+
+            session.Execute(ProjectCommands.UngroupNodes(slide.Id, [groupId]));
+
+            var afterUngroup = builder.Build(session.CurrentProject, session.CurrentProject.Slides[0], session.Revision)
+                .Layers.SelectMany(layer => layer.Primitives)
+                .ToDictionary(primitive => primitive.Id);
+            foreach (var id in new[] { first.Id, second.Id })
+            {
+                Assert.Equal(beforeUngroup[id].Bounds.X, afterUngroup[id].Bounds.X, 8);
+                Assert.Equal(beforeUngroup[id].Bounds.Y, afterUngroup[id].Bounds.Y, 8);
+                Assert.Equal(beforeUngroup[id].Bounds.Width, afterUngroup[id].Bounds.Width, 8);
+                Assert.Equal(beforeUngroup[id].Bounds.Height, afterUngroup[id].Bounds.Height, 8);
+                Assert.Equal(beforeUngroup[id].RotationDegrees, afterUngroup[id].RotationDegrees, 8);
+            }
+
+            await PhysicaProjectPackage.SaveAsync(session.CurrentProject, path);
+            loaded = await PhysicaProjectPackage.LoadAsync(path);
+            Assert.Equal(
+                session.CurrentProject.Slides[0].Nodes.Select(node =>
+                    (node.Id, node.Name, node.Kind, node.ParentId, node.LayerIndex, node.Geometry,
+                        node.ModelTransform, node.PresentationTransform, node.IsVisible, node.IsLocked)),
+                loaded.Slides[0].Nodes.Select(node =>
+                    (node.Id, node.Name, node.Kind, node.ParentId, node.LayerIndex, node.Geometry,
+                        node.ModelTransform, node.PresentationTransform, node.IsVisible, node.IsLocked)));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
     }
 
     [Fact]

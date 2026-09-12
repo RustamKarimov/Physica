@@ -190,7 +190,7 @@ public static class DocumentNormalizer
                 Name = slide.NameKind == DocumentNameKind.Automatic
                     ? $"Slide {index + 1}"
                     : slide.Name.Trim(),
-                Nodes = slide.Nodes
+                Nodes = SceneNodeHierarchy.FlattenByLayer(slide.Nodes)
                     .Select((node, index) => node with { Name = node.Name.Trim(), Kind = node.Kind.Trim(), LayerIndex = index })
                     .ToArray(),
             })

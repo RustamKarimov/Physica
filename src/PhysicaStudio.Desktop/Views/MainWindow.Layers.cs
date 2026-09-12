@@ -207,6 +207,21 @@ public sealed partial class MainWindow
         }
     }
 
+    private void LayerGroupToggle_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: LayerItemViewModel { IsGroup: true } layer })
+        {
+            _viewModel.ToggleLayerGroup(layer.Id);
+            e.Handled = true;
+        }
+    }
+
+    private void GroupLayers_Click(object? sender, RoutedEventArgs e) =>
+        ExecuteLayerAction(_viewModel.GroupSelectedNodes);
+
+    private void UngroupLayers_Click(object? sender, RoutedEventArgs e) =>
+        ExecuteLayerAction(_viewModel.UngroupSelectedNodes);
+
     private void RenameLayer_Click(object? sender, RoutedEventArgs e) => BeginSelectedLayerRename();
 
     private void BeginSelectedLayerRename()
