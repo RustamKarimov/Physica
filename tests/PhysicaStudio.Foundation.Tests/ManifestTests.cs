@@ -231,6 +231,32 @@ public sealed class ManifestTests
         Assert.Contains("_viewModel.UngroupSelectedNodes", code, StringComparison.Ordinal);
         Assert.Contains("RenameNode", code, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void CanvasViewportExposesRealZoomFitPanAndKeyboardRoutes()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(
+            Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Viewport.cs"));
+
+        Assert.Contains("CanvasViewportHost", xaml, StringComparison.Ordinal);
+        Assert.Contains("AuthoringSlideFrame", xaml, StringComparison.Ordinal);
+        Assert.Contains("CanvasViewport_PointerWheelChanged", xaml, StringComparison.Ordinal);
+        Assert.Contains("ZoomOut_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("ZoomIn_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("FitSlide_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("FitWidth", xaml, StringComparison.Ordinal);
+        Assert.Contains("ActualSize", xaml, StringComparison.Ordinal);
+        Assert.Contains("CanvasViewportGeometry.ZoomAt", code, StringComparison.Ordinal);
+        Assert.Contains("CanvasViewportGeometry.PanBy", code, StringComparison.Ordinal);
+        Assert.Contains("properties.IsMiddleButtonPressed", code, StringComparison.Ordinal);
+        Assert.Contains("_spacePanArmed", code, StringComparison.Ordinal);
+        Assert.Contains("e.Key == Key.D0", code, StringComparison.Ordinal);
+        Assert.Contains("e.Key == Key.D1", code, StringComparison.Ordinal);
+    }
+
     private static JsonSerializerOptions JsonOptions() => new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true

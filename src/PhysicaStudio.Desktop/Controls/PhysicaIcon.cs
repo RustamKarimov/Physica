@@ -305,6 +305,22 @@ public sealed class PhysicaIcon : Control
                 context.DrawEllipse(null, pen, P(.42, .4), w * .25, h * .25);
                 context.DrawLine(pen, P(.6, .59), P(.84, .83));
                 break;
+            case "zoom":
+                context.DrawEllipse(null, pen, P(.42, .4), w * .25, h * .25);
+                context.DrawLine(pen, P(.6, .59), P(.84, .83));
+                context.DrawLine(pen, P(.31, .4), P(.53, .4));
+                context.DrawLine(pen, P(.42, .29), P(.42, .51));
+                break;
+            case "fit":
+                context.DrawLine(pen, P(.16, .38), P(.16, .16));
+                context.DrawLine(pen, P(.16, .16), P(.38, .16));
+                context.DrawLine(pen, P(.62, .16), P(.84, .16));
+                context.DrawLine(pen, P(.84, .16), P(.84, .38));
+                context.DrawLine(pen, P(.84, .62), P(.84, .84));
+                context.DrawLine(pen, P(.84, .84), P(.62, .84));
+                context.DrawLine(pen, P(.38, .84), P(.16, .84));
+                context.DrawLine(pen, P(.16, .84), P(.16, .62));
+                break;
             case "lock":
                 context.DrawRectangle(null, pen, R(.22, .43, .56, .4), 2, 2);
                 context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .34},{h * .43} L {w * .34},{h * .32} C {w * .34},{h * .08} {w * .66},{h * .08} {w * .66},{h * .32} L {w * .66},{h * .43}"));

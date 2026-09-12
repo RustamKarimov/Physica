@@ -419,4 +419,43 @@
     <Setter Property="Background" Value="#182833" />
     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
   </Style>
+  <Style Selector="Button.viewport-tool, Button.viewport-fit">
+    <Setter Property="Width" Value="22" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="MinHeight" Value="20" />
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.viewport-tool:pointerover, Button.viewport-fit:pointerover">
+    <Setter Property="Background" Value="#213541" />
+  </Style>
+  <Style Selector="Button.viewport-percent">
+    <Setter Property="MinWidth" Value="58" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="MinHeight" Value="20" />
+    <Setter Property="Padding" Value="7,1" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="Button.viewport-percent:pointerover">
+    <Setter Property="Background" Value="#213541" />
+  </Style>
+  <Style Selector="Button.viewport-option">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="Padding" Value="9,5" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="Button.viewport-option:pointerover">
+    <Setter Property="Background" Value="#223744" />
+  </Style>
 </Styles>

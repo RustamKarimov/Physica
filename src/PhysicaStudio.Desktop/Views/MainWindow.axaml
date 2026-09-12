@@ -12,6 +12,7 @@
         WindowDecorations="None"
         WindowState="FullScreen"
         KeyDown="Window_KeyDown"
+        KeyUp="Window_KeyUp"
         WindowStartupLocation="CenterScreen">
   <Grid RowDefinitions="30,32,88,*,24">
     <!-- Custom title bar -->
@@ -369,10 +370,15 @@
       <!-- Canvas and timeline -->
       <Grid x:Name="CenterGrid" Grid.Column="2" RowDefinitions="*,4,260" MinWidth="0">
         <Grid Grid.Row="0" Background="#0A1219">
-          <Viewbox Margin="16" Stretch="Uniform">
-            <Border Width="{Binding SlideLogicalWidth}" Height="{Binding SlideLogicalHeight}"
+          <Canvas x:Name="CanvasViewportHost" ClipToBounds="True"
+                  SizeChanged="CanvasViewport_SizeChanged"
+                  PointerWheelChanged="CanvasViewport_PointerWheelChanged"
+                  AutomationProperties.Name="Slide canvas viewport">
+            <Border x:Name="AuthoringSlideFrame"
+                    Width="{Binding SlideLogicalWidth}" Height="{Binding SlideLogicalHeight}"
                     BorderBrush="#3A4650" BorderThickness="1"
-                    BoxShadow="0 12 28 0 #99000000">
+                    BoxShadow="0 12 28 0 #99000000"
+                    RenderTransformOrigin="0%,0%">
               <controls:DocumentSceneSurface x:Name="AuthoringCanvasSurface"
                                              Snapshot="{Binding ActiveScene}"
                                              SelectedNodeIds="{Binding SelectedNodeIds}"
@@ -384,7 +390,7 @@
                                              PointerCaptureLost="AuthoringCanvas_PointerCaptureLost"
                                              AutomationProperties.Name="Slide authoring canvas" />
             </Border>
-          </Viewbox>
+          </Canvas>
           <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,24,18"
                   Padding="9,5" Background="#D912202B" BorderBrush="#344B5A"
                   BorderThickness="1" CornerRadius="4" IsHitTestVisible="False">
@@ -772,7 +778,57 @@
         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
           <TextBlock Text="PREVIEW" FontSize="11" FontWeight="SemiBold" Foreground="#E8B85B" />
           <Border Width="1" Height="12" Background="#263744" />
-          <TextBlock Text="100%" FontSize="12" Foreground="#AFBEC9" />
+          <Button Classes="viewport-tool" Click="ZoomOut_Click"
+                  ToolTip.Tip="{x:Static resources:AppText.ZoomOut}"
+                  AutomationProperties.Name="{x:Static resources:AppText.ZoomOut}">
+            <TextBlock Text="−" FontSize="15" />
+          </Button>
+          <Button x:Name="ZoomMenuButton" Classes="viewport-percent"
+                  ToolTip.Tip="{x:Static resources:AppText.ZoomOptions}"
+                  AutomationProperties.Name="{x:Static resources:AppText.ZoomOptions}">
+            <Button.Flyout>
+              <Flyout Placement="TopEdgeAlignedRight">
+                <Border Classes="ribbon-gallery" Padding="8">
+                  <StackPanel Width="174" Spacing="2">
+                    <Button Classes="viewport-option" Tag="FitSlide" Click="ZoomPreset_Click">
+                      <TextBlock Text="{x:Static resources:AppText.FitSlide}" />
+                    </Button>
+                    <Button Classes="viewport-option" Tag="FitWidth" Click="ZoomPreset_Click">
+                      <TextBlock Text="{x:Static resources:AppText.FitWidth}" />
+                    </Button>
+                    <Button Classes="viewport-option" Tag="ActualSize" Click="ZoomPreset_Click">
+                      <TextBlock Text="{x:Static resources:AppText.ActualSize}" />
+                    </Button>
+                    <Border Height="1" Background="#2B3E4A" Margin="4,5" />
+                    <UniformGrid Columns="2" Rows="4">
+                      <Button Classes="viewport-option" Tag="0.25" Click="ZoomPreset_Click"><TextBlock Text="25%" /></Button>
+                      <Button Classes="viewport-option" Tag="0.5" Click="ZoomPreset_Click"><TextBlock Text="50%" /></Button>
+                      <Button Classes="viewport-option" Tag="0.75" Click="ZoomPreset_Click"><TextBlock Text="75%" /></Button>
+                      <Button Classes="viewport-option" Tag="1" Click="ZoomPreset_Click"><TextBlock Text="100%" /></Button>
+                      <Button Classes="viewport-option" Tag="1.5" Click="ZoomPreset_Click"><TextBlock Text="150%" /></Button>
+                      <Button Classes="viewport-option" Tag="2" Click="ZoomPreset_Click"><TextBlock Text="200%" /></Button>
+                      <Button Classes="viewport-option" Tag="4" Click="ZoomPreset_Click"><TextBlock Text="400%" /></Button>
+                      <Button Classes="viewport-option" Tag="8" Click="ZoomPreset_Click"><TextBlock Text="800%" /></Button>
+                    </UniformGrid>
+                  </StackPanel>
+                </Border>
+              </Flyout>
+            </Button.Flyout>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock x:Name="ZoomPercentText" Text="100%" FontSize="11.5" VerticalAlignment="Center" />
+              <Path Data="M 1,2 L 4,5 L 7,2" Stroke="#9CAEB9" StrokeThickness="1.2" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+          <Button Classes="viewport-tool" Click="ZoomIn_Click"
+                  ToolTip.Tip="{x:Static resources:AppText.ZoomIn}"
+                  AutomationProperties.Name="{x:Static resources:AppText.ZoomIn}">
+            <TextBlock Text="+" FontSize="14" />
+          </Button>
+          <Button Classes="viewport-fit" Click="FitSlide_Click"
+                  ToolTip.Tip="{x:Static resources:AppText.CanvasPanHint}"
+                  AutomationProperties.Name="{x:Static resources:AppText.FitSlide}">
+            <controls:PhysicaIcon IconKey="fit" Width="14" Height="14" Stroke="#AFC0CA" />
+          </Button>
         </StackPanel>
       </Grid>
     </Border>

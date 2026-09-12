@@ -31,6 +31,9 @@ public sealed class DocumentSceneSurface : Control
     public static readonly StyledProperty<bool> IsAuthoringSurfaceProperty =
         AvaloniaProperty.Register<DocumentSceneSurface, bool>(nameof(IsAuthoringSurface));
 
+    public static readonly StyledProperty<double> ViewportZoomProperty =
+        AvaloniaProperty.Register<DocumentSceneSurface, double>(nameof(ViewportZoom), 1);
+
     private IReadOnlyDictionary<Guid, CanvasNodePreview> _interactionPreview =
         new Dictionary<Guid, CanvasNodePreview>();
     private Rect? _selectionMarquee;
@@ -38,7 +41,8 @@ public sealed class DocumentSceneSurface : Control
     static DocumentSceneSurface() => AffectsRender<DocumentSceneSurface>(
         SnapshotProperty,
         SelectedNodeIdsProperty,
-        IsAuthoringSurfaceProperty);
+        IsAuthoringSurfaceProperty,
+        ViewportZoomProperty);
 
     public SceneSnapshot? Snapshot
     {
@@ -56,6 +60,12 @@ public sealed class DocumentSceneSurface : Control
     {
         get => GetValue(IsAuthoringSurfaceProperty);
         set => SetValue(IsAuthoringSurfaceProperty, value);
+    }
+
+    public double ViewportZoom
+    {
+        get => GetValue(ViewportZoomProperty);
+        set => SetValue(ViewportZoomProperty, value);
     }
 
     public void SetInteractionPreview(IReadOnlyDictionary<Guid, CanvasNodePreview>? preview)
@@ -129,8 +139,8 @@ public sealed class DocumentSceneSurface : Control
             return CanvasSelectionHandle.None;
         }
 
-        const double hitRadius = 9;
-        var rotationCenter = new Point(bounds.Center.X, bounds.Top - 26);
+        var hitRadius = ScreenPixels(9);
+        var rotationCenter = new Point(bounds.Center.X, bounds.Top - ScreenPixels(26));
         if (Distance(surfacePoint, rotationCenter) <= hitRadius + 2)
         {
             return CanvasSelectionHandle.Rotate;
@@ -216,7 +226,9 @@ public sealed class DocumentSceneSurface : Control
                     return false;
                 }
 
-                var tolerance = Math.Max(6, StrokeScale(logicalSize, primitive.Style.StrokeWidth) / 2 + 4);
+                var tolerance = Math.Max(
+                    ScreenPixels(6),
+                    StrokeScale(logicalSize, primitive.Style.StrokeWidth) / 2 + ScreenPixels(4));
                 var previous = Scale(logicalSize, PreviewPoint(primitive, preview, primitive.Points[0]));
                 for (var index = 1; index < primitive.Points.Count; index++)
                 {
@@ -231,11 +243,11 @@ public sealed class DocumentSceneSurface : Control
             case RenderPrimitiveKind.Ellipse:
                 var radiusX = Math.Max(surfaceBounds.Width / 2, 1);
                 var radiusY = Math.Max(surfaceBounds.Height / 2, 1);
-                var normalizedX = (testPoint.X - surfaceBounds.Center.X) / (radiusX + 5);
-                var normalizedY = (testPoint.Y - surfaceBounds.Center.Y) / (radiusY + 5);
+                var normalizedX = (testPoint.X - surfaceBounds.Center.X) / (radiusX + ScreenPixels(5));
+                var normalizedY = (testPoint.Y - surfaceBounds.Center.Y) / (radiusY + ScreenPixels(5));
                 return normalizedX * normalizedX + normalizedY * normalizedY <= 1;
             default:
-                return surfaceBounds.Inflate(5).Contains(testPoint);
+                return surfaceBounds.Inflate(ScreenPixels(5)).Contains(testPoint);
         }
     }
 
@@ -418,14 +430,21 @@ public sealed class DocumentSceneSurface : Control
             return;
         }
 
-        var selectionPen = new Pen(Brush.Parse("#168CFF"), 1.5);
+        var selectionPen = new Pen(Brush.Parse("#168CFF"), ScreenPixels(1.5));
         context.DrawRectangle(null, selectionPen, selection);
-        var rotationCenter = new Point(selection.Center.X, selection.Top - 26);
+        var rotationCenter = new Point(selection.Center.X, selection.Top - ScreenPixels(26));
         context.DrawLine(selectionPen, new Point(selection.Center.X, selection.Top), rotationCenter);
-        context.DrawEllipse(Brushes.White, selectionPen, rotationCenter, 5, 5);
+        var rotationRadius = ScreenPixels(5);
+        context.DrawEllipse(Brushes.White, selectionPen, rotationCenter, rotationRadius, rotationRadius);
+        var handleRadius = ScreenPixels(4);
         foreach (var point in new[] { selection.TopLeft, selection.TopRight, selection.BottomRight, selection.BottomLeft })
         {
-            context.DrawRectangle(Brushes.White, selectionPen, new Rect(point.X - 4, point.Y - 4, 8, 8), 1, 1);
+            context.DrawRectangle(
+                Brushes.White,
+                selectionPen,
+                new Rect(point.X - handleRadius, point.Y - handleRadius, handleRadius * 2, handleRadius * 2),
+                ScreenPixels(1),
+                ScreenPixels(1));
         }
     }
 
@@ -438,7 +457,10 @@ public sealed class DocumentSceneSurface : Control
 
         var normalized = CanvasTransformGeometry.Normalize(marquee.TopLeft, marquee.BottomRight);
         var fill = Brush.Parse("#24168CFF");
-        var pen = new Pen(Brush.Parse("#168CFF"), 1, new DashStyle([5, 3], 0));
+        var pen = new Pen(
+            Brush.Parse("#168CFF"),
+            ScreenPixels(1),
+            new DashStyle([ScreenPixels(5), ScreenPixels(3)], 0));
         context.DrawRectangle(fill, pen, normalized);
     }
 
@@ -663,6 +685,9 @@ public sealed class DocumentSceneSurface : Control
     private double StrokeScale(RenderSize logicalSize, double value) => value * Math.Min(
         Bounds.Width / logicalSize.Width,
         Bounds.Height / logicalSize.Height);
+
+    private double ScreenPixels(double value) =>
+        CanvasViewportGeometry.ScreenPixels(value, ViewportZoom);
 
     private static IDashStyle? CreateDash(IReadOnlyList<double> pattern) =>
         pattern.Count == 0 ? null : new DashStyle(pattern, 0);

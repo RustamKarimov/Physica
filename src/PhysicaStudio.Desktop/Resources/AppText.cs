@@ -74,6 +74,13 @@ public static class AppText
     public static string OpenExistingLesson => Get(nameof(OpenExistingLesson));
     public static string RecentLessons => Get(nameof(RecentLessons));
     public static string NoRecentLessons => Get(nameof(NoRecentLessons));
+    public static string ZoomOut => Get(nameof(ZoomOut));
+    public static string ZoomIn => Get(nameof(ZoomIn));
+    public static string ZoomOptions => Get(nameof(ZoomOptions));
+    public static string FitSlide => Get(nameof(FitSlide));
+    public static string FitWidth => Get(nameof(FitWidth));
+    public static string ActualSize => Get(nameof(ActualSize));
+    public static string CanvasPanHint => Get(nameof(CanvasPanHint));
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);

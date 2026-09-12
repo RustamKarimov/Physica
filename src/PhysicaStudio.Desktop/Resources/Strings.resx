@@ -80,6 +80,13 @@
   <data name="OpenExistingLesson" xml:space="preserve"><value>Open existing lesson</value></data>
   <data name="RecentLessons" xml:space="preserve"><value>Recent lessons</value></data>
   <data name="NoRecentLessons" xml:space="preserve"><value>No recent saved lessons yet.</value></data>
+  <data name="ZoomOut" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="ZoomIn" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="ZoomOptions" xml:space="preserve"><value>Zoom options</value></data>
+  <data name="FitSlide" xml:space="preserve"><value>Fit slide</value></data>
+  <data name="FitWidth" xml:space="preserve"><value>Fit width</value></data>
+  <data name="ActualSize" xml:space="preserve"><value>Actual size (100%)</value></data>
+  <data name="CanvasPanHint" xml:space="preserve"><value>Middle-drag or hold Space and drag to pan. Ctrl+wheel zooms around the pointer.</value></data>
   <data name="SectionSlideCountSingular" xml:space="preserve"><value>{0} slide</value></data>
   <data name="SectionSlideCountPlural" xml:space="preserve"><value>{0} slides</value></data>
   <data name="SelectedObjectCountSingular" xml:space="preserve"><value>{0} object selected</value></data>

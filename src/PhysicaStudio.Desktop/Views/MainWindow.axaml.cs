@@ -38,6 +38,7 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = _viewModel;
+        InitializeCanvasViewport();
         var applicationData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "PhysicaStudio");
@@ -165,6 +166,12 @@ public sealed partial class MainWindow : Window
                     break;
                 case "Ungroup":
                     _viewModel.UngroupSelectedNodes();
+                    break;
+                case "Zoom":
+                    OpenZoomOptions();
+                    break;
+                case "Fit":
+                    SetCanvasViewportMode(CanvasViewportMode.FitSlide);
                     break;
                 case "Undo":
                     _viewModel.Undo();
@@ -665,8 +672,16 @@ public sealed partial class MainWindow : Window
 
     private void AuthoringCanvas_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not DocumentSceneSurface surface
-            || !e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
+        if (sender is not DocumentSceneSurface surface)
+        {
+            return;
+        }
+        if (TryBeginCanvasPan(surface, e))
+        {
+            e.Handled = true;
+            return;
+        }
+        if (!e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
         {
             return;
         }
@@ -735,8 +750,16 @@ public sealed partial class MainWindow : Window
 
     private void AuthoringCanvas_PointerMoved(object? sender, PointerEventArgs e)
     {
-        if (sender is not DocumentSceneSurface surface
-            || _canvasGesture is not { } gesture
+        if (sender is not DocumentSceneSurface surface)
+        {
+            return;
+        }
+        if (TryUpdateCanvasPan(surface, e))
+        {
+            e.Handled = true;
+            return;
+        }
+        if (_canvasGesture is not { } gesture
             || !e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
         {
             return;
@@ -765,6 +788,11 @@ public sealed partial class MainWindow : Window
     {
         if (sender is not DocumentSceneSurface surface)
         {
+            return;
+        }
+        if (TryEndCanvasPan(surface, e))
+        {
+            e.Handled = true;
             return;
         }
 
@@ -806,6 +834,7 @@ public sealed partial class MainWindow : Window
 
     private void AuthoringCanvas_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
     {
+        CancelCanvasPan();
         _canvasGesture = null;
         if (sender is DocumentSceneSurface surface)
         {
@@ -956,6 +985,11 @@ public sealed partial class MainWindow : Window
 
     private async void Window_KeyDown(object? sender, KeyEventArgs e)
     {
+        if (TryHandleViewportKeyDown(e))
+        {
+            return;
+        }
+
         if (e.Key == Key.F2 && e.Source is not TextBox && _viewModel.IsProjectOpen)
         {
             if (_viewModel.ShowLayersPanel && LayerItemsControl.IsKeyboardFocusWithin)

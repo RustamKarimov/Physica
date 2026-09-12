@@ -16,7 +16,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     {
         "New", "Open", "Recent", "Save", "Save As", "Save Copy", "Recover", "Close",
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
-        "Selection Pane", "Layers", "Group", "Ungroup",
+        "Selection Pane", "Layers", "Group", "Ungroup", "Zoom", "Fit",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -936,6 +936,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         if (normalized == "joint") return "joint";
         if (normalized.Contains("check model") || normalized.Contains("validate")) return "check";
         if (normalized.Contains("diagnostic")) return "diagnostics";
+        if (normalized == "zoom") return "zoom";
+        if (normalized == "fit") return "fit";
         if (normalized.Contains("paste")) return "paste";
         if (normalized.Contains("cut")) return "cut";
         if (normalized.Contains("copy")) return "copy";

@@ -397,7 +397,7 @@ public sealed class Phase2FoundationTests
         Assert.DoesNotContain(ungrouped.Nodes, SceneNodeHierarchy.IsGroup);
         Assert.Null(ungrouped.Nodes.Single(node => node.Id == first.Id).ParentId);
         Assert.Null(ungrouped.Nodes.Single(node => node.Id == second.Id).ParentId);
-        Assert.Equal([first.Id, second.Id], session.SelectedNodeIds.Order());
+        Assert.True(session.SelectedNodeIds.SetEquals([first.Id, second.Id]));
     }
 
     [Fact]
