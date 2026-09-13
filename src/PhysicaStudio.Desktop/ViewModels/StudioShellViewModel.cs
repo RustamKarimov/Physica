@@ -1004,13 +1004,17 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         if (normalized == "medium") return "medium";
         if (normalized.Contains("wall")) return "wall";
         if (normalized.Contains("ruler")) return "ruler";
+        if (normalized.Contains("grid")) return "grid";
+        if (normalized.Contains("snapping") || normalized == "snap") return "snap";
+        if (normalized.Contains("safe area")) return "safe-area";
+        if (normalized.Contains("margin")) return "margins";
         if (normalized.Contains("protractor")) return "protractor";
         if (normalized.Contains("sensor")) return "sensor";
         if (normalized == "trace") return "trace";
         if (normalized == "path") return "path";
         if (normalized == "field") return "field";
         if (normalized.Contains("fixed point")) return "pin";
-        if (normalized == "guide") return "guide";
+        if (normalized.Contains("guide")) return "guide";
         if (normalized == "limit") return "limit";
         if (normalized == "joint") return "joint";
         if (normalized.Contains("check model") || normalized.Contains("validate")) return "check";

@@ -36,6 +36,38 @@ public sealed class PhysicaIcon : Control
 
         switch (IconKey)
         {
+            case "close":
+                context.DrawLine(pen, P(.22, .22), P(.78, .78));
+                context.DrawLine(pen, P(.78, .22), P(.22, .78));
+                break;
+            case "grid":
+                for (var line = 0; line < 4; line++)
+                {
+                    var position = .18 + line * .213;
+                    context.DrawLine(pen, P(position, .18), P(position, .82));
+                    context.DrawLine(pen, P(.18, position), P(.82, position));
+                }
+                break;
+            case "snap":
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .24},{h * .18} L {w * .24},{h * .54} C {w * .24},{h * .9} {w * .76},{h * .9} {w * .76},{h * .54} L {w * .76},{h * .18}"));
+                context.DrawLine(pen, P(.24, .36), P(.42, .36));
+                context.DrawLine(pen, P(.58, .36), P(.76, .36));
+                break;
+            case "margins":
+                context.DrawRectangle(null, pen, R(.12, .16, .76, .68), 2, 2);
+                context.DrawRectangle(null, new Pen(brush, pen.Thickness * .75, new DashStyle([2, 2], 0)), R(.28, .3, .44, .4), 1, 1);
+                break;
+            case "safe-area":
+                context.DrawRectangle(null, pen, R(.12, .16, .76, .68), 2, 2);
+                context.DrawLine(pen, P(.3, .38), P(.3, .3));
+                context.DrawLine(pen, P(.3, .3), P(.38, .3));
+                context.DrawLine(pen, P(.62, .3), P(.7, .3));
+                context.DrawLine(pen, P(.7, .3), P(.7, .38));
+                context.DrawLine(pen, P(.7, .62), P(.7, .7));
+                context.DrawLine(pen, P(.7, .7), P(.62, .7));
+                context.DrawLine(pen, P(.38, .7), P(.3, .7));
+                context.DrawLine(pen, P(.3, .7), P(.3, .62));
+                break;
             case "paste":
                 context.DrawRectangle(null, pen, R(.22, .22, .56, .66), 2, 2);
                 context.DrawRectangle(null, pen, R(.36, .1, .28, .22), 2, 2);

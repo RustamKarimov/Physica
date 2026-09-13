@@ -13,6 +13,7 @@ namespace PhysicaStudio.Desktop.Views;
 public sealed partial class MainWindow
 {
     private bool _showCanvasRulers = true;
+    private double _rulerMajorInterval;
     private GuideDragState? _guideDrag;
 
     private void InitializeCanvasGuidance()
@@ -46,6 +47,9 @@ public sealed partial class MainWindow
         SnapGuidesCheckBox.IsChecked = settings.SnapToGuides;
         SnapSlideCheckBox.IsChecked = settings.SnapToSlide;
         GridSpacingTextBox.Text = settings.GridSpacing.ToString("0.##", CultureInfo.CurrentCulture);
+        RulerIntervalTextBox.Text = _rulerMajorInterval > 0
+            ? _rulerMajorInterval.ToString("0.##", CultureInfo.CurrentCulture)
+            : AppText.Auto;
         UpdateCanvasRulers();
     }
 
@@ -63,9 +67,11 @@ public sealed partial class MainWindow
         HorizontalCanvasRuler.ViewportZoom = _canvasViewport.Zoom;
         HorizontalCanvasRuler.StartOffset = _canvasViewport.OffsetX - 22;
         HorizontalCanvasRuler.LogicalLength = _viewModel.SlideLogicalWidth;
+        HorizontalCanvasRuler.MajorInterval = _rulerMajorInterval;
         VerticalCanvasRuler.ViewportZoom = _canvasViewport.Zoom;
         VerticalCanvasRuler.StartOffset = _canvasViewport.OffsetY - 22;
         VerticalCanvasRuler.LogicalLength = _viewModel.SlideLogicalHeight;
+        VerticalCanvasRuler.MajorInterval = _rulerMajorInterval;
     }
 
     private void OpenCanvasGuidance()
@@ -141,6 +147,15 @@ public sealed partial class MainWindow
 
     private void GridSpacing_LostFocus(object? sender, RoutedEventArgs e) => CommitGridSpacing();
 
+    private void GridPreset_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: string value }
+            && double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var spacing))
+        {
+            SetGridSpacing(spacing);
+        }
+    }
+
     private void CommitGridSpacing()
     {
         if (!_viewModel.IsProjectOpen)
@@ -157,6 +172,11 @@ public sealed partial class MainWindow
         {
             return;
         }
+        SetGridSpacing(spacing);
+    }
+
+    private void SetGridSpacing(double spacing)
+    {
         try
         {
             _viewModel.SetGridSpacing(spacing);
@@ -166,6 +186,63 @@ public sealed partial class MainWindow
             _viewModel.SetStatus(exception.Message);
             SynchronizeCanvasGuidance();
         }
+    }
+
+    private void RulerInterval_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            CommitRulerInterval();
+            AuthoringCanvasSurface.Focus();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            SynchronizeCanvasGuidance();
+            AuthoringCanvasSurface.Focus();
+            e.Handled = true;
+        }
+    }
+
+    private void RulerInterval_LostFocus(object? sender, RoutedEventArgs e) => CommitRulerInterval();
+
+    private void AutoRulerInterval_Click(object? sender, RoutedEventArgs e) => SetRulerInterval(0);
+
+    private void RulerPreset_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: string value }
+            && double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var interval))
+        {
+            SetRulerInterval(interval);
+        }
+    }
+
+    private void CommitRulerInterval()
+    {
+        var text = RulerIntervalTextBox.Text?.Trim();
+        if (string.Equals(text, AppText.Auto, StringComparison.CurrentCultureIgnoreCase))
+        {
+            SetRulerInterval(0);
+            return;
+        }
+        if (!double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out var interval)
+            || interval < 5
+            || interval > 1000)
+        {
+            _viewModel.SetStatus(AppText.RulerIntervalRange);
+            SynchronizeCanvasGuidance();
+            return;
+        }
+        SetRulerInterval(interval);
+    }
+
+    private void SetRulerInterval(double interval)
+    {
+        _rulerMajorInterval = interval;
+        RulerIntervalTextBox.Text = interval > 0
+            ? interval.ToString("0.##", CultureInfo.CurrentCulture)
+            : AppText.Auto;
+        UpdateCanvasRulers();
     }
 
     private void AddVerticalGuide_Click(object? sender, RoutedEventArgs e) =>
@@ -182,6 +259,66 @@ public sealed partial class MainWindow
         if (sender is Control { DataContext: GuideDefinition guide })
         {
             ExecuteGuideAction(() => _viewModel.ToggleGuideLock(guide.Id));
+        }
+    }
+
+    private void GuidePosition_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox textBox)
+        {
+            return;
+        }
+        if (e.Key == Key.Enter)
+        {
+            CommitGuidePosition(textBox);
+            AuthoringCanvasSurface.Focus();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            RestoreGuidePosition(textBox);
+            AuthoringCanvasSurface.Focus();
+            e.Handled = true;
+        }
+    }
+
+    private void GuidePosition_LostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox textBox)
+        {
+            CommitGuidePosition(textBox);
+        }
+    }
+
+    private void CommitGuidePosition(TextBox textBox)
+    {
+        if (textBox.DataContext is not GuideDefinition guide)
+        {
+            return;
+        }
+        var limit = guide.Orientation == GuideOrientation.Vertical
+            ? _viewModel.SlideLogicalWidth
+            : _viewModel.SlideLogicalHeight;
+        if (!double.TryParse(textBox.Text, NumberStyles.Float, CultureInfo.CurrentCulture, out var position)
+            || position < 0
+            || position > limit)
+        {
+            _viewModel.SetStatus(AppText.GuidePositionRange);
+            RestoreGuidePosition(textBox);
+            return;
+        }
+        if (Math.Abs(position - guide.Position) < .001)
+        {
+            return;
+        }
+        ExecuteGuideAction(() => _viewModel.MoveGuide(guide.Id, position));
+    }
+
+    private static void RestoreGuidePosition(TextBox textBox)
+    {
+        if (textBox.DataContext is GuideDefinition guide)
+        {
+            textBox.Text = guide.Position.ToString("0.##", CultureInfo.CurrentCulture);
         }
     }
 

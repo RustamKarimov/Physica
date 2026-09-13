@@ -25,8 +25,12 @@ public sealed class CanvasRulerSurface : Control
     public static readonly StyledProperty<double> LogicalLengthProperty =
         AvaloniaProperty.Register<CanvasRulerSurface, double>(nameof(LogicalLength), 1);
 
+    public static readonly StyledProperty<double> MajorIntervalProperty =
+        AvaloniaProperty.Register<CanvasRulerSurface, double>(nameof(MajorInterval));
+
     static CanvasRulerSurface() => AffectsRender<CanvasRulerSurface>(
-        OrientationProperty, ViewportZoomProperty, StartOffsetProperty, LogicalLengthProperty);
+        OrientationProperty, ViewportZoomProperty, StartOffsetProperty, LogicalLengthProperty,
+        MajorIntervalProperty);
 
     public CanvasRulerOrientation Orientation
     {
@@ -52,6 +56,16 @@ public sealed class CanvasRulerSurface : Control
         set => SetValue(LogicalLengthProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the ruler's major interval in slide units. Zero selects an
+    /// interval automatically from the current zoom.
+    /// </summary>
+    public double MajorInterval
+    {
+        get => GetValue(MajorIntervalProperty);
+        set => SetValue(MajorIntervalProperty, value);
+    }
+
     public override void Render(DrawingContext context)
     {
         base.Render(context);
@@ -61,7 +75,7 @@ public sealed class CanvasRulerSurface : Control
             return;
         }
 
-        var major = SelectMajorStep(ViewportZoom);
+        var major = MajorInterval > 0 ? MajorInterval : SelectMajorStep(ViewportZoom);
         var minor = major / 5;
         var end = StartOffset + LogicalLength * ViewportZoom;
         var axisPen = new Pen(Brush.Parse("#63798A"), 1);

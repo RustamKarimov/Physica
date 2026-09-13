@@ -107,6 +107,18 @@ public static class AppText
     public static string GridSpacing => Get(nameof(GridSpacing));
     public static string ClosePanel => Get(nameof(ClosePanel));
     public static string AltBypassSnap => Get(nameof(AltBypassSnap));
+    public static string DisplayOptions => Get(nameof(DisplayOptions));
+    public static string GridAndRuler => Get(nameof(GridAndRuler));
+    public static string GridPresets => Get(nameof(GridPresets));
+    public static string RulerInterval => Get(nameof(RulerInterval));
+    public static string RulerIntervalRange => Get(nameof(RulerIntervalRange));
+    public static string RulerPresets => Get(nameof(RulerPresets));
+    public static string Auto => Get(nameof(Auto));
+    public static string SlideUnits => Get(nameof(SlideUnits));
+    public static string GuidePositions => Get(nameof(GuidePositions));
+    public static string GuidePosition => Get(nameof(GuidePosition));
+    public static string GuidePositionRange => Get(nameof(GuidePositionRange));
+    public static string LockGuide => Get(nameof(LockGuide));
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);

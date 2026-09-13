@@ -22,6 +22,13 @@ A teacher can open the View or Design ribbon and:
 - `SlideDocument.Guides` remains the ordered per-slide guide authority.
 - `SlideDocument.SnapSettings` stores snap categories, logical grid spacing, and authoring-overlay visibility.
 - Ruler visibility is transient workspace state and never dirties or serializes the lesson.
+- Ruler major-interval choice is transient workspace state. Teachers can use automatic
+  scaling, enter an exact interval, or use 50/100/200-unit presets.
+- The grid renderer draws the saved interval itself. It must not silently coalesce
+  10, 20, and 40-unit grids into the same visual interval.
+- The guidance workspace is divided into Display, Grid and ruler, Snapping, and
+  Guides sections. Each guide exposes an exact editable position and an explicit
+  lock state in addition to direct canvas dragging.
 - Physics/model transforms are never changed by this slice. Snapped object edits commit only `PresentationTransform2D` values through one authoring command.
 - Thumbnails, presenter views, exports, and scene snapshots never contain grid, ruler, guide, margin, safe-area, or snap-feedback artwork.
 

@@ -352,13 +352,13 @@ public sealed class DocumentSceneSurface : Control
             return;
         }
 
+        // Render the authored interval exactly. Coalescing small intervals made the
+        // 10, 20, and 40 presets visually indistinguishable at ordinary zoom levels.
         var spacing = settings.GridSpacing;
-        while (spacing * ViewportZoom < 10)
-        {
-            spacing *= 2;
-        }
-        var minor = new Pen(Brush.Parse("#183D718A"), ScreenPixels(1));
-        var major = new Pen(Brush.Parse("#2A4E8298"), ScreenPixels(1));
+        var projectedSpacing = spacing * ViewportZoom;
+        var minorOpacity = projectedSpacing < 4 ? "#123D718A" : "#203D718A";
+        var minor = new Pen(Brush.Parse(minorOpacity), ScreenPixels(projectedSpacing < 4 ? .7 : 1));
+        var major = new Pen(Brush.Parse("#3A4E8298"), ScreenPixels(1));
         var index = 0;
         for (var x = spacing; x < logicalSize.Width; x += spacing, index++)
         {

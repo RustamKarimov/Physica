@@ -145,6 +145,39 @@ public sealed class CanvasGuidanceTests
         Assert.Contains("SnapCanvasBounds(", code, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public void RulerMajorIntervalSupportsExplicitAndAutomaticModes()
+    {
+        var ruler = new CanvasRulerSurface();
+
+        Assert.Equal(0, ruler.MajorInterval);
+
+        ruler.MajorInterval = 100;
+
+        Assert.Equal(100, ruler.MajorInterval);
+    }
+
+    [Fact]
+    public void RejectedGuidanceReviewHasStructuralRegressionCoverage()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var guidanceCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Guidance.cs"));
+        var surfaceCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "DocumentSceneSurface.cs"));
+        var iconCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaIcon.cs"));
+
+        Assert.Contains("RulerIntervalTextBox", xaml, StringComparison.Ordinal);
+        Assert.Contains("GuidePosition_KeyDown", xaml, StringComparison.Ordinal);
+        Assert.Contains("GridPreset_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("RulerPreset_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("GridAndRuler", xaml, StringComparison.Ordinal);
+        Assert.Contains("MajorInterval = _rulerMajorInterval", guidanceCode, StringComparison.Ordinal);
+        Assert.Contains("var spacing = settings.GridSpacing", surfaceCode, StringComparison.Ordinal);
+        Assert.DoesNotContain("while (spacing * ViewportZoom < 10)", surfaceCode, StringComparison.Ordinal);
+        Assert.Contains("case \"grid\"", iconCode, StringComparison.Ordinal);
+        Assert.Contains("case \"close\"", iconCode, StringComparison.Ordinal);
+    }
+
     private static string FindRepositoryRoot()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

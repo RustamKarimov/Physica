@@ -407,83 +407,116 @@
                   Background="#0F1C25" BorderBrush="#344A58" BorderThickness="0,0,1,1"
                   IsHitTestVisible="False" />
           <Border x:Name="CanvasGuidancePanel" IsVisible="False"
-                  Width="326" HorizontalAlignment="Right" VerticalAlignment="Top"
+                  Width="382" MaxHeight="740" HorizontalAlignment="Right" VerticalAlignment="Top"
                   Margin="0,12,14,0" Padding="14,12"
                   Background="#F511202B" BorderBrush="#456172" BorderThickness="1"
                   CornerRadius="7" BoxShadow="0 12 28 0 #99000000">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
-              <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Text="{x:Static resources:AppText.CanvasGuidance}" FontSize="14"
+            <Grid RowDefinitions="Auto,*" RowSpacing="10">
+              <Grid ColumnDefinitions="*,32">
+                <TextBlock Text="{x:Static resources:AppText.CanvasGuidance}" FontSize="15"
                            FontWeight="SemiBold" VerticalAlignment="Center" />
                 <Button Grid.Column="1" Classes="title-tool" Click="CloseCanvasGuidance_Click"
+                        Width="28" Height="28" HorizontalAlignment="Right"
                         ToolTip.Tip="{x:Static resources:AppText.ClosePanel}"
                         AutomationProperties.Name="{x:Static resources:AppText.ClosePanel}">
-                  <controls:PhysicaIcon IconKey="close" Width="13" Height="13" Stroke="#AFC1CC" />
+                  <controls:PhysicaIcon IconKey="close" Width="14" Height="14" Stroke="#C7D5DE" />
                 </Button>
               </Grid>
-              <Border Grid.Row="3" BorderBrush="#314957" BorderThickness="0,1,0,0" Padding="0,9,0,0">
-                <StackPanel Spacing="6">
-                  <CheckBox x:Name="SnapEnabledCheckBox" Content="{x:Static resources:AppText.Snapping}" FontWeight="SemiBold" Click="SnapEnabled_Click" />
-                  <WrapPanel Orientation="Horizontal" Margin="18,0,0,0">
-                    <CheckBox x:Name="SnapObjectsCheckBox" Content="{x:Static resources:AppText.SnapObjects}" Margin="0,0,12,0" Click="SnapObjects_Click" />
-                    <CheckBox x:Name="SnapGridCheckBox" Content="{x:Static resources:AppText.SnapGrid}" Margin="0,0,12,0" Click="SnapGrid_Click" />
-                    <CheckBox x:Name="SnapGuidesCheckBox" Content="{x:Static resources:AppText.SnapGuides}" Margin="0,6,12,0" Click="SnapGuides_Click" />
-                    <CheckBox x:Name="SnapSlideCheckBox" Content="{x:Static resources:AppText.SnapSlide}" Margin="0,6,0,0" Click="SnapSlide_Click" />
-                  </WrapPanel>
-                  <TextBlock Text="{x:Static resources:AppText.AltBypassSnap}" Margin="18,1,0,0" FontSize="10.5" Foreground="#7F95A4" />
+              <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="10">
+                  <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,9">
+                    <StackPanel Spacing="8">
+                      <TextBlock Text="{x:Static resources:AppText.DisplayOptions}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
+                      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="7">
+                        <CheckBox x:Name="ShowRulersCheckBox" Content="{x:Static resources:AppText.Rulers}" Click="ShowRulers_Click" />
+                        <CheckBox x:Name="ShowGridCheckBox" Grid.Column="1" Content="{x:Static resources:AppText.Grid}" Click="ShowGrid_Click" />
+                        <CheckBox x:Name="ShowGuidesCheckBox" Grid.Row="1" Content="{x:Static resources:AppText.Guides}" Click="ShowGuides_Click" />
+                        <CheckBox x:Name="ShowMarginsCheckBox" Grid.Row="1" Grid.Column="1" Content="{x:Static resources:AppText.Margins}" Click="ShowMargins_Click" />
+                        <CheckBox x:Name="ShowSafeAreaCheckBox" Grid.Row="2" Content="{x:Static resources:AppText.SafeArea}" Click="ShowSafeArea_Click" />
+                      </Grid>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,9">
+                    <StackPanel Spacing="8">
+                      <TextBlock Text="{x:Static resources:AppText.GridAndRuler}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
+                      <Grid ColumnDefinitions="*,82,42" RowDefinitions="Auto,Auto" RowSpacing="7" ColumnSpacing="7">
+                        <TextBlock Text="{x:Static resources:AppText.GridSpacing}" VerticalAlignment="Center" Foreground="#B8C8D2" />
+                        <TextBox x:Name="GridSpacingTextBox" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 KeyDown="GridSpacing_KeyDown" LostFocus="GridSpacing_LostFocus"
+                                 AutomationProperties.Name="{x:Static resources:AppText.GridSpacing}" />
+                        <TextBlock Grid.Column="2" Text="{x:Static resources:AppText.SlideUnits}" VerticalAlignment="Center" FontSize="10.5" Foreground="#8198A7" />
+                        <TextBlock Grid.Row="1" Text="{x:Static resources:AppText.RulerInterval}" VerticalAlignment="Center" Foreground="#B8C8D2" />
+                        <TextBox x:Name="RulerIntervalTextBox" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 KeyDown="RulerInterval_KeyDown" LostFocus="RulerInterval_LostFocus"
+                                 AutomationProperties.Name="{x:Static resources:AppText.RulerInterval}" />
+                        <Button Grid.Row="1" Grid.Column="2" Content="{x:Static resources:AppText.Auto}"
+                                Click="AutoRulerInterval_Click" Padding="6,4" FontSize="10.5" />
+                      </Grid>
+                      <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="6">
+                        <TextBlock Text="{x:Static resources:AppText.GridPresets}" VerticalAlignment="Center" FontSize="10.5" Foreground="#8198A7" />
+                        <Button Grid.Column="2" Content="10" Tag="10" Click="GridPreset_Click" Padding="9,4" />
+                        <Button Grid.Column="3" Content="20" Tag="20" Click="GridPreset_Click" Padding="9,4" />
+                        <Button Grid.Column="4" Content="40" Tag="40" Click="GridPreset_Click" Padding="9,4" />
+                      </Grid>
+                      <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="6">
+                        <TextBlock Text="{x:Static resources:AppText.RulerPresets}" VerticalAlignment="Center" FontSize="10.5" Foreground="#8198A7" />
+                        <Button Grid.Column="2" Content="50" Tag="50" Click="RulerPreset_Click" Padding="7,4" />
+                        <Button Grid.Column="3" Content="100" Tag="100" Click="RulerPreset_Click" Padding="7,4" />
+                        <Button Grid.Column="4" Content="200" Tag="200" Click="RulerPreset_Click" Padding="7,4" />
+                      </Grid>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,9">
+                    <StackPanel Spacing="7">
+                      <CheckBox x:Name="SnapEnabledCheckBox" Content="{x:Static resources:AppText.Snapping}" FontWeight="SemiBold" Click="SnapEnabled_Click" />
+                      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="7" Margin="18,0,0,0">
+                        <CheckBox x:Name="SnapObjectsCheckBox" Content="{x:Static resources:AppText.SnapObjects}" Click="SnapObjects_Click" />
+                        <CheckBox x:Name="SnapGridCheckBox" Grid.Column="1" Content="{x:Static resources:AppText.SnapGrid}" Click="SnapGrid_Click" />
+                        <CheckBox x:Name="SnapGuidesCheckBox" Grid.Row="1" Content="{x:Static resources:AppText.SnapGuides}" Click="SnapGuides_Click" />
+                        <CheckBox x:Name="SnapSlideCheckBox" Grid.Row="1" Grid.Column="1" Content="{x:Static resources:AppText.SnapSlide}" Click="SnapSlide_Click" />
+                      </Grid>
+                      <TextBlock Text="{x:Static resources:AppText.AltBypassSnap}" Margin="18,1,0,0" FontSize="10.5" Foreground="#7F95A4" />
+                    </StackPanel>
+                  </Border>
+
+                  <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,9">
+                    <StackPanel Spacing="8">
+                      <TextBlock Text="{x:Static resources:AppText.GuidePositions}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
+                      <WrapPanel Orientation="Horizontal">
+                        <Button Content="{x:Static resources:AppText.AddVerticalGuide}" Click="AddVerticalGuide_Click" Padding="8,5" Margin="0,0,6,0" />
+                        <Button Content="{x:Static resources:AppText.AddHorizontalGuide}" Click="AddHorizontalGuide_Click" Padding="8,5" Margin="0,0,6,0" />
+                        <Button Content="{x:Static resources:AppText.ClearGuides}" Click="ClearGuides_Click" Padding="8,5" />
+                      </WrapPanel>
+                      <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ActiveSlide.Guides}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                              <Grid ColumnDefinitions="76,76,*,Auto,Auto" MinHeight="34" ColumnSpacing="7" Margin="0,2">
+                                <TextBlock Text="{Binding Orientation}" FontSize="11" Foreground="#8EA5B4" VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Text="{Binding Position, StringFormat='{}{0:0.##}', Mode=OneWay}"
+                                         HorizontalContentAlignment="Right" Padding="6,3"
+                                         IsEnabled="{Binding !IsLocked}"
+                                         KeyDown="GuidePosition_KeyDown" LostFocus="GuidePosition_LostFocus"
+                                         AutomationProperties.Name="{x:Static resources:AppText.GuidePosition}" />
+                                <TextBlock Grid.Column="2" Text="{x:Static resources:AppText.SlideUnits}" VerticalAlignment="Center" FontSize="10.5" Foreground="#8198A7" />
+                                <CheckBox Grid.Column="3" Content="{x:Static resources:AppText.LockGuide}"
+                                          IsChecked="{Binding IsLocked, Mode=OneWay}" Click="ToggleGuideLock_Click"
+                                          ToolTip.Tip="{x:Static resources:AppText.LockOrUnlockGuide}" />
+                                <Button Grid.Column="4" Classes="title-tool" Click="RemoveGuide_Click"
+                                        ToolTip.Tip="{x:Static resources:AppText.GuideRemoved}">
+                                  <controls:PhysicaIcon IconKey="delete" Width="13" Height="13" Stroke="#AFC1CC" />
+                                </Button>
+                              </Grid>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </ScrollViewer>
+                    </StackPanel>
+                  </Border>
                 </StackPanel>
-              </Border>
-              <WrapPanel Grid.Row="1" Orientation="Horizontal">
-                <CheckBox x:Name="ShowRulersCheckBox" Content="{x:Static resources:AppText.Rulers}"
-                          Margin="0,0,14,0" Click="ShowRulers_Click" />
-                <CheckBox x:Name="ShowGridCheckBox" Content="{x:Static resources:AppText.Grid}"
-                          Margin="0,0,14,0" Click="ShowGrid_Click" />
-                <CheckBox x:Name="ShowGuidesCheckBox" Content="{x:Static resources:AppText.Guides}"
-                          Click="ShowGuides_Click" />
-                <CheckBox x:Name="ShowMarginsCheckBox" Content="{x:Static resources:AppText.Margins}"
-                          Margin="0,6,14,0" Click="ShowMargins_Click" />
-                <CheckBox x:Name="ShowSafeAreaCheckBox" Content="{x:Static resources:AppText.SafeArea}"
-                          Margin="0,6,0,0" Click="ShowSafeArea_Click" />
-              </WrapPanel>
-              <Grid Grid.Row="2" ColumnDefinitions="*,94" ColumnSpacing="10">
-                <TextBlock Text="{x:Static resources:AppText.GridSpacing}" VerticalAlignment="Center"
-                           Foreground="#B8C8D2" />
-                <TextBox x:Name="GridSpacingTextBox" Grid.Column="1" HorizontalContentAlignment="Right"
-                         KeyDown="GridSpacing_KeyDown" LostFocus="GridSpacing_LostFocus"
-                         AutomationProperties.Name="{x:Static resources:AppText.GridSpacing}" />
-              </Grid>
-              <StackPanel Grid.Row="4" Spacing="7">
-                <WrapPanel Orientation="Horizontal">
-                  <Button Content="{x:Static resources:AppText.AddVerticalGuide}"
-                          Click="AddVerticalGuide_Click" Padding="9,5" Margin="0,0,6,0" />
-                  <Button Content="{x:Static resources:AppText.AddHorizontalGuide}"
-                          Click="AddHorizontalGuide_Click" Padding="9,5" Margin="0,0,6,0" />
-                  <Button Content="{x:Static resources:AppText.ClearGuides}"
-                          Click="ClearGuides_Click" Padding="9,5" />
-                </WrapPanel>
-                <ScrollViewer MaxHeight="108" VerticalScrollBarVisibility="Auto">
-                  <ItemsControl ItemsSource="{Binding ActiveSlide.Guides}">
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" MinHeight="28" ColumnSpacing="7">
-                          <TextBlock Text="{Binding Orientation}" FontSize="11" Foreground="#8EA5B4"
-                                     VerticalAlignment="Center" />
-                          <TextBlock Grid.Column="1" Text="{Binding Position, StringFormat='{}{0:0.##}'}"
-                                     FontSize="12" VerticalAlignment="Center" />
-                          <Button Grid.Column="2" Classes="title-tool" Click="ToggleGuideLock_Click"
-                                  ToolTip.Tip="{x:Static resources:AppText.LockOrUnlockGuide}">
-                            <controls:PhysicaIcon IconKey="lock" Width="13" Height="13" Stroke="#AFC1CC" />
-                          </Button>
-                          <Button Grid.Column="3" Classes="title-tool" Click="RemoveGuide_Click"
-                                  ToolTip.Tip="{x:Static resources:AppText.GuideRemoved}">
-                            <controls:PhysicaIcon IconKey="delete" Width="13" Height="13" Stroke="#AFC1CC" />
-                          </Button>
-                        </Grid>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
-                </ScrollViewer>
-              </StackPanel>
+              </ScrollViewer>
             </Grid>
           </Border>
           <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,24,18"

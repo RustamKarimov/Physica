@@ -119,4 +119,16 @@
   <data name="GridSpacing" xml:space="preserve"><value>Grid spacing</value></data>
   <data name="ClosePanel" xml:space="preserve"><value>Close panel</value></data>
   <data name="AltBypassSnap" xml:space="preserve"><value>Hold Alt while dragging to bypass snapping.</value></data>
+  <data name="DisplayOptions" xml:space="preserve"><value>Display</value></data>
+  <data name="GridAndRuler" xml:space="preserve"><value>Grid and ruler</value></data>
+  <data name="GridPresets" xml:space="preserve"><value>Grid presets</value></data>
+  <data name="RulerInterval" xml:space="preserve"><value>Ruler major interval</value></data>
+  <data name="RulerIntervalRange" xml:space="preserve"><value>Enter Auto or a ruler interval from 5 to 1000 slide units.</value></data>
+  <data name="RulerPresets" xml:space="preserve"><value>Ruler presets</value></data>
+  <data name="Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="SlideUnits" xml:space="preserve"><value>units</value></data>
+  <data name="GuidePositions" xml:space="preserve"><value>Guides</value></data>
+  <data name="GuidePosition" xml:space="preserve"><value>Guide position</value></data>
+  <data name="GuidePositionRange" xml:space="preserve"><value>The guide position must stay within the slide.</value></data>
+  <data name="LockGuide" xml:space="preserve"><value>Lock</value></data>
 </root>
