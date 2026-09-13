@@ -172,6 +172,7 @@ public sealed class SlideDesignSettingsTests
         var root = FindRepositoryRoot();
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
         var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Design.cs"));
+        var commandRouting = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
         var viewModel = new StudioShellViewModel(
             new RibbonManifest([new RibbonTabDefinition("design", "Design",
                 [new RibbonGroupDefinition("Canvas", ["Slide Size", "Orientation", "Margins"])])], []),
@@ -183,11 +184,16 @@ public sealed class SlideDesignSettingsTests
         Assert.False(viewModel.ShowStandingWaveInspector);
         Assert.Contains("ThemeLightAzureButton", xaml, StringComparison.Ordinal);
         Assert.Contains("ThemeLaboratoryPlumButton", xaml, StringComparison.Ordinal);
-        Assert.Contains("BackgroundColorPickerPanel", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundPrimaryColorPicker", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundSecondaryColorPicker", xaml, StringComparison.Ordinal);
+        Assert.Contains("Classes=\"design-color-picker\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("UseThemeBackground_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("IsVisible=\"{Binding ShowStandingWaveInspector}\"", xaml, StringComparison.Ordinal);
         Assert.Contains("CanvasResizePolicyComboBox", xaml, StringComparison.Ordinal);
         Assert.Contains("ApplyCanvasSize_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("ApplyInsets_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("OpenSlideDesign(SlideDesignSection.Themes)", commandRouting, StringComparison.Ordinal);
+        Assert.Contains("ConfigureColorPalettes", code, StringComparison.Ordinal);
         Assert.Contains("SynchronizeSlideDesign", code, StringComparison.Ordinal);
         Assert.All(viewModel.RibbonTabs.SelectMany(tab => tab.Groups).SelectMany(group => group.Commands),
             command => Assert.True(command.IsImplemented));

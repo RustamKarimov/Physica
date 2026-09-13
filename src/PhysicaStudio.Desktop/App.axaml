@@ -4,6 +4,7 @@
              RequestedThemeVariant="Dark">
   <Application.Styles>
     <FluentTheme DensityStyle="Compact" />
+    <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
     <StyleInclude Source="avares://PhysicaStudio.Desktop/Themes/PhysicaTheme.axaml" />
   </Application.Styles>
 </Application>

@@ -712,7 +712,7 @@
               </StackPanel>
             </StackPanel>
           </ScrollViewer>
-          <ScrollViewer Grid.Row="1"
+          <ScrollViewer x:Name="SlideDesignScrollViewer" Grid.Row="1"
                         IsVisible="{Binding ShowSlideDesignInspector}"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto">
@@ -729,7 +729,7 @@
                 </Border>
               </Grid>
 
-              <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
+              <Border x:Name="ThemeGallerySection" Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.ProjectTheme}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
                   <TextBlock Text="{x:Static resources:AppText.ThemeGalleryHint}" FontSize="10.5" Foreground="#78909F" />
@@ -847,7 +847,7 @@
                 </StackPanel>
               </Border>
 
-              <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
+              <Border x:Name="BackgroundSection" Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.SlideBackground}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
                   <Grid ColumnDefinitions="112,*" RowDefinitions="Auto" RowSpacing="7" ColumnSpacing="8">
@@ -859,61 +859,27 @@
                     </ComboBox>
                   </Grid>
 
-                  <Grid ColumnDefinitions="*,*" ColumnSpacing="7">
-                    <Button x:Name="BackgroundPrimaryColorButton" Classes="colour-target selected" Tag="Primary"
-                            Click="BackgroundColorTarget_Click" AutomationProperties.Name="{x:Static resources:AppText.PrimaryColor}">
-                      <Grid ColumnDefinitions="22,*,Auto" ColumnSpacing="6">
-                        <Border x:Name="BackgroundPrimaryColorPreview" Width="18" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
-                        <TextBlock Grid.Column="1" Text="{x:Static resources:AppText.PrimaryColor}" VerticalAlignment="Center" />
-                        <TextBlock x:Name="BackgroundPrimaryColorValue" Grid.Column="2" VerticalAlignment="Center" FontSize="10" Foreground="#8195A2" />
-                      </Grid>
-                    </Button>
-                    <Button x:Name="BackgroundSecondaryColorButton" Grid.Column="1" Classes="colour-target" Tag="Secondary"
-                            Click="BackgroundColorTarget_Click" AutomationProperties.Name="{x:Static resources:AppText.SecondaryColor}">
-                      <Grid ColumnDefinitions="22,*,Auto" ColumnSpacing="6">
-                        <Border x:Name="BackgroundSecondaryColorPreview" Width="18" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
-                        <TextBlock Grid.Column="1" Text="{x:Static resources:AppText.SecondaryColor}" VerticalAlignment="Center" />
-                        <TextBlock x:Name="BackgroundSecondaryColorValue" Grid.Column="2" VerticalAlignment="Center" FontSize="10" Foreground="#8195A2" />
-                      </Grid>
-                    </Button>
+                  <Grid ColumnDefinitions="112,*" RowDefinitions="Auto,Auto" RowSpacing="7" ColumnSpacing="8">
+                    <TextBlock Text="{x:Static resources:AppText.PrimaryColor}" Classes="property-label" />
+                    <ColorPicker x:Name="BackgroundPrimaryColorPicker" Grid.Column="1" Classes="design-color-picker"
+                                 IsAlphaEnabled="False" HorizontalAlignment="Stretch"
+                                 ColorChanged="BackgroundColorPicker_ColorChanged"
+                                 AutomationProperties.Name="{x:Static resources:AppText.PrimaryColor}" />
+                    <TextBlock Grid.Row="1" Text="{x:Static resources:AppText.SecondaryColor}" Classes="property-label" />
+                    <ColorPicker x:Name="BackgroundSecondaryColorPicker" Grid.Row="1" Grid.Column="1" Classes="design-color-picker"
+                                 IsAlphaEnabled="False" HorizontalAlignment="Stretch"
+                                 ColorChanged="BackgroundColorPicker_ColorChanged"
+                                 AutomationProperties.Name="{x:Static resources:AppText.SecondaryColor}" />
                   </Grid>
 
-                  <Border x:Name="BackgroundColorPickerPanel" Classes="colour-picker-panel">
-                    <StackPanel Spacing="8">
-                      <Grid ColumnDefinitions="*,Auto">
-                        <TextBlock x:Name="BackgroundColorTargetLabel" Text="{x:Static resources:AppText.PrimaryColor}" FontSize="11.5" FontWeight="SemiBold" />
-                        <Border x:Name="CustomColorPreview" Grid.Column="1" Width="34" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
-                      </Grid>
-                      <Grid ColumnDefinitions="*,*,*,*,*,*" RowDefinitions="26,26" ColumnSpacing="6" RowSpacing="6">
-                        <Button Classes="color-swatch" Tag="#FFFFFF" Background="#FFFFFF" Click="BackgroundSwatch_Click" ToolTip.Tip="#FFFFFF" />
-                        <Button Grid.Column="1" Classes="color-swatch" Tag="#F4F5F3" Background="#F4F5F3" Click="BackgroundSwatch_Click" ToolTip.Tip="#F4F5F3" />
-                        <Button Grid.Column="2" Classes="color-swatch" Tag="#11284B" Background="#11284B" Click="BackgroundSwatch_Click" ToolTip.Tip="#11284B" />
-                        <Button Grid.Column="3" Classes="color-swatch" Tag="#0878F9" Background="#0878F9" Click="BackgroundSwatch_Click" ToolTip.Tip="#0878F9" />
-                        <Button Grid.Column="4" Classes="color-swatch" Tag="#008C88" Background="#008C88" Click="BackgroundSwatch_Click" ToolTip.Tip="#008C88" />
-                        <Button Grid.Column="5" Classes="color-swatch" Tag="#9B7CFF" Background="#9B7CFF" Click="BackgroundSwatch_Click" ToolTip.Tip="#9B7CFF" />
-                        <Button Grid.Row="1" Classes="color-swatch" Tag="#07121B" Background="#07121B" Click="BackgroundSwatch_Click" ToolTip.Tip="#07121B" />
-                        <Button Grid.Row="1" Grid.Column="1" Classes="color-swatch" Tag="#34424D" Background="#34424D" Click="BackgroundSwatch_Click" ToolTip.Tip="#34424D" />
-                        <Button Grid.Row="1" Grid.Column="2" Classes="color-swatch" Tag="#ED7F18" Background="#ED7F18" Click="BackgroundSwatch_Click" ToolTip.Tip="#ED7F18" />
-                        <Button Grid.Row="1" Grid.Column="3" Classes="color-swatch" Tag="#E53935" Background="#E53935" Click="BackgroundSwatch_Click" ToolTip.Tip="#E53935" />
-                        <Button Grid.Row="1" Grid.Column="4" Classes="color-swatch" Tag="#F2C94C" Background="#F2C94C" Click="BackgroundSwatch_Click" ToolTip.Tip="#F2C94C" />
-                        <Button Grid.Row="1" Grid.Column="5" Classes="color-swatch" Tag="#43C5B5" Background="#43C5B5" Click="BackgroundSwatch_Click" ToolTip.Tip="#43C5B5" />
-                      </Grid>
-                      <Grid ColumnDefinitions="18,*,34" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="7" RowSpacing="5">
-                        <TextBlock Text="H" Classes="colour-channel-label" />
-                        <Slider x:Name="BackgroundHueSlider" Grid.Column="1" Minimum="0" Maximum="360" ValueChanged="CustomColorSlider_ValueChanged" />
-                        <TextBlock x:Name="BackgroundHueValue" Grid.Column="2" Classes="colour-channel-value" />
-                        <TextBlock Grid.Row="1" Text="S" Classes="colour-channel-label" />
-                        <Slider x:Name="BackgroundSaturationSlider" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="100" ValueChanged="CustomColorSlider_ValueChanged" />
-                        <TextBlock x:Name="BackgroundSaturationValue" Grid.Row="1" Grid.Column="2" Classes="colour-channel-value" />
-                        <TextBlock Grid.Row="2" Text="L" Classes="colour-channel-label" />
-                        <Slider x:Name="BackgroundLightnessSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="100" ValueChanged="CustomColorSlider_ValueChanged" />
-                        <TextBlock x:Name="BackgroundLightnessValue" Grid.Row="2" Grid.Column="2" Classes="colour-channel-value" />
-                      </Grid>
-                      <Expander Header="{x:Static resources:AppText.AdvancedColorEntry}">
-                        <TextBox x:Name="ActiveColorHexTextBox" Margin="0,6,0,0" TextChanged="ActiveColorHex_TextChanged"
-                                 AutomationProperties.Name="{x:Static resources:AppText.HexColor}" />
-                      </Expander>
-                    </StackPanel>
+                  <Border x:Name="ThemeBackgroundOverrideNotice" Background="#13232D" BorderBrush="#355064"
+                          BorderThickness="1" CornerRadius="4" Padding="9,7">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                      <TextBlock Text="{x:Static resources:AppText.CustomBackgroundOverride}" FontSize="11"
+                                 Foreground="#AFC0CA" TextWrapping="Wrap" VerticalAlignment="Center" />
+                      <Button Grid.Column="1" Content="{x:Static resources:AppText.UseThemeBackground}"
+                              Click="UseThemeBackground_Click" Padding="9,4" />
+                    </Grid>
                   </Border>
 
                   <Grid ColumnDefinitions="112,*" RowDefinitions="Auto" ColumnSpacing="8">
@@ -927,7 +893,7 @@
                 </StackPanel>
               </Border>
 
-              <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
+              <Border x:Name="CanvasSection" Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.SlideCanvas}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
                   <Grid ColumnDefinitions="112,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="7" ColumnSpacing="8">
@@ -957,7 +923,7 @@
                 </StackPanel>
               </Border>
 
-              <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
+              <Border x:Name="InsetsSection" Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.SlideInsets}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
                   <TextBlock Text="{x:Static resources:AppText.Margins}" FontSize="11" FontWeight="SemiBold" Foreground="#9CB0BC" />

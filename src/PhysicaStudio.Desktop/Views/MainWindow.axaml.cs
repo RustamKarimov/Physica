@@ -193,18 +193,24 @@ public sealed partial class MainWindow : Window
                     break;
                 case "Themes":
                 case "Variants":
+                    OpenSlideDesign(SlideDesignSection.Themes);
+                    break;
                 case "Transparency":
-                case "Slide Size":
-                case "Orientation":
-                case "Margins":
-                case "Safe Areas":
-                    OpenSlideDesign();
+                    OpenSlideDesign(SlideDesignSection.Background);
                     break;
                 case "Fill":
-                    OpenSlideDesign(SlideBackgroundKind.Solid);
+                    OpenSlideDesign(SlideDesignSection.Background, SlideBackgroundKind.Solid);
                     break;
                 case "Gradient":
-                    OpenSlideDesign(SlideBackgroundKind.Gradient);
+                    OpenSlideDesign(SlideDesignSection.Background, SlideBackgroundKind.Gradient);
+                    break;
+                case "Slide Size":
+                case "Orientation":
+                    OpenSlideDesign(SlideDesignSection.Canvas);
+                    break;
+                case "Margins":
+                case "Safe Areas":
+                    OpenSlideDesign(SlideDesignSection.Insets);
                     break;
                 case "Undo":
                     _viewModel.Undo();

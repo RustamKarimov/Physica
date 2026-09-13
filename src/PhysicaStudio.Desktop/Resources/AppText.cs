@@ -143,6 +143,8 @@ public static class AppText
     public static string SecondaryColor => Get(nameof(SecondaryColor));
     public static string AdvancedColorEntry => Get(nameof(AdvancedColorEntry));
     public static string HexColor => Get(nameof(HexColor));
+    public static string CustomBackgroundOverride => Get(nameof(CustomBackgroundOverride));
+    public static string UseThemeBackground => Get(nameof(UseThemeBackground));
     public static string Transparency => Get(nameof(Transparency));
     public static string SlideCanvas => Get(nameof(SlideCanvas));
     public static string SizePreset => Get(nameof(SizePreset));

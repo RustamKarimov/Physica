@@ -23,9 +23,10 @@ Design commands open a contextual **Slide Design** surface in the existing Inspe
 
 The surface provides:
 
-- A visual project-theme gallery with three families and three genuinely distinct colour variants in each family.
+- A visual project-theme gallery with three families and three genuinely distinct colour variants in each family. Selecting a theme updates the project theme and immediately refreshes slides that use the Theme background mode.
 - Per-slide Theme, Solid, and Gradient background modes.
-- Primary and secondary colour swatches, a custom HSL editor, and hexadecimal entry retained as an advanced path.
+- Compact primary and secondary colour pickers. Each picker opens the official palette/spectrum/components flyout with an exact-value entry, and the current project theme colours are offered as a contextual palette.
+- A clear custom-background override notice with a one-click **Use project theme** action, so a teacher can understand why changing a theme does not recolour a manually overridden slide.
 - Widescreen 16:9, Standard 4:3, and Custom canvas sizes.
 - Landscape and Portrait orientation.
 - An explicit resize policy before dimensions are applied.

@@ -155,6 +155,8 @@
   <data name="SecondaryColor" xml:space="preserve"><value>Secondary colour</value></data>
   <data name="AdvancedColorEntry" xml:space="preserve"><value>Advanced hexadecimal entry</value></data>
   <data name="HexColor" xml:space="preserve"><value>Hexadecimal colour</value></data>
+  <data name="CustomBackgroundOverride" xml:space="preserve"><value>This slide has a custom background. Use the project theme to preview theme changes here.</value></data>
+  <data name="UseThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
   <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>
   <data name="SlideCanvas" xml:space="preserve"><value>Slide size and orientation</value></data>
   <data name="SizePreset" xml:space="preserve"><value>Size</value></data>

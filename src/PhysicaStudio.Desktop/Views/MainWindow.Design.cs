@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Threading;
 using PhysicaStudio.Authoring;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.ViewModels;
@@ -12,8 +13,15 @@ namespace PhysicaStudio.Desktop.Views;
 
 public sealed partial class MainWindow
 {
+    private enum SlideDesignSection
+    {
+        Themes,
+        Background,
+        Canvas,
+        Insets,
+    }
+
     private bool _synchronizingSlideDesign;
-    private bool _editingPrimaryBackgroundColor = true;
     private string _backgroundPrimaryColor = "#F4F5F3";
     private string _backgroundSecondaryColor = "#CFE8FF";
 
@@ -34,7 +42,7 @@ public sealed partial class MainWindow
         }
     }
 
-    private void OpenSlideDesign(SlideBackgroundKind? requestedBackground = null)
+    private void OpenSlideDesign(SlideDesignSection section = SlideDesignSection.Themes, SlideBackgroundKind? requestedBackground = null)
     {
         EnsureRightPanelVisible();
         _viewModel.OpenSlideDesignInspector();
@@ -44,6 +52,18 @@ public sealed partial class MainWindow
             SelectByTag(BackgroundTypeComboBox, requestedBackground.Value.ToString());
             UpdateBackgroundFieldAvailability();
         }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            var target = section switch
+            {
+                SlideDesignSection.Background => BackgroundSection,
+                SlideDesignSection.Canvas => CanvasSection,
+                SlideDesignSection.Insets => InsetsSection,
+                _ => ThemeGallerySection,
+            };
+            target.BringIntoView();
+        });
     }
 
     private void SynchronizeSlideDesign()
@@ -63,6 +83,10 @@ public sealed partial class MainWindow
             SelectByTag(BackgroundTypeComboBox, background.Kind.ToString());
             _backgroundPrimaryColor = background.Color.ToUpperInvariant();
             _backgroundSecondaryColor = (background.SecondaryColor ?? "#CFE8FF").ToUpperInvariant();
+            BackgroundPrimaryColorPicker.Color = Color.Parse(_backgroundPrimaryColor);
+            BackgroundSecondaryColorPicker.Color = Color.Parse(_backgroundSecondaryColor);
+            ThemeBackgroundOverrideNotice.IsVisible = background.Kind != SlideBackgroundKind.Theme;
+            ConfigureColorPalettes(project.Theme);
             BackgroundTransparencyTextBox.Text = ((1 - background.Opacity) * 100)
                 .ToString("0.#", CultureInfo.CurrentCulture);
 
@@ -74,7 +98,6 @@ public sealed partial class MainWindow
             SetThicknessText(canvas.Margins, MarginLeftTextBox, MarginTopTextBox, MarginRightTextBox, MarginBottomTextBox);
             SetThicknessText(canvas.SafeArea, SafeLeftTextBox, SafeTopTextBox, SafeRightTextBox, SafeBottomTextBox);
             UpdateBackgroundFieldAvailability();
-            UpdateColorEditorFromTarget();
         }
         finally
         {
@@ -95,6 +118,37 @@ public sealed partial class MainWindow
     private void BackgroundType_SelectionChanged(object? sender, SelectionChangedEventArgs e) =>
         UpdateBackgroundFieldAvailability();
 
+    private void BackgroundColorPicker_ColorChanged(object? sender, Avalonia.Controls.ColorChangedEventArgs e)
+    {
+        if (_synchronizingSlideDesign || sender is not ColorPicker picker)
+        {
+            return;
+        }
+
+        var color = $"#{e.NewColor.R:X2}{e.NewColor.G:X2}{e.NewColor.B:X2}";
+        if (ReferenceEquals(picker, BackgroundPrimaryColorPicker))
+        {
+            _backgroundPrimaryColor = color;
+        }
+        else
+        {
+            _backgroundSecondaryColor = color;
+        }
+    }
+
+    private void UseThemeBackground_Click(object? sender, RoutedEventArgs e)
+    {
+        ExecuteDesignChange(() =>
+        {
+            var themeColor = _viewModel.Session.CurrentProject.Theme.Colors["background"];
+            _viewModel.SetSlideBackground(
+                SlideBackgroundKind.Theme,
+                themeColor,
+                null,
+                _viewModel.ActiveSlide.Background.Opacity);
+        });
+    }
+
     private void ApplyBackground_Click(object? sender, RoutedEventArgs e)
     {
         ExecuteDesignChange(() =>
@@ -111,59 +165,12 @@ public sealed partial class MainWindow
             }
             _viewModel.SetSlideBackground(
                 kind,
-                _backgroundPrimaryColor,
+                ToHex(BackgroundPrimaryColorPicker.Color),
                 kind == SlideBackgroundKind.Gradient
-                    ? _backgroundSecondaryColor
+                    ? ToHex(BackgroundSecondaryColorPicker.Color)
                     : null,
                 1 - transparency / 100);
         });
-    }
-
-    private void BackgroundColorTarget_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Button { Tag: { } tag })
-        {
-            return;
-        }
-
-        _editingPrimaryBackgroundColor = !string.Equals(tag.ToString(), "Secondary", StringComparison.Ordinal);
-        UpdateColorEditorFromTarget();
-    }
-
-    private void BackgroundSwatch_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is Button { Tag: { } tag } && IsHexColor(tag.ToString()))
-        {
-            SetActiveBackgroundColor(tag.ToString()!.ToUpperInvariant());
-            UpdateColorEditorFromTarget();
-        }
-    }
-
-    private void CustomColorSlider_ValueChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-    {
-        if (_synchronizingSlideDesign)
-        {
-            return;
-        }
-
-        SetActiveBackgroundColor(HslToHex(
-            BackgroundHueSlider.Value,
-            BackgroundSaturationSlider.Value / 100,
-            BackgroundLightnessSlider.Value / 100));
-        UpdateColorPreviews();
-        ActiveColorHexTextBox.Text = ActiveBackgroundColor;
-        UpdateColorChannelLabels();
-    }
-
-    private void ActiveColorHex_TextChanged(object? sender, TextChangedEventArgs e)
-    {
-        if (_synchronizingSlideDesign || !IsHexColor(ActiveColorHexTextBox.Text))
-        {
-            return;
-        }
-
-        SetActiveBackgroundColor(ActiveColorHexTextBox.Text!.ToUpperInvariant());
-        UpdateColorEditorFromTarget();
     }
 
     private void CanvasPreset_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -247,70 +254,20 @@ public sealed partial class MainWindow
         var kind = SelectedTag(BackgroundTypeComboBox);
         var customColor = kind != nameof(SlideBackgroundKind.Theme);
         var gradient = kind == nameof(SlideBackgroundKind.Gradient);
-        BackgroundPrimaryColorButton.IsEnabled = customColor;
-        BackgroundSecondaryColorButton.IsEnabled = gradient;
-        BackgroundColorPickerPanel.IsEnabled = customColor;
-        if (!gradient && !_editingPrimaryBackgroundColor)
-        {
-            _editingPrimaryBackgroundColor = true;
-        }
+        BackgroundPrimaryColorPicker.IsEnabled = customColor;
+        BackgroundSecondaryColorPicker.IsEnabled = gradient;
+        ThemeBackgroundOverrideNotice.IsVisible = customColor;
     }
 
-    private string ActiveBackgroundColor =>
-        _editingPrimaryBackgroundColor ? _backgroundPrimaryColor : _backgroundSecondaryColor;
-
-    private void SetActiveBackgroundColor(string color)
+    private void ConfigureColorPalettes(ThemeDefinition theme)
     {
-        if (_editingPrimaryBackgroundColor)
-        {
-            _backgroundPrimaryColor = color;
-        }
-        else
-        {
-            _backgroundSecondaryColor = color;
-        }
-    }
-
-    private void UpdateColorEditorFromTarget()
-    {
-        var wasSynchronizing = _synchronizingSlideDesign;
-        _synchronizingSlideDesign = true;
-        try
-        {
-            SetSelectedClass(BackgroundPrimaryColorButton, _editingPrimaryBackgroundColor);
-            SetSelectedClass(BackgroundSecondaryColorButton, !_editingPrimaryBackgroundColor);
-            BackgroundColorTargetLabel.Text = _editingPrimaryBackgroundColor
-                ? AppText.PrimaryColor
-                : AppText.SecondaryColor;
-
-            var (hue, saturation, lightness) = HexToHsl(ActiveBackgroundColor);
-            BackgroundHueSlider.Value = hue;
-            BackgroundSaturationSlider.Value = saturation * 100;
-            BackgroundLightnessSlider.Value = lightness * 100;
-            ActiveColorHexTextBox.Text = ActiveBackgroundColor;
-            UpdateColorPreviews();
-            UpdateColorChannelLabels();
-        }
-        finally
-        {
-            _synchronizingSlideDesign = wasSynchronizing;
-        }
-    }
-
-    private void UpdateColorPreviews()
-    {
-        BackgroundPrimaryColorPreview.Background = ToBrush(_backgroundPrimaryColor);
-        BackgroundSecondaryColorPreview.Background = ToBrush(_backgroundSecondaryColor);
-        BackgroundPrimaryColorValue.Text = _backgroundPrimaryColor;
-        BackgroundSecondaryColorValue.Text = _backgroundSecondaryColor;
-        CustomColorPreview.Background = ToBrush(ActiveBackgroundColor);
-    }
-
-    private void UpdateColorChannelLabels()
-    {
-        BackgroundHueValue.Text = $"{BackgroundHueSlider.Value:0}°";
-        BackgroundSaturationValue.Text = $"{BackgroundSaturationSlider.Value:0}%";
-        BackgroundLightnessValue.Text = $"{BackgroundLightnessSlider.Value:0}%";
+        var palette = theme.Colors.Values
+            .Where(value => IsHexColor(value))
+            .Select(Color.Parse)
+            .Distinct()
+            .ToArray();
+        BackgroundPrimaryColorPicker.PaletteColors = palette;
+        BackgroundSecondaryColorPicker.PaletteColors = palette;
     }
 
     private void UpdateThemeSelection(string selectedThemeId)
@@ -346,72 +303,12 @@ public sealed partial class MainWindow
         }
     }
 
-    private static IBrush ToBrush(string color) => new SolidColorBrush(Color.Parse(color));
-
     private static bool IsHexColor(string? value) =>
         value is { Length: 7 }
         && value[0] == '#'
         && value.AsSpan(1).ToArray().All(Uri.IsHexDigit);
 
-    private static (double Hue, double Saturation, double Lightness) HexToHsl(string color)
-    {
-        var parsed = Color.Parse(color);
-        var red = parsed.R / 255d;
-        var green = parsed.G / 255d;
-        var blue = parsed.B / 255d;
-        var maximum = Math.Max(red, Math.Max(green, blue));
-        var minimum = Math.Min(red, Math.Min(green, blue));
-        var lightness = (maximum + minimum) / 2;
-        if (Math.Abs(maximum - minimum) < .000001)
-        {
-            return (0, 0, lightness);
-        }
-
-        var difference = maximum - minimum;
-        var saturation = lightness > .5
-            ? difference / (2 - maximum - minimum)
-            : difference / (maximum + minimum);
-        var hue = maximum == red
-            ? (green - blue) / difference + (green < blue ? 6 : 0)
-            : maximum == green
-                ? (blue - red) / difference + 2
-                : (red - green) / difference + 4;
-        return (hue * 60, saturation, lightness);
-    }
-
-    private static string HslToHex(double hue, double saturation, double lightness)
-    {
-        hue = ((hue % 360) + 360) % 360 / 360;
-        double red;
-        double green;
-        double blue;
-        if (saturation <= .000001)
-        {
-            red = green = blue = lightness;
-        }
-        else
-        {
-            var q = lightness < .5
-                ? lightness * (1 + saturation)
-                : lightness + saturation - lightness * saturation;
-            var p = 2 * lightness - q;
-            red = HueToRgb(p, q, hue + 1d / 3);
-            green = HueToRgb(p, q, hue);
-            blue = HueToRgb(p, q, hue - 1d / 3);
-        }
-
-        return $"#{(byte)Math.Round(red * 255):X2}{(byte)Math.Round(green * 255):X2}{(byte)Math.Round(blue * 255):X2}";
-    }
-
-    private static double HueToRgb(double p, double q, double value)
-    {
-        if (value < 0) value += 1;
-        if (value > 1) value -= 1;
-        if (value < 1d / 6) return p + (q - p) * 6 * value;
-        if (value < 1d / 2) return q;
-        if (value < 2d / 3) return p + (q - p) * (2d / 3 - value) * 6;
-        return p;
-    }
+    private static string ToHex(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 
     private void SetCanvasDimensions(double width, double height)
     {
