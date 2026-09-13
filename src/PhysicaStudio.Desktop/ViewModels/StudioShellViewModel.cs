@@ -18,6 +18,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
         "Selection Pane", "Layers", "Group", "Ungroup", "Zoom", "Fit",
         "Rulers", "Grids", "Guides", "Snapping", "Margins", "Safe Areas",
+        "Themes", "Variants", "Fill", "Gradient", "Transparency", "Slide Size", "Orientation",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -27,6 +28,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     private string _statusMessage = AppText.ProjectFoundationReady;
     private bool _isProjectOpen = true;
     private RightPanelWorkspace _rightPanelWorkspace = RightPanelWorkspace.Inspector;
+    private bool _showSlideDesignInspector;
     private readonly ISlideSceneSnapshotBuilder _sceneBuilder = new SlideSceneSnapshotBuilder();
     private readonly HashSet<Guid> _collapsedSectionIds = [];
     private readonly HashSet<Guid> _collapsedLayerGroupIds = [];
@@ -98,7 +100,9 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public bool ShowGenericObjectContext => ActiveSlide.Nodes.Count > 0 && !ShowStandingWaveReference;
     public bool ShowEmptySlideContext => ActiveSlide.Nodes.Count == 0;
     public string SlideSurfaceColor => ActiveSlide.Background.Color;
-    public string InspectorTitle => ShowStandingWaveReference
+    public string InspectorTitle => _showSlideDesignInspector
+        ? AppText.SlideDesign
+        : ShowStandingWaveReference
         ? "Standing Wave"
         : _session.SelectedNodeIds.Count switch
         {
@@ -129,9 +133,10 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public bool ShowInspectorPanel => _rightPanelWorkspace == RightPanelWorkspace.Inspector;
     public bool ShowLayersPanel => _rightPanelWorkspace == RightPanelWorkspace.Layers;
     public bool ShowGuidesPanel => _rightPanelWorkspace == RightPanelWorkspace.Guides;
-    public bool ShowStandingWaveInspector => ShowInspectorPanel && ShowStandingWaveReference;
-    public bool ShowGenericObjectInspector => ShowInspectorPanel && ShowGenericObjectContext;
-    public bool ShowEmptySlideInspector => ShowInspectorPanel && ShowEmptySlideContext;
+    public bool ShowSlideDesignInspector => ShowInspectorPanel && _showSlideDesignInspector;
+    public bool ShowStandingWaveInspector => ShowInspectorPanel && !_showSlideDesignInspector && ShowStandingWaveReference;
+    public bool ShowGenericObjectInspector => ShowInspectorPanel && !_showSlideDesignInspector && ShowGenericObjectContext;
+    public bool ShowEmptySlideInspector => ShowInspectorPanel && !_showSlideDesignInspector && ShowEmptySlideContext;
     public string InspectorPanelLabel => AppText.InspectorPanel;
     public string LayersPanelLabel => AppText.LayersPanel;
     public string GuidesPanelLabel => AppText.Guides;
@@ -292,6 +297,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowInspectorPanel));
         OnPropertyChanged(nameof(ShowLayersPanel));
         OnPropertyChanged(nameof(ShowGuidesPanel));
+        OnPropertyChanged(nameof(ShowSlideDesignInspector));
         OnPropertyChanged(nameof(ShowStandingWaveInspector));
         OnPropertyChanged(nameof(ShowGenericObjectInspector));
         OnPropertyChanged(nameof(ShowEmptySlideInspector));
@@ -319,6 +325,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectNode(Guid nodeId, NodeSelectionMode mode = NodeSelectionMode.Replace)
     {
+        CloseSlideDesignInspector();
         _session.SelectNode(nodeId, mode);
         StatusMessage = AppText.ObjectSelectionChanged;
     }
@@ -327,6 +334,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SelectNodes(IEnumerable<Guid> nodeIds, NodeSelectionMode mode = NodeSelectionMode.Replace)
     {
+        CloseSlideDesignInspector();
         var requested = nodeIds.Distinct().ToHashSet();
         var selection = mode switch
         {
@@ -427,6 +435,69 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         }
         _session.Execute(ProjectCommands.SetSlideGuides(ActiveSlide.Id, []));
         StatusMessage = AppText.GuidesCleared;
+    }
+
+    public void OpenSlideDesignInspector()
+    {
+        _showSlideDesignInspector = true;
+        SelectRightPanelWorkspace(RightPanelWorkspace.Inspector);
+        NotifyInspectorContextChanged();
+    }
+
+    public void SetThemePreset(string themeId)
+    {
+        var theme = themeId switch
+        {
+            "physica-light" => ThemeDefinition.Default,
+            "physica-dark" => ThemeDefinition.Dark,
+            "physica-laboratory" => ThemeDefinition.Laboratory,
+            _ => throw new AuthoringCommandException(AppText.ThemeUnavailable),
+        };
+        _session.Execute(ProjectCommands.SetTheme(theme));
+        StatusMessage = AppText.ThemeChanged;
+    }
+
+    public void SetSlideBackground(
+        SlideBackgroundKind kind,
+        string primaryColor,
+        string? secondaryColor,
+        double opacity)
+    {
+        if (!IsHexColor(primaryColor)
+            || secondaryColor is not null && !IsHexColor(secondaryColor))
+        {
+            throw new AuthoringCommandException(AppText.InvalidHexColor);
+        }
+        if (!double.IsFinite(opacity) || opacity is < 0 or > 1)
+        {
+            throw new AuthoringCommandException(AppText.BackgroundOpacityRange);
+        }
+
+        _session.Execute(ProjectCommands.SetSlideBackground(
+            ActiveSlide.Id,
+            new SlideBackground(
+                kind,
+                primaryColor.ToUpperInvariant(),
+                kind == SlideBackgroundKind.Gradient ? secondaryColor!.ToUpperInvariant() : null,
+                null,
+                opacity)));
+        StatusMessage = AppText.BackgroundChanged;
+    }
+
+    public void ResizeCanvas(
+        double width,
+        double height,
+        SlideOrientation orientation,
+        CanvasResizePolicy policy)
+    {
+        _session.Execute(ProjectCommands.ResizeCanvas(width, height, orientation, policy));
+        StatusMessage = AppText.SlideSizeChanged;
+    }
+
+    public void SetCanvasInsets(ThicknessDefinition margins, ThicknessDefinition safeArea)
+    {
+        _session.Execute(ProjectCommands.SetCanvasInsets(margins, safeArea));
+        StatusMessage = AppText.CanvasInsetsChanged;
     }
 
     public void NudgeSelectedNodes(double offsetX, double offsetY)
@@ -1065,6 +1136,32 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
             _ => "command"
         };
     }
+
+    private void CloseSlideDesignInspector()
+    {
+        if (!_showSlideDesignInspector)
+        {
+            return;
+        }
+
+        _showSlideDesignInspector = false;
+        NotifyInspectorContextChanged();
+    }
+
+    private void NotifyInspectorContextChanged()
+    {
+        OnPropertyChanged(nameof(ShowSlideDesignInspector));
+        OnPropertyChanged(nameof(ShowStandingWaveInspector));
+        OnPropertyChanged(nameof(ShowGenericObjectInspector));
+        OnPropertyChanged(nameof(ShowEmptySlideInspector));
+        OnPropertyChanged(nameof(InspectorTitle));
+    }
+
+    private static bool IsHexColor(string value) =>
+        !string.IsNullOrWhiteSpace(value)
+        && value[0] == '#'
+        && value.Length is 4 or 5 or 7 or 9
+        && value.AsSpan(1).IndexOfAnyExcept("0123456789abcdefABCDEF") < 0;
 
     private void OnPropertyChanged([CallerMemberName] string? name = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

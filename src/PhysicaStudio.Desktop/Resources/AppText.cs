@@ -121,6 +121,53 @@ public static class AppText
     public static string LockGuide => Get(nameof(LockGuide));
     public static string FloatPanel => Get(nameof(FloatPanel));
     public static string DockPanel => Get(nameof(DockPanel));
+    public static string SlideDesign => Get(nameof(SlideDesign));
+    public static string ProjectTheme => Get(nameof(ProjectTheme));
+    public static string PhysicaLight => Get(nameof(PhysicaLight));
+    public static string PhysicaDark => Get(nameof(PhysicaDark));
+    public static string LaboratoryTheme => Get(nameof(LaboratoryTheme));
+    public static string SlideBackground => Get(nameof(SlideBackground));
+    public static string BackgroundType => Get(nameof(BackgroundType));
+    public static string ThemeBackground => Get(nameof(ThemeBackground));
+    public static string SolidBackground => Get(nameof(SolidBackground));
+    public static string GradientBackground => Get(nameof(GradientBackground));
+    public static string PrimaryColor => Get(nameof(PrimaryColor));
+    public static string SecondaryColor => Get(nameof(SecondaryColor));
+    public static string Transparency => Get(nameof(Transparency));
+    public static string SlideCanvas => Get(nameof(SlideCanvas));
+    public static string SizePreset => Get(nameof(SizePreset));
+    public static string WidescreenPreset => Get(nameof(WidescreenPreset));
+    public static string StandardPreset => Get(nameof(StandardPreset));
+    public static string CustomPreset => Get(nameof(CustomPreset));
+    public static string Width => Get(nameof(Width));
+    public static string Height => Get(nameof(Height));
+    public static string Orientation => Get(nameof(Orientation));
+    public static string Landscape => Get(nameof(Landscape));
+    public static string Portrait => Get(nameof(Portrait));
+    public static string ResizeContent => Get(nameof(ResizeContent));
+    public static string ScaleToFit => Get(nameof(ScaleToFit));
+    public static string KeepSizeAndPosition => Get(nameof(KeepSizeAndPosition));
+    public static string ApplySlideSize => Get(nameof(ApplySlideSize));
+    public static string SlideInsets => Get(nameof(SlideInsets));
+    public static string Left => Get(nameof(Left));
+    public static string Top => Get(nameof(Top));
+    public static string Right => Get(nameof(Right));
+    public static string Bottom => Get(nameof(Bottom));
+    public static string ApplyInsets => Get(nameof(ApplyInsets));
+    public static string OpenGuidesWorkspace => Get(nameof(OpenGuidesWorkspace));
+    public static string ThemeUnavailable => Get(nameof(ThemeUnavailable));
+    public static string ThemeChanged => Get(nameof(ThemeChanged));
+    public static string InvalidHexColor => Get(nameof(InvalidHexColor));
+    public static string BackgroundOpacityRange => Get(nameof(BackgroundOpacityRange));
+    public static string BackgroundChanged => Get(nameof(BackgroundChanged));
+    public static string ApplyBackground => Get(nameof(ApplyBackground));
+    public static string SlideSizeChanged => Get(nameof(SlideSizeChanged));
+    public static string CanvasInsetsChanged => Get(nameof(CanvasInsetsChanged));
+    public static string DesignSettingsHint => Get(nameof(DesignSettingsHint));
+    public static string UiWired => Get(nameof(UiWired));
+
+    public static string NumberRequired(string label) =>
+        string.Format(CultureInfo.CurrentCulture, Get(nameof(NumberRequired)), label);
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);

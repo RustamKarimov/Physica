@@ -28,8 +28,16 @@ public static class DocumentValidator
         Require(!string.IsNullOrWhiteSpace(project.Title), "project.title.empty", "Project title cannot be empty.", "$.title", issues);
         Require(project.FormatVersion is > 0 and <= ProjectFormat.Current, "project.version.unsupported", "Project format version is not supported.", "$.formatVersion", issues);
         Require(IsFinitePositive(project.Canvas.Width) && IsFinitePositive(project.Canvas.Height), "canvas.size.invalid", "Canvas dimensions must be finite and positive.", "$.canvas", issues);
+        Require(project.Canvas.Width is >= 100 and <= 20_000 && project.Canvas.Height is >= 100 and <= 20_000, "canvas.size.range", "Canvas dimensions must be between 100 and 20,000 units.", "$.canvas", issues);
+        Require(Enum.IsDefined(project.Canvas.Orientation), "canvas.orientation.invalid", "Canvas orientation is invalid.", "$.canvas.orientation", issues);
         Require(IsValidThickness(project.Canvas.Margins, project.Canvas), "canvas.margins.invalid", "Canvas margins must be finite, non-negative, and leave usable slide space.", "$.canvas.margins", issues);
         Require(IsValidThickness(project.Canvas.SafeArea, project.Canvas), "canvas.safeArea.invalid", "Canvas safe area must be finite, non-negative, and leave usable slide space.", "$.canvas.safeArea", issues);
+        Require(!string.IsNullOrWhiteSpace(project.Theme.Id), "theme.id.empty", "Theme ID cannot be empty.", "$.theme.id", issues);
+        Require(!string.IsNullOrWhiteSpace(project.Theme.DisplayName), "theme.name.empty", "Theme name cannot be empty.", "$.theme.displayName", issues);
+        foreach (var color in project.Theme.Colors)
+        {
+            Require(IsHexColor(color.Value), "theme.color.invalid", "Theme colours must use hexadecimal notation.", $"$.theme.colors.{color.Key}", issues);
+        }
         Require(project.Slides.Count > 0, "slides.empty", "A lesson must contain at least one slide.", "$.slides", issues);
 
         ValidateUniqueIds(project.Sections.Select(section => section.Id), "section", "$.sections", issues);
@@ -55,6 +63,10 @@ public static class DocumentValidator
             Require(!string.IsNullOrWhiteSpace(slide.Name), "slide.name.empty", "Slide name cannot be empty.", $"{slidePath}.name", issues);
             Require(slide.SectionId is null || sectionIds.Contains(slide.SectionId.Value), "slide.section.missing", "Slide references a section that does not exist.", $"{slidePath}.sectionId", issues);
             Require(IsFiniteInRange(slide.Background.Opacity, 0, 1), "slide.background.opacity", "Background opacity must be between 0 and 1.", $"{slidePath}.background.opacity", issues);
+            Require(Enum.IsDefined(slide.Background.Kind), "slide.background.kind", "Background kind is invalid.", $"{slidePath}.background.kind", issues);
+            Require(IsHexColor(slide.Background.Color), "slide.background.color", "Background colour must use hexadecimal notation.", $"{slidePath}.background.color", issues);
+            Require(slide.Background.SecondaryColor is null || IsHexColor(slide.Background.SecondaryColor), "slide.background.secondaryColor", "Secondary background colour must use hexadecimal notation.", $"{slidePath}.background.secondaryColor", issues);
+            Require(slide.Background.Kind != SlideBackgroundKind.Gradient || slide.Background.SecondaryColor is not null, "slide.background.gradient", "Gradient backgrounds require a secondary colour.", $"{slidePath}.background.secondaryColor", issues);
             Require(Enum.IsDefined(slide.NameKind), "slide.nameKind.invalid", "Slide name kind is invalid.", $"{slidePath}.nameKind", issues);
             Require(IsFinitePositive(slide.SnapSettings.GridSpacing), "slide.snap.grid", "Grid spacing must be finite and positive.", $"{slidePath}.snapSettings.gridSpacing", issues);
             Require(IsFiniteNonNegative(slide.SnapSettings.Threshold), "slide.snap.threshold", "Snap threshold must be finite and non-negative.", $"{slidePath}.snapSettings.threshold", issues);
@@ -157,6 +169,17 @@ public static class DocumentValidator
     private static bool IsFinitePositive(double value) => IsFinite(value) && value > 0;
     private static bool IsFiniteNonNegative(double value) => IsFinite(value) && value >= 0;
     private static bool IsFiniteInRange(double value, double minimum, double maximum) => IsFinite(value) && value >= minimum && value <= maximum;
+
+    private static bool IsHexColor(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value[0] != '#'
+            || value.Length is not (4 or 5 or 7 or 9))
+        {
+            return false;
+        }
+
+        return value.AsSpan(1).IndexOfAnyExcept("0123456789abcdefABCDEF") < 0;
+    }
 
     private static void Require(
         bool condition,

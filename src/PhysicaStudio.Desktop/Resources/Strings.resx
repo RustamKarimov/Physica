@@ -133,4 +133,49 @@
   <data name="LockGuide" xml:space="preserve"><value>Lock</value></data>
   <data name="FloatPanel" xml:space="preserve"><value>Float panel</value></data>
   <data name="DockPanel" xml:space="preserve"><value>Dock panel on the right</value></data>
+  <data name="SlideDesign" xml:space="preserve"><value>Slide Design</value></data>
+  <data name="ProjectTheme" xml:space="preserve"><value>Project theme</value></data>
+  <data name="PhysicaLight" xml:space="preserve"><value>Physica Light</value></data>
+  <data name="PhysicaDark" xml:space="preserve"><value>Physica Dark</value></data>
+  <data name="LaboratoryTheme" xml:space="preserve"><value>Laboratory</value></data>
+  <data name="SlideBackground" xml:space="preserve"><value>Slide background</value></data>
+  <data name="BackgroundType" xml:space="preserve"><value>Type</value></data>
+  <data name="ThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
+  <data name="SolidBackground" xml:space="preserve"><value>Solid colour</value></data>
+  <data name="GradientBackground" xml:space="preserve"><value>Gradient</value></data>
+  <data name="PrimaryColor" xml:space="preserve"><value>Primary colour</value></data>
+  <data name="SecondaryColor" xml:space="preserve"><value>Secondary colour</value></data>
+  <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>
+  <data name="SlideCanvas" xml:space="preserve"><value>Slide size and orientation</value></data>
+  <data name="SizePreset" xml:space="preserve"><value>Size</value></data>
+  <data name="WidescreenPreset" xml:space="preserve"><value>Widescreen (16:9)</value></data>
+  <data name="StandardPreset" xml:space="preserve"><value>Standard (4:3)</value></data>
+  <data name="CustomPreset" xml:space="preserve"><value>Custom</value></data>
+  <data name="Width" xml:space="preserve"><value>Width</value></data>
+  <data name="Height" xml:space="preserve"><value>Height</value></data>
+  <data name="Orientation" xml:space="preserve"><value>Orientation</value></data>
+  <data name="Landscape" xml:space="preserve"><value>Landscape</value></data>
+  <data name="Portrait" xml:space="preserve"><value>Portrait</value></data>
+  <data name="ResizeContent" xml:space="preserve"><value>Existing content</value></data>
+  <data name="ScaleToFit" xml:space="preserve"><value>Scale to fit and centre</value></data>
+  <data name="KeepSizeAndPosition" xml:space="preserve"><value>Keep size and position</value></data>
+  <data name="ApplySlideSize" xml:space="preserve"><value>Apply slide size</value></data>
+  <data name="SlideInsets" xml:space="preserve"><value>Margins and safe area</value></data>
+  <data name="Left" xml:space="preserve"><value>Left</value></data>
+  <data name="Top" xml:space="preserve"><value>Top</value></data>
+  <data name="Right" xml:space="preserve"><value>Right</value></data>
+  <data name="Bottom" xml:space="preserve"><value>Bottom</value></data>
+  <data name="ApplyInsets" xml:space="preserve"><value>Apply margins and safe area</value></data>
+  <data name="OpenGuidesWorkspace" xml:space="preserve"><value>Open Guides workspace</value></data>
+  <data name="ThemeUnavailable" xml:space="preserve"><value>The selected theme is not available.</value></data>
+  <data name="ThemeChanged" xml:space="preserve"><value>Project theme changed</value></data>
+  <data name="InvalidHexColor" xml:space="preserve"><value>Enter a valid hexadecimal colour such as #0878F9.</value></data>
+  <data name="BackgroundOpacityRange" xml:space="preserve"><value>Background opacity must be between 0 and 100 percent.</value></data>
+  <data name="BackgroundChanged" xml:space="preserve"><value>Slide background changed</value></data>
+  <data name="ApplyBackground" xml:space="preserve"><value>Apply background</value></data>
+  <data name="SlideSizeChanged" xml:space="preserve"><value>Slide size changed</value></data>
+  <data name="CanvasInsetsChanged" xml:space="preserve"><value>Margins and safe area changed</value></data>
+  <data name="DesignSettingsHint" xml:space="preserve"><value>Theme and size apply to the whole lesson. Background applies to the current slide.</value></data>
+  <data name="UiWired" xml:space="preserve"><value>UI WIRED</value></data>
+  <data name="NumberRequired" xml:space="preserve"><value>{0} must be a number.</value></data>
 </root>

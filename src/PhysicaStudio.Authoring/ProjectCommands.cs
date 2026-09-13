@@ -2,6 +2,12 @@ using PhysicaStudio.Document;
 
 namespace PhysicaStudio.Authoring;
 
+public enum CanvasResizePolicy
+{
+    ScaleToFit,
+    KeepSizeAndPosition,
+}
+
 public static class ProjectCommands
 {
     public static IProjectCommand RenameProject(string title) => Command("Rename project", project =>
@@ -722,8 +728,127 @@ public static class ProjectCommands
     public static IProjectCommand SetCanvas(CanvasDefinition canvas) =>
         Command("Change slide size", project => project with { Canvas = canvas });
 
+    public static IProjectCommand ResizeCanvas(
+        double width,
+        double height,
+        SlideOrientation orientation,
+        CanvasResizePolicy policy) => Command("Change slide size", project =>
+    {
+        if (!double.IsFinite(width) || !double.IsFinite(height)
+            || width < 100 || width > 20_000 || height < 100 || height > 20_000)
+        {
+            throw new AuthoringCommandException("Slide dimensions must be between 100 and 20,000 units.");
+        }
+
+        var oldCanvas = project.Canvas;
+        var resizedCanvas = oldCanvas with
+        {
+            Width = width,
+            Height = height,
+            Orientation = orientation,
+            Margins = FitThickness(oldCanvas.Margins, width, height),
+            SafeArea = FitThickness(oldCanvas.SafeArea, width, height),
+        };
+        if (oldCanvas.Width == width && oldCanvas.Height == height
+            && oldCanvas.Orientation == orientation)
+        {
+            return project;
+        }
+
+        var scale = Math.Min(width / oldCanvas.Width, height / oldCanvas.Height);
+        var offsetX = (width - oldCanvas.Width * scale) / 2;
+        var offsetY = (height - oldCanvas.Height * scale) / 2;
+        var slides = project.Slides.Select(slide => slide with
+        {
+            Nodes = policy == CanvasResizePolicy.ScaleToFit
+                ? ScaleTopLevelNodes(slide.Nodes, scale, offsetX, offsetY)
+                : slide.Nodes,
+            Guides = slide.Guides.Select(guide => guide with
+            {
+                Position = guide.Orientation == GuideOrientation.Vertical
+                    ? Math.Clamp(policy == CanvasResizePolicy.ScaleToFit
+                        ? offsetX + guide.Position * scale
+                        : guide.Position, 0, width)
+                    : Math.Clamp(policy == CanvasResizePolicy.ScaleToFit
+                        ? offsetY + guide.Position * scale
+                        : guide.Position, 0, height),
+            }).ToArray(),
+        }).ToArray();
+
+        return project with { Canvas = resizedCanvas, Slides = slides };
+    });
+
+    public static IProjectCommand SetCanvasInsets(
+        ThicknessDefinition margins,
+        ThicknessDefinition safeArea) => Command("Change slide margins and safe area", project =>
+    {
+        RequireValidThickness(margins, project.Canvas, "Margins");
+        RequireValidThickness(safeArea, project.Canvas, "Safe area");
+        return project with
+        {
+            Canvas = project.Canvas with { Margins = margins, SafeArea = safeArea },
+        };
+    });
+
     private static IProjectCommand Command(string description, Func<LessonProject, LessonProject> apply) =>
         new ProjectCommand(Guid.NewGuid(), description, apply);
+
+    private static IReadOnlyList<SceneNode> ScaleTopLevelNodes(
+        IReadOnlyList<SceneNode> nodes,
+        double scale,
+        double offsetX,
+        double offsetY) => nodes.Select(node =>
+    {
+        if (node.ParentId is not null)
+        {
+            return node;
+        }
+
+        var presentation = node.PresentationTransform;
+        var model = node.ModelTransform;
+        var geometry = node.Geometry;
+        return node with
+        {
+            PresentationTransform = presentation with
+            {
+                OffsetX = offsetX + scale * (geometry.X + model.X + presentation.OffsetX)
+                    - geometry.X - model.X,
+                OffsetY = offsetY + scale * (geometry.Y + model.Y + presentation.OffsetY)
+                    - geometry.Y - model.Y,
+                ScaleX = presentation.ScaleX * scale,
+                ScaleY = presentation.ScaleY * scale,
+            },
+        };
+    }).ToArray();
+
+    private static ThicknessDefinition FitThickness(ThicknessDefinition value, double width, double height)
+    {
+        var horizontalScale = value.Left + value.Right < width
+            ? 1
+            : width * .9 / Math.Max(value.Left + value.Right, 1);
+        var verticalScale = value.Top + value.Bottom < height
+            ? 1
+            : height * .9 / Math.Max(value.Top + value.Bottom, 1);
+        return new ThicknessDefinition(
+            value.Left * horizontalScale,
+            value.Top * verticalScale,
+            value.Right * horizontalScale,
+            value.Bottom * verticalScale);
+    }
+
+    private static void RequireValidThickness(
+        ThicknessDefinition value,
+        CanvasDefinition canvas,
+        string label)
+    {
+        var values = new[] { value.Left, value.Top, value.Right, value.Bottom };
+        if (values.Any(candidate => !double.IsFinite(candidate) || candidate < 0)
+            || value.Left + value.Right >= canvas.Width
+            || value.Top + value.Bottom >= canvas.Height)
+        {
+            throw new AuthoringCommandException($"{label} must be non-negative and leave usable slide space.");
+        }
+    }
 
     private static HashSet<Guid> RequireNodeSelection(SlideDocument slide, IEnumerable<Guid> nodeIds)
     {

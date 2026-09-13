@@ -40,6 +40,7 @@ public sealed partial class MainWindow : Window
         DataContext = _viewModel;
         InitializeCanvasViewport();
         InitializeCanvasGuidance();
+        InitializeSlideDesign();
         var applicationData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "PhysicaStudio");
@@ -188,9 +189,22 @@ public sealed partial class MainWindow : Window
                     break;
                 case "Guides":
                 case "Snapping":
+                    OpenCanvasGuidance();
+                    break;
+                case "Themes":
+                case "Variants":
+                case "Transparency":
+                case "Slide Size":
+                case "Orientation":
                 case "Margins":
                 case "Safe Areas":
-                    OpenCanvasGuidance();
+                    OpenSlideDesign();
+                    break;
+                case "Fill":
+                    OpenSlideDesign(SlideBackgroundKind.Solid);
+                    break;
+                case "Gradient":
+                    OpenSlideDesign(SlideBackgroundKind.Gradient);
                     break;
                 case "Undo":
                     _viewModel.Undo();

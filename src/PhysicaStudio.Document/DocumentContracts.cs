@@ -138,6 +138,46 @@ public sealed record ThemeDefinition(
             ["mathematics"] = "STIX Two Math",
         },
         new Dictionary<string, string>(StringComparer.Ordinal));
+
+    public static ThemeDefinition Dark { get; } = new(
+        "physica-dark",
+        "Physica Dark",
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["background"] = "#07121B",
+            ["surface"] = "#10222F",
+            ["heading"] = "#F1F7FA",
+            ["body"] = "#C3D2DC",
+            ["accent"] = "#31A3FF",
+            ["secondaryAccent"] = "#FF9B42",
+        },
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["interface"] = "Inter",
+            ["heading"] = "Source Serif 4",
+            ["mathematics"] = "STIX Two Math",
+        },
+        new Dictionary<string, string>(StringComparer.Ordinal));
+
+    public static ThemeDefinition Laboratory { get; } = new(
+        "physica-laboratory",
+        "Laboratory",
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["background"] = "#F7FAFC",
+            ["surface"] = "#FFFFFF",
+            ["heading"] = "#17344A",
+            ["body"] = "#354D5E",
+            ["accent"] = "#007F82",
+            ["secondaryAccent"] = "#E67E22",
+        },
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["interface"] = "Inter",
+            ["heading"] = "Source Serif 4",
+            ["mathematics"] = "STIX Two Math",
+        },
+        new Dictionary<string, string>(StringComparer.Ordinal));
 }
 
 public enum SlideOrientation

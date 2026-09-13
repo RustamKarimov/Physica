@@ -318,7 +318,7 @@ public sealed class DocumentSceneSurface : Control
 
         using (context.PushOpacity(snapshot.Background.Opacity))
         {
-            context.DrawRectangle(ParseBrush(snapshot.Background.Color, Brushes.White), null, Bounds);
+            context.DrawRectangle(CreateBackgroundBrush(snapshot.Background), null, Bounds);
         }
 
         if (IsAuthoringSurface)
@@ -867,6 +867,32 @@ public sealed class DocumentSceneSurface : Control
         catch (FormatException)
         {
             return fallback;
+        }
+    }
+
+    private static IBrush CreateBackgroundBrush(RenderBackgroundSnapshot background)
+    {
+        if (string.IsNullOrWhiteSpace(background.SecondaryColor))
+        {
+            return ParseBrush(background.Color, Brushes.White);
+        }
+
+        try
+        {
+            return new LinearGradientBrush
+            {
+                StartPoint = RelativePoint.TopLeft,
+                EndPoint = RelativePoint.BottomRight,
+                GradientStops =
+                {
+                    new GradientStop(Color.Parse(background.Color), 0),
+                    new GradientStop(Color.Parse(background.SecondaryColor), 1),
+                },
+            };
+        }
+        catch (FormatException)
+        {
+            return Brushes.White;
         }
     }
 }
