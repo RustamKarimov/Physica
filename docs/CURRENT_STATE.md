@@ -4,7 +4,7 @@
 **Active milestone:** Phase 2 project and slide foundation
 **Review result:** The original Phase 1 shell was rejected on 2026-09-06
 **Phase 1 decision:** Main authoring shell accepted for continued development on 2026-09-07; remaining qualification debt retained
-**Current activity:** Phase 2 Gate 3; canvas guidance and snapping are UI wired for teacher review after grouping and the transient viewport
+**Current activity:** Phase 2 Gate 3; slide design settings are UI wired for teacher review after grouping, viewport, and guidance
 
 The concise phase-by-phase dashboard is maintained in `docs/PHASE_PROGRESS.md`. The binding Phase 2 implementation plan is `docs/implementation/PHASE_02_PROJECT_SLIDE_FOUNDATION_SPEC.md`.
 The full offline feature dashboard is `PROJECT_PROGRESS.html`, styled by `project-progress.css`. It must stay synchronized with readiness changes.
@@ -59,6 +59,8 @@ Commit `440476b` implements the P2.5 canvas-guidance slice from a dedicated spec
 The user's first real review rejected that guidance surface: its Grid ribbon icon was unrelated, the renderer coalesced 10/20/40-unit spacing into nearly identical visual density, rulers exposed no adjustable interval, guides exposed no exact-position editor, the panel close glyph was incorrect, and the flat popup provided too little useful control. Recovery commit `1959d5c` removes grid-spacing coalescing; adds exact and preset grid spacing, automatic/exact/preset ruler intervals, editable per-guide positions, explicit lock state, recognizable vector icons, and a structured Display / Grid and ruler / Snapping / Guides workspace. The solution builds without warnings or errors and all 101 repository checks pass. The corrected launcher opened one responsive Windows process. This remains **UI wired** until the teacher reviews the corrected real application.
 
 Commit `ee3239c` moves the same live guidance control into a third Guides workspace beside Inspector and Layers. Ribbon commands select the docked tab instead of opening an overlay; the workspace stays open until the teacher selects another tab or collapses the right pane. An explicit Float action moves that one control into a resizable owned window, and Dock or closing the floating window returns it to the right side without creating a second state owner. User-resized right-panel width is preserved across tab changes. The solution builds without warnings/errors, all 103 repository checks pass, and the launcher opens one responsive Windows process. Computer initialization failed before application observation after reset and retry, so float/dock pointer behavior remains **UI wired** pending teacher review.
+
+Commit `979f77a` activates the Phase 2 slide-design slice from a dedicated specification. Design-ribbon commands open a contextual Slide Design inspector containing three project themes; per-slide theme, solid, and gradient backgrounds; transparency; widescreen, standard, custom, landscape, and portrait canvas settings; explicit Scale to fit or Keep size and position policies; and editable margin/safe-area values. Canvas resizing is one atomic command: top-level presentation transforms and guides adapt while nested descendants are not double-scaled and every model transform remains unchanged. Editor, thumbnails, and current-slide presenter still consume the same snapshot, which now draws gradients. Six focused scenarios and all 109 repository checks pass, and the solution builds with no warnings/errors. `Launch Physica.bat` opened one responsive Windows process. Computer initialization failed before observation after reset and retry, so this work remains **UI wired**, not Interaction verified. Evidence is in `docs/checkpoints/phase-02/gate-03-complete/SLIDE_DESIGN_SETTINGS_2026-09-13.md`.
 
 
 ## Binding visual authority
@@ -150,7 +152,7 @@ Still required for the Phase 2 gate:
 
 - Real-application interaction proof for section create/rename/collapse/reorder/reassignment/removal and drag-between-section behavior; the command and UI paths are wired.
 - Controlled cross-platform evidence for canvas gestures, Layers, and grouping; grouping is UI wired but awaits real-app and user acceptance.
-- Theme/background, slide size, orientation, and editable margin/safe-area values remain; grouping, pan/zoom/fit, guides, overlays, and snapping are UI wired and await interaction acceptance.
+- Theme/background, slide size, orientation, and editable margin/safe-area values are UI wired; grouping, pan/zoom/fit, guides, overlays, snapping, and slide design all await interaction acceptance.
 - Automated recovery scheduling, Save/Discard/Cancel close decision, and recovery chooser UX.
 - Full keyboard/accessibility workflow coverage and Windows/macOS acceptance runs; core file/history/reorder shortcuts are connected.
 - Representative Phase 2 lesson project and user functional-canvas approval.
