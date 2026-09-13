@@ -28,12 +28,18 @@ public sealed partial class MainWindow
         _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Layers);
     }
 
+    private void ShowGuidesPanel_Click(object? sender, RoutedEventArgs e) => OpenCanvasGuidance();
+
     private void EnsureRightPanelVisible()
     {
+        var wasVisible = RightPanel.IsVisible;
         RightPanel.IsVisible = true;
         ExpandRightButton.IsVisible = false;
         RightSplitter.IsVisible = true;
-        WorkspaceGrid.ColumnDefinitions[4].Width = new GridLength(320);
+        if (!wasVisible)
+        {
+            WorkspaceGrid.ColumnDefinitions[4].Width = new GridLength(384);
+        }
     }
 
     private void LayerItem_PointerPressed(object? sender, PointerPressedEventArgs e)

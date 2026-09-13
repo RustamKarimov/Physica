@@ -415,11 +415,13 @@
               <Grid ColumnDefinitions="*,32">
                 <TextBlock Text="{x:Static resources:AppText.CanvasGuidance}" FontSize="15"
                            FontWeight="SemiBold" VerticalAlignment="Center" />
-                <Button Grid.Column="1" Classes="title-tool" Click="CloseCanvasGuidance_Click"
+                <Button x:Name="GuidanceDockToggleButton" Grid.Column="1" Classes="title-tool"
+                        Click="ToggleCanvasGuidanceDock_Click"
                         Width="28" Height="28" HorizontalAlignment="Right"
-                        ToolTip.Tip="{x:Static resources:AppText.ClosePanel}"
-                        AutomationProperties.Name="{x:Static resources:AppText.ClosePanel}">
-                  <controls:PhysicaIcon IconKey="close" Width="14" Height="14" Stroke="#C7D5DE" />
+                        ToolTip.Tip="{x:Static resources:AppText.FloatPanel}"
+                        AutomationProperties.Name="{x:Static resources:AppText.FloatPanel}">
+                  <controls:PhysicaIcon x:Name="GuidanceDockToggleIcon" IconKey="float"
+                                        Width="14" Height="14" Stroke="#C7D5DE" />
                 </Button>
               </Grid>
               <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -576,7 +578,7 @@
         <Grid RowDefinitions="36,*">
           <Border Background="#0C1922" BorderBrush="#203440" BorderThickness="0,0,0,1"
                   Padding="7,0,5,0">
-          <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+          <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto">
             <Button Grid.Column="0" Classes="right-panel-tab"
                     Click="ShowInspectorPanel_Click" ToolTip.Tip="Show contextual inspector">
               <Grid RowDefinitions="*,2">
@@ -593,7 +595,15 @@
                 <Border Grid.Row="1" Height="2" Background="#168CFF" IsVisible="{Binding ShowLayersPanel}" />
               </Grid>
             </Button>
-            <Button Grid.Column="3" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse right panel">
+            <Button Grid.Column="2" Classes="right-panel-tab"
+                    Click="ShowGuidesPanel_Click" ToolTip.Tip="Show grid, rulers, guides, and snapping">
+              <Grid RowDefinitions="*,2">
+                <TextBlock Text="{Binding GuidesPanelLabel}" FontSize="12" FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+                <Border Grid.Row="1" Height="2" Background="#168CFF" IsVisible="{Binding ShowGuidesPanel}" />
+              </Grid>
+            </Button>
+            <Button Grid.Column="4" Classes="panel-collapse" Click="ToggleRightPanel_Click" ToolTip.Tip="Collapse right panel">
               <Path Data="M 4,3 L 9,8 L 4,13" Stroke="#8193A0" StrokeThickness="1.4" />
             </Button>
           </Grid>
@@ -820,6 +830,7 @@
               </StackPanel>
             </Border>
           </Grid>
+          <Grid x:Name="GuidanceDockHost" Grid.Row="1" IsVisible="{Binding ShowGuidesPanel}" />
         </Grid>
       </Border>
     </Grid>

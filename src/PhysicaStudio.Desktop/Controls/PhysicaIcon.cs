@@ -68,6 +68,19 @@ public sealed class PhysicaIcon : Control
                 context.DrawLine(pen, P(.38, .7), P(.3, .7));
                 context.DrawLine(pen, P(.3, .7), P(.3, .62));
                 break;
+            case "float":
+                context.DrawRectangle(null, pen, R(.16, .3, .48, .5), 2, 2);
+                context.DrawLine(pen, P(.46, .18), P(.84, .18));
+                context.DrawLine(pen, P(.84, .18), P(.84, .56));
+                context.DrawLine(pen, P(.84, .18), P(.52, .5));
+                context.DrawLine(pen, P(.66, .5), P(.52, .5));
+                context.DrawLine(pen, P(.52, .5), P(.52, .36));
+                break;
+            case "dock":
+                context.DrawRectangle(null, pen, R(.12, .16, .76, .68), 2, 2);
+                context.DrawLine(pen, P(.62, .16), P(.62, .84));
+                context.DrawRectangle(brush, null, R(.69, .27, .1, .46), 1, 1);
+                break;
             case "paste":
                 context.DrawRectangle(null, pen, R(.22, .22, .56, .66), 2, 2);
                 context.DrawRectangle(null, pen, R(.36, .1, .28, .22), 2, 2);

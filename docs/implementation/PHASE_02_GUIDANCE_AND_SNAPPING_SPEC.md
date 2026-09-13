@@ -51,7 +51,14 @@ A teacher can open the View or Design ribbon and:
 ## Interface
 
 - View ribbon commands `Rulers`, `Grids`, `Guides`, `Snapping`, and `Margins` are Active.
-- Design ribbon commands `Guides`, `Margins`, and `Safe Areas` open the same compact guidance panel.
+- Design ribbon commands `Guides`, `Margins`, and `Safe Areas` open the same guidance workspace.
+- Guidance is docked by default as a third right-side workspace beside Inspector and
+  Layers. It stays selected until the teacher chooses another workspace or explicitly
+  collapses the right pane; object selection and ordinary canvas actions never close it.
+- The teacher may explicitly float the same live guidance control into a resizable
+  owned window and dock it back. Floating never creates a second state owner or a
+  duplicate set of controls. Closing the floating window docks it rather than silently
+  discarding the workspace.
 - The panel exposes honest toggles, grid spacing, snap categories, guide creation, guide list, lock, removal, and margin/safe-area values.
 - Rulers occupy quiet top and left viewport bands and do not shrink or alter the saved slide.
 - Overlays use restrained semantic styling: neutral grid, cyan guides, amber margins, violet safe area, and bright cyan snap feedback.

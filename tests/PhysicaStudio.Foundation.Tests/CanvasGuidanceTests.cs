@@ -178,6 +178,32 @@ public sealed class CanvasGuidanceTests
         Assert.Contains("case \"close\"", iconCode, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public void GuidesIsAnAuthoritativeRightPanelWorkspace()
+    {
+        var root = FindRepositoryRoot();
+        var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "ViewModels", "StudioShellViewModel.cs"));
+
+        Assert.Contains("ShowGuidesPanel => _rightPanelWorkspace == RightPanelWorkspace.Guides", code, StringComparison.Ordinal);
+        Assert.Contains("OnPropertyChanged(nameof(ShowGuidesPanel))", code, StringComparison.Ordinal);
+        Assert.Contains("Guides,", code, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void GuidanceUsesOneDockableControlInsteadOfDuplicatedPanels()
+    {
+        var root = FindRepositoryRoot();
+        var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Guidance.cs"));
+
+        Assert.Equal(1, xaml.Split("x:Name=\"CanvasGuidancePanel\"", StringSplitOptions.None).Length - 1);
+        Assert.Contains("GuidanceDockHost", xaml, StringComparison.Ordinal);
+        Assert.Contains("ShowGuidesPanel_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("ToggleCanvasGuidanceDock_Click", xaml, StringComparison.Ordinal);
+        Assert.Contains("Content = CanvasGuidancePanel", code, StringComparison.Ordinal);
+        Assert.Contains("DockCanvasGuidance(selectWorkspace: true)", code, StringComparison.Ordinal);
+    }
+
     private static string FindRepositoryRoot()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

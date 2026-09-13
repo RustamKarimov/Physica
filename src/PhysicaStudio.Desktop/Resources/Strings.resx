@@ -131,4 +131,6 @@
   <data name="GuidePosition" xml:space="preserve"><value>Guide position</value></data>
   <data name="GuidePositionRange" xml:space="preserve"><value>The guide position must stay within the slide.</value></data>
   <data name="LockGuide" xml:space="preserve"><value>Lock</value></data>
+  <data name="FloatPanel" xml:space="preserve"><value>Float panel</value></data>
+  <data name="DockPanel" xml:space="preserve"><value>Dock panel on the right</value></data>
 </root>

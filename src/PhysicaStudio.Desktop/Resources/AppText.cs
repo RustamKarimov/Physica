@@ -119,6 +119,8 @@ public static class AppText
     public static string GuidePosition => Get(nameof(GuidePosition));
     public static string GuidePositionRange => Get(nameof(GuidePositionRange));
     public static string LockGuide => Get(nameof(LockGuide));
+    public static string FloatPanel => Get(nameof(FloatPanel));
+    public static string DockPanel => Get(nameof(DockPanel));
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);

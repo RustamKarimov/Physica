@@ -1,11 +1,15 @@
 using System.Globalization;
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.VisualTree;
 using PhysicaStudio.Authoring;
 using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Resources;
+using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
 
 namespace PhysicaStudio.Desktop.Views;
@@ -15,9 +19,11 @@ public sealed partial class MainWindow
     private bool _showCanvasRulers = true;
     private double _rulerMajorInterval;
     private GuideDragState? _guideDrag;
+    private Window? _guidanceWindow;
 
     private void InitializeCanvasGuidance()
     {
+        DockCanvasGuidance(selectWorkspace: false);
         SynchronizeCanvasGuidance();
         UpdateCanvasRulers();
     }
@@ -27,6 +33,10 @@ public sealed partial class MainWindow
         if (!_viewModel.IsProjectOpen)
         {
             CanvasGuidancePanel.IsVisible = false;
+            if (_guidanceWindow is not null)
+            {
+                DockCanvasGuidance(selectWorkspace: false);
+            }
             return;
         }
 
@@ -77,11 +87,130 @@ public sealed partial class MainWindow
     private void OpenCanvasGuidance()
     {
         SynchronizeCanvasGuidance();
+        if (_guidanceWindow is not null)
+        {
+            _guidanceWindow.Activate();
+            return;
+        }
+        EnsureRightPanelVisible();
+        _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Guides);
         CanvasGuidancePanel.IsVisible = true;
     }
 
-    private void CloseCanvasGuidance_Click(object? sender, RoutedEventArgs e) =>
-        CanvasGuidancePanel.IsVisible = false;
+    private void ToggleCanvasGuidanceDock_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_guidanceWindow is null)
+        {
+            FloatCanvasGuidance();
+        }
+        else
+        {
+            DockCanvasGuidance(selectWorkspace: true);
+        }
+    }
+
+    private void FloatCanvasGuidance()
+    {
+        if (!_viewModel.IsProjectOpen || _guidanceWindow is not null)
+        {
+            return;
+        }
+
+        DetachCanvasGuidancePanel();
+        ApplyGuidanceHostStyle();
+        GuidanceDockToggleIcon.IconKey = "dock";
+        ToolTip.SetTip(GuidanceDockToggleButton, AppText.DockPanel);
+        AutomationProperties.SetName(GuidanceDockToggleButton, AppText.DockPanel);
+
+        var window = new Window
+        {
+            Title = AppText.CanvasGuidance,
+            Width = 410,
+            Height = 720,
+            MinWidth = 360,
+            MinHeight = 480,
+            CanResize = true,
+            ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Background = Brush.Parse("#0C1821"),
+            Content = CanvasGuidancePanel,
+        };
+        _guidanceWindow = window;
+        window.Closed += (_, _) =>
+        {
+            if (!ReferenceEquals(_guidanceWindow, window))
+            {
+                return;
+            }
+            window.Content = null;
+            _guidanceWindow = null;
+            DockCanvasGuidance(selectWorkspace: true);
+        };
+
+        _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Inspector);
+        window.Show(this);
+    }
+
+    private void DockCanvasGuidance(bool selectWorkspace)
+    {
+        if (_guidanceWindow is { } window)
+        {
+            window.Content = null;
+            _guidanceWindow = null;
+            window.Close();
+        }
+        DetachCanvasGuidancePanel();
+        if (!GuidanceDockHost.Children.Contains(CanvasGuidancePanel))
+        {
+            GuidanceDockHost.Children.Add(CanvasGuidancePanel);
+        }
+        ApplyGuidanceHostStyle();
+        GuidanceDockToggleIcon.IconKey = "float";
+        ToolTip.SetTip(GuidanceDockToggleButton, AppText.FloatPanel);
+        AutomationProperties.SetName(GuidanceDockToggleButton, AppText.FloatPanel);
+
+        if (selectWorkspace && _viewModel.IsProjectOpen)
+        {
+            EnsureRightPanelVisible();
+            _viewModel.SelectRightPanelWorkspace(RightPanelWorkspace.Guides);
+            CanvasGuidancePanel.IsVisible = true;
+        }
+    }
+
+    private void DetachCanvasGuidancePanel()
+    {
+        if (CanvasGuidancePanel.GetVisualParent() is Panel panel)
+        {
+            panel.Children.Remove(CanvasGuidancePanel);
+        }
+        else if (CanvasGuidancePanel.GetVisualParent() is ContentControl contentControl)
+        {
+            contentControl.Content = null;
+        }
+    }
+
+    private void ApplyGuidanceHostStyle()
+    {
+        CanvasGuidancePanel.Width = double.NaN;
+        CanvasGuidancePanel.MaxHeight = double.PositiveInfinity;
+        CanvasGuidancePanel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
+        CanvasGuidancePanel.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch;
+        CanvasGuidancePanel.Margin = default;
+        CanvasGuidancePanel.BorderThickness = default;
+        CanvasGuidancePanel.CornerRadius = default;
+        CanvasGuidancePanel.BoxShadow = default;
+    }
+
+    private void CloseFloatingGuidanceForApplicationExit()
+    {
+        if (_guidanceWindow is not { } window)
+        {
+            return;
+        }
+        window.Content = null;
+        _guidanceWindow = null;
+        window.Close();
+    }
 
     private void ShowRulers_Click(object? sender, RoutedEventArgs e)
     {

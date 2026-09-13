@@ -85,6 +85,11 @@ public sealed partial class MainWindow : Window
             _ = CloseWithRecoveryAsync();
         }
 
+        if (!e.Cancel)
+        {
+            CloseFloatingGuidanceForApplicationExit();
+        }
+
         base.OnClosing(e);
     }
 
@@ -1332,7 +1337,7 @@ public sealed partial class MainWindow : Window
         RightPanel.IsVisible = !RightPanel.IsVisible;
         ExpandRightButton.IsVisible = !RightPanel.IsVisible;
         RightSplitter.IsVisible = RightPanel.IsVisible;
-        WorkspaceGrid.ColumnDefinitions[4].Width = RightPanel.IsVisible ? new GridLength(296) : new GridLength(0);
+        WorkspaceGrid.ColumnDefinitions[4].Width = RightPanel.IsVisible ? new GridLength(384) : new GridLength(0);
     }
 
     private void ToggleBottomPanel_Click(object? sender, RoutedEventArgs e)

@@ -128,11 +128,13 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     public string SelectedObjectSummary => AppText.SelectedObjectCount(_session.SelectedNodeIds.Count);
     public bool ShowInspectorPanel => _rightPanelWorkspace == RightPanelWorkspace.Inspector;
     public bool ShowLayersPanel => _rightPanelWorkspace == RightPanelWorkspace.Layers;
+    public bool ShowGuidesPanel => _rightPanelWorkspace == RightPanelWorkspace.Guides;
     public bool ShowStandingWaveInspector => ShowInspectorPanel && ShowStandingWaveReference;
     public bool ShowGenericObjectInspector => ShowInspectorPanel && ShowGenericObjectContext;
     public bool ShowEmptySlideInspector => ShowInspectorPanel && ShowEmptySlideContext;
     public string InspectorPanelLabel => AppText.InspectorPanel;
     public string LayersPanelLabel => AppText.LayersPanel;
+    public string GuidesPanelLabel => AppText.Guides;
     public string NoLayerObjectsLabel => AppText.NoLayerObjects;
     public string LayerSummary => AppText.LayerObjectCount(ActiveSlide.Nodes.Count);
     public bool HasNoLayers => ActiveSlide.Nodes.Count == 0;
@@ -289,6 +291,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         _rightPanelWorkspace = workspace;
         OnPropertyChanged(nameof(ShowInspectorPanel));
         OnPropertyChanged(nameof(ShowLayersPanel));
+        OnPropertyChanged(nameof(ShowGuidesPanel));
         OnPropertyChanged(nameof(ShowStandingWaveInspector));
         OnPropertyChanged(nameof(ShowGenericObjectInspector));
         OnPropertyChanged(nameof(ShowEmptySlideInspector));
@@ -1349,6 +1352,7 @@ public enum RightPanelWorkspace
 {
     Inspector,
     Layers,
+    Guides,
 }
 
 public enum StudioWorkspace
