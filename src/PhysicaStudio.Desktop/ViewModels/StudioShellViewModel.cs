@@ -446,13 +446,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
 
     public void SetThemePreset(string themeId)
     {
-        var theme = themeId switch
-        {
-            "physica-light" => ThemeDefinition.Default,
-            "physica-dark" => ThemeDefinition.Dark,
-            "physica-laboratory" => ThemeDefinition.Laboratory,
-            _ => throw new AuthoringCommandException(AppText.ThemeUnavailable),
-        };
+        var theme = ThemeDefinition.FindBuiltIn(themeId)
+            ?? throw new AuthoringCommandException(AppText.ThemeUnavailable);
         _session.Execute(ProjectCommands.SetTheme(theme));
         StatusMessage = AppText.ThemeChanged;
     }

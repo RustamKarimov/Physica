@@ -138,6 +138,14 @@
   <data name="PhysicaLight" xml:space="preserve"><value>Physica Light</value></data>
   <data name="PhysicaDark" xml:space="preserve"><value>Physica Dark</value></data>
   <data name="LaboratoryTheme" xml:space="preserve"><value>Laboratory</value></data>
+  <data name="ThemeGalleryHint" xml:space="preserve"><value>Choose a family, then a distinct colour variant.</value></data>
+  <data name="AzureVariant" xml:space="preserve"><value>Azure</value></data>
+  <data name="TealVariant" xml:space="preserve"><value>Teal</value></data>
+  <data name="AmberVariant" xml:space="preserve"><value>Amber</value></data>
+  <data name="VioletVariant" xml:space="preserve"><value>Violet</value></data>
+  <data name="CopperVariant" xml:space="preserve"><value>Copper</value></data>
+  <data name="CobaltVariant" xml:space="preserve"><value>Cobalt</value></data>
+  <data name="PlumVariant" xml:space="preserve"><value>Plum</value></data>
   <data name="SlideBackground" xml:space="preserve"><value>Slide background</value></data>
   <data name="BackgroundType" xml:space="preserve"><value>Type</value></data>
   <data name="ThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
@@ -145,6 +153,8 @@
   <data name="GradientBackground" xml:space="preserve"><value>Gradient</value></data>
   <data name="PrimaryColor" xml:space="preserve"><value>Primary colour</value></data>
   <data name="SecondaryColor" xml:space="preserve"><value>Secondary colour</value></data>
+  <data name="AdvancedColorEntry" xml:space="preserve"><value>Advanced hexadecimal entry</value></data>
+  <data name="HexColor" xml:space="preserve"><value>Hexadecimal colour</value></data>
   <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>
   <data name="SlideCanvas" xml:space="preserve"><value>Slide size and orientation</value></data>
   <data name="SizePreset" xml:space="preserve"><value>Size</value></data>

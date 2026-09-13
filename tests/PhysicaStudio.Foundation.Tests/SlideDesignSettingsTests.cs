@@ -180,13 +180,34 @@ public sealed class SlideDesignSettingsTests
         viewModel.OpenSlideDesignInspector();
 
         Assert.True(viewModel.ShowSlideDesignInspector);
-        Assert.Contains("ThemePresetComboBox", xaml, StringComparison.Ordinal);
+        Assert.False(viewModel.ShowStandingWaveInspector);
+        Assert.Contains("ThemeLightAzureButton", xaml, StringComparison.Ordinal);
+        Assert.Contains("ThemeLaboratoryPlumButton", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundColorPickerPanel", xaml, StringComparison.Ordinal);
+        Assert.Contains("IsVisible=\"{Binding ShowStandingWaveInspector}\"", xaml, StringComparison.Ordinal);
         Assert.Contains("CanvasResizePolicyComboBox", xaml, StringComparison.Ordinal);
         Assert.Contains("ApplyCanvasSize_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("ApplyInsets_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("SynchronizeSlideDesign", code, StringComparison.Ordinal);
         Assert.All(viewModel.RibbonTabs.SelectMany(tab => tab.Groups).SelectMany(group => group.Commands),
             command => Assert.True(command.IsImplemented));
+    }
+
+    [Fact]
+    public void BuiltInThemeVariantsPublishDistinctPalettes()
+    {
+        Assert.Equal(9, ThemeDefinition.BuiltInThemes.Count);
+        Assert.Equal(9, ThemeDefinition.BuiltInThemes.Select(theme => theme.Id).Distinct().Count());
+        Assert.Equal(9, ThemeDefinition.BuiltInThemes
+            .Select(theme => string.Join('|', theme.Colors.OrderBy(pair => pair.Key).Select(pair => pair.Value)))
+            .Distinct()
+            .Count());
+        Assert.All(ThemeDefinition.BuiltInThemes, theme =>
+        {
+            Assert.NotNull(ThemeDefinition.FindBuiltIn(theme.Id));
+            Assert.Matches("^#[0-9A-Fa-f]{6}$", theme.Colors["background"]);
+            Assert.Matches("^#[0-9A-Fa-f]{6}$", theme.Colors["accent"]);
+        });
     }
 
     private static string FindRepositoryRoot()

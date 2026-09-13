@@ -126,6 +126,14 @@ public static class AppText
     public static string PhysicaLight => Get(nameof(PhysicaLight));
     public static string PhysicaDark => Get(nameof(PhysicaDark));
     public static string LaboratoryTheme => Get(nameof(LaboratoryTheme));
+    public static string ThemeGalleryHint => Get(nameof(ThemeGalleryHint));
+    public static string AzureVariant => Get(nameof(AzureVariant));
+    public static string TealVariant => Get(nameof(TealVariant));
+    public static string AmberVariant => Get(nameof(AmberVariant));
+    public static string VioletVariant => Get(nameof(VioletVariant));
+    public static string CopperVariant => Get(nameof(CopperVariant));
+    public static string CobaltVariant => Get(nameof(CobaltVariant));
+    public static string PlumVariant => Get(nameof(PlumVariant));
     public static string SlideBackground => Get(nameof(SlideBackground));
     public static string BackgroundType => Get(nameof(BackgroundType));
     public static string ThemeBackground => Get(nameof(ThemeBackground));
@@ -133,6 +141,8 @@ public static class AppText
     public static string GradientBackground => Get(nameof(GradientBackground));
     public static string PrimaryColor => Get(nameof(PrimaryColor));
     public static string SecondaryColor => Get(nameof(SecondaryColor));
+    public static string AdvancedColorEntry => Get(nameof(AdvancedColorEntry));
+    public static string HexColor => Get(nameof(HexColor));
     public static string Transparency => Get(nameof(Transparency));
     public static string SlideCanvas => Get(nameof(SlideCanvas));
     public static string SizePreset => Get(nameof(SizePreset));

@@ -610,7 +610,7 @@
           </Border>
           <ScrollViewer x:Name="InspectorScrollViewer"
                         Grid.Row="1"
-                        IsVisible="{Binding ShowInspectorPanel}"
+                        IsVisible="{Binding ShowStandingWaveInspector}"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Hidden">
             <StackPanel IsVisible="{Binding ShowStandingWaveReference}">
@@ -732,31 +732,193 @@
               <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.ProjectTheme}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
-                  <ComboBox x:Name="ThemePresetComboBox" SelectionChanged="ThemePreset_SelectionChanged"
-                            AutomationProperties.Name="{x:Static resources:AppText.ProjectTheme}">
-                    <ComboBoxItem Tag="physica-light" Content="{x:Static resources:AppText.PhysicaLight}" />
-                    <ComboBoxItem Tag="physica-dark" Content="{x:Static resources:AppText.PhysicaDark}" />
-                    <ComboBoxItem Tag="physica-laboratory" Content="{x:Static resources:AppText.LaboratoryTheme}" />
-                  </ComboBox>
+                  <TextBlock Text="{x:Static resources:AppText.ThemeGalleryHint}" FontSize="10.5" Foreground="#78909F" />
+
+                  <TextBlock Text="{x:Static resources:AppText.PhysicaLight}" Classes="theme-family-label" />
+                  <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                    <Button x:Name="ThemeLightAzureButton" Classes="theme-variant" Tag="physica-light"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Light, Azure">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#F4F5F3" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#0878F9" />
+                          <Border Grid.Column="2" Background="#ED7F18" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.AzureVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeLightTealButton" Grid.Column="1" Classes="theme-variant" Tag="physica-light-teal"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Light, Teal">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#F2F8F7" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#008C88" />
+                          <Border Grid.Column="2" Background="#E0783C" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.TealVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeLightAmberButton" Grid.Column="2" Classes="theme-variant" Tag="physica-light-amber"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Light, Amber">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#FAF7EF" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#D67708" />
+                          <Border Grid.Column="2" Background="#127E8D" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.AmberVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                  </Grid>
+
+                  <TextBlock Text="{x:Static resources:AppText.PhysicaDark}" Classes="theme-family-label" Margin="0,3,0,0" />
+                  <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                    <Button x:Name="ThemeDarkAzureButton" Classes="theme-variant" Tag="physica-dark"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Dark, Azure">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#07121B" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#31A3FF" />
+                          <Border Grid.Column="2" Background="#FF9B42" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.AzureVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeDarkVioletButton" Grid.Column="1" Classes="theme-variant" Tag="physica-dark-violet"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Dark, Violet">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#100D19" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#9B7CFF" />
+                          <Border Grid.Column="2" Background="#43C5B5" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.VioletVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeDarkCopperButton" Grid.Column="2" Classes="theme-variant" Tag="physica-dark-copper"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Physica Dark, Copper">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#17100C" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#F18B45" />
+                          <Border Grid.Column="2" Background="#55B8C9" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.CopperVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                  </Grid>
+
+                  <TextBlock Text="{x:Static resources:AppText.LaboratoryTheme}" Classes="theme-family-label" Margin="0,3,0,0" />
+                  <Grid ColumnDefinitions="*,*,*" ColumnSpacing="6">
+                    <Button x:Name="ThemeLaboratoryTealButton" Classes="theme-variant" Tag="physica-laboratory"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Laboratory, Teal">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#F7FAFC" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#007F82" />
+                          <Border Grid.Column="2" Background="#E67E22" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.TealVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeLaboratoryCobaltButton" Grid.Column="1" Classes="theme-variant" Tag="physica-laboratory-cobalt"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Laboratory, Cobalt">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#F4F7FC" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#2F6FE4" />
+                          <Border Grid.Column="2" Background="#EA7C29" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.CobaltVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                    <Button x:Name="ThemeLaboratoryPlumButton" Grid.Column="2" Classes="theme-variant" Tag="physica-laboratory-plum"
+                            Click="ThemePreset_Click" AutomationProperties.Name="Laboratory, Plum">
+                      <StackPanel Spacing="4">
+                        <Grid Height="23" ColumnDefinitions="*,*,*">
+                          <Border Background="#FAF6FB" CornerRadius="2,0,0,2" />
+                          <Border Grid.Column="1" Background="#9848A3" />
+                          <Border Grid.Column="2" Background="#198A87" CornerRadius="0,2,2,0" />
+                        </Grid>
+                        <TextBlock Text="{x:Static resources:AppText.PlumVariant}" Classes="theme-variant-label" />
+                      </StackPanel>
+                    </Button>
+                  </Grid>
                 </StackPanel>
               </Border>
 
               <Border Background="#B20C1821" BorderBrush="#304654" BorderThickness="1" CornerRadius="5" Padding="11,10">
                 <StackPanel Spacing="8">
                   <TextBlock Text="{x:Static resources:AppText.SlideBackground}" FontSize="12.5" FontWeight="SemiBold" Foreground="#D8E5EC" />
-                  <Grid ColumnDefinitions="112,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="7" ColumnSpacing="8">
+                  <Grid ColumnDefinitions="112,*" RowDefinitions="Auto" RowSpacing="7" ColumnSpacing="8">
                     <TextBlock Text="{x:Static resources:AppText.BackgroundType}" Classes="property-label" />
                     <ComboBox x:Name="BackgroundTypeComboBox" Grid.Column="1" SelectionChanged="BackgroundType_SelectionChanged">
                       <ComboBoxItem Tag="Theme" Content="{x:Static resources:AppText.ThemeBackground}" />
                       <ComboBoxItem Tag="Solid" Content="{x:Static resources:AppText.SolidBackground}" />
                       <ComboBoxItem Tag="Gradient" Content="{x:Static resources:AppText.GradientBackground}" />
                     </ComboBox>
-                    <TextBlock Grid.Row="1" Text="{x:Static resources:AppText.PrimaryColor}" Classes="property-label" />
-                    <TextBox x:Name="BackgroundPrimaryColorTextBox" Grid.Row="1" Grid.Column="1" />
-                    <TextBlock Grid.Row="2" Text="{x:Static resources:AppText.SecondaryColor}" Classes="property-label" />
-                    <TextBox x:Name="BackgroundSecondaryColorTextBox" Grid.Row="2" Grid.Column="1" />
-                    <TextBlock Grid.Row="3" Text="{x:Static resources:AppText.Transparency}" Classes="property-label" />
-                    <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="5">
+                  </Grid>
+
+                  <Grid ColumnDefinitions="*,*" ColumnSpacing="7">
+                    <Button x:Name="BackgroundPrimaryColorButton" Classes="colour-target selected" Tag="Primary"
+                            Click="BackgroundColorTarget_Click" AutomationProperties.Name="{x:Static resources:AppText.PrimaryColor}">
+                      <Grid ColumnDefinitions="22,*,Auto" ColumnSpacing="6">
+                        <Border x:Name="BackgroundPrimaryColorPreview" Width="18" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
+                        <TextBlock Grid.Column="1" Text="{x:Static resources:AppText.PrimaryColor}" VerticalAlignment="Center" />
+                        <TextBlock x:Name="BackgroundPrimaryColorValue" Grid.Column="2" VerticalAlignment="Center" FontSize="10" Foreground="#8195A2" />
+                      </Grid>
+                    </Button>
+                    <Button x:Name="BackgroundSecondaryColorButton" Grid.Column="1" Classes="colour-target" Tag="Secondary"
+                            Click="BackgroundColorTarget_Click" AutomationProperties.Name="{x:Static resources:AppText.SecondaryColor}">
+                      <Grid ColumnDefinitions="22,*,Auto" ColumnSpacing="6">
+                        <Border x:Name="BackgroundSecondaryColorPreview" Width="18" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
+                        <TextBlock Grid.Column="1" Text="{x:Static resources:AppText.SecondaryColor}" VerticalAlignment="Center" />
+                        <TextBlock x:Name="BackgroundSecondaryColorValue" Grid.Column="2" VerticalAlignment="Center" FontSize="10" Foreground="#8195A2" />
+                      </Grid>
+                    </Button>
+                  </Grid>
+
+                  <Border x:Name="BackgroundColorPickerPanel" Classes="colour-picker-panel">
+                    <StackPanel Spacing="8">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock x:Name="BackgroundColorTargetLabel" Text="{x:Static resources:AppText.PrimaryColor}" FontSize="11.5" FontWeight="SemiBold" />
+                        <Border x:Name="CustomColorPreview" Grid.Column="1" Width="34" Height="18" CornerRadius="3" BorderBrush="#6B7F8C" BorderThickness="1" />
+                      </Grid>
+                      <Grid ColumnDefinitions="*,*,*,*,*,*" RowDefinitions="26,26" ColumnSpacing="6" RowSpacing="6">
+                        <Button Classes="color-swatch" Tag="#FFFFFF" Background="#FFFFFF" Click="BackgroundSwatch_Click" ToolTip.Tip="#FFFFFF" />
+                        <Button Grid.Column="1" Classes="color-swatch" Tag="#F4F5F3" Background="#F4F5F3" Click="BackgroundSwatch_Click" ToolTip.Tip="#F4F5F3" />
+                        <Button Grid.Column="2" Classes="color-swatch" Tag="#11284B" Background="#11284B" Click="BackgroundSwatch_Click" ToolTip.Tip="#11284B" />
+                        <Button Grid.Column="3" Classes="color-swatch" Tag="#0878F9" Background="#0878F9" Click="BackgroundSwatch_Click" ToolTip.Tip="#0878F9" />
+                        <Button Grid.Column="4" Classes="color-swatch" Tag="#008C88" Background="#008C88" Click="BackgroundSwatch_Click" ToolTip.Tip="#008C88" />
+                        <Button Grid.Column="5" Classes="color-swatch" Tag="#9B7CFF" Background="#9B7CFF" Click="BackgroundSwatch_Click" ToolTip.Tip="#9B7CFF" />
+                        <Button Grid.Row="1" Classes="color-swatch" Tag="#07121B" Background="#07121B" Click="BackgroundSwatch_Click" ToolTip.Tip="#07121B" />
+                        <Button Grid.Row="1" Grid.Column="1" Classes="color-swatch" Tag="#34424D" Background="#34424D" Click="BackgroundSwatch_Click" ToolTip.Tip="#34424D" />
+                        <Button Grid.Row="1" Grid.Column="2" Classes="color-swatch" Tag="#ED7F18" Background="#ED7F18" Click="BackgroundSwatch_Click" ToolTip.Tip="#ED7F18" />
+                        <Button Grid.Row="1" Grid.Column="3" Classes="color-swatch" Tag="#E53935" Background="#E53935" Click="BackgroundSwatch_Click" ToolTip.Tip="#E53935" />
+                        <Button Grid.Row="1" Grid.Column="4" Classes="color-swatch" Tag="#F2C94C" Background="#F2C94C" Click="BackgroundSwatch_Click" ToolTip.Tip="#F2C94C" />
+                        <Button Grid.Row="1" Grid.Column="5" Classes="color-swatch" Tag="#43C5B5" Background="#43C5B5" Click="BackgroundSwatch_Click" ToolTip.Tip="#43C5B5" />
+                      </Grid>
+                      <Grid ColumnDefinitions="18,*,34" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="7" RowSpacing="5">
+                        <TextBlock Text="H" Classes="colour-channel-label" />
+                        <Slider x:Name="BackgroundHueSlider" Grid.Column="1" Minimum="0" Maximum="360" ValueChanged="CustomColorSlider_ValueChanged" />
+                        <TextBlock x:Name="BackgroundHueValue" Grid.Column="2" Classes="colour-channel-value" />
+                        <TextBlock Grid.Row="1" Text="S" Classes="colour-channel-label" />
+                        <Slider x:Name="BackgroundSaturationSlider" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="100" ValueChanged="CustomColorSlider_ValueChanged" />
+                        <TextBlock x:Name="BackgroundSaturationValue" Grid.Row="1" Grid.Column="2" Classes="colour-channel-value" />
+                        <TextBlock Grid.Row="2" Text="L" Classes="colour-channel-label" />
+                        <Slider x:Name="BackgroundLightnessSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="100" ValueChanged="CustomColorSlider_ValueChanged" />
+                        <TextBlock x:Name="BackgroundLightnessValue" Grid.Row="2" Grid.Column="2" Classes="colour-channel-value" />
+                      </Grid>
+                      <Expander Header="{x:Static resources:AppText.AdvancedColorEntry}">
+                        <TextBox x:Name="ActiveColorHexTextBox" Margin="0,6,0,0" TextChanged="ActiveColorHex_TextChanged"
+                                 AutomationProperties.Name="{x:Static resources:AppText.HexColor}" />
+                      </Expander>
+                    </StackPanel>
+                  </Border>
+
+                  <Grid ColumnDefinitions="112,*" RowDefinitions="Auto" ColumnSpacing="8">
+                    <TextBlock Text="{x:Static resources:AppText.Transparency}" Classes="property-label" />
+                    <Grid Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="5">
                       <TextBox x:Name="BackgroundTransparencyTextBox" HorizontalContentAlignment="Right" />
                       <TextBlock Grid.Column="1" Text="%" VerticalAlignment="Center" Foreground="#8298A6" />
                     </Grid>

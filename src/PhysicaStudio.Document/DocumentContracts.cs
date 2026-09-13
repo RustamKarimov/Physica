@@ -178,6 +178,63 @@ public sealed record ThemeDefinition(
             ["mathematics"] = "STIX Two Math",
         },
         new Dictionary<string, string>(StringComparer.Ordinal));
+
+    public static ThemeDefinition LightTeal { get; } = CreateVariant(
+        "physica-light-teal", "Physica Light — Teal",
+        "#F2F8F7", "#FFFFFF", "#12383D", "#385054", "#008C88", "#E0783C");
+
+    public static ThemeDefinition LightAmber { get; } = CreateVariant(
+        "physica-light-amber", "Physica Light — Amber",
+        "#FAF7EF", "#FFFDF8", "#3B2D20", "#57483B", "#D67708", "#127E8D");
+
+    public static ThemeDefinition DarkViolet { get; } = CreateVariant(
+        "physica-dark-violet", "Physica Dark — Violet",
+        "#100D19", "#1B1728", "#F6F1FF", "#D2C9E4", "#9B7CFF", "#43C5B5");
+
+    public static ThemeDefinition DarkCopper { get; } = CreateVariant(
+        "physica-dark-copper", "Physica Dark — Copper",
+        "#17100C", "#271B14", "#FFF4E8", "#E2CCBA", "#F18B45", "#55B8C9");
+
+    public static ThemeDefinition LaboratoryCobalt { get; } = CreateVariant(
+        "physica-laboratory-cobalt", "Laboratory — Cobalt",
+        "#F4F7FC", "#FFFFFF", "#173157", "#384B62", "#2F6FE4", "#EA7C29");
+
+    public static ThemeDefinition LaboratoryPlum { get; } = CreateVariant(
+        "physica-laboratory-plum", "Laboratory — Plum",
+        "#FAF6FB", "#FFFFFF", "#402548", "#59465D", "#9848A3", "#198A87");
+
+    public static IReadOnlyList<ThemeDefinition> BuiltInThemes { get; } =
+    [
+        Default, LightTeal, LightAmber,
+        Dark, DarkViolet, DarkCopper,
+        Laboratory, LaboratoryCobalt, LaboratoryPlum,
+    ];
+
+    public static ThemeDefinition? FindBuiltIn(string id) =>
+        BuiltInThemes.FirstOrDefault(theme => string.Equals(theme.Id, id, StringComparison.Ordinal));
+
+    private static ThemeDefinition CreateVariant(
+        string id,
+        string displayName,
+        string background,
+        string surface,
+        string heading,
+        string body,
+        string accent,
+        string secondaryAccent) => new(
+            id,
+            displayName,
+            new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["background"] = background,
+                ["surface"] = surface,
+                ["heading"] = heading,
+                ["body"] = body,
+                ["accent"] = accent,
+                ["secondaryAccent"] = secondaryAccent,
+            },
+            new Dictionary<string, string>(Default.Fonts, StringComparer.Ordinal),
+            new Dictionary<string, string>(StringComparer.Ordinal));
 }
 
 public enum SlideOrientation

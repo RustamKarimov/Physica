@@ -414,6 +414,80 @@
     <Setter Property="Background" Value="#0A141C" />
     <Setter Property="BorderBrush" Value="#344A5D" />
   </Style>
+  <Style Selector="TextBlock.theme-family-label">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#AFC0CA" />
+  </Style>
+  <Style Selector="Button.theme-variant">
+    <Setter Property="MinHeight" Value="50" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="Background" Value="#101D26" />
+    <Setter Property="BorderBrush" Value="#2B414F" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  </Style>
+  <Style Selector="Button.theme-variant:pointerover">
+    <Setter Property="Background" Value="#172A36" />
+    <Setter Property="BorderBrush" Value="#5A7B8E" />
+  </Style>
+  <Style Selector="Button.theme-variant.selected">
+    <Setter Property="Background" Value="#153044" />
+    <Setter Property="BorderBrush" Value="#22A2FF" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style Selector="TextBlock.theme-variant-label">
+    <Setter Property="FontSize" Value="9.5" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="#BED0DA" />
+  </Style>
+  <Style Selector="Button.colour-target">
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="Padding" Value="7,5" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Background" Value="#0B171F" />
+    <Setter Property="BorderBrush" Value="#2E4553" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.colour-target:pointerover">
+    <Setter Property="Background" Value="#162A35" />
+    <Setter Property="BorderBrush" Value="#577589" />
+  </Style>
+  <Style Selector="Button.colour-target.selected">
+    <Setter Property="Background" Value="#142A39" />
+    <Setter Property="BorderBrush" Value="#22A2FF" />
+  </Style>
+  <Style Selector="Border.colour-picker-panel">
+    <Setter Property="Background" Value="#08141C" />
+    <Setter Property="BorderBrush" Value="#2C4352" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Padding" Value="9" />
+  </Style>
+  <Style Selector="Button.color-swatch">
+    <Setter Property="MinHeight" Value="26" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderBrush" Value="#71828E" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="Button.color-swatch:pointerover">
+    <Setter Property="BorderBrush" Value="#E8F3F8" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style Selector="TextBlock.colour-channel-label">
+    <Setter Property="FontSize" Value="10.5" />
+    <Setter Property="Foreground" Value="#9FB1BC" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.colour-channel-value">
+    <Setter Property="FontSize" Value="9.5" />
+    <Setter Property="Foreground" Value="#8195A2" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
   <Style Selector="ToolTip">
     <Setter Property="FontSize" Value="12.5" />
     <Setter Property="Background" Value="#182833" />
