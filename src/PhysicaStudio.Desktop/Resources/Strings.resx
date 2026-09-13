@@ -153,8 +153,12 @@
   <data name="GradientBackground" xml:space="preserve"><value>Gradient</value></data>
   <data name="PrimaryColor" xml:space="preserve"><value>Primary colour</value></data>
   <data name="SecondaryColor" xml:space="preserve"><value>Secondary colour</value></data>
-  <data name="AdvancedColorEntry" xml:space="preserve"><value>Advanced hexadecimal entry</value></data>
   <data name="HexColor" xml:space="preserve"><value>Hexadecimal colour</value></data>
+  <data name="ThemeColors" xml:space="preserve"><value>Theme colours</value></data>
+  <data name="StandardColors" xml:space="preserve"><value>Standard colours</value></data>
+  <data name="ExactColor" xml:space="preserve"><value>Exact colour</value></data>
+  <data name="ApplyColor" xml:space="preserve"><value>Apply</value></data>
+  <data name="ChooseColor" xml:space="preserve"><value>Choose colour</value></data>
   <data name="CustomBackgroundOverride" xml:space="preserve"><value>This slide has a custom background. Use the project theme to preview theme changes here.</value></data>
   <data name="UseThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
   <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>

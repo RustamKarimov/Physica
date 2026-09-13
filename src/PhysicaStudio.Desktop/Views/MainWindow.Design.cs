@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using PhysicaStudio.Authoring;
+using PhysicaStudio.Desktop.Controls;
 using PhysicaStudio.Desktop.Resources;
 using PhysicaStudio.Desktop.ViewModels;
 using PhysicaStudio.Document;
@@ -83,8 +84,8 @@ public sealed partial class MainWindow
             SelectByTag(BackgroundTypeComboBox, background.Kind.ToString());
             _backgroundPrimaryColor = background.Color.ToUpperInvariant();
             _backgroundSecondaryColor = (background.SecondaryColor ?? "#CFE8FF").ToUpperInvariant();
-            BackgroundPrimaryColorPicker.Color = Color.Parse(_backgroundPrimaryColor);
-            BackgroundSecondaryColorPicker.Color = Color.Parse(_backgroundSecondaryColor);
+            BackgroundPrimaryColorField.Color = Color.Parse(_backgroundPrimaryColor);
+            BackgroundSecondaryColorField.Color = Color.Parse(_backgroundSecondaryColor);
             ThemeBackgroundOverrideNotice.IsVisible = background.Kind != SlideBackgroundKind.Theme;
             ConfigureColorPalettes(project.Theme);
             BackgroundTransparencyTextBox.Text = ((1 - background.Opacity) * 100)
@@ -118,15 +119,15 @@ public sealed partial class MainWindow
     private void BackgroundType_SelectionChanged(object? sender, SelectionChangedEventArgs e) =>
         UpdateBackgroundFieldAvailability();
 
-    private void BackgroundColorPicker_ColorChanged(object? sender, Avalonia.Controls.ColorChangedEventArgs e)
+    private void BackgroundColorField_ColorSelected(object? sender, PhysicaColorSelectedEventArgs e)
     {
-        if (_synchronizingSlideDesign || sender is not ColorPicker picker)
+        if (_synchronizingSlideDesign || sender is not PhysicaColorField field)
         {
             return;
         }
 
-        var color = $"#{e.NewColor.R:X2}{e.NewColor.G:X2}{e.NewColor.B:X2}";
-        if (ReferenceEquals(picker, BackgroundPrimaryColorPicker))
+        var color = ToHex(e.Color);
+        if (ReferenceEquals(field, BackgroundPrimaryColorField))
         {
             _backgroundPrimaryColor = color;
         }
@@ -165,9 +166,9 @@ public sealed partial class MainWindow
             }
             _viewModel.SetSlideBackground(
                 kind,
-                ToHex(BackgroundPrimaryColorPicker.Color),
+                ToHex(BackgroundPrimaryColorField.Color),
                 kind == SlideBackgroundKind.Gradient
-                    ? ToHex(BackgroundSecondaryColorPicker.Color)
+                    ? ToHex(BackgroundSecondaryColorField.Color)
                     : null,
                 1 - transparency / 100);
         });
@@ -254,20 +255,22 @@ public sealed partial class MainWindow
         var kind = SelectedTag(BackgroundTypeComboBox);
         var customColor = kind != nameof(SlideBackgroundKind.Theme);
         var gradient = kind == nameof(SlideBackgroundKind.Gradient);
-        BackgroundPrimaryColorPicker.IsEnabled = customColor;
-        BackgroundSecondaryColorPicker.IsEnabled = gradient;
+        BackgroundPrimaryColorField.IsEnabled = customColor;
+        BackgroundSecondaryColorField.IsEnabled = gradient;
         ThemeBackgroundOverrideNotice.IsVisible = customColor;
     }
 
     private void ConfigureColorPalettes(ThemeDefinition theme)
     {
-        var palette = theme.Colors.Values
+        var palette = new[] { "background", "surface", "heading", "body", "accent", "secondaryAccent" }
+            .Select(role => theme.Colors.TryGetValue(role, out var value) ? value : null)
             .Where(value => IsHexColor(value))
+            .Select(value => value!)
             .Select(Color.Parse)
             .Distinct()
             .ToArray();
-        BackgroundPrimaryColorPicker.PaletteColors = palette;
-        BackgroundSecondaryColorPicker.PaletteColors = palette;
+        BackgroundPrimaryColorField.SetThemePalette(theme.DisplayName, palette);
+        BackgroundSecondaryColorField.SetThemePalette(theme.DisplayName, palette);
     }
 
     private void UpdateThemeSelection(string selectedThemeId)

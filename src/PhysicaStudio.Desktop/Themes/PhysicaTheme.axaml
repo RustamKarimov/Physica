@@ -442,22 +442,83 @@
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Foreground" Value="#BED0DA" />
   </Style>
-  <!-- The official ColorPicker owns the palette, spectrum and exact-value
-       editor. Physica only sets compact chrome; the flyout stays native and
-       accessible instead of duplicating colour-slider controls in the inspector. -->
-  <Style Selector="ColorPicker.design-color-picker">
+  <Style Selector="Button.physica-color-field">
     <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="8,5" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Background" Value="#0B171F" />
     <Setter Property="BorderBrush" Value="#2E4553" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
-    <Setter Property="Padding" Value="7,4" />
   </Style>
-  <Style Selector="ColorPicker.design-color-picker:pointerover">
+  <Style Selector="Button.physica-color-field:pointerover">
     <Setter Property="Background" Value="#162A35" />
     <Setter Property="BorderBrush" Value="#577589" />
+  </Style>
+  <Style Selector="Border.physica-color-menu">
+    <Setter Property="Background" Value="#101D26" />
+    <Setter Property="BorderBrush" Value="#3B5568" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="7" />
+    <Setter Property="Padding" Value="14" />
+    <Setter Property="BoxShadow" Value="0 10 26 0 #66000000" />
+  </Style>
+  <Style Selector="FlyoutPresenter.physica-color-flyout">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="TextBlock.color-menu-heading">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#EDF3F7" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.color-menu-meta">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#8298A6" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.physica-color-swatch">
+    <Setter Property="Height" Value="25" />
+    <Setter Property="MinHeight" Value="25" />
+    <Setter Property="Margin" Value="1.5" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderBrush" Value="#526775" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="Button.physica-color-swatch:pointerover">
+    <Setter Property="BorderBrush" Value="#EDF3F7" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style Selector="Button.physica-color-swatch.selected">
+    <Setter Property="BorderBrush" Value="#168CFF" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style Selector="Border.color-exact-card">
+    <Setter Property="Background" Value="#0B171F" />
+    <Setter Property="BorderBrush" Value="#293F4D" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="Padding" Value="10" />
+  </Style>
+  <Style Selector="TextBox.color-hex-input">
+    <Setter Property="FontFamily" Value="Cascadia Mono,Consolas" />
+    <Setter Property="FontSize" Value="12.5" />
+  </Style>
+  <Style Selector="TextBox.color-hex-input.invalid">
+    <Setter Property="BorderBrush" Value="#E36363" />
+  </Style>
+  <Style Selector="Button.color-apply">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="Padding" Value="11,4" />
+    <Setter Property="Background" Value="#15344B" />
+    <Setter Property="BorderBrush" Value="#327AAC" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
   </Style>
   <Style Selector="ToolTip">
     <Setter Property="FontSize" Value="12.5" />

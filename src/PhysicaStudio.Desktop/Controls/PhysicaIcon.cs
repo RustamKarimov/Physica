@@ -36,6 +36,10 @@ public sealed class PhysicaIcon : Control
 
         switch (IconKey)
         {
+            case "chevron-down":
+                context.DrawLine(pen, P(.22, .38), P(.5, .66));
+                context.DrawLine(pen, P(.5, .66), P(.78, .38));
+                break;
             case "close":
                 context.DrawLine(pen, P(.22, .22), P(.78, .78));
                 context.DrawLine(pen, P(.78, .22), P(.22, .78));

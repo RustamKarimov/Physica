@@ -171,6 +171,7 @@ public sealed class SlideDesignSettingsTests
     {
         var root = FindRepositoryRoot();
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
+        var colorFieldXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorField.axaml"));
         var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Design.cs"));
         var commandRouting = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
         var viewModel = new StudioShellViewModel(
@@ -184,9 +185,13 @@ public sealed class SlideDesignSettingsTests
         Assert.False(viewModel.ShowStandingWaveInspector);
         Assert.Contains("ThemeLightAzureButton", xaml, StringComparison.Ordinal);
         Assert.Contains("ThemeLaboratoryPlumButton", xaml, StringComparison.Ordinal);
-        Assert.Contains("BackgroundPrimaryColorPicker", xaml, StringComparison.Ordinal);
-        Assert.Contains("BackgroundSecondaryColorPicker", xaml, StringComparison.Ordinal);
-        Assert.Contains("Classes=\"design-color-picker\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundPrimaryColorField", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundSecondaryColorField", xaml, StringComparison.Ordinal);
+        Assert.Contains("controls:PhysicaColorField", xaml, StringComparison.Ordinal);
+        Assert.Contains("ThemeSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("StandardSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("HexTextBox", colorFieldXaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("<ColorPicker", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("UseThemeBackground_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("IsVisible=\"{Binding ShowStandingWaveInspector}\"", xaml, StringComparison.Ordinal);
         Assert.Contains("CanvasResizePolicyComboBox", xaml, StringComparison.Ordinal);
@@ -197,6 +202,34 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("SynchronizeSlideDesign", code, StringComparison.Ordinal);
         Assert.All(viewModel.RibbonTabs.SelectMany(tab => tab.Groups).SelectMany(group => group.Commands),
             command => Assert.True(command.IsImplemented));
+    }
+
+    [Fact]
+    public void SharedRendererResolvesSemanticThemeColors()
+    {
+        var slide = SlideDocument.Create("Theme tokens") with
+        {
+            Nodes =
+            [
+                SceneNode.Create("title", "shape.text", new NodeGeometry(10, 10, 400, 80)) with
+                {
+                    Appearance = SceneNodeAppearance.Default with
+                    {
+                        FillColor = ThemeColorReference.For("surface"),
+                        StrokeColor = ThemeColorReference.For("accent"),
+                        TextColor = ThemeColorReference.For("heading"),
+                    },
+                },
+            ],
+        };
+        var project = LessonProject.Create("Theme") with { Theme = ThemeDefinition.Dark, Slides = [slide] };
+
+        var scene = new SlideSceneSnapshotBuilder().Build(project, slide, 5);
+        var style = Assert.Single(Assert.Single(scene.Layers).Primitives).Style;
+
+        Assert.Equal(ThemeDefinition.Dark.Colors["surface"], style.FillColor);
+        Assert.Equal(ThemeDefinition.Dark.Colors["accent"], style.StrokeColor);
+        Assert.Equal(ThemeDefinition.Dark.Colors["heading"], style.TextColor);
     }
 
     [Fact]

@@ -24,7 +24,7 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
             node => node.Id,
             node => CreateVisualState(node, nodesById));
         var layers = SceneNodeHierarchy.FlattenByLayer(slide.Nodes)
-            .Select(node => CreateLayer(node, slide.Nodes, nodesById, states))
+            .Select(node => CreateLayer(project.Theme, node, slide.Nodes, nodesById, states))
             .ToArray();
 
         return new SceneSnapshot(
@@ -38,6 +38,7 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
     }
 
     private static RenderLayerSnapshot CreateLayer(
+        ThemeDefinition theme,
         SceneNode node,
         IReadOnlyList<SceneNode> nodes,
         IReadOnlyDictionary<Guid, SceneNode> nodesById,
@@ -54,7 +55,7 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
             node.LayerIndex,
             state.IsVisible,
             IsStatic: true,
-            isGroup ? [] : [CreatePrimitive(node, state)])
+            isGroup ? [] : [CreatePrimitive(theme, node, state)])
         {
             ParentId = node.ParentId,
             IsGroup = isGroup,
@@ -65,7 +66,7 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
         };
     }
 
-    private static RenderPrimitiveSnapshot CreatePrimitive(SceneNode node, NodeVisualState state)
+    private static RenderPrimitiveSnapshot CreatePrimitive(ThemeDefinition theme, SceneNode node, NodeVisualState state)
     {
         var geometry = state.Bounds;
         var points = node.Content.Points
@@ -85,8 +86,8 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
             node.Content.AssetId?.ToString("D"))
         {
             Style = new RenderStyleSnapshot(
-                appearance.FillColor,
-                appearance.StrokeColor,
+                ThemeColorReference.Resolve(theme, appearance.FillColor),
+                ThemeColorReference.Resolve(theme, appearance.StrokeColor),
                 appearance.StrokeWidth,
                 appearance.CornerRadius,
                 appearance.DashPattern,
@@ -94,7 +95,7 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
                 appearance.FontSize,
                 appearance.FontWeight,
                 appearance.IsItalic,
-                appearance.TextColor,
+                ThemeColorReference.Resolve(theme, appearance.TextColor) ?? ThemeDefinition.Default.Colors["body"],
                 appearance.TextAlignment),
             RotationDegrees = state.RotationDegrees,
             Opacity = state.Opacity,

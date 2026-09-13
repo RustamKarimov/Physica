@@ -861,15 +861,15 @@
 
                   <Grid ColumnDefinitions="112,*" RowDefinitions="Auto,Auto" RowSpacing="7" ColumnSpacing="8">
                     <TextBlock Text="{x:Static resources:AppText.PrimaryColor}" Classes="property-label" />
-                    <ColorPicker x:Name="BackgroundPrimaryColorPicker" Grid.Column="1" Classes="design-color-picker"
-                                 IsAlphaEnabled="False" HorizontalAlignment="Stretch"
-                                 ColorChanged="BackgroundColorPicker_ColorChanged"
-                                 AutomationProperties.Name="{x:Static resources:AppText.PrimaryColor}" />
+                    <controls:PhysicaColorField x:Name="BackgroundPrimaryColorField" Grid.Column="1"
+                                                HorizontalAlignment="Stretch"
+                                                ColorSelected="BackgroundColorField_ColorSelected"
+                                                AutomationProperties.Name="{x:Static resources:AppText.PrimaryColor}" />
                     <TextBlock Grid.Row="1" Text="{x:Static resources:AppText.SecondaryColor}" Classes="property-label" />
-                    <ColorPicker x:Name="BackgroundSecondaryColorPicker" Grid.Row="1" Grid.Column="1" Classes="design-color-picker"
-                                 IsAlphaEnabled="False" HorizontalAlignment="Stretch"
-                                 ColorChanged="BackgroundColorPicker_ColorChanged"
-                                 AutomationProperties.Name="{x:Static resources:AppText.SecondaryColor}" />
+                    <controls:PhysicaColorField x:Name="BackgroundSecondaryColorField" Grid.Row="1" Grid.Column="1"
+                                                HorizontalAlignment="Stretch"
+                                                ColorSelected="BackgroundColorField_ColorSelected"
+                                                AutomationProperties.Name="{x:Static resources:AppText.SecondaryColor}" />
                   </Grid>
 
                   <Border x:Name="ThemeBackgroundOverrideNotice" Background="#13232D" BorderBrush="#355064"

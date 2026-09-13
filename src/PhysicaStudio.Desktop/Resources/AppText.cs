@@ -141,8 +141,12 @@ public static class AppText
     public static string GradientBackground => Get(nameof(GradientBackground));
     public static string PrimaryColor => Get(nameof(PrimaryColor));
     public static string SecondaryColor => Get(nameof(SecondaryColor));
-    public static string AdvancedColorEntry => Get(nameof(AdvancedColorEntry));
     public static string HexColor => Get(nameof(HexColor));
+    public static string ThemeColors => Get(nameof(ThemeColors));
+    public static string StandardColors => Get(nameof(StandardColors));
+    public static string ExactColor => Get(nameof(ExactColor));
+    public static string ApplyColor => Get(nameof(ApplyColor));
+    public static string ChooseColor => Get(nameof(ChooseColor));
     public static string CustomBackgroundOverride => Get(nameof(CustomBackgroundOverride));
     public static string UseThemeBackground => Get(nameof(UseThemeBackground));
     public static string Transparency => Get(nameof(Transparency));

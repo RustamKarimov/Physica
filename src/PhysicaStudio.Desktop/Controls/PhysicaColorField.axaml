@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+             xmlns:resources="using:PhysicaStudio.Desktop.Resources"
+             x:Class="PhysicaStudio.Desktop.Controls.PhysicaColorField">
+  <Button x:Name="PickerButton" Classes="physica-color-field"
+          AutomationProperties.Name="{x:Static resources:AppText.ChooseColor}">
+    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+      <Border x:Name="CurrentSwatch" Width="25" Height="18" CornerRadius="3"
+              BorderBrush="#8CA0AD" BorderThickness="1" VerticalAlignment="Center" />
+      <TextBlock x:Name="CurrentHexText" Grid.Column="1" VerticalAlignment="Center"
+                 FontFamily="Cascadia Mono,Consolas" FontSize="12.5" />
+      <controls:PhysicaIcon Grid.Column="2" IconKey="chevron-down" Width="12" Height="12"
+                            Stroke="#9FB1BC" VerticalAlignment="Center" />
+    </Grid>
+    <Button.Flyout>
+      <Flyout Placement="BottomEdgeAlignedRight" ShowMode="Standard"
+              FlyoutPresenterClasses="physica-color-flyout">
+        <Border Classes="physica-color-menu" Width="292">
+          <StackPanel Spacing="11">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="{x:Static resources:AppText.ThemeColors}" Classes="color-menu-heading" />
+              <TextBlock x:Name="ThemeNameText" Grid.Column="1" Classes="color-menu-meta" />
+            </Grid>
+
+            <UniformGrid x:Name="ThemeSwatchGrid" Columns="6" Rows="5" />
+
+            <Border Height="1" Background="#2A3D49" />
+
+            <TextBlock Text="{x:Static resources:AppText.StandardColors}" Classes="color-menu-heading" />
+            <UniformGrid x:Name="StandardSwatchGrid" Columns="10" Rows="1" />
+
+            <Border Classes="color-exact-card">
+              <StackPanel Spacing="7">
+                <TextBlock Text="{x:Static resources:AppText.ExactColor}" Classes="color-menu-heading" />
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="7">
+                  <TextBox x:Name="HexTextBox" Classes="color-hex-input"
+                           PlaceholderText="#RRGGBB" KeyDown="HexTextBox_KeyDown"
+                           AutomationProperties.Name="{x:Static resources:AppText.HexColor}" />
+                  <Button Grid.Column="1" Content="{x:Static resources:AppText.ApplyColor}"
+                          Classes="color-apply" Click="ApplyHex_Click" />
+                </Grid>
+                <TextBlock x:Name="HexErrorText" Text="{x:Static resources:AppText.InvalidHexColor}"
+                           FontSize="11" Foreground="#E88A8A" IsVisible="False" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Border>
+      </Flyout>
+    </Button.Flyout>
+  </Button>
+</UserControl>

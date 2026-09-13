@@ -4,13 +4,12 @@ namespace PhysicaStudio.Desktop.Services;
 
 internal static class ReferenceLessonFactory
 {
-    private const string Navy = "#11284B";
-    private const string Body = "#34424D";
-    private const string Muted = "#697985";
-    private const string Blue = "#0878F9";
+    private const string Navy = "theme:heading";
+    private const string Body = "theme:body";
+    private const string Muted = "theme:body";
+    private const string Blue = "theme:accent";
     private const string Cyan = "#24B8FF";
-    private const string Orange = "#ED7F18";
-    private const string Paper = "#F8F9F7";
+    private const string Orange = "theme:secondaryAccent";
 
     public static LessonProject Create()
     {
@@ -97,7 +96,7 @@ internal static class ReferenceLessonFactory
         for (var nodeIndex = 0; nodeIndex <= 3; nodeIndex++)
         {
             var x = left + width * nodeIndex / 3;
-            nodes.Add(Ellipse($"node {nodeIndex + 1}", x - 12, centerY - 12, 24, 24, Paper, Blue, 4));
+            nodes.Add(Ellipse($"node {nodeIndex + 1}", x - 12, centerY - 12, 24, 24, "theme:background", Blue, 4));
             if (nodeIndex is 1 or 2)
             {
                 nodes.Add(Line($"node callout {nodeIndex}", x, centerY + 28, 0, 66, Blue, 2));
@@ -112,17 +111,17 @@ internal static class ReferenceLessonFactory
         nodes.Add(Text("antinode label", "Antinode", antinodeX - 90, centerY - 308, 180, 42, 22, Orange,
             weight: SceneFontWeight.Medium, alignment: SceneTextAlignment.Center));
 
-        nodes.Add(Rect("frequency card", 140, 800, 410, 145, "#FFFFFF", "#D5DADE", 2, 12));
+        nodes.Add(Rect("frequency card", 140, 800, 410, 145, "theme:surface", "theme:body", 2, 12));
         nodes.Add(Text("frequency label", "Frequency", 172, 828, 180, 38, 21, Body, weight: SceneFontWeight.Medium));
         nodes.Add(Text("frequency value", "4.0 Hz", 410, 828, 100, 38, 22, Blue, weight: SceneFontWeight.SemiBold, alignment: SceneTextAlignment.End));
         nodes.Add(Line("frequency track", 210, 900, 245, 0, "#B0BBC2", 6));
         nodes.Add(Line("frequency progress", 210, 900, 125, 0, Blue, 6));
-        nodes.Add(Ellipse("frequency thumb", 325, 890, 20, 20, Blue, "#FFFFFF", 2));
+        nodes.Add(Ellipse("frequency thumb", 325, 890, 20, 20, Blue, "theme:surface", 2));
 
-        nodes.Add(Rect("equation card", 730, 812, 330, 118, "#FFFFFF", "#AEB8C0", 2, 10));
+        nodes.Add(Rect("equation card", 730, 812, 330, 118, "theme:surface", "theme:body", 2, 10));
         nodes.Add(Text("equation", "v = f λ", 730, 833, 330, 70, 55, Navy, "Cambria Math", SceneFontWeight.Normal, true, SceneTextAlignment.Center));
 
-        nodes.Add(Rect("legend card", 1190, 800, 520, 145, "#FFFFFF", "#D5DADE", 2, 11));
+        nodes.Add(Rect("legend card", 1190, 800, 520, 145, "theme:surface", "theme:body", 2, 11));
         nodes.Add(Ellipse("legend node", 1222, 838, 18, 18, Blue, null, 0));
         nodes.Add(Text("legend node text", "Node    zero displacement", 1260, 829, 400, 38, 20, Body));
         nodes.Add(Ellipse("legend antinode", 1222, 891, 18, 18, Orange, null, 0));
@@ -144,7 +143,7 @@ internal static class ReferenceLessonFactory
             Text("kinetic label", "Kinetic energy", 415, 861, 270, 42, 22, Body),
             Ellipse("potential swatch", 760, 875, 18, 18, Orange, null, 0),
             Text("potential label", "Potential energy", 795, 861, 300, 42, 22, Body),
-            Rect("conservation card", 1260, 835, 390, 90, "#FFFFFF", "#C7D0D6", 2, 10),
+            Rect("conservation card", 1260, 835, 390, 90, "theme:surface", "theme:body", 2, 10),
             Text("conservation equation", "E = Eₖ + Eₚ", 1260, 850, 390, 54, 34, Navy, "Cambria Math", alignment: SceneTextAlignment.Center),
         };
         return Slide("Energy in a standing wave", nodes);
@@ -170,7 +169,7 @@ internal static class ReferenceLessonFactory
     private static SlideDocument Slide(string name, IEnumerable<SceneNode> nodes) =>
         SlideDocument.Create(name) with
         {
-            Background = new SlideBackground(SlideBackgroundKind.Solid, Paper, null, null, 1),
+            Background = SlideBackground.Default,
             Nodes = nodes.Select((node, index) => node with { LayerIndex = index }).ToArray(),
         };
 

@@ -25,7 +25,7 @@ The surface provides:
 
 - A visual project-theme gallery with three families and three genuinely distinct colour variants in each family. Selecting a theme updates the project theme and immediately refreshes slides that use the Theme background mode.
 - Per-slide Theme, Solid, and Gradient background modes.
-- Compact primary and secondary colour pickers. Each picker opens the official palette/spectrum/components flyout with an exact-value entry, and the current project theme colours are offered as a contextual palette.
+- Compact primary and secondary colour fields. Each field opens a Physica-owned menu containing a PowerPoint-style theme-colour matrix, a restrained standard-colour row, the current colour, and exact hexadecimal entry. Advanced colour controls must be deliberately opened and may not dominate the inspector.
 - A clear custom-background override notice with a one-click **Use project theme** action, so a teacher can understand why changing a theme does not recolour a manually overridden slide.
 - Widescreen 16:9, Standard 4:3, and Custom canvas sizes.
 - Landscape and Portrait orientation.
@@ -34,6 +34,24 @@ The surface provides:
 - A direct route to the Guides workspace for visibility and snapping controls.
 
 The Slide Design surface is mutually exclusive with every object-specific inspector. Switching to Design must remove the previous inspector from layout and hit testing; it may never place two inspector surfaces in the same grid cell.
+
+## Colour-control visual contract
+
+- The closed field is a single 32 px control with a 24 px colour chip, an exact value, and a vector disclosure icon.
+- The menu uses Physica chrome, 4 px geometry, 13 px essential text, an 8 px internal rhythm, and a maximum width of 304 px.
+- Theme colours appear as a six-column matrix with lighter and darker derivations, followed by a one-row standard palette.
+- Swatches are compact squares with hover and selected outlines; they are not full-height bars, unlabeled gradients, or exposed component sliders.
+- Exact colour entry is always available, but a teacher is never required to type a hexadecimal value for ordinary selection.
+- The control must be reusable by later shape, text, graph, vector, and physics-representation inspectors.
+- The stock Avalonia ColorPicker visual is not an approved product surface.
+
+## Theme application contract
+
+- A project theme supplies semantic colours such as background, surface, heading, body, accent, and secondary accent.
+- Scene styles may reference those semantic colours through UI-independent document tokens; the shared snapshot builder resolves them before rendering.
+- Built-in example lessons use Theme backgrounds and semantic theme colours so selecting a theme visibly changes the whole composition without changing geometry or physics.
+- Explicit hexadecimal colours remain literal and do not change when a theme changes.
+- Per-slide Solid and Gradient backgrounds remain explicit overrides and display the override notice.
 
 ## Resize policies
 

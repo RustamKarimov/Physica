@@ -237,6 +237,35 @@ public sealed record ThemeDefinition(
             new Dictionary<string, string>(StringComparer.Ordinal));
 }
 
+public static class ThemeColorReference
+{
+    public const string Prefix = "theme:";
+
+    public static string For(string role)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(role);
+        return $"{Prefix}{role}";
+    }
+
+    public static string? Resolve(ThemeDefinition theme, string? value)
+    {
+        ArgumentNullException.ThrowIfNull(theme);
+        if (value is null || !value.StartsWith(Prefix, StringComparison.Ordinal))
+        {
+            return value;
+        }
+
+        var role = value[Prefix.Length..];
+        if (theme.Colors.TryGetValue(role, out var resolved))
+        {
+            return resolved;
+        }
+        return ThemeDefinition.Default.Colors.TryGetValue(role, out var fallback)
+            ? fallback
+            : ThemeDefinition.Default.Colors["body"];
+    }
+}
+
 public enum SlideOrientation
 {
     Landscape,
