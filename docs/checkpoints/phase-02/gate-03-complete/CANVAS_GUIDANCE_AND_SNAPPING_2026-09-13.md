@@ -2,6 +2,7 @@
 
 **Initial implementation commit:** `440476bd71eda3fcd4aae356e9296048edec1ef5`
 **Review-recovery commit:** `1959d5c342683a2d29ff20f50e6f795209ed376a`
+**Docked-workspace commit:** `ee3239c2adfaca40ac21a2e7a9e5897e0ab8e8cc`
 **Platform exercised:** Windows x64
 **Acceptance state:** UI wired
 **User decision:** Initial implementation rejected; recovery pending review
@@ -33,6 +34,17 @@ No acceptance state was promoted.
 - Grid, snapping, margin, safe-area, and close actions now use recognizable vector
   icons rather than fallback artwork.
 
+## Docked workspace revision
+
+- Guides is a third right-side workspace beside Inspector and Layers.
+- Ribbon guide, snapping, margin, and safe-area commands select the docked workspace;
+  they no longer create a floating overlay.
+- The workspace never closes because canvas selection changes. It remains until the
+  teacher chooses another right tab or explicitly collapses the pane.
+- Float is an explicit action. It reparents the same live control into a resizable
+  owned window; Dock and the floating window's close action return it to the right.
+- Tab switching preserves a teacher-resized right-panel width.
+
 ## Implemented teacher workflow
 
 - Open one compact guidance panel from View or Design ribbon commands.
@@ -62,7 +74,7 @@ No acceptance state was promoted.
 | Model/service | Pass | Round trip, backward defaults, validation, undo, and model-transform separation |
 | Snapping | Pass | Complete-bounds grid targets and deterministic equal-distance priority |
 | UI component | Pass | Zoom-consistent guide hit tolerance and structural reachability of the real controls |
-| Full repository | 101 passed, 0 failed | Existing document, render, history, navigator, canvas, grouping, and viewport suites remain green; explicit ruler mode and recovery-structure checks added |
+| Full repository | 103 passed, 0 failed | Existing document, render, history, navigator, canvas, grouping, and viewport suites remain green; docked workspace and single-control float architecture checks added |
 | Build | Pass | .NET solution compiled with zero warnings and zero errors |
 
 The changed C# files pass the repository whitespace formatter. A repository-wide formatting check still reports pre-existing formatting debt in unrelated preview-rendering files; those files were not changed in this slice.
@@ -78,16 +90,17 @@ Therefore no screenshot, pointer, focus, keyboard, or DPI claim is made.
 
 ## Manual acceptance checklist
 
-1. Open **View**. Confirm **Grids** has a recognizable grid icon; toggle **Rulers** and **Grids**; use **More → Guides** to open the panel, then confirm the X closes it.
-2. Toggle grid, guides, margins, and safe area. Confirm thumbnails stay clean.
-3. Choose 10, 20, and 40 grid presets and confirm that each produces a visibly different density.
-4. Switch the ruler between Auto, 50, 100, 200, and one custom interval; confirm major ticks and labels update.
-5. Add one vertical and one horizontal guide. Enter exact positions, drag each, lock one, and confirm both dragging and numeric editing are disabled while locked.
-6. Change grid spacing and guide positions, then use Undo/Redo.
-7. Move a single object and a group near the grid, a guide, the slide centre/edge, and another object. Confirm the colored snap line and stable placement.
-8. Corner-resize near the same targets. Repeat with Shift, Ctrl, and Ctrl+Shift.
-9. Hold Alt while moving or resizing and confirm snapping is bypassed.
-10. Save, close the project without exiting the app, reopen it, and confirm guide/settings persistence while ruler interval resets as transient workspace state.
+1. Open **View**. Confirm **Grids** has a recognizable grid icon; toggle **Rulers** and **Grids**; use **More → Guides** to select the Guides tab, then confirm its Float action is explicit and recognizable.
+2. Confirm Guides opens as the third right-side tab rather than covering the canvas. Switch Inspector → Layers → Guides and confirm each remains open until another tab is selected.
+3. Resize the right side, switch tabs, and confirm the chosen width remains. Collapse the right pane and reopen Guides from the ribbon.
+4. Select Float, change a setting in the floating window, and Dock it again. Float once more and close the floating window; confirm the same settings and controls return to the Guides tab.
+5. Toggle grid, guides, margins, and safe area. Confirm thumbnails stay clean.
+6. Choose 10, 20, and 40 grid presets and confirm that each produces a visibly different density.
+7. Switch the ruler between Auto, 50, 100, 200, and one custom interval; confirm major ticks and labels update.
+8. Add one vertical and one horizontal guide. Enter exact positions, drag each, lock one, and confirm both dragging and numeric editing are disabled while locked.
+9. Change grid spacing and guide positions, then use Undo/Redo.
+10. Move and resize an object/group against every snap source; repeat resize with Shift, Ctrl, and Ctrl+Shift, and confirm Alt bypasses snapping.
+11. Save, close the project without exiting the app, reopen it, and confirm guide/settings persistence while ruler interval resets as transient workspace state.
 
 ## Remaining limitations
 
