@@ -23,14 +23,16 @@ Design commands open a contextual **Slide Design** surface in the existing Inspe
 
 The surface provides:
 
-- Project theme presets with an immediate document-backed preview.
+- A visual project-theme gallery with three families and three genuinely distinct colour variants in each family.
 - Per-slide Theme, Solid, and Gradient background modes.
-- Validated hexadecimal primary and secondary colours and background opacity.
+- Primary and secondary colour swatches, a custom HSL editor, and hexadecimal entry retained as an advanced path.
 - Widescreen 16:9, Standard 4:3, and Custom canvas sizes.
 - Landscape and Portrait orientation.
 - An explicit resize policy before dimensions are applied.
 - Independently editable left, top, right, and bottom margins and safe-area insets.
 - A direct route to the Guides workspace for visibility and snapping controls.
+
+The Slide Design surface is mutually exclusive with every object-specific inspector. Switching to Design must remove the previous inspector from layout and hit testing; it may never place two inspector surfaces in the same grid cell.
 
 ## Resize policies
 
@@ -83,4 +85,3 @@ Promotion beyond UI wired requires real-application evidence for:
 5. Save, close, reopen, and recovery of all design values.
 6. Margin and safe-area editing and overlay agreement.
 7. Windows DPI and macOS rendering.
-
