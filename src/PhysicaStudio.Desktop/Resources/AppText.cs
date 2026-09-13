@@ -81,6 +81,32 @@ public static class AppText
     public static string FitWidth => Get(nameof(FitWidth));
     public static string ActualSize => Get(nameof(ActualSize));
     public static string CanvasPanHint => Get(nameof(CanvasPanHint));
+    public static string CanvasGuidance => Get(nameof(CanvasGuidance));
+    public static string CanvasGuidanceUpdated => Get(nameof(CanvasGuidanceUpdated));
+    public static string GridSpacingRange => Get(nameof(GridSpacingRange));
+    public static string GuideAdded => Get(nameof(GuideAdded));
+    public static string GuideMoved => Get(nameof(GuideMoved));
+    public static string GuideRemoved => Get(nameof(GuideRemoved));
+    public static string GuidesCleared => Get(nameof(GuidesCleared));
+    public static string GuideLockChanged => Get(nameof(GuideLockChanged));
+    public static string GuideUnavailable => Get(nameof(GuideUnavailable));
+    public static string Rulers => Get(nameof(Rulers));
+    public static string Grid => Get(nameof(Grid));
+    public static string Guides => Get(nameof(Guides));
+    public static string Margins => Get(nameof(Margins));
+    public static string SafeArea => Get(nameof(SafeArea));
+    public static string SnapObjects => Get(nameof(SnapObjects));
+    public static string SnapGrid => Get(nameof(SnapGrid));
+    public static string SnapGuides => Get(nameof(SnapGuides));
+    public static string SnapSlide => Get(nameof(SnapSlide));
+    public static string Snapping => Get(nameof(Snapping));
+    public static string LockOrUnlockGuide => Get(nameof(LockOrUnlockGuide));
+    public static string AddVerticalGuide => Get(nameof(AddVerticalGuide));
+    public static string AddHorizontalGuide => Get(nameof(AddHorizontalGuide));
+    public static string ClearGuides => Get(nameof(ClearGuides));
+    public static string GridSpacing => Get(nameof(GridSpacing));
+    public static string ClosePanel => Get(nameof(ClosePanel));
+    public static string AltBypassSnap => Get(nameof(AltBypassSnap));
 
     public static string SectionSlideCount(int count) =>
         string.Format(CultureInfo.CurrentCulture, Get(count == 1 ? "SectionSlideCountSingular" : "SectionSlideCountPlural"), count);

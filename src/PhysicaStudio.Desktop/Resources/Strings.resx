@@ -93,4 +93,30 @@
   <data name="SelectedObjectCountPlural" xml:space="preserve"><value>{0} objects selected</value></data>
   <data name="LayerObjectCountSingular" xml:space="preserve"><value>{0} object · front to back</value></data>
   <data name="LayerObjectCountPlural" xml:space="preserve"><value>{0} objects · front to back</value></data>
+  <data name="CanvasGuidance" xml:space="preserve"><value>Canvas guides</value></data>
+  <data name="CanvasGuidanceUpdated" xml:space="preserve"><value>Canvas guidance updated</value></data>
+  <data name="GridSpacingRange" xml:space="preserve"><value>Grid spacing must be between 2 and 500 slide units.</value></data>
+  <data name="GuideAdded" xml:space="preserve"><value>Guide added</value></data>
+  <data name="GuideMoved" xml:space="preserve"><value>Guide moved</value></data>
+  <data name="GuideRemoved" xml:space="preserve"><value>Guide removed</value></data>
+  <data name="GuidesCleared" xml:space="preserve"><value>Guides cleared</value></data>
+  <data name="GuideLockChanged" xml:space="preserve"><value>Guide lock changed</value></data>
+  <data name="GuideUnavailable" xml:space="preserve"><value>The guide is no longer available.</value></data>
+  <data name="Rulers" xml:space="preserve"><value>Rulers</value></data>
+  <data name="Grid" xml:space="preserve"><value>Grid</value></data>
+  <data name="Guides" xml:space="preserve"><value>Guides</value></data>
+  <data name="Margins" xml:space="preserve"><value>Margins</value></data>
+  <data name="SafeArea" xml:space="preserve"><value>Safe area</value></data>
+  <data name="SnapObjects" xml:space="preserve"><value>Objects</value></data>
+  <data name="SnapGrid" xml:space="preserve"><value>Grid lines</value></data>
+  <data name="SnapGuides" xml:space="preserve"><value>Guides</value></data>
+  <data name="SnapSlide" xml:space="preserve"><value>Slide edges and centre</value></data>
+  <data name="Snapping" xml:space="preserve"><value>Enable snapping</value></data>
+  <data name="LockOrUnlockGuide" xml:space="preserve"><value>Lock or unlock guide</value></data>
+  <data name="AddVerticalGuide" xml:space="preserve"><value>Add vertical guide</value></data>
+  <data name="AddHorizontalGuide" xml:space="preserve"><value>Add horizontal guide</value></data>
+  <data name="ClearGuides" xml:space="preserve"><value>Clear guides</value></data>
+  <data name="GridSpacing" xml:space="preserve"><value>Grid spacing</value></data>
+  <data name="ClosePanel" xml:space="preserve"><value>Close panel</value></data>
+  <data name="AltBypassSnap" xml:space="preserve"><value>Hold Alt while dragging to bypass snapping.</value></data>
 </root>

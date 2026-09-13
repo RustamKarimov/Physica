@@ -39,6 +39,7 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         DataContext = _viewModel;
         InitializeCanvasViewport();
+        InitializeCanvasGuidance();
         var applicationData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "PhysicaStudio");
@@ -172,6 +173,19 @@ public sealed partial class MainWindow : Window
                     break;
                 case "Fit":
                     SetCanvasViewportMode(CanvasViewportMode.FitSlide);
+                    break;
+                case "Rulers":
+                    _showCanvasRulers = !_showCanvasRulers;
+                    SynchronizeCanvasGuidance();
+                    break;
+                case "Grids":
+                    _viewModel.UpdateSnapSettings(settings => settings with { ShowGrid = !settings.ShowGrid });
+                    break;
+                case "Guides":
+                case "Snapping":
+                case "Margins":
+                case "Safe Areas":
+                    OpenCanvasGuidance();
                     break;
                 case "Undo":
                     _viewModel.Undo();
@@ -681,6 +695,11 @@ public sealed partial class MainWindow : Window
             e.Handled = true;
             return;
         }
+        if (TryBeginGuideDrag(surface, e))
+        {
+            e.Handled = true;
+            return;
+        }
         if (!e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
         {
             return;
@@ -759,6 +778,11 @@ public sealed partial class MainWindow : Window
             e.Handled = true;
             return;
         }
+        if (TryUpdateGuideDrag(surface, e))
+        {
+            e.Handled = true;
+            return;
+        }
         if (_canvasGesture is not { } gesture
             || !e.GetCurrentPoint(surface).Properties.IsLeftButtonPressed)
         {
@@ -780,7 +804,7 @@ public sealed partial class MainWindow : Window
             return;
         }
 
-        UpdateCanvasGesture(surface, gesture, surface.ToLogical(surfacePoint));
+        UpdateCanvasGesture(surface, gesture, surface.ToLogical(surfacePoint), e.KeyModifiers);
         e.Handled = true;
     }
 
@@ -795,11 +819,17 @@ public sealed partial class MainWindow : Window
             e.Handled = true;
             return;
         }
+        if (TryEndGuideDrag(surface, e))
+        {
+            e.Handled = true;
+            return;
+        }
 
         var gesture = _canvasGesture;
         _canvasGesture = null;
         surface.SetInteractionPreview(null);
         surface.SetSelectionMarquee(null);
+        surface.SetSnapLines(null);
         e.Pointer.Capture(null);
 
         try
@@ -838,8 +868,10 @@ public sealed partial class MainWindow : Window
         _canvasGesture = null;
         if (sender is DocumentSceneSurface surface)
         {
+            CancelGuideDrag(surface);
             surface.SetInteractionPreview(null);
             surface.SetSelectionMarquee(null);
+            surface.SetSnapLines(null);
         }
     }
 
@@ -881,10 +913,11 @@ public sealed partial class MainWindow : Window
                 node => surface.GetNodeLogicalRotation(node.Id)));
     }
 
-    private static void UpdateCanvasGesture(
+    private void UpdateCanvasGesture(
         DocumentSceneSurface surface,
         CanvasGestureState gesture,
-        Point currentLogicalPoint)
+        Point currentLogicalPoint,
+        KeyModifiers modifiers)
     {
         var preview = new Dictionary<Guid, CanvasNodePreview>();
         var transforms = new Dictionary<Guid, PresentationTransform2D>();
@@ -893,6 +926,16 @@ public sealed partial class MainWindow : Window
 
         if (gesture.Handle == CanvasSelectionHandle.Body)
         {
+            var snapped = SnapCanvasBounds(
+                surface,
+                new NodeBounds(gesture.GroupBounds.X, gesture.GroupBounds.Y,
+                    gesture.GroupBounds.Width, gesture.GroupBounds.Height),
+                gesture.GroupBounds.X + deltaX,
+                gesture.GroupBounds.Y + deltaY,
+                modifiers);
+            deltaX = snapped.X - gesture.GroupBounds.X;
+            deltaY = snapped.Y - gesture.GroupBounds.Y;
+            surface.SetSnapLines(SnapLines(snapped));
             foreach (var (id, bounds) in gesture.OriginalBounds)
             {
                 var target = bounds with { X = bounds.X + deltaX, Y = bounds.Y + deltaY };
@@ -907,6 +950,7 @@ public sealed partial class MainWindow : Window
         }
         else if (gesture.Handle == CanvasSelectionHandle.Rotate)
         {
+            surface.SetSnapLines(null);
             var center = new Point(gesture.GroupBounds.X + gesture.GroupBounds.Width / 2,
                 gesture.GroupBounds.Y + gesture.GroupBounds.Height / 2);
             var startAngle = Math.Atan2(gesture.StartLogicalPoint.Y - center.Y, gesture.StartLogicalPoint.X - center.X);
@@ -933,13 +977,21 @@ public sealed partial class MainWindow : Window
         }
         else
         {
+            var snapped = SnapCanvasBounds(
+                surface,
+                new NodeBounds(0, 0, 0, 0),
+                currentLogicalPoint.X,
+                currentLogicalPoint.Y,
+                modifiers);
+            currentLogicalPoint = new Point(snapped.X, snapped.Y);
+            surface.SetSnapLines(SnapLines(snapped));
             var targetGroup = CanvasTransformGeometry.ResizeBounds(
                 gesture.GroupBounds,
                 gesture.Handle,
                 currentLogicalPoint,
-                gesture.PressModifiers.HasFlag(KeyModifiers.Shift),
-                gesture.PressModifiers.HasFlag(KeyModifiers.Control)
-                    || gesture.PressModifiers.HasFlag(KeyModifiers.Meta));
+                modifiers.HasFlag(KeyModifiers.Shift),
+                modifiers.HasFlag(KeyModifiers.Control)
+                    || modifiers.HasFlag(KeyModifiers.Meta));
             var scaleX = Math.Abs(gesture.GroupBounds.Width) < .001
                 ? 1
                 : targetGroup.Width / gesture.GroupBounds.Width;

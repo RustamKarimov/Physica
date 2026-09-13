@@ -17,6 +17,7 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         "New", "Open", "Recent", "Save", "Save As", "Save Copy", "Recover", "Close",
         "New Slide", "Duplicate Slide", "Delete Slide", "Section", "Undo", "Redo",
         "Selection Pane", "Layers", "Group", "Ungroup", "Zoom", "Fit",
+        "Rulers", "Grids", "Guides", "Snapping", "Margins", "Safe Areas",
     };
 
     private RibbonTabViewModel? _selectedRibbonTab;
@@ -345,6 +346,84 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
     {
         _session.Execute(ProjectCommands.SetNodesPresentationTransforms(ActiveSlide.Id, transforms));
         StatusMessage = AppText.ObjectsTransformed;
+    }
+
+    public void UpdateSnapSettings(Func<SnapSettings, SnapSettings> update)
+    {
+        ArgumentNullException.ThrowIfNull(update);
+        _session.Execute(ProjectCommands.SetSnapSettings(ActiveSlide.Id, update(ActiveSlide.SnapSettings)));
+        StatusMessage = AppText.CanvasGuidanceUpdated;
+    }
+
+    public void SetGridSpacing(double spacing)
+    {
+        if (!double.IsFinite(spacing) || spacing < 2 || spacing > 500)
+        {
+            throw new AuthoringCommandException(AppText.GridSpacingRange);
+        }
+        UpdateSnapSettings(settings => settings with { GridSpacing = spacing });
+    }
+
+    public void AddGuide(GuideOrientation orientation)
+    {
+        var position = orientation == GuideOrientation.Vertical
+            ? Session.CurrentProject.Canvas.Width / 2
+            : Session.CurrentProject.Canvas.Height / 2;
+        var guide = new GuideDefinition(Guid.NewGuid(), orientation, position, false);
+        _session.Execute(ProjectCommands.SetSlideGuides(ActiveSlide.Id, [.. ActiveSlide.Guides, guide]));
+        StatusMessage = AppText.GuideAdded;
+    }
+
+    public void MoveGuide(Guid guideId, double position)
+    {
+        var guide = ActiveSlide.Guides.FirstOrDefault(candidate => candidate.Id == guideId)
+            ?? throw new AuthoringCommandException(AppText.GuideUnavailable);
+        var limit = guide.Orientation == GuideOrientation.Vertical
+            ? Session.CurrentProject.Canvas.Width
+            : Session.CurrentProject.Canvas.Height;
+        var clamped = Math.Clamp(position, 0, limit);
+        _session.Execute(ProjectCommands.SetSlideGuides(
+            ActiveSlide.Id,
+            ActiveSlide.Guides.Select(candidate => candidate.Id == guideId
+                ? candidate with { Position = clamped }
+                : candidate).ToArray()));
+        StatusMessage = AppText.GuideMoved;
+    }
+
+    public void ToggleGuideLock(Guid guideId)
+    {
+        if (ActiveSlide.Guides.All(candidate => candidate.Id != guideId))
+        {
+            throw new AuthoringCommandException(AppText.GuideUnavailable);
+        }
+        _session.Execute(ProjectCommands.SetSlideGuides(
+            ActiveSlide.Id,
+            ActiveSlide.Guides.Select(candidate => candidate.Id == guideId
+                ? candidate with { IsLocked = !candidate.IsLocked }
+                : candidate).ToArray()));
+        StatusMessage = AppText.GuideLockChanged;
+    }
+
+    public void RemoveGuide(Guid guideId)
+    {
+        if (ActiveSlide.Guides.All(candidate => candidate.Id != guideId))
+        {
+            return;
+        }
+        _session.Execute(ProjectCommands.SetSlideGuides(
+            ActiveSlide.Id,
+            ActiveSlide.Guides.Where(candidate => candidate.Id != guideId).ToArray()));
+        StatusMessage = AppText.GuideRemoved;
+    }
+
+    public void ClearGuides()
+    {
+        if (ActiveSlide.Guides.Count == 0)
+        {
+            return;
+        }
+        _session.Execute(ProjectCommands.SetSlideGuides(ActiveSlide.Id, []));
+        StatusMessage = AppText.GuidesCleared;
     }
 
     public void NudgeSelectedNodes(double offsetX, double offsetY)

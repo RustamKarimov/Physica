@@ -196,7 +196,11 @@ public sealed record SnapSettings(
     bool SnapToSlide,
     bool SnapToObjects,
     double GridSpacing,
-    double Threshold)
+    double Threshold,
+    bool ShowGrid = false,
+    bool ShowGuides = true,
+    bool ShowMargins = false,
+    bool ShowSafeArea = false)
 {
     public static SnapSettings Default { get; } = new(true, true, true, true, true, 20, 8);
 }

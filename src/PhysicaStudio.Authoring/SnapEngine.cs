@@ -38,8 +38,14 @@ public static class SnapEngine
 
         if (settings.SnapToGrid)
         {
-            AddCandidate(xCandidates, desiredX, Math.Round(desiredX / settings.GridSpacing) * settings.GridSpacing, "Grid");
-            AddCandidate(yCandidates, desiredY, Math.Round(desiredY / settings.GridSpacing) * settings.GridSpacing, "Grid");
+            foreach (var source in new[] { translated.Left, translated.CenterX, translated.Right })
+            {
+                AddCandidate(xCandidates, source, Math.Round(source / settings.GridSpacing) * settings.GridSpacing, "Grid");
+            }
+            foreach (var source in new[] { translated.Top, translated.CenterY, translated.Bottom })
+            {
+                AddCandidate(yCandidates, source, Math.Round(source / settings.GridSpacing) * settings.GridSpacing, "Grid");
+            }
         }
 
         if (settings.SnapToSlide)
@@ -123,8 +129,18 @@ public static class SnapEngine
         candidates
             .Where(candidate => Math.Abs(candidate.Offset) <= threshold)
             .OrderBy(candidate => Math.Abs(candidate.Offset))
-            .ThenBy(candidate => candidate.Source, StringComparer.Ordinal)
+            .ThenBy(candidate => SourcePriority(candidate.Source))
+            .ThenBy(candidate => candidate.Target)
             .FirstOrDefault();
+
+    private static int SourcePriority(string source) => source switch
+    {
+        "Guide" => 0,
+        "Object" => 1,
+        "Slide" => 2,
+        "Grid" => 3,
+        _ => 4,
+    };
 
     private sealed record SnapCandidate(double Offset, double Target, string Source);
 }

@@ -20,6 +20,13 @@ public enum CanvasSelectionHandle
 
 public sealed record CanvasNodePreview(RenderBounds Bounds, double RotationDegrees);
 
+public sealed record CanvasGuidanceState(
+    CanvasDefinition Canvas,
+    IReadOnlyList<GuideDefinition> Guides,
+    SnapSettings SnapSettings);
+
+public sealed record CanvasSnapLine(string Axis, string Source, double Position);
+
 public sealed class DocumentSceneSurface : Control
 {
     public static readonly StyledProperty<SceneSnapshot?> SnapshotProperty =
@@ -34,15 +41,22 @@ public sealed class DocumentSceneSurface : Control
     public static readonly StyledProperty<double> ViewportZoomProperty =
         AvaloniaProperty.Register<DocumentSceneSurface, double>(nameof(ViewportZoom), 1);
 
+    public static readonly StyledProperty<CanvasGuidanceState?> GuidanceProperty =
+        AvaloniaProperty.Register<DocumentSceneSurface, CanvasGuidanceState?>(nameof(Guidance));
+
     private IReadOnlyDictionary<Guid, CanvasNodePreview> _interactionPreview =
         new Dictionary<Guid, CanvasNodePreview>();
     private Rect? _selectionMarquee;
+    private IReadOnlyList<CanvasSnapLine> _snapLines = [];
+    private Guid? _previewGuideId;
+    private double _previewGuidePosition;
 
     static DocumentSceneSurface() => AffectsRender<DocumentSceneSurface>(
         SnapshotProperty,
         SelectedNodeIdsProperty,
         IsAuthoringSurfaceProperty,
-        ViewportZoomProperty);
+        ViewportZoomProperty,
+        GuidanceProperty);
 
     public SceneSnapshot? Snapshot
     {
@@ -68,6 +82,12 @@ public sealed class DocumentSceneSurface : Control
         set => SetValue(ViewportZoomProperty, value);
     }
 
+    public CanvasGuidanceState? Guidance
+    {
+        get => GetValue(GuidanceProperty);
+        set => SetValue(GuidanceProperty, value);
+    }
+
     public void SetInteractionPreview(IReadOnlyDictionary<Guid, CanvasNodePreview>? preview)
     {
         _interactionPreview = preview ?? new Dictionary<Guid, CanvasNodePreview>();
@@ -78,6 +98,41 @@ public sealed class DocumentSceneSurface : Control
     {
         _selectionMarquee = marquee;
         InvalidateVisual();
+    }
+
+    public void SetSnapLines(IReadOnlyList<CanvasSnapLine>? lines)
+    {
+        _snapLines = lines ?? [];
+        InvalidateVisual();
+    }
+
+    public void SetGuidePreview(Guid? guideId, double position = 0)
+    {
+        _previewGuideId = guideId;
+        _previewGuidePosition = position;
+        InvalidateVisual();
+    }
+
+    public GuideDefinition? HitTestGuide(Point surfacePoint)
+    {
+        var snapshot = Snapshot;
+        var guidance = Guidance;
+        if (!IsAuthoringSurface || snapshot is null || guidance is null || !guidance.SnapSettings.ShowGuides)
+        {
+            return null;
+        }
+
+        var logical = ToLogical(surfacePoint);
+        var tolerance = 7 / Math.Max(ViewportZoom, .001);
+        return guidance.Guides
+            .Where(guide => !guide.IsLocked)
+            .Select(guide => (Guide: guide, Distance: guide.Orientation == GuideOrientation.Vertical
+                ? Math.Abs(logical.X - guide.Position)
+                : Math.Abs(logical.Y - guide.Position)))
+            .Where(item => item.Distance <= tolerance)
+            .OrderBy(item => item.Distance)
+            .Select(item => item.Guide)
+            .FirstOrDefault();
     }
 
     public IReadOnlySet<Guid> GetNodeIdsInsideMarquee(Rect marquee)
@@ -266,6 +321,11 @@ public sealed class DocumentSceneSurface : Control
             context.DrawRectangle(ParseBrush(snapshot.Background.Color, Brushes.White), null, Bounds);
         }
 
+        if (IsAuthoringSurface)
+        {
+            DrawGrid(context, snapshot.LogicalSize);
+        }
+
         foreach (var layer in snapshot.Layers.Where(layer => layer.IsVisible).OrderBy(layer => layer.ZIndex))
         {
             foreach (var primitive in layer.Primitives)
@@ -277,9 +337,112 @@ public sealed class DocumentSceneSurface : Control
 
         if (IsAuthoringSurface)
         {
+            DrawGuidance(context, snapshot.LogicalSize);
+            DrawSnapLines(context, snapshot.LogicalSize);
             DrawSelection(context);
             DrawSelectionMarquee(context);
         }
+    }
+
+    private void DrawGrid(DrawingContext context, RenderSize logicalSize)
+    {
+        var settings = Guidance?.SnapSettings;
+        if (settings is null || !settings.ShowGrid || settings.GridSpacing <= 0)
+        {
+            return;
+        }
+
+        var spacing = settings.GridSpacing;
+        while (spacing * ViewportZoom < 10)
+        {
+            spacing *= 2;
+        }
+        var minor = new Pen(Brush.Parse("#183D718A"), ScreenPixels(1));
+        var major = new Pen(Brush.Parse("#2A4E8298"), ScreenPixels(1));
+        var index = 0;
+        for (var x = spacing; x < logicalSize.Width; x += spacing, index++)
+        {
+            var sx = x / logicalSize.Width * Bounds.Width;
+            context.DrawLine(index % 5 == 4 ? major : minor, new Point(sx, 0), new Point(sx, Bounds.Height));
+        }
+        index = 0;
+        for (var y = spacing; y < logicalSize.Height; y += spacing, index++)
+        {
+            var sy = y / logicalSize.Height * Bounds.Height;
+            context.DrawLine(index % 5 == 4 ? major : minor, new Point(0, sy), new Point(Bounds.Width, sy));
+        }
+    }
+
+    private void DrawGuidance(DrawingContext context, RenderSize logicalSize)
+    {
+        var guidance = Guidance;
+        if (guidance is null)
+        {
+            return;
+        }
+
+        if (guidance.SnapSettings.ShowMargins)
+        {
+            DrawInset(context, logicalSize, guidance.Canvas.Margins,
+                new Pen(Brush.Parse("#B57F92A0"), ScreenPixels(1), new DashStyle([ScreenPixels(6), ScreenPixels(4)], 0)));
+        }
+        if (guidance.SnapSettings.ShowSafeArea)
+        {
+            DrawInset(context, logicalSize, guidance.Canvas.SafeArea,
+                new Pen(Brush.Parse("#C8D18A23"), ScreenPixels(1), new DashStyle([ScreenPixels(3), ScreenPixels(3)], 0)));
+        }
+        if (!guidance.SnapSettings.ShowGuides)
+        {
+            return;
+        }
+
+        foreach (var guide in guidance.Guides)
+        {
+            var position = guide.Id == _previewGuideId ? _previewGuidePosition : guide.Position;
+            var pen = new Pen(
+                Brush.Parse(guide.IsLocked ? "#A4698BA0" : "#D91FB7D4"),
+                ScreenPixels(1),
+                guide.IsLocked ? new DashStyle([ScreenPixels(4), ScreenPixels(3)], 0) : null);
+            if (guide.Orientation == GuideOrientation.Vertical)
+            {
+                var x = position / logicalSize.Width * Bounds.Width;
+                context.DrawLine(pen, new Point(x, 0), new Point(x, Bounds.Height));
+            }
+            else
+            {
+                var y = position / logicalSize.Height * Bounds.Height;
+                context.DrawLine(pen, new Point(0, y), new Point(Bounds.Width, y));
+            }
+        }
+    }
+
+    private void DrawSnapLines(DrawingContext context, RenderSize logicalSize)
+    {
+        foreach (var line in _snapLines)
+        {
+            var color = line.Source == "Guide" ? "#FF22D3EE" : "#FFB040D9";
+            var pen = new Pen(Brush.Parse(color), ScreenPixels(1.35));
+            if (line.Axis == "X")
+            {
+                var x = line.Position / logicalSize.Width * Bounds.Width;
+                context.DrawLine(pen, new Point(x, 0), new Point(x, Bounds.Height));
+            }
+            else
+            {
+                var y = line.Position / logicalSize.Height * Bounds.Height;
+                context.DrawLine(pen, new Point(0, y), new Point(Bounds.Width, y));
+            }
+        }
+    }
+
+    private void DrawInset(DrawingContext context, RenderSize logicalSize, ThicknessDefinition inset, Pen pen)
+    {
+        var rect = new Rect(
+            inset.Left / logicalSize.Width * Bounds.Width,
+            inset.Top / logicalSize.Height * Bounds.Height,
+            Math.Max(0, (logicalSize.Width - inset.Left - inset.Right) / logicalSize.Width * Bounds.Width),
+            Math.Max(0, (logicalSize.Height - inset.Top - inset.Bottom) / logicalSize.Height * Bounds.Height));
+        context.DrawRectangle(null, pen, rect);
     }
 
     private void DrawPrimitive(

@@ -28,6 +28,8 @@ public static class DocumentValidator
         Require(!string.IsNullOrWhiteSpace(project.Title), "project.title.empty", "Project title cannot be empty.", "$.title", issues);
         Require(project.FormatVersion is > 0 and <= ProjectFormat.Current, "project.version.unsupported", "Project format version is not supported.", "$.formatVersion", issues);
         Require(IsFinitePositive(project.Canvas.Width) && IsFinitePositive(project.Canvas.Height), "canvas.size.invalid", "Canvas dimensions must be finite and positive.", "$.canvas", issues);
+        Require(IsValidThickness(project.Canvas.Margins, project.Canvas), "canvas.margins.invalid", "Canvas margins must be finite, non-negative, and leave usable slide space.", "$.canvas.margins", issues);
+        Require(IsValidThickness(project.Canvas.SafeArea, project.Canvas), "canvas.safeArea.invalid", "Canvas safe area must be finite, non-negative, and leave usable slide space.", "$.canvas.safeArea", issues);
         Require(project.Slides.Count > 0, "slides.empty", "A lesson must contain at least one slide.", "$.slides", issues);
 
         ValidateUniqueIds(project.Sections.Select(section => section.Id), "section", "$.sections", issues);
@@ -56,6 +58,14 @@ public static class DocumentValidator
             Require(Enum.IsDefined(slide.NameKind), "slide.nameKind.invalid", "Slide name kind is invalid.", $"{slidePath}.nameKind", issues);
             Require(IsFinitePositive(slide.SnapSettings.GridSpacing), "slide.snap.grid", "Grid spacing must be finite and positive.", $"{slidePath}.snapSettings.gridSpacing", issues);
             Require(IsFiniteNonNegative(slide.SnapSettings.Threshold), "slide.snap.threshold", "Snap threshold must be finite and non-negative.", $"{slidePath}.snapSettings.threshold", issues);
+            ValidateUniqueIds(slide.Guides.Select(guide => guide.Id), "guide", $"{slidePath}.guides", issues);
+            foreach (var guide in slide.Guides)
+            {
+                var limit = guide.Orientation == GuideOrientation.Vertical ? project.Canvas.Width : project.Canvas.Height;
+                Require(Enum.IsDefined(guide.Orientation), "slide.guide.orientation", "Guide orientation is invalid.", $"{slidePath}.guides", issues);
+                Require(IsFinite(guide.Position) && guide.Position >= 0 && guide.Position <= limit,
+                    "slide.guide.position", "Guide position must remain within the slide.", $"{slidePath}.guides", issues);
+            }
 
             ValidateNodes(slide, slidePath, allNodeIds, issues);
         }
@@ -136,6 +146,12 @@ public static class DocumentValidator
         IsFinite(transform.OffsetX) && IsFinite(transform.OffsetY) && IsFinitePositive(transform.ScaleX) &&
         IsFinitePositive(transform.ScaleY) && IsFinite(transform.RotationDegrees) &&
         IsFiniteInRange(transform.Opacity, 0, 1);
+
+    private static bool IsValidThickness(ThicknessDefinition value, CanvasDefinition canvas) =>
+        IsFiniteNonNegative(value.Left) && IsFiniteNonNegative(value.Top)
+        && IsFiniteNonNegative(value.Right) && IsFiniteNonNegative(value.Bottom)
+        && value.Left + value.Right < canvas.Width
+        && value.Top + value.Bottom < canvas.Height;
 
     private static bool IsFinite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
     private static bool IsFinitePositive(double value) => IsFinite(value) && value > 0;

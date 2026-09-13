@@ -67,6 +67,7 @@ public sealed partial class MainWindow
         {
             ApplyCanvasViewport(_canvasViewport);
         }
+        SynchronizeCanvasGuidance();
     }
 
     private void CanvasViewport_SizeChanged(object? sender, SizeChangedEventArgs e) =>
@@ -290,6 +291,7 @@ public sealed partial class MainWindow
             CultureInfo.CurrentCulture,
             $"{Math.Round(_canvasViewport.Zoom * 100):0}%");
         _canvasViewportSession.SaveCurrent(_canvasViewport);
+        UpdateCanvasRulers();
     }
 
     private RenderSize CurrentSlideSize() =>
