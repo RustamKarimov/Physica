@@ -456,8 +456,33 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
         SlideBackgroundKind kind,
         string primaryColor,
         string? secondaryColor,
-        double opacity)
+        double opacity,
+        GradientDefinition? gradient = null)
     {
+        GradientDefinition? normalizedGradient = null;
+        if (kind == SlideBackgroundKind.Gradient)
+        {
+            if (gradient is null && secondaryColor is null)
+            {
+                throw new AuthoringCommandException(AppText.InvalidHexColor);
+            }
+            normalizedGradient = gradient ?? GradientDefinition.CreateDefault(primaryColor, secondaryColor!);
+            if (normalizedGradient.Stops.Count is < 2 or > 32
+                || normalizedGradient.Stops.Any(stop => !IsHexColor(stop.Color)))
+            {
+                throw new AuthoringCommandException(AppText.InvalidGradientDefinition);
+            }
+            normalizedGradient = normalizedGradient with
+            {
+                Stops = normalizedGradient.Stops
+                    .Select(stop => stop with { Color = stop.Color.ToUpperInvariant() })
+                    .ToArray(),
+            };
+            var orderedStops = normalizedGradient.Stops.OrderBy(stop => stop.Position).ToArray();
+            primaryColor = orderedStops[0].Color;
+            secondaryColor = orderedStops[^1].Color;
+        }
+
         if (!IsHexColor(primaryColor)
             || secondaryColor is not null && !IsHexColor(secondaryColor))
         {
@@ -475,7 +500,8 @@ public sealed class StudioShellViewModel : INotifyPropertyChanged
                 primaryColor.ToUpperInvariant(),
                 kind == SlideBackgroundKind.Gradient ? secondaryColor!.ToUpperInvariant() : null,
                 null,
-                opacity)));
+                opacity,
+                normalizedGradient)));
         StatusMessage = AppText.BackgroundChanged;
     }
 

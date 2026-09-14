@@ -135,11 +135,20 @@ public sealed class SlideDesignSettingsTests
         var session = new AuthoringSession(project);
         var margins = new ThicknessDefinition(80, 70, 60, 50);
         var safeArea = new ThicknessDefinition(100, 90, 80, 70);
+        var gradient = new GradientDefinition(
+            SlideGradientKind.Linear,
+            35,
+            [
+                GradientStopDefinition.Create(0, "#102030"),
+                GradientStopDefinition.Create(.3, "#305080"),
+                GradientStopDefinition.Create(.7, "#E28535"),
+                GradientStopDefinition.Create(1, "#405060"),
+            ]);
 
         session.Execute(ProjectCommands.SetTheme(ThemeDefinition.Dark));
         session.Execute(ProjectCommands.SetSlideBackground(
             slideId,
-            new SlideBackground(SlideBackgroundKind.Gradient, "#102030", "#405060", null, .75)));
+            new SlideBackground(SlideBackgroundKind.Gradient, "#102030", "#405060", null, .75, gradient)));
         session.Execute(ProjectCommands.SetCanvasInsets(margins, safeArea));
 
         var reopened = ProjectJson.Deserialize(ProjectJson.Serialize(session.CurrentProject));
@@ -150,9 +159,54 @@ public sealed class SlideDesignSettingsTests
         Assert.Equal("#102030", scene.Background.Color);
         Assert.Equal("#405060", scene.Background.SecondaryColor);
         Assert.Equal(.75, scene.Background.Opacity);
+        Assert.Equal(SlideGradientKind.Linear, scene.Background.GradientKind);
+        Assert.Equal(35, scene.Background.GradientAngleDegrees);
+        var renderedStops = scene.Background.GradientStops!;
+        Assert.Equal([0, .3, .7, 1], renderedStops.Select(stop => stop.Position));
+        Assert.Equal(["#102030", "#305080", "#E28535", "#405060"], renderedStops.Select(stop => stop.Color));
+        Assert.Equal(gradient.Stops.Select(stop => stop.Id), reopened.Slides[0].Background.Gradient!.Stops.Select(stop => stop.Id));
         Assert.True(session.Undo());
         Assert.Equal(project.Canvas.Margins, session.CurrentProject.Canvas.Margins);
         Assert.Equal(project.Canvas.SafeArea, session.CurrentProject.Canvas.SafeArea);
+    }
+
+    [Fact]
+    public void LegacyTwoColorGradientResolvesToTwoStableEndpoints()
+    {
+        var legacy = new SlideBackground(SlideBackgroundKind.Gradient, "#112233", "#DDEEFF", null, 1);
+        var slide = SlideDocument.Create("Legacy") with { Background = legacy };
+        var restored = ProjectJson.Deserialize(ProjectJson.Serialize(
+            LessonProject.Create("Legacy lesson") with { Slides = [slide] }));
+        var gradient = restored.Slides[0].Background.ResolveGradient();
+
+        Assert.Equal(SlideGradientKind.Linear, gradient.Kind);
+        Assert.Equal([0, 1], gradient.Stops.Select(stop => stop.Position));
+        Assert.Equal(["#112233", "#DDEEFF"], gradient.Stops.Select(stop => stop.Color));
+    }
+
+    [Fact]
+    public void GradientValidationRejectsInvalidCountPositionAndColour()
+    {
+        var invalidGradient = new GradientDefinition(
+            SlideGradientKind.Linear,
+            25,
+            [GradientStopDefinition.Create(1.4, "not-a-colour")]);
+        var slide = SlideDocument.Create("Invalid gradient") with
+        {
+            Background = new SlideBackground(
+                SlideBackgroundKind.Gradient,
+                "#102030",
+                null,
+                null,
+                1,
+                invalidGradient),
+        };
+
+        var result = DocumentValidator.Validate(LessonProject.Create("Lesson") with { Slides = [slide] });
+
+        Assert.Contains(result.Issues, issue => issue.Code == "slide.background.gradient.stops");
+        Assert.Contains(result.Issues, issue => issue.Code == "slide.background.gradient.stop.position");
+        Assert.Contains(result.Issues, issue => issue.Code == "slide.background.gradient.stop.color");
     }
 
     [Fact]
@@ -175,6 +229,8 @@ public sealed class SlideDesignSettingsTests
         var colorFieldCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorField.axaml.cs"));
         var colorDialogXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorDialog.axaml"));
         var colorSpectrumCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorSpectrum.cs"));
+        var gradientEditorXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaGradientEditor.axaml"));
+        var gradientSurfaceCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaGradientStopSurface.cs"));
         var themeXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Themes", "PhysicaTheme.axaml"));
         var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Design.cs"));
         var commandRouting = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
@@ -190,7 +246,8 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("ThemeLightAzureButton", xaml, StringComparison.Ordinal);
         Assert.Contains("ThemeLaboratoryPlumButton", xaml, StringComparison.Ordinal);
         Assert.Contains("BackgroundPrimaryColorField", xaml, StringComparison.Ordinal);
-        Assert.Contains("BackgroundSecondaryColorField", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("BackgroundSecondaryColorField", xaml, StringComparison.Ordinal);
+        Assert.Contains("BackgroundGradientEditor", xaml, StringComparison.Ordinal);
         Assert.Contains("controls:PhysicaColorField", xaml, StringComparison.Ordinal);
         Assert.Contains("ThemeSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("StandardSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
@@ -199,6 +256,7 @@ public sealed class SlideDesignSettingsTests
         Assert.DoesNotContain("HexTextBox", colorFieldXaml, StringComparison.Ordinal);
         Assert.DoesNotContain("<ColorPicker", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("RecentColorLimit", colorFieldCode, StringComparison.Ordinal);
+        Assert.Contains("Width = swatchWidth", colorFieldCode, StringComparison.Ordinal);
         Assert.Contains("ShowDialog<Color?>", colorFieldCode, StringComparison.Ordinal);
         Assert.Contains("ExtendedPaletteGrid", colorDialogXaml, StringComparison.Ordinal);
         Assert.Contains("PhysicaColorSpectrum", colorDialogXaml, StringComparison.Ordinal);
@@ -208,6 +266,13 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("CustomTabButton", colorDialogXaml, StringComparison.Ordinal);
         Assert.Contains("OnPointerPressed", colorSpectrumCode, StringComparison.Ordinal);
         Assert.Contains("OnKeyDown", colorSpectrumCode, StringComparison.Ordinal);
+        Assert.Contains("PhysicaGradientStopSurface", gradientEditorXaml, StringComparison.Ordinal);
+        Assert.Contains("GradientKindComboBox", gradientEditorXaml, StringComparison.Ordinal);
+        Assert.Contains("AddStop_Click", gradientEditorXaml, StringComparison.Ordinal);
+        Assert.Contains("RemoveStop_Click", gradientEditorXaml, StringComparison.Ordinal);
+        Assert.Contains("SetSelectedPosition", gradientSurfaceCode, StringComparison.Ordinal);
+        Assert.Contains("e.ClickCount == 2", gradientSurfaceCode, StringComparison.Ordinal);
+        Assert.Contains("Stops.OrderBy", code, StringComparison.Ordinal);
         Assert.Contains("Background=\"{TemplateBinding Background}\"", themeXaml, StringComparison.Ordinal);
         Assert.Contains("UseThemeBackground_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("IsVisible=\"{Binding ShowStandingWaveInspector}\"", xaml, StringComparison.Ordinal);

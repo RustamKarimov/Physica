@@ -66,7 +66,27 @@ public static class DocumentValidator
             Require(Enum.IsDefined(slide.Background.Kind), "slide.background.kind", "Background kind is invalid.", $"{slidePath}.background.kind", issues);
             Require(IsHexColor(slide.Background.Color), "slide.background.color", "Background colour must use hexadecimal notation.", $"{slidePath}.background.color", issues);
             Require(slide.Background.SecondaryColor is null || IsHexColor(slide.Background.SecondaryColor), "slide.background.secondaryColor", "Secondary background colour must use hexadecimal notation.", $"{slidePath}.background.secondaryColor", issues);
-            Require(slide.Background.Kind != SlideBackgroundKind.Gradient || slide.Background.SecondaryColor is not null, "slide.background.gradient", "Gradient backgrounds require a secondary colour.", $"{slidePath}.background.secondaryColor", issues);
+            Require(slide.Background.Kind != SlideBackgroundKind.Gradient
+                    || slide.Background.Gradient is not null
+                    || slide.Background.SecondaryColor is not null,
+                "slide.background.gradient", "Gradient backgrounds require at least two colour stops.", $"{slidePath}.background", issues);
+            if (slide.Background.Gradient is { } gradient)
+            {
+                Require(Enum.IsDefined(gradient.Kind), "slide.background.gradient.kind", "Gradient kind is invalid.", $"{slidePath}.background.gradient.kind", issues);
+                Require(IsFinite(gradient.AngleDegrees) && gradient.AngleDegrees is >= 0 and <= 360,
+                    "slide.background.gradient.angle", "Gradient angle must be between 0 and 360 degrees.", $"{slidePath}.background.gradient.angleDegrees", issues);
+                Require(gradient.Stops.Count is >= 2 and <= 32,
+                    "slide.background.gradient.stops", "A gradient must contain between 2 and 32 stops.", $"{slidePath}.background.gradient.stops", issues);
+                ValidateUniqueIds(gradient.Stops.Select(stop => stop.Id), "gradient stop", $"{slidePath}.background.gradient.stops", issues);
+                for (var stopIndex = 0; stopIndex < gradient.Stops.Count; stopIndex++)
+                {
+                    var stop = gradient.Stops[stopIndex];
+                    var stopPath = $"{slidePath}.background.gradient.stops[{stopIndex}]";
+                    Require(stop.Id != Guid.Empty, "slide.background.gradient.stop.id", "Gradient stop ID cannot be empty.", $"{stopPath}.id", issues);
+                    Require(IsFiniteInRange(stop.Position, 0, 1), "slide.background.gradient.stop.position", "Gradient stop position must be between 0 and 1.", $"{stopPath}.position", issues);
+                    Require(IsHexColor(stop.Color), "slide.background.gradient.stop.color", "Gradient stop colour must use hexadecimal notation.", $"{stopPath}.color", issues);
+                }
+            }
             Require(Enum.IsDefined(slide.NameKind), "slide.nameKind.invalid", "Slide name kind is invalid.", $"{slidePath}.nameKind", issues);
             Require(IsFinitePositive(slide.SnapSettings.GridSpacing), "slide.snap.grid", "Grid spacing must be finite and positive.", $"{slidePath}.snapSettings.gridSpacing", issues);
             Require(IsFiniteNonNegative(slide.SnapSettings.Threshold), "slide.snap.threshold", "Snap threshold must be finite and non-negative.", $"{slidePath}.snapSettings.threshold", issues);

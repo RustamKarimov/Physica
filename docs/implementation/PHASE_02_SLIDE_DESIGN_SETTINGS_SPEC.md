@@ -46,7 +46,17 @@ The Slide Design surface is mutually exclusive with every object-specific inspec
 - **More colours…** opens a separate Physica-owned modal chooser. Its Standard view provides an extended curated palette; its Custom view provides a saturation/value field, hue control, live old/new preview, RGB values, and exact hexadecimal entry. Apply and Cancel are explicit and do not mutate the slide until Apply.
 - The advanced chooser supports pointer selection, keyboard focus, Enter/Cancel behavior, and clear validation. It must not reuse the stock Avalonia ColorPicker visual.
 - The control must be reusable by later shape, text, graph, vector, and physics-representation inspectors.
-- Gradient editing reuses the same professional colour field for each stop in this Phase 2 slice; adding, positioning, and interpolating an arbitrary stop collection belongs to its own later design slice and may not be falsely implied by the solid-colour chooser.
+- Gradient editing uses an ordered collection of two to thirty-two colour stops. A teacher can select, add, remove, recolour, and reposition stops on a gradient rail; choose Linear or Radial geometry; and control the linear angle. Two colours are only the default, never the storage or interface limit.
+
+## Gradient background contract
+
+- `SlideBackground` retains its legacy primary/secondary fields only for loading earlier Phase 2 packages. New gradient mutations store one `GradientDefinition` with stable stop IDs, geometry, angle, and ordered stops.
+- A gradient contains at least two and at most thirty-two stops. Stop positions are finite values from 0 to 1 and may coincide to create a hard edge. Rendering sorts by position and preserves stable order for coincident stops.
+- Linear gradients support a 0–360 degree angle. Radial gradients use the slide centre in this slice; editable centre, focal point, radius, and spread belong to the later full Fill-formatting phase.
+- The inspector shows a real gradient preview rail and movable stop handles. Double-clicking the rail or choosing Add stop inserts an interpolated colour in the largest available gap. Remove stop is disabled at the two-stop minimum.
+- Selecting a handle exposes its colour and exact 0–100% position. Colour selection uses the same `PhysicaColorField` as solid fills.
+- Changes remain a local preview until **Apply background**. One Apply creates one undoable command containing the complete gradient. Canceling or leaving the surface without Apply does not silently mutate the lesson.
+- Editor, thumbnail, and presenter resolve the same ordered gradient-stop snapshot. Save/reopen and undo/redo preserve stop IDs, colours, positions, geometry, and angle exactly.
 
 ## Theme application contract
 

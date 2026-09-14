@@ -224,6 +224,22 @@ public sealed class SlideSceneSnapshotBuilder : ISlideSceneSnapshotBuilder
             && theme.Colors.TryGetValue("background", out var themeColor)
                 ? themeColor
                 : background.Color;
-        return new RenderBackgroundSnapshot(color, background.SecondaryColor, background.Opacity);
+        if (background.Kind != SlideBackgroundKind.Gradient)
+        {
+            return new RenderBackgroundSnapshot(color, null, background.Opacity);
+        }
+
+        var gradient = background.ResolveGradient();
+        var stops = gradient.Stops
+            .OrderBy(stop => stop.Position)
+            .Select(stop => new RenderGradientStopSnapshot(stop.Position, stop.Color))
+            .ToArray();
+        return new RenderBackgroundSnapshot(
+            stops[0].Color,
+            stops[^1].Color,
+            background.Opacity,
+            gradient.Kind,
+            gradient.AngleDegrees,
+            stops);
     }
 }

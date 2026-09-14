@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+             xmlns:resources="using:PhysicaStudio.Desktop.Resources"
+             x:Class="PhysicaStudio.Desktop.Controls.PhysicaGradientEditor">
+  <Border Classes="gradient-editor-card">
+    <StackPanel Spacing="9">
+      <Grid ColumnDefinitions="92,*" RowDefinitions="Auto,Auto" RowSpacing="7" ColumnSpacing="8">
+        <TextBlock Text="{x:Static resources:AppText.GradientType}" Classes="property-label" />
+        <ComboBox x:Name="GradientKindComboBox" Grid.Column="1" SelectionChanged="GradientKind_SelectionChanged">
+          <ComboBoxItem Tag="Linear" Content="{x:Static resources:AppText.LinearGradient}" />
+          <ComboBoxItem Tag="Radial" Content="{x:Static resources:AppText.RadialGradient}" />
+        </ComboBox>
+        <TextBlock x:Name="GradientAngleLabel" Grid.Row="1" Text="{x:Static resources:AppText.GradientAngle}" Classes="property-label" />
+        <Grid x:Name="GradientAngleControls" Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,58" ColumnSpacing="7">
+          <Slider x:Name="GradientAngleSlider" Minimum="0" Maximum="360" TickFrequency="15"
+                  ValueChanged="GradientAngle_ValueChanged" />
+          <TextBox x:Name="GradientAngleTextBox" Grid.Column="1" HorizontalContentAlignment="Right"
+                   KeyDown="GradientAngle_KeyDown" LostFocus="GradientAngle_LostFocus" />
+        </Grid>
+      </Grid>
+
+      <TextBlock Text="{x:Static resources:AppText.GradientStops}" Classes="color-menu-heading" />
+      <controls:PhysicaGradientStopSurface x:Name="StopSurface" Height="66"
+                                           StopsChanged="StopSurface_StopsChanged"
+                                           AutomationProperties.Name="{x:Static resources:AppText.GradientStops}" />
+      <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="6">
+        <Button Content="{x:Static resources:AppText.AddStop}" Classes="gradient-stop-action" Click="AddStop_Click" />
+        <Button x:Name="RemoveStopButton" Grid.Column="1" Content="{x:Static resources:AppText.RemoveStop}"
+                Classes="gradient-stop-action" Click="RemoveStop_Click" />
+        <TextBlock Grid.Column="2" Text="{x:Static resources:AppText.GradientRailHelp}"
+                   Classes="color-dialog-help" TextAlignment="Right" VerticalAlignment="Center" />
+      </Grid>
+
+      <Grid ColumnDefinitions="92,*" RowDefinitions="Auto,Auto" RowSpacing="7" ColumnSpacing="8">
+        <TextBlock Text="{x:Static resources:AppText.StopColor}" Classes="property-label" />
+        <controls:PhysicaColorField x:Name="StopColorField" Grid.Column="1"
+                                    ColorSelected="StopColor_ColorSelected"
+                                    AutomationProperties.Name="{x:Static resources:AppText.StopColor}" />
+        <TextBlock Grid.Row="1" Text="{x:Static resources:AppText.StopPosition}" Classes="property-label" />
+        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="5">
+          <TextBox x:Name="StopPositionTextBox" HorizontalContentAlignment="Right"
+                   KeyDown="StopPosition_KeyDown" LostFocus="StopPosition_LostFocus" />
+          <TextBlock Grid.Column="1" Text="%" Foreground="#8298A6" VerticalAlignment="Center" />
+        </Grid>
+      </Grid>
+    </StackPanel>
+  </Border>
+</UserControl>

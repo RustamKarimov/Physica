@@ -24,7 +24,6 @@ public sealed partial class MainWindow
 
     private bool _synchronizingSlideDesign;
     private string _backgroundPrimaryColor = "#F4F5F3";
-    private string _backgroundSecondaryColor = "#CFE8FF";
 
     private void InitializeSlideDesign()
     {
@@ -83,9 +82,13 @@ public sealed partial class MainWindow
             UpdateThemeSelection(project.Theme.Id);
             SelectByTag(BackgroundTypeComboBox, background.Kind.ToString());
             _backgroundPrimaryColor = background.Color.ToUpperInvariant();
-            _backgroundSecondaryColor = (background.SecondaryColor ?? "#CFE8FF").ToUpperInvariant();
             BackgroundPrimaryColorField.Color = Color.Parse(_backgroundPrimaryColor);
-            BackgroundSecondaryColorField.Color = Color.Parse(_backgroundSecondaryColor);
+            var defaultSecondary = project.Theme.Colors.TryGetValue("accent", out var accent)
+                ? accent
+                : "#CFE8FF";
+            BackgroundGradientEditor.SetGradient(background.Kind == SlideBackgroundKind.Gradient
+                ? background.ResolveGradient()
+                : GradientDefinition.CreateDefault(_backgroundPrimaryColor, defaultSecondary));
             ThemeBackgroundOverrideNotice.IsVisible = background.Kind != SlideBackgroundKind.Theme;
             ConfigureColorPalettes(project.Theme);
             BackgroundTransparencyTextBox.Text = ((1 - background.Opacity) * 100)
@@ -121,20 +124,13 @@ public sealed partial class MainWindow
 
     private void BackgroundColorField_ColorSelected(object? sender, PhysicaColorSelectedEventArgs e)
     {
-        if (_synchronizingSlideDesign || sender is not PhysicaColorField field)
+        if (_synchronizingSlideDesign || sender is not PhysicaColorField)
         {
             return;
         }
 
         var color = ToHex(e.Color);
-        if (ReferenceEquals(field, BackgroundPrimaryColorField))
-        {
-            _backgroundPrimaryColor = color;
-        }
-        else
-        {
-            _backgroundSecondaryColor = color;
-        }
+        _backgroundPrimaryColor = color;
     }
 
     private void UseThemeBackground_Click(object? sender, RoutedEventArgs e)
@@ -164,13 +160,16 @@ public sealed partial class MainWindow
             {
                 throw new AuthoringCommandException(AppText.BackgroundOpacityRange);
             }
+            var gradient = kind == SlideBackgroundKind.Gradient
+                ? BackgroundGradientEditor.Gradient
+                : null;
+            var orderedStops = gradient?.Stops.OrderBy(stop => stop.Position).ToArray();
             _viewModel.SetSlideBackground(
                 kind,
-                ToHex(BackgroundPrimaryColorField.Color),
-                kind == SlideBackgroundKind.Gradient
-                    ? ToHex(BackgroundSecondaryColorField.Color)
-                    : null,
-                1 - transparency / 100);
+                orderedStops?[0].Color ?? ToHex(BackgroundPrimaryColorField.Color),
+                orderedStops?[^1].Color,
+                1 - transparency / 100,
+                gradient);
         });
     }
 
@@ -255,8 +254,8 @@ public sealed partial class MainWindow
         var kind = SelectedTag(BackgroundTypeComboBox);
         var customColor = kind != nameof(SlideBackgroundKind.Theme);
         var gradient = kind == nameof(SlideBackgroundKind.Gradient);
-        BackgroundPrimaryColorField.IsEnabled = customColor;
-        BackgroundSecondaryColorField.IsEnabled = gradient;
+        SolidColorRow.IsVisible = customColor && !gradient;
+        BackgroundGradientEditor.IsVisible = gradient;
         ThemeBackgroundOverrideNotice.IsVisible = customColor;
     }
 
@@ -270,7 +269,7 @@ public sealed partial class MainWindow
             .Distinct()
             .ToArray();
         BackgroundPrimaryColorField.SetThemePalette(theme.DisplayName, palette);
-        BackgroundSecondaryColorField.SetThemePalette(theme.DisplayName, palette);
+        BackgroundGradientEditor.SetThemePalette(theme.DisplayName, palette);
     }
 
     private void UpdateThemeSelection(string selectedThemeId)

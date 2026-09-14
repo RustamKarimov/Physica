@@ -2,10 +2,17 @@ using PhysicaStudio.Document;
 
 namespace PhysicaStudio.Rendering2D;
 
+public sealed record RenderGradientStopSnapshot(
+    double Position,
+    string Color);
+
 public sealed record RenderBackgroundSnapshot(
     string Color,
     string? SecondaryColor,
-    double Opacity);
+    double Opacity,
+    SlideGradientKind? GradientKind = null,
+    double GradientAngleDegrees = 0,
+    IReadOnlyList<RenderGradientStopSnapshot>? GradientStops = null);
 
 public sealed record RenderStyleSnapshot(
     string? FillColor,

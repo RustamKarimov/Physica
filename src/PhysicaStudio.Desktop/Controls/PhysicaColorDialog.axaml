@@ -37,7 +37,7 @@
       <StackPanel x:Name="StandardPanel" Spacing="12">
         <TextBlock Text="{x:Static resources:AppText.ExtendedPalette}" Classes="color-dialog-heading" />
         <Border Classes="color-dialog-palette-card">
-          <UniformGrid x:Name="ExtendedPaletteGrid" Columns="10" Rows="6" />
+          <UniformGrid x:Name="ExtendedPaletteGrid" Columns="10" Rows="6" HorizontalAlignment="Left" />
         </Border>
         <TextBlock Text="{x:Static resources:AppText.PaletteHelp}" Classes="color-dialog-help" />
       </StackPanel>

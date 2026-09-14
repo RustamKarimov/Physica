@@ -80,6 +80,7 @@ public sealed partial class PhysicaColorField : UserControl
     private void PopulateSwatches(Panel panel, IEnumerable<Color> colors)
     {
         panel.Children.Clear();
+        var swatchWidth = ReferenceEquals(panel, ThemeSwatchGrid) ? 44d : 25.2d;
         foreach (var color in colors)
         {
             var captured = color;
@@ -98,6 +99,8 @@ public sealed partial class PhysicaColorField : UserControl
                 Tag = captured,
                 Background = new SolidColorBrush(captured),
                 Content = check,
+                Width = swatchWidth,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             };
             button.Classes.Add("physica-color-swatch");
             ToolTip.SetTip(button, ToHex(captured));

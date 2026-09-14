@@ -872,23 +872,50 @@ public sealed class DocumentSceneSurface : Control
 
     private static IBrush CreateBackgroundBrush(RenderBackgroundSnapshot background)
     {
-        if (string.IsNullOrWhiteSpace(background.SecondaryColor))
+        var stops = background.GradientStops;
+        if (stops is null || stops.Count < 2)
         {
-            return ParseBrush(background.Color, Brushes.White);
+            if (string.IsNullOrWhiteSpace(background.SecondaryColor))
+            {
+                return ParseBrush(background.Color, Brushes.White);
+            }
+            stops =
+            [
+                new RenderGradientStopSnapshot(0, background.Color),
+                new RenderGradientStopSnapshot(1, background.SecondaryColor),
+            ];
         }
 
         try
         {
-            return new LinearGradientBrush
+            GradientBrush brush;
+            if (background.GradientKind == SlideGradientKind.Radial)
             {
-                StartPoint = RelativePoint.TopLeft,
-                EndPoint = RelativePoint.BottomRight,
-                GradientStops =
+                brush = new RadialGradientBrush
                 {
-                    new GradientStop(Color.Parse(background.Color), 0),
-                    new GradientStop(Color.Parse(background.SecondaryColor), 1),
-                },
-            };
+                    Center = new RelativePoint(.5, .5, RelativeUnit.Relative),
+                    GradientOrigin = new RelativePoint(.5, .5, RelativeUnit.Relative),
+                    RadiusX = new RelativeScalar(.707, RelativeUnit.Relative),
+                    RadiusY = new RelativeScalar(.707, RelativeUnit.Relative),
+                };
+            }
+            else
+            {
+                var radians = background.GradientAngleDegrees * Math.PI / 180;
+                var dx = Math.Cos(radians) * .5;
+                var dy = Math.Sin(radians) * .5;
+                brush = new LinearGradientBrush
+                {
+                    StartPoint = new RelativePoint(.5 - dx, .5 - dy, RelativeUnit.Relative),
+                    EndPoint = new RelativePoint(.5 + dx, .5 + dy, RelativeUnit.Relative),
+                };
+            }
+
+            foreach (var stop in stops.OrderBy(stop => stop.Position))
+            {
+                brush.GradientStops.Add(new GradientStop(Color.Parse(stop.Color), stop.Position));
+            }
+            return brush;
         }
         catch (FormatException)
         {

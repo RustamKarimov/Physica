@@ -175,6 +175,18 @@
   <data name="CurrentColor" xml:space="preserve"><value>Current</value></data>
   <data name="NewColor" xml:space="preserve"><value>New</value></data>
   <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Color" xml:space="preserve"><value>Colour</value></data>
+  <data name="GradientType" xml:space="preserve"><value>Type</value></data>
+  <data name="LinearGradient" xml:space="preserve"><value>Linear</value></data>
+  <data name="RadialGradient" xml:space="preserve"><value>Radial</value></data>
+  <data name="GradientAngle" xml:space="preserve"><value>Angle</value></data>
+  <data name="GradientStops" xml:space="preserve"><value>Gradient stops</value></data>
+  <data name="AddStop" xml:space="preserve"><value>Add stop</value></data>
+  <data name="RemoveStop" xml:space="preserve"><value>Remove</value></data>
+  <data name="StopColor" xml:space="preserve"><value>Stop colour</value></data>
+  <data name="StopPosition" xml:space="preserve"><value>Position</value></data>
+  <data name="GradientRailHelp" xml:space="preserve"><value>Drag · double-click to add</value></data>
+  <data name="InvalidGradientDefinition" xml:space="preserve"><value>A gradient requires 2–32 valid colour stops.</value></data>
   <data name="CustomBackgroundOverride" xml:space="preserve"><value>This slide has a custom background. Use the project theme to preview theme changes here.</value></data>
   <data name="UseThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
   <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>

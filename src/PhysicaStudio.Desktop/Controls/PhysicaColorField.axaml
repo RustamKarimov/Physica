@@ -22,18 +22,18 @@
               <TextBlock Text="{x:Static resources:AppText.ThemeColors}" Classes="color-menu-heading" />
               <TextBlock x:Name="ThemeNameText" Grid.Column="1" Classes="color-menu-meta" />
             </Grid>
-            <UniformGrid x:Name="ThemeSwatchGrid" Columns="6" Rows="5" />
+            <UniformGrid x:Name="ThemeSwatchGrid" Columns="6" Rows="5" HorizontalAlignment="Left" />
 
             <Border Height="1" Background="#2A3D49" Margin="0,1" />
 
             <TextBlock Text="{x:Static resources:AppText.StandardColors}" Classes="color-menu-heading" />
-            <UniformGrid x:Name="StandardSwatchGrid" Columns="10" Rows="1" />
+            <UniformGrid x:Name="StandardSwatchGrid" Columns="10" Rows="1" HorizontalAlignment="Left" />
 
             <StackPanel Spacing="7">
               <TextBlock Text="{x:Static resources:AppText.RecentColors}" Classes="color-menu-heading" />
               <TextBlock x:Name="RecentEmptyText" Text="{x:Static resources:AppText.NoRecentColors}"
                          Classes="color-menu-empty" />
-              <UniformGrid x:Name="RecentSwatchGrid" Columns="10" Rows="1" />
+              <UniformGrid x:Name="RecentSwatchGrid" Columns="10" Rows="1" HorizontalAlignment="Left" />
             </StackPanel>
 
             <Border Height="1" Background="#2A3D49" Margin="0,1" />

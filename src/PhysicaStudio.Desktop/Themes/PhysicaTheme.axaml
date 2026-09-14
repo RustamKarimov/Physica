@@ -645,6 +645,22 @@
     <Setter Property="Background" Value="#176A9B" />
     <Setter Property="BorderBrush" Value="#3FAEEB" />
   </Style>
+  <Style Selector="Border.gradient-editor-card">
+    <Setter Property="Padding" Value="10" />
+    <Setter Property="Background" Value="#0E1B24" />
+    <Setter Property="BorderBrush" Value="#304958" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="5" />
+  </Style>
+  <Style Selector="Button.gradient-stop-action">
+    <Setter Property="Height" Value="28" />
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="Padding" Value="9,3" />
+    <Setter Property="Background" Value="#142A36" />
+    <Setter Property="BorderBrush" Value="#365668" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="FontSize" Value="11.5" />
+  </Style>
   <Style Selector="ToolTip">
     <Setter Property="FontSize" Value="12.5" />
     <Setter Property="Background" Value="#182833" />

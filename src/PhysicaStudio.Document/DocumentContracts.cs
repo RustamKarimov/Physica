@@ -297,14 +297,48 @@ public enum SlideBackgroundKind
     Theme
 }
 
+public enum SlideGradientKind
+{
+    Linear,
+    Radial,
+}
+
+public sealed record GradientStopDefinition(
+    Guid Id,
+    double Position,
+    string Color)
+{
+    public static GradientStopDefinition Create(double position, string color) =>
+        new(Guid.NewGuid(), position, color);
+}
+
+public sealed record GradientDefinition(
+    SlideGradientKind Kind,
+    double AngleDegrees,
+    IReadOnlyList<GradientStopDefinition> Stops)
+{
+    public static GradientDefinition CreateDefault(string primaryColor, string secondaryColor) => new(
+        SlideGradientKind.Linear,
+        0,
+        [
+            GradientStopDefinition.Create(0, primaryColor),
+            GradientStopDefinition.Create(1, secondaryColor),
+        ]);
+}
+
 public sealed record SlideBackground(
     SlideBackgroundKind Kind,
     string Color,
     string? SecondaryColor,
     Guid? AssetId,
-    double Opacity)
+    double Opacity,
+    GradientDefinition? Gradient = null)
 {
     public static SlideBackground Default { get; } = new(SlideBackgroundKind.Theme, "#F4F5F3", null, null, 1);
+
+    public GradientDefinition ResolveGradient() => Gradient ?? GradientDefinition.CreateDefault(
+        Color,
+        SecondaryColor ?? Color);
 }
 
 public enum GuideOrientation

@@ -58,6 +58,8 @@ public sealed partial class PhysicaColorDialog : Window
                 Tag = captured,
                 Background = new SolidColorBrush(captured),
                 Content = check,
+                Width = 44,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             };
             button.Classes.Add("physica-color-swatch");
             button.Classes.Add("extended");
