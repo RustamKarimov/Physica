@@ -159,6 +159,22 @@
   <data name="ExactColor" xml:space="preserve"><value>Exact colour</value></data>
   <data name="ApplyColor" xml:space="preserve"><value>Apply</value></data>
   <data name="ChooseColor" xml:space="preserve"><value>Choose colour</value></data>
+  <data name="RecentColors" xml:space="preserve"><value>Recent colours</value></data>
+  <data name="NoRecentColors" xml:space="preserve"><value>Your latest colours will appear here.</value></data>
+  <data name="MoreColors" xml:space="preserve"><value>More colours…</value></data>
+  <data name="Colors" xml:space="preserve"><value>Colours</value></data>
+  <data name="StandardTab" xml:space="preserve"><value>Standard</value></data>
+  <data name="CustomTab" xml:space="preserve"><value>Custom</value></data>
+  <data name="ExtendedPalette" xml:space="preserve"><value>Extended colour palette</value></data>
+  <data name="PaletteHelp" xml:space="preserve"><value>Select once to preview. Double-click a colour to apply it immediately.</value></data>
+  <data name="CustomColor" xml:space="preserve"><value>Custom colour</value></data>
+  <data name="ColorSpectrum" xml:space="preserve"><value>Colour spectrum and hue control</value></data>
+  <data name="SpectrumKeyboardHelp" xml:space="preserve"><value>Arrow keys refine saturation and brightness. Page Up and Page Down adjust hue.</value></data>
+  <data name="ColorValues" xml:space="preserve"><value>Colour values</value></data>
+  <data name="InvalidColorValue" xml:space="preserve"><value>Enter RGB values from 0 to 255 or a valid hexadecimal colour.</value></data>
+  <data name="CurrentColor" xml:space="preserve"><value>Current</value></data>
+  <data name="NewColor" xml:space="preserve"><value>New</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="CustomBackgroundOverride" xml:space="preserve"><value>This slide has a custom background. Use the project theme to preview theme changes here.</value></data>
   <data name="UseThemeBackground" xml:space="preserve"><value>Use project theme</value></data>
   <data name="Transparency" xml:space="preserve"><value>Transparency</value></data>

@@ -40,6 +40,10 @@ public sealed class PhysicaIcon : Control
                 context.DrawLine(pen, P(.22, .38), P(.5, .66));
                 context.DrawLine(pen, P(.5, .66), P(.78, .38));
                 break;
+            case "chevron-right":
+                context.DrawLine(pen, P(.38, .22), P(.66, .5));
+                context.DrawLine(pen, P(.66, .5), P(.38, .78));
+                break;
             case "close":
                 context.DrawLine(pen, P(.22, .22), P(.78, .78));
                 context.DrawLine(pen, P(.78, .22), P(.22, .78));

@@ -1,0 +1,100 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+        xmlns:resources="using:PhysicaStudio.Desktop.Resources"
+        x:Class="PhysicaStudio.Desktop.Controls.PhysicaColorDialog"
+        Classes="physica-color-dialog"
+        Title="{x:Static resources:AppText.Colors}"
+        Width="558" Height="526" MinWidth="558" MinHeight="526"
+        MaxWidth="558" MaxHeight="526"
+        CanResize="False" ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner" WindowDecorations="None">
+  <Grid RowDefinitions="42,42,*,66">
+    <Border Grid.Row="0" Classes="color-dialog-titlebar" PointerPressed="TitleBar_PointerPressed">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Orientation="Horizontal" Spacing="9" VerticalAlignment="Center">
+          <controls:PhysicaIcon IconKey="palette" Width="18" Height="18" Stroke="#53B9F3" />
+          <TextBlock Text="{x:Static resources:AppText.Colors}" FontSize="14" FontWeight="SemiBold"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+        <Button Grid.Column="1" Classes="color-dialog-close" Click="Cancel_Click"
+                AutomationProperties.Name="{x:Static resources:AppText.Cancel}">
+          <controls:PhysicaIcon IconKey="close" Width="13" Height="13" Stroke="#B7C7D0" />
+        </Button>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="1" Classes="color-dialog-tabs">
+      <StackPanel Orientation="Horizontal" Spacing="4">
+        <Button x:Name="StandardTabButton" Content="{x:Static resources:AppText.StandardTab}"
+                Classes="color-dialog-tab selected" Click="StandardTab_Click" />
+        <Button x:Name="CustomTabButton" Content="{x:Static resources:AppText.CustomTab}"
+                Classes="color-dialog-tab" Click="CustomTab_Click" />
+      </StackPanel>
+    </Border>
+
+    <Grid Grid.Row="2" Margin="18,16,18,10">
+      <StackPanel x:Name="StandardPanel" Spacing="12">
+        <TextBlock Text="{x:Static resources:AppText.ExtendedPalette}" Classes="color-dialog-heading" />
+        <Border Classes="color-dialog-palette-card">
+          <UniformGrid x:Name="ExtendedPaletteGrid" Columns="10" Rows="6" />
+        </Border>
+        <TextBlock Text="{x:Static resources:AppText.PaletteHelp}" Classes="color-dialog-help" />
+      </StackPanel>
+
+      <Grid x:Name="CustomPanel" IsVisible="False" ColumnDefinitions="322,*" ColumnSpacing="16">
+        <StackPanel Spacing="8">
+          <TextBlock Text="{x:Static resources:AppText.CustomColor}" Classes="color-dialog-heading" />
+          <controls:PhysicaColorSpectrum x:Name="Spectrum" Height="276"
+                                         ColorChanged="Spectrum_ColorChanged"
+                                         AutomationProperties.Name="{x:Static resources:AppText.ColorSpectrum}" />
+          <TextBlock Text="{x:Static resources:AppText.SpectrumKeyboardHelp}" Classes="color-dialog-help" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Spacing="11">
+          <TextBlock Text="{x:Static resources:AppText.ColorValues}" Classes="color-dialog-heading" />
+          <Border Classes="color-dialog-values-card">
+            <Grid ColumnDefinitions="30,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8" ColumnSpacing="7">
+              <TextBlock Text="R" Classes="color-component-label" />
+              <TextBox x:Name="RedTextBox" Grid.Column="1" Classes="color-component-input"
+                       KeyDown="ColorValue_KeyDown" LostFocus="ColorValue_LostFocus" />
+              <TextBlock Grid.Row="1" Text="G" Classes="color-component-label" />
+              <TextBox x:Name="GreenTextBox" Grid.Row="1" Grid.Column="1" Classes="color-component-input"
+                       KeyDown="ColorValue_KeyDown" LostFocus="ColorValue_LostFocus" />
+              <TextBlock Grid.Row="2" Text="B" Classes="color-component-label" />
+              <TextBox x:Name="BlueTextBox" Grid.Row="2" Grid.Column="1" Classes="color-component-input"
+                       KeyDown="ColorValue_KeyDown" LostFocus="ColorValue_LostFocus" />
+              <TextBlock Grid.Row="3" Text="#" Classes="color-component-label" />
+              <TextBox x:Name="HexTextBox" Grid.Row="3" Grid.Column="1" Classes="color-dialog-hex"
+                       KeyDown="ColorValue_KeyDown" LostFocus="ColorValue_LostFocus"
+                       AutomationProperties.Name="{x:Static resources:AppText.HexColor}" />
+            </Grid>
+          </Border>
+          <TextBlock x:Name="ValidationText" Text="{x:Static resources:AppText.InvalidColorValue}"
+                     Classes="color-dialog-error" IsVisible="False" TextWrapping="Wrap" />
+        </StackPanel>
+      </Grid>
+    </Grid>
+
+    <Border Grid.Row="3" Classes="color-dialog-footer">
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="9">
+        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="10" VerticalAlignment="Center">
+          <StackPanel Spacing="3">
+            <TextBlock Text="{x:Static resources:AppText.CurrentColor}" Classes="color-preview-label" />
+            <Border x:Name="OriginalPreview" Width="62" Height="26" Classes="color-preview-chip" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Spacing="3">
+            <TextBlock Text="{x:Static resources:AppText.NewColor}" Classes="color-preview-label" />
+            <Border x:Name="SelectedPreview" Width="62" Height="26" Classes="color-preview-chip" />
+          </StackPanel>
+        </Grid>
+        <TextBlock x:Name="SelectedHexText" Grid.Column="1" FontFamily="Cascadia Mono,Consolas"
+                   FontSize="12" Foreground="#9CB0BC" VerticalAlignment="Center" />
+        <Button Grid.Column="2" Content="{x:Static resources:AppText.Cancel}" Classes="color-dialog-secondary"
+                Click="Cancel_Click" />
+        <Button Grid.Column="3" Content="{x:Static resources:AppText.ApplyColor}" Classes="color-dialog-primary"
+                Click="Apply_Click" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

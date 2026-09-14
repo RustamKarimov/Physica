@@ -1,9 +1,8 @@
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 namespace PhysicaStudio.Desktop.Controls;
 
@@ -16,10 +15,13 @@ public sealed partial class PhysicaColorField : UserControl
 {
     private static readonly Color[] StandardColors =
     [
-        Color.Parse("#FFFFFF"), Color.Parse("#D9DEE2"), Color.Parse("#98A6B0"), Color.Parse("#1D2B34"),
-        Color.Parse("#111111"), Color.Parse("#D83B3B"), Color.Parse("#ED7F18"), Color.Parse("#E3B321"),
-        Color.Parse("#168CFF"), Color.Parse("#118A82"),
+        Color.Parse("#D83B3B"), Color.Parse("#F04A36"), Color.Parse("#ED7F18"), Color.Parse("#E3B321"),
+        Color.Parse("#8EBF42"), Color.Parse("#24A56A"), Color.Parse("#20A7CF"), Color.Parse("#168CFF"),
+        Color.Parse("#4059B8"), Color.Parse("#8B4BB3"),
     ];
+
+    private static readonly List<Color> RecentColors = [];
+    private const int RecentColorLimit = 10;
 
     public static readonly StyledProperty<Color> ColorProperty =
         AvaloniaProperty.Register<PhysicaColorField, Color>(nameof(Color), Color.Parse("#FFFFFF"));
@@ -31,8 +33,13 @@ public sealed partial class PhysicaColorField : UserControl
     {
         InitializeComponent();
         _initialized = true;
-        PickerButton.Flyout!.Opened += (_, _) => SynchronizeEditor();
+        PickerButton.Flyout!.Opened += (_, _) =>
+        {
+            PopulateRecentSwatches();
+            SynchronizeEditor();
+        };
         PopulateSwatches(StandardSwatchGrid, StandardColors);
+        PopulateRecentSwatches();
         SynchronizeEditor();
     }
 
@@ -49,13 +56,13 @@ public sealed partial class PhysicaColorField : UserControl
         _themeName = themeName;
         var colors = baseColors.Distinct().Take(6).ToArray();
         var matrix = new List<Color>(30);
-        foreach (var factor in new[] { .76, .48, .20, 0d, -.24 })
+        foreach (var factor in new[] { .82, .58, .32, 0d, -.28 })
         {
             matrix.AddRange(colors.Select(color => Adjust(color, factor)));
         }
         while (matrix.Count < 30)
         {
-            matrix.Add(Color.Parse("#FFFFFF"));
+            matrix.Add(Color.Parse("#F4F7F9"));
         }
         PopulateSwatches(ThemeSwatchGrid, matrix.Take(30));
         SynchronizeEditor();
@@ -76,10 +83,21 @@ public sealed partial class PhysicaColorField : UserControl
         foreach (var color in colors)
         {
             var captured = color;
+            var check = new PhysicaIcon
+            {
+                IconKey = "check",
+                Width = 12,
+                Height = 12,
+                Stroke = ContrastStroke(captured),
+                IsVisible = false,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            };
             var button = new Button
             {
                 Tag = captured,
                 Background = new SolidColorBrush(captured),
+                Content = check,
             };
             button.Classes.Add("physica-color-swatch");
             ToolTip.SetTip(button, ToHex(captured));
@@ -89,37 +107,36 @@ public sealed partial class PhysicaColorField : UserControl
         }
     }
 
+    private void PopulateRecentSwatches()
+    {
+        var colors = RecentColors.ToArray();
+        RecentEmptyText.IsVisible = colors.Length == 0;
+        RecentSwatchGrid.IsVisible = colors.Length > 0;
+        PopulateSwatches(RecentSwatchGrid, colors);
+    }
+
     private void SelectColor(Color color)
     {
+        RememberColor(color);
         Color = color;
-        HexErrorText.IsVisible = false;
         PickerButton.Flyout!.Hide();
         ColorSelected?.Invoke(this, new PhysicaColorSelectedEventArgs(color));
     }
 
-    private void ApplyHex_Click(object? sender, RoutedEventArgs e) => ApplyHexValue();
-
-    private void HexTextBox_KeyDown(object? sender, KeyEventArgs e)
+    private async void MoreColors_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (e.Key != Key.Enter)
+        PickerButton.Flyout!.Hide();
+        if (TopLevel.GetTopLevel(this) is not Window owner)
         {
             return;
         }
-        ApplyHexValue();
-        e.Handled = true;
-    }
 
-    private void ApplyHexValue()
-    {
-        var value = HexTextBox.Text?.Trim();
-        if (value is null || !TryParseHex(value, out var color))
+        var dialog = new PhysicaColorDialog(Color);
+        var result = await dialog.ShowDialog<Color?>(owner);
+        if (result is Color selected)
         {
-            HexErrorText.IsVisible = true;
-            HexTextBox.Classes.Add("invalid");
-            return;
+            SelectColor(selected);
         }
-        HexTextBox.Classes.Remove("invalid");
-        SelectColor(color);
     }
 
     private void SynchronizeEditor()
@@ -131,11 +148,10 @@ public sealed partial class PhysicaColorField : UserControl
         var hex = ToHex(Color);
         CurrentSwatch.Background = new SolidColorBrush(Color);
         CurrentHexText.Text = hex;
-        HexTextBox.Text = hex;
         ThemeNameText.Text = _themeName;
-        HexErrorText.IsVisible = false;
         UpdateSelectedSwatches(ThemeSwatchGrid);
         UpdateSelectedSwatches(StandardSwatchGrid);
+        UpdateSelectedSwatches(RecentSwatchGrid);
     }
 
     private void UpdateSelectedSwatches(Panel panel)
@@ -143,14 +159,33 @@ public sealed partial class PhysicaColorField : UserControl
         foreach (var button in panel.Children.OfType<Button>())
         {
             var selected = button.Tag is Color candidate && candidate == Color;
-            if (selected && !button.Classes.Contains("selected"))
+            SetSelectedClass(button, selected);
+            if (button.Content is PhysicaIcon check)
             {
-                button.Classes.Add("selected");
+                check.IsVisible = selected;
             }
-            else if (!selected)
-            {
-                button.Classes.Remove("selected");
-            }
+        }
+    }
+
+    private static void SetSelectedClass(Button button, bool selected)
+    {
+        if (selected && !button.Classes.Contains("selected"))
+        {
+            button.Classes.Add("selected");
+        }
+        else if (!selected)
+        {
+            button.Classes.Remove("selected");
+        }
+    }
+
+    private static void RememberColor(Color color)
+    {
+        RecentColors.RemoveAll(candidate => candidate == color);
+        RecentColors.Insert(0, color);
+        if (RecentColors.Count > RecentColorLimit)
+        {
+            RecentColors.RemoveRange(RecentColorLimit, RecentColors.Count - RecentColorLimit);
         }
     }
 
@@ -167,17 +202,10 @@ public sealed partial class PhysicaColorField : UserControl
             Blend(color.B, target, amount));
     }
 
-    private static bool TryParseHex(string value, out Color color)
+    private static IBrush ContrastStroke(Color color)
     {
-        var normalized = value.StartsWith('#') ? value : $"#{value}";
-        if (normalized.Length is not 4 and not 7
-            || normalized.AsSpan(1).ToArray().Any(character => !Uri.IsHexDigit(character)))
-        {
-            color = default;
-            return false;
-        }
-        color = Color.Parse(normalized);
-        return true;
+        var luminance = (.2126 * color.R + .7152 * color.G + .0722 * color.B) / 255;
+        return luminance > .62 ? Brushes.Black : Brushes.White;
     }
 
     private static string ToHex(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";

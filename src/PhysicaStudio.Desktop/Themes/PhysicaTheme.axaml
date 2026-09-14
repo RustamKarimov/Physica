@@ -444,6 +444,7 @@
   </Style>
   <Style Selector="Button.physica-color-field">
     <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Height" Value="32" />
     <Setter Property="Padding" Value="8,5" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -482,43 +483,167 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="Button.physica-color-swatch">
-    <Setter Property="Height" Value="25" />
-    <Setter Property="MinHeight" Value="25" />
-    <Setter Property="Margin" Value="1.5" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="Margin" Value="2" />
     <Setter Property="Padding" Value="0" />
-    <Setter Property="BorderBrush" Value="#526775" />
+    <Setter Property="BorderBrush" Value="#718491" />
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="CornerRadius" Value="2" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}">
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
   </Style>
   <Style Selector="Button.physica-color-swatch:pointerover">
     <Setter Property="BorderBrush" Value="#EDF3F7" />
     <Setter Property="BorderThickness" Value="2" />
   </Style>
   <Style Selector="Button.physica-color-swatch.selected">
-    <Setter Property="BorderBrush" Value="#168CFF" />
-    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="BorderBrush" Value="#38B6FF" />
+    <Setter Property="BorderThickness" Value="3" />
   </Style>
-  <Style Selector="Border.color-exact-card">
-    <Setter Property="Background" Value="#0B171F" />
-    <Setter Property="BorderBrush" Value="#293F4D" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="CornerRadius" Value="5" />
-    <Setter Property="Padding" Value="10" />
+  <Style Selector="Button.physica-color-swatch.extended">
+    <Setter Property="Height" Value="38" />
+    <Setter Property="MinHeight" Value="38" />
+    <Setter Property="Margin" Value="2.5" />
   </Style>
-  <Style Selector="TextBox.color-hex-input">
-    <Setter Property="FontFamily" Value="Cascadia Mono,Consolas" />
-    <Setter Property="FontSize" Value="12.5" />
+  <Style Selector="TextBlock.color-menu-empty">
+    <Setter Property="FontSize" Value="11.5" />
+    <Setter Property="Foreground" Value="#738896" />
   </Style>
-  <Style Selector="TextBox.color-hex-input.invalid">
-    <Setter Property="BorderBrush" Value="#E36363" />
+  <Style Selector="Button.color-menu-action">
+    <Setter Property="Height" Value="34" />
+    <Setter Property="MinHeight" Value="34" />
+    <Setter Property="Padding" Value="8,5" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="FontWeight" Value="Medium" />
   </Style>
-  <Style Selector="Button.color-apply">
+  <Style Selector="Button.color-menu-action:pointerover">
+    <Setter Property="Background" Value="#1B303D" />
+    <Setter Property="BorderBrush" Value="#355466" />
+  </Style>
+  <Style Selector="Window.physica-color-dialog">
+    <Setter Property="Background" Value="#0D1821" />
+    <Setter Property="Foreground" Value="#EDF3F7" />
+  </Style>
+  <Style Selector="Border.color-dialog-titlebar">
+    <Setter Property="Height" Value="42" />
+    <Setter Property="Padding" Value="16,0,7,0" />
+    <Setter Property="Background" Value="#09131B" />
+    <Setter Property="BorderBrush" Value="#293E4C" />
+    <Setter Property="BorderThickness" Value="1,1,1,0" />
+  </Style>
+  <Style Selector="Button.color-dialog-close">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="30" />
     <Setter Property="MinHeight" Value="30" />
-    <Setter Property="Padding" Value="11,4" />
-    <Setter Property="Background" Value="#15344B" />
-    <Setter Property="BorderBrush" Value="#327AAC" />
+    <Setter Property="Padding" Value="8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.color-dialog-close:pointerover">
+    <Setter Property="Background" Value="#A83D46" />
+  </Style>
+  <Style Selector="Border.color-dialog-tabs">
+    <Setter Property="Padding" Value="12,4,12,0" />
+    <Setter Property="Background" Value="#101E28" />
+    <Setter Property="BorderBrush" Value="#2B414F" />
+    <Setter Property="BorderThickness" Value="1,0,1,1" />
+  </Style>
+  <Style Selector="Button.color-dialog-tab">
+    <Setter Property="Height" Value="37" />
+    <Setter Property="MinHeight" Value="37" />
+    <Setter Property="Padding" Value="16,5" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0,0,0,2" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Foreground" Value="#AFC0CA" />
+  </Style>
+  <Style Selector="Button.color-dialog-tab:pointerover">
+    <Setter Property="Background" Value="#182A35" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+  <Style Selector="Button.color-dialog-tab.selected">
+    <Setter Property="Foreground" Value="#FFFFFF" />
+    <Setter Property="BorderBrush" Value="#32A8F4" />
+  </Style>
+  <Style Selector="TextBlock.color-dialog-heading">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#DCE8EE" />
+  </Style>
+  <Style Selector="TextBlock.color-dialog-help">
+    <Setter Property="FontSize" Value="11.5" />
+    <Setter Property="Foreground" Value="#7F95A3" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="Border.color-dialog-palette-card, Border.color-dialog-values-card">
+    <Setter Property="Padding" Value="10" />
+    <Setter Property="Background" Value="#101E28" />
+    <Setter Property="BorderBrush" Value="#304958" />
     <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+  </Style>
+  <Style Selector="TextBlock.color-component-label">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="#8FA4B1" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="TextBox.color-component-input, TextBox.color-dialog-hex">
+    <Setter Property="Height" Value="31" />
+    <Setter Property="MinHeight" Value="31" />
+    <Setter Property="Padding" Value="7,3" />
+    <Setter Property="HorizontalContentAlignment" Value="Right" />
+    <Setter Property="FontFamily" Value="Cascadia Mono,Consolas" />
+  </Style>
+  <Style Selector="TextBox.color-dialog-hex">
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+  </Style>
+  <Style Selector="TextBlock.color-dialog-error">
+    <Setter Property="FontSize" Value="11.5" />
+    <Setter Property="Foreground" Value="#E88A8A" />
+  </Style>
+  <Style Selector="Border.color-dialog-footer">
+    <Setter Property="Padding" Value="14,9" />
+    <Setter Property="Background" Value="#101E28" />
+    <Setter Property="BorderBrush" Value="#2B414F" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+  </Style>
+  <Style Selector="TextBlock.color-preview-label">
+    <Setter Property="FontSize" Value="10.5" />
+    <Setter Property="Foreground" Value="#8398A5" />
+  </Style>
+  <Style Selector="Border.color-preview-chip">
+    <Setter Property="BorderBrush" Value="#718491" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="Button.color-dialog-secondary, Button.color-dialog-primary">
+    <Setter Property="MinWidth" Value="78" />
+    <Setter Property="Height" Value="32" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="13,5" />
     <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.color-dialog-primary">
+    <Setter Property="Background" Value="#176A9B" />
+    <Setter Property="BorderBrush" Value="#3FAEEB" />
   </Style>
   <Style Selector="ToolTip">
     <Setter Property="FontSize" Value="12.5" />

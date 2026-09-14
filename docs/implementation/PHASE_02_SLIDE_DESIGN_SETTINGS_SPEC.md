@@ -25,7 +25,7 @@ The surface provides:
 
 - A visual project-theme gallery with three families and three genuinely distinct colour variants in each family. Selecting a theme updates the project theme and immediately refreshes slides that use the Theme background mode.
 - Per-slide Theme, Solid, and Gradient background modes.
-- Compact primary and secondary colour fields. Each field opens a Physica-owned menu containing a PowerPoint-style theme-colour matrix, a restrained standard-colour row, the current colour, and exact hexadecimal entry. Advanced colour controls must be deliberately opened and may not dominate the inspector.
+- Compact primary and secondary colour fields. Each field opens a Physica-owned quick palette containing a PowerPoint-familiar theme-colour matrix, standard and recent colours, and a deliberate route to a separate advanced chooser. The workflow adopts familiar hierarchy without copying PowerPoint's light-grey visual styling.
 - A clear custom-background override notice with a one-click **Use project theme** action, so a teacher can understand why changing a theme does not recolour a manually overridden slide.
 - Widescreen 16:9, Standard 4:3, and Custom canvas sizes.
 - Landscape and Portrait orientation.
@@ -38,12 +38,15 @@ The Slide Design surface is mutually exclusive with every object-specific inspec
 ## Colour-control visual contract
 
 - The closed field is a single 32 px control with a 24 px colour chip, an exact value, and a vector disclosure icon.
-- The menu uses Physica chrome, 4 px geometry, 13 px essential text, an 8 px internal rhythm, and a maximum width of 304 px.
-- Theme colours appear as a six-column matrix with lighter and darker derivations, followed by a one-row standard palette.
-- Swatches are compact squares with hover and selected outlines; they are not full-height bars, unlabeled gradients, or exposed component sliders.
-- Exact colour entry is always available, but a teacher is never required to type a hexadecimal value for ordinary selection.
+- The quick palette uses Physica's dark chrome, restrained elevation, 4 px geometry, 13 px essential text, an 8 px internal rhythm, and a compact width near 320 px. It must feel native to Physica rather than copied from another product.
+- Theme colours are real filled square swatches arranged as base-colour columns with predictable light-to-dark shades. Every cell retains a minimum visible width and height; no template or layout state may collapse a swatch into a line.
+- Standard colours are a restrained one-row palette. Recent colours contain the latest successful selections for the current application session, remove duplicates, and remain reachable without opening the advanced chooser.
+- Hover uses a high-contrast outline, selection uses a two-part accent/check treatment, and light swatches retain a visible neutral border. Colour values are exposed through tooltips and accessible names.
+- The quick palette applies a selected colour immediately and closes. It contains no exposed component sliders, spectrum, or permanent hexadecimal form.
+- **More colours…** opens a separate Physica-owned modal chooser. Its Standard view provides an extended curated palette; its Custom view provides a saturation/value field, hue control, live old/new preview, RGB values, and exact hexadecimal entry. Apply and Cancel are explicit and do not mutate the slide until Apply.
+- The advanced chooser supports pointer selection, keyboard focus, Enter/Cancel behavior, and clear validation. It must not reuse the stock Avalonia ColorPicker visual.
 - The control must be reusable by later shape, text, graph, vector, and physics-representation inspectors.
-- The stock Avalonia ColorPicker visual is not an approved product surface.
+- Gradient editing reuses the same professional colour field for each stop in this Phase 2 slice; adding, positioning, and interpolating an arbitrary stop collection belongs to its own later design slice and may not be falsely implied by the solid-colour chooser.
 
 ## Theme application contract
 

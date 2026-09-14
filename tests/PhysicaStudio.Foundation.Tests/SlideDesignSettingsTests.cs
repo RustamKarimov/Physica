@@ -172,6 +172,10 @@ public sealed class SlideDesignSettingsTests
         var root = FindRepositoryRoot();
         var xaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml"));
         var colorFieldXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorField.axaml"));
+        var colorFieldCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorField.axaml.cs"));
+        var colorDialogXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorDialog.axaml"));
+        var colorSpectrumCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorSpectrum.cs"));
+        var themeXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Themes", "PhysicaTheme.axaml"));
         var code = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.Design.cs"));
         var commandRouting = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Views", "MainWindow.axaml.cs"));
         var viewModel = new StudioShellViewModel(
@@ -190,8 +194,21 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("controls:PhysicaColorField", xaml, StringComparison.Ordinal);
         Assert.Contains("ThemeSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("StandardSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
-        Assert.Contains("HexTextBox", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("RecentSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("MoreColors_Click", colorFieldXaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("HexTextBox", colorFieldXaml, StringComparison.Ordinal);
         Assert.DoesNotContain("<ColorPicker", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("RecentColorLimit", colorFieldCode, StringComparison.Ordinal);
+        Assert.Contains("ShowDialog<Color?>", colorFieldCode, StringComparison.Ordinal);
+        Assert.Contains("ExtendedPaletteGrid", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("PhysicaColorSpectrum", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("OriginalPreview", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("SelectedPreview", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("StandardTabButton", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("CustomTabButton", colorDialogXaml, StringComparison.Ordinal);
+        Assert.Contains("OnPointerPressed", colorSpectrumCode, StringComparison.Ordinal);
+        Assert.Contains("OnKeyDown", colorSpectrumCode, StringComparison.Ordinal);
+        Assert.Contains("Background=\"{TemplateBinding Background}\"", themeXaml, StringComparison.Ordinal);
         Assert.Contains("UseThemeBackground_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("IsVisible=\"{Binding ShowStandingWaveInspector}\"", xaml, StringComparison.Ordinal);
         Assert.Contains("CanvasResizePolicyComboBox", xaml, StringComparison.Ordinal);
