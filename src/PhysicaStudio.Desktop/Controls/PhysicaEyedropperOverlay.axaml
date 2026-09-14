@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+        xmlns:resources="using:PhysicaStudio.Desktop.Resources"
+        x:Class="PhysicaStudio.Desktop.Controls.PhysicaEyedropperOverlay"
+        Title="{x:Static resources:AppText.PickFromScreen}"
+        CanResize="False" ShowInTaskbar="False" Topmost="True"
+        WindowDecorations="None" Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        PointerMoved="Overlay_PointerMoved"
+        PointerPressed="Overlay_PointerPressed">
+  <Canvas x:Name="OverlayCanvas" Background="Transparent">
+    <Border x:Name="PreviewBubble" Width="174" Height="56" IsHitTestVisible="False"
+            Padding="8" Background="#F20B171F" BorderBrush="#547487"
+            BorderThickness="1" CornerRadius="6" BoxShadow="0 8 22 0 #77000000">
+      <Grid ColumnDefinitions="40,*" ColumnSpacing="9">
+        <Border x:Name="SamplePreview" Width="40" Height="40" CornerRadius="4"
+                BorderBrush="#C7D5DD" BorderThickness="1" />
+        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+          <TextBlock x:Name="SampleHex" FontFamily="Cascadia Mono,Consolas"
+                     FontSize="13" FontWeight="SemiBold" Foreground="#F3F7F9" />
+          <TextBlock Text="{x:Static resources:AppText.ScreenPickerInstruction}"
+                     FontSize="10.5" Foreground="#93A8B5" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Canvas>
+</Window>

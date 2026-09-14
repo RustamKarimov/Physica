@@ -131,7 +131,8 @@ public sealed class PhysicaGradientStopSurface : Control
 
         if (IsFocused)
         {
-            context.DrawRectangle(null, new Pen(Brush.Parse("#32A8F4"), 1), Bounds.Deflate(.5), 5, 5);
+            context.DrawRectangle(null, new Pen(Brush.Parse("#32A8F4"), 1),
+                new Rect(Bounds.Size).Deflate(.5), 5, 5);
         }
     }
 

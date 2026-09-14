@@ -48,6 +48,16 @@
                                       Stroke="#7F95A3" VerticalAlignment="Center" />
               </Grid>
             </Button>
+            <Button x:Name="ScreenPickerButton" Classes="color-menu-action" Click="PickFromScreen_Click"
+                    AutomationProperties.Name="{x:Static resources:AppText.PickFromScreen}">
+              <Grid ColumnDefinitions="Auto,*" ColumnSpacing="9">
+                <controls:PhysicaIcon IconKey="eyedropper" Width="17" Height="17" Stroke="#9FD4F5" />
+                <StackPanel Grid.Column="1" Spacing="1" VerticalAlignment="Center">
+                  <TextBlock Text="{x:Static resources:AppText.PickFromScreen}" />
+                  <TextBlock Text="{x:Static resources:AppText.PickFromScreenHint}" Classes="color-menu-meta" />
+                </StackPanel>
+              </Grid>
+            </Button>
           </StackPanel>
         </Border>
       </Flyout>

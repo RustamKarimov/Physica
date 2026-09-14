@@ -3,6 +3,7 @@ using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.VisualTree;
+using PhysicaStudio.Desktop.Resources;
 
 namespace PhysicaStudio.Desktop.Controls;
 
@@ -40,6 +41,11 @@ public sealed partial class PhysicaColorField : UserControl
         };
         PopulateSwatches(StandardSwatchGrid, StandardColors);
         PopulateRecentSwatches();
+        ScreenPickerButton.IsEnabled = PhysicaScreenEyedropper.IsSupported;
+        if (!ScreenPickerButton.IsEnabled)
+        {
+            ToolTip.SetTip(ScreenPickerButton, AppText.ScreenPickerUnavailable);
+        }
         SynchronizeEditor();
     }
 
@@ -136,6 +142,21 @@ public sealed partial class PhysicaColorField : UserControl
 
         var dialog = new PhysicaColorDialog(Color);
         var result = await dialog.ShowDialog<Color?>(owner);
+        if (result is Color selected)
+        {
+            SelectColor(selected);
+        }
+    }
+
+    private async void PickFromScreen_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        PickerButton.Flyout!.Hide();
+        if (TopLevel.GetTopLevel(this) is not Window owner)
+        {
+            return;
+        }
+
+        var result = await PhysicaScreenEyedropper.PickAsync(owner);
         if (result is Color selected)
         {
             SelectColor(selected);

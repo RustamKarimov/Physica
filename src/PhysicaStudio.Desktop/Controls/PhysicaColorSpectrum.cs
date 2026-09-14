@@ -94,7 +94,8 @@ public sealed class PhysicaColorSpectrum : Control
 
         if (IsFocused)
         {
-            context.DrawRectangle(null, new Pen(Brush.Parse("#32A8F4"), 1.5), Bounds.Deflate(1), 5, 5);
+            context.DrawRectangle(null, new Pen(Brush.Parse("#32A8F4"), 1.5),
+                new Rect(Bounds.Size).Deflate(1), 5, 5);
         }
     }
 

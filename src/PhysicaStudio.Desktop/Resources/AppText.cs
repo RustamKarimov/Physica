@@ -150,6 +150,10 @@ public static class AppText
     public static string RecentColors => Get(nameof(RecentColors));
     public static string NoRecentColors => Get(nameof(NoRecentColors));
     public static string MoreColors => Get(nameof(MoreColors));
+    public static string PickFromScreen => Get(nameof(PickFromScreen));
+    public static string PickFromScreenHint => Get(nameof(PickFromScreenHint));
+    public static string ScreenPickerInstruction => Get(nameof(ScreenPickerInstruction));
+    public static string ScreenPickerUnavailable => Get(nameof(ScreenPickerUnavailable));
     public static string Colors => Get(nameof(Colors));
     public static string StandardTab => Get(nameof(StandardTab));
     public static string CustomTab => Get(nameof(CustomTab));

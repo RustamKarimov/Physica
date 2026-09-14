@@ -162,6 +162,10 @@
   <data name="RecentColors" xml:space="preserve"><value>Recent colours</value></data>
   <data name="NoRecentColors" xml:space="preserve"><value>Your latest colours will appear here.</value></data>
   <data name="MoreColors" xml:space="preserve"><value>More colours…</value></data>
+  <data name="PickFromScreen" xml:space="preserve"><value>Pick from screen</value></data>
+  <data name="PickFromScreenHint" xml:space="preserve"><value>Click any visible colour</value></data>
+  <data name="ScreenPickerInstruction" xml:space="preserve"><value>Click to select · Esc to cancel</value></data>
+  <data name="ScreenPickerUnavailable" xml:space="preserve"><value>Screen colour sampling is not available on this platform yet.</value></data>
   <data name="Colors" xml:space="preserve"><value>Colours</value></data>
   <data name="StandardTab" xml:space="preserve"><value>Standard</value></data>
   <data name="CustomTab" xml:space="preserve"><value>Custom</value></data>

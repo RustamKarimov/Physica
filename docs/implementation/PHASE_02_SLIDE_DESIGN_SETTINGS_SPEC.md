@@ -44,6 +44,7 @@ The Slide Design surface is mutually exclusive with every object-specific inspec
 - Hover uses a high-contrast outline, selection uses a two-part accent/check treatment, and light swatches retain a visible neutral border. Colour values are exposed through tooltips and accessible names.
 - The quick palette applies a selected colour immediately and closes. It contains no exposed component sliders, spectrum, or permanent hexadecimal form.
 - **More colours…** opens a separate Physica-owned modal chooser. Its Standard view provides an extended curated palette; its Custom view provides a saturation/value field, hue control, live old/new preview, RGB values, and exact hexadecimal entry. Apply and Cancel are explicit and do not mutate the slide until Apply.
+- **Pick from screen** is part of the reusable `PhysicaColorField`, not a background-specific command. It enters a deliberate full-screen sampling mode, shows a live colour preview and exact hexadecimal value, applies only on click, and cancels with Escape. Screen capture is isolated behind a platform adapter so the same field can be used by later shape, text, graph, vector, and physics-representation inspectors without duplicating native code.
 - The advanced chooser supports pointer selection, keyboard focus, Enter/Cancel behavior, and clear validation. It must not reuse the stock Avalonia ColorPicker visual.
 - The control must be reusable by later shape, text, graph, vector, and physics-representation inspectors.
 - Gradient editing uses an ordered collection of two to thirty-two colour stops. A teacher can select, add, remove, recolour, and reposition stops on a gradient rail; choose Linear or Radial geometry; and control the linear angle. Two colours are only the default, never the storage or interface limit.
@@ -55,6 +56,7 @@ The Slide Design surface is mutually exclusive with every object-specific inspec
 - Linear gradients support a 0–360 degree angle. Radial gradients use the slide centre in this slice; editable centre, focal point, radius, and spread belong to the later full Fill-formatting phase.
 - The inspector shows a real gradient preview rail and movable stop handles. Double-clicking the rail or choosing Add stop inserts an interpolated colour in the largest available gap. Remove stop is disabled at the two-stop minimum.
 - Selecting a handle exposes its colour and exact 0–100% position. Colour selection uses the same `PhysicaColorField` as solid fills.
+- Focus outlines for the spectrum and gradient-stop rail are drawn in each control's local coordinate space and may never enclose neighbouring editor rows. Angle and position editors use the same compact 32 px property-row height as other inspector fields.
 - Changes remain a local preview until **Apply background**. One Apply creates one undoable command containing the complete gradient. Canceling or leaving the surface without Apply does not silently mutate the lesson.
 - Editor, thumbnail, and presenter resolve the same ordered gradient-stop snapshot. Save/reopen and undo/redo preserve stop IDs, colours, positions, geometry, and angle exactly.
 

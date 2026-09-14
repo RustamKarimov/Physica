@@ -399,6 +399,10 @@ public sealed class PhysicaIcon : Control
                 context.DrawEllipse(brush, null, P(.53, .28), w * .04, h * .04);
                 context.DrawEllipse(brush, null, P(.68, .4), w * .04, h * .04);
                 break;
+            case "eyedropper":
+                context.DrawGeometry(null, pen, PathGeometry.Parse($"M {w * .24},{h * .76} L {w * .44},{h * .56} L {w * .39},{h * .51} L {w * .66},{h * .24} C {w * .72},{h * .18} {w * .82},{h * .18} {w * .87},{h * .23} C {w * .92},{h * .28} {w * .92},{h * .38} {w * .86},{h * .44} L {w * .59},{h * .71} L {w * .54},{h * .66} L {w * .34},{h * .86} L {w * .18},{h * .86} Z"));
+                context.DrawLine(pen, P(.44, .56), P(.59, .71));
+                break;
             case "clock":
                 context.DrawEllipse(null, pen, P(.5, .5), w * .34, h * .34);
                 context.DrawLine(pen, P(.5, .5), P(.5, .28));

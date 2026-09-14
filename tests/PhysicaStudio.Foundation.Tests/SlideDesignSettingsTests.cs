@@ -229,6 +229,9 @@ public sealed class SlideDesignSettingsTests
         var colorFieldCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorField.axaml.cs"));
         var colorDialogXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorDialog.axaml"));
         var colorSpectrumCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaColorSpectrum.cs"));
+        var eyedropperCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaScreenEyedropper.cs"));
+        var eyedropperOverlayXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaEyedropperOverlay.axaml"));
+        var screenSamplerCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "WindowsScreenColorSampler.cs"));
         var gradientEditorXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaGradientEditor.axaml"));
         var gradientSurfaceCode = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Controls", "PhysicaGradientStopSurface.cs"));
         var themeXaml = File.ReadAllText(Path.Combine(root, "src", "PhysicaStudio.Desktop", "Themes", "PhysicaTheme.axaml"));
@@ -253,6 +256,8 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("StandardSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("RecentSwatchGrid", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("MoreColors_Click", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("PickFromScreen_Click", colorFieldXaml, StringComparison.Ordinal);
+        Assert.Contains("IconKey=\"eyedropper\"", colorFieldXaml, StringComparison.Ordinal);
         Assert.DoesNotContain("HexTextBox", colorFieldXaml, StringComparison.Ordinal);
         Assert.DoesNotContain("<ColorPicker", colorFieldXaml, StringComparison.Ordinal);
         Assert.Contains("RecentColorLimit", colorFieldCode, StringComparison.Ordinal);
@@ -266,12 +271,19 @@ public sealed class SlideDesignSettingsTests
         Assert.Contains("CustomTabButton", colorDialogXaml, StringComparison.Ordinal);
         Assert.Contains("OnPointerPressed", colorSpectrumCode, StringComparison.Ordinal);
         Assert.Contains("OnKeyDown", colorSpectrumCode, StringComparison.Ordinal);
+        Assert.Contains("new Rect(Bounds.Size).Deflate(1)", colorSpectrumCode, StringComparison.Ordinal);
+        Assert.Contains("WindowsScreenColorSampler", eyedropperCode, StringComparison.Ordinal);
+        Assert.Contains("ShowDialog<Color?>", eyedropperCode, StringComparison.Ordinal);
+        Assert.Contains("ScreenPickerInstruction", eyedropperOverlayXaml, StringComparison.Ordinal);
+        Assert.Contains("GetPixel", screenSamplerCode, StringComparison.Ordinal);
         Assert.Contains("PhysicaGradientStopSurface", gradientEditorXaml, StringComparison.Ordinal);
         Assert.Contains("GradientKindComboBox", gradientEditorXaml, StringComparison.Ordinal);
         Assert.Contains("AddStop_Click", gradientEditorXaml, StringComparison.Ordinal);
         Assert.Contains("RemoveStop_Click", gradientEditorXaml, StringComparison.Ordinal);
+        Assert.Contains("x:Name=\"GradientAngleControls\" Grid.Row=\"1\" Grid.Column=\"1\" Height=\"32\"", gradientEditorXaml, StringComparison.Ordinal);
         Assert.Contains("SetSelectedPosition", gradientSurfaceCode, StringComparison.Ordinal);
         Assert.Contains("e.ClickCount == 2", gradientSurfaceCode, StringComparison.Ordinal);
+        Assert.Contains("new Rect(Bounds.Size).Deflate(.5)", gradientSurfaceCode, StringComparison.Ordinal);
         Assert.Contains("Stops.OrderBy", code, StringComparison.Ordinal);
         Assert.Contains("Background=\"{TemplateBinding Background}\"", themeXaml, StringComparison.Ordinal);
         Assert.Contains("UseThemeBackground_Click", xaml, StringComparison.Ordinal);
