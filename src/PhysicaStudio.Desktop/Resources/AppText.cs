@@ -172,6 +172,8 @@ public static class AppText
     public static string LinearGradient => Get(nameof(LinearGradient));
     public static string RadialGradient => Get(nameof(RadialGradient));
     public static string GradientAngle => Get(nameof(GradientAngle));
+    public static string AngleSlider => Get(nameof(AngleSlider));
+    public static string AngleValue => Get(nameof(AngleValue));
     public static string GradientStops => Get(nameof(GradientStops));
     public static string AddStop => Get(nameof(AddStop));
     public static string RemoveStop => Get(nameof(RemoveStop));

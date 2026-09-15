@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:PhysicaStudio.Desktop.Controls"
+             xmlns:resources="using:PhysicaStudio.Desktop.Resources"
+             x:Class="PhysicaStudio.Desktop.Controls.PhysicaAngleEditor"
+             Height="32" MinHeight="32" MaxHeight="32">
+  <Grid ColumnDefinitions="*,72" ColumnSpacing="10">
+    <controls:PhysicaAngleSlider x:Name="AngleSlider" ValueChanged="AngleSlider_ValueChanged"
+                                 AutomationProperties.Name="{x:Static resources:AppText.AngleSlider}" />
+    <Border Grid.Column="1" Classes="angle-value-field">
+      <Grid ColumnDefinitions="*,20">
+        <TextBox x:Name="AngleTextBox" Classes="angle-value-input"
+                 KeyDown="AngleTextBox_KeyDown" LostFocus="AngleTextBox_LostFocus"
+                 PointerWheelChanged="AngleTextBox_PointerWheelChanged"
+                 AutomationProperties.Name="{x:Static resources:AppText.AngleValue}" />
+        <Border Grid.Column="1" Classes="angle-degree-suffix">
+          <TextBlock Text="°" FontSize="13" Foreground="#91A6B2"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

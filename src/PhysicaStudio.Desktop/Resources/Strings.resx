@@ -184,6 +184,8 @@
   <data name="LinearGradient" xml:space="preserve"><value>Linear</value></data>
   <data name="RadialGradient" xml:space="preserve"><value>Radial</value></data>
   <data name="GradientAngle" xml:space="preserve"><value>Angle</value></data>
+  <data name="AngleSlider" xml:space="preserve"><value>Angle slider</value></data>
+  <data name="AngleValue" xml:space="preserve"><value>Angle in degrees</value></data>
   <data name="GradientStops" xml:space="preserve"><value>Gradient stops</value></data>
   <data name="AddStop" xml:space="preserve"><value>Add stop</value></data>
   <data name="RemoveStop" xml:space="preserve"><value>Remove</value></data>

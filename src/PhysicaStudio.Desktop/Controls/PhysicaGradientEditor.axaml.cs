@@ -1,6 +1,5 @@
 using System.Globalization;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -33,8 +32,7 @@ public sealed partial class PhysicaGradientEditor : UserControl
             _kind = gradient.Kind;
             _angle = NormalizeAngle(gradient.AngleDegrees);
             SelectByTag(GradientKindComboBox, _kind.ToString());
-            GradientAngleSlider.Value = _angle;
-            GradientAngleTextBox.Text = _angle.ToString("0.#", CultureInfo.CurrentCulture);
+            GradientAngleEditor.Value = _angle;
             StopSurface.SetStops(gradient.Stops);
             SynchronizeSelectedStop();
             UpdateKindAvailability();
@@ -61,40 +59,13 @@ public sealed partial class PhysicaGradientEditor : UserControl
         }
     }
 
-    private void GradientAngle_ValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
+    private void GradientAngle_ValueChanged(object? sender, PhysicaAngleChangedEventArgs e)
     {
         if (_synchronizing)
         {
             return;
         }
-        _angle = NormalizeAngle(e.NewValue);
-        GradientAngleTextBox.Text = _angle.ToString("0.#", CultureInfo.CurrentCulture);
-    }
-
-    private void GradientAngle_KeyDown(object? sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            ApplyAngleText();
-            e.Handled = true;
-        }
-    }
-
-    private void GradientAngle_LostFocus(object? sender, RoutedEventArgs e) => ApplyAngleText();
-
-    private void ApplyAngleText()
-    {
-        if (_synchronizing)
-        {
-            return;
-        }
-        if (double.TryParse(GradientAngleTextBox.Text, NumberStyles.Float, CultureInfo.CurrentCulture, out var angle)
-            && double.IsFinite(angle))
-        {
-            _angle = NormalizeAngle(angle);
-            GradientAngleSlider.Value = _angle;
-        }
-        GradientAngleTextBox.Text = _angle.ToString("0.#", CultureInfo.CurrentCulture);
+        _angle = NormalizeAngle(e.Value);
     }
 
     private void AddStop_Click(object? sender, RoutedEventArgs e) => StopSurface.AddStop();
@@ -159,7 +130,7 @@ public sealed partial class PhysicaGradientEditor : UserControl
     {
         var linear = _kind == SlideGradientKind.Linear;
         GradientAngleLabel.IsVisible = linear;
-        GradientAngleControls.IsVisible = linear;
+        GradientAngleEditor.IsVisible = linear;
     }
 
     private static void SelectByTag(ComboBox comboBox, string tag) =>
